@@ -1,0 +1,16 @@
+name: mechanic_trucks
+properties:
+  - name: uuid
+    type: string
+  - name: truck_type
+    type: string
+  - name: truck_class
+    type: string
+  - name: air_compressor
+    type: boolean
+  - name: tooling
+    type: string
+  - name: tool_details
+    type: string
+  - name: profile_id
+    type: integer

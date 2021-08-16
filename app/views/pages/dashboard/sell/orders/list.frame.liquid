@@ -1,0 +1,27 @@
+---
+layout: null
+---
+
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  assign page = context.params.page | to_positive_integer: 1
+  assign allowed_statuses = 'app.statuses.orders.paid,app.statuses.orders.delivered,app.statuses.orders.cancelled_seller,app.statuses.orders.cancelled_buyer,app.statuses.orders.returned' | split: ','
+  assign statuses = context.params.status | split: ','
+
+  assign allowed = true
+  for status in statuses
+    unless allowed_statuses contains status
+      assign allowed = false
+    endunless
+  endfor
+
+  if allowed or statuses.size == 0
+    function orders = 'lib/queries/orders/search_by_seller', limit: 50, page: page, seller: current_profile.id, lang: context.language, status: statuses
+
+    render 'theme/simple/dashboard/orders/list/table', orders: orders, role: 'seller', page: page, statuses: statuses
+  else
+    response_status 403
+  endif
+%}

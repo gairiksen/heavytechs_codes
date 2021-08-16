@@ -1,0 +1,10 @@
+<% if(taskResults.length) { %>
+    <% for(var i = taskResults.length - 1; i >= 0; i--) { %>
+        <% var r = taskResults[i],
+            track = false;
+        %>
+        <% include task_results_list_item.ejs %>
+    <% } %>
+<% } else { %>
+    <div class="no-msg no-tasks-results">There is no test report yet</div>
+<% } %>

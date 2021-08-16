@@ -1,0 +1,21 @@
+{% parse_json order %}
+{
+  "id": "123",
+  "total_price_cents": 40000,
+  "currency": "usd",
+  "line_items": [
+    {
+      "name": "bag",
+      "item_id": 1,
+      "total_price_cents": 40000,
+      "currency": "usd"
+    }
+  ]
+}
+{% endparse_json %}
+{% liquid
+  function checkout_session = 'lib/commands/orders/checkout_session/create/build', order: order, mpo_fee_percent: 10
+
+  include 'test/assertions/equal', contract: contract, field_name: 'unit_amount', given: checkout_session.line_items[0].price_data.unit_amount, expected: 40000
+  include 'test/assertions/equal', contract: contract, field_name: 'application_fee_amount', given: checkout_session['payment_intent_data[application_fee_amount]'], expected: 5190
+%}

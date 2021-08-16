@@ -1,0 +1,31 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+  assign user_id = context.params.m_id | default: 0
+
+  function mechanic_details = 'lib/queries/mechanic/details', user_id: user_id
+
+  function user_details = 'lib/queries/users/find', id: user_id
+
+  function mechanic_basic_details = 'lib/queries/profiles/find', user_id: user_id
+
+  function profile_bio = 'lib/queries/profiles/find_bio', user_id: user_id
+
+  function profile_skills = 'lib/queries/profiles/find_skills', user_id: user_id
+  function profile_all_oem = 'lib/queries/profiles/find_all_oem', user_id: user_id
+
+  function profile_education = 'lib/queries/profiles/find_education', user_id: user_id
+  function profile_ase = 'lib/queries/profiles/find_ase', user_id: user_id
+
+  function profile_truck = 'lib/queries/profiles/find_truck', user_id: user_id
+  function truck_photos = 'lib/queries/profiles/find_truck_photos', user_id: user_id
+
+  function profile_insurance = 'lib/queries/profiles/find_insurance', user_id: context.current_user.id
+
+  function user_pdf = 'lib/queries/profiles/find_pdf', user_id: user_id, is_active: '1'
+
+  function user_favourite = 'lib/queries/profiles/find_favourite', user_id: context.current_user.id, fav_id: user_id, fav_for: 'mechanic'
+%}
+{%
+  render 'theme/simple/find_mechanic/details', records: records, user_id: user_id, profile_bio: profile_bio, profile_skills: profile_skills, profile_all_oem: profile_all_oem, profile_education: profile_education, profile_ase: profile_ase, profile_truck: profile_truck, truck_photos: truck_photos, mechanic_details: mechanic_details, mechanic_basic_details: mechanic_basic_details, user_pdf: user_pdf, profile_insurance: profile_insurance, current_profile: current_profile, user_details: user_details, user_favourite: user_favourite
+%}

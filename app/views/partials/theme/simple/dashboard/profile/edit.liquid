@@ -1,0 +1,994 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+        <div class="container m-auto px-3.5">
+            <h2 class="mb-7 text-2xl font-bold text-gray-700">Profile Edit</h2>
+
+            <div class="flex justify-between flex-col md:flex-row">
+                <div class="w-full mb-6 md:mb-0 md:w-60">
+                
+                    {%comment%}
+                    <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md mb-4">
+                        <div class="flex flex-col w-77 mb-0 text-center">
+                          <figure>
+                            {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-32 h-32 m-auto rounded-full' %}
+                          </figure>
+                          <div class="px-0 mt-5 mechanic_logo">
+                            {% render 'theme/simple/photos/uppy_area' %}
+                          </div>
+                        </div>
+                    </div>
+                    {%endcomment%}
+
+                    {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+                    {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object, search_mechanic_deatils: search_mechanic_deatils %}
+
+
+                    {%comment%}
+                    <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+                        <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+                        <p class="text-sm font-normal text-gray-400 mb-5">
+                            To make your profile visible to other users, fill in the required fields
+                        </p>
+
+                        <div>
+                            <span class="block text-right text-sm text-gray-400 mb-2">0%</span>
+                            <ul class="flex justify-between items-center">
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    {%endcomment%}
+
+                </div>
+                <div class="w-full 2xl:w-4/5 md:w-4/6 lg:w-3/4 bg-white rounded-md">
+                    <div class="border-b border-gray-300 pb-10 px-7 pt-7">
+                        <form action="/dashboard/profile" method="post" enctype='multipart/form-data'>
+                            {% render 'authenticity_token', context: context %}
+                            <input type="hidden" name="_method" value="put" />
+
+                            <input type="hidden" name="profile_type" value="basic" />
+                            <ul>
+                                <li class="mb-5">
+                                    
+                                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{% if object.profile_for == 'mechanic' %}{{ 'app.profiles.username' | t }}{%else%}{{ 'app.profiles.company_name' | t }}{%endif%}</label>
+                                    <input type="text" name="profile[name]" value="{{ object.name }}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                                </li>
+
+                                <li class="mb-5">
+                                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{{ 'app.profiles.first_name' | t }}</label>
+                                    <input type="text" name="profile[first_name]" value="{{ object.first_name }}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                                </li>
+
+                                <li class="mb-5">
+                                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{{ 'app.profiles.last_name' | t }}</label>
+                                    <input type="text" name="profile[last_name]" value="{{ object.last_name }}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                                </li>
+
+                                <li class="mb-5">
+                                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{{ 'app.profiles.mobile_number' | t }}</label>
+                                    <input type="text" name="profile[mobile_number]" value="{{ object.mobile_number }}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                                </li>
+
+                                <li>
+                                    <button class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block">Save</button>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+
+                    <div class="py-8 px-7 relative" x-data="{show_update_email:false, show_email: true, show_update_password:false, show_pasword: true, show_save_btn: false}">
+                        
+                        <form name="frm_update_email" method="POST" action="/dashboard/profile/update_email">
+
+                        {% render 'authenticity_token', context: context %}
+                        <a href="javascript:void()" @click="show_update_email = !show_update_email, show_email = !show_email, show_update_password = !show_update_password, show_pasword = !show_pasword, show_save_btn = !show_save_btn" class="block absolute right-7">
+                            <img src="{{ 'images/edit-icon.svg' | asset_url }}" alt="">
+                        </a>
+                        <ul> 
+                            <li class="mb-5" x-show="show_email">
+                                <span class="block text-base text-gray-700">Email</span>
+                                <strong class="block text-base text-gray-800 font-semibold">{{ object.user.email }}</strong>
+                            </li>
+
+                            <li x-show="show_pasword">
+                                <span class="block text-base text-gray-700">Password</span>
+                                <strong class="block text-base text-gray-800 font-semibold">********</strong>
+                            </li>
+
+                            <li class="mb-5" x-show="show_update_email">
+                                <span class="block text-base text-gray-700">Email</span>
+                                <input type="text" name="update_email" value="{{ object.user.email }}"  class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+
+                                {%comment%}
+                                <button class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block">Save</button>
+                                {%endcomment%}
+                            </li>
+
+                            <li class="mb-5" x-show="show_update_password">
+                                <span class="block text-base text-gray-700">Password</span>
+                                <input type="password" name="update_password" placeholder="*********"  class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+
+                                {%comment%}
+                                <button class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block">Save</button>
+                                {%endcomment%}
+                            </li>
+
+                            <li x-show="show_save_btn">
+                              <button class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block">Save</button>
+                            </li>
+
+                            
+                        </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--profileEdit-->
+
+
+    
+{% comment %}
+<div class="container flex flex-wrap items-center mx-auto mb-10">
+  <h2 class="bigtitle">{{ 'app.profiles.edit' | t }}</h2>
+</div>
+
+<div class="sm:flex">
+
+  <div class="flex flex-col w-64 mb-6 text-center">
+    <div>
+      {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-48 h-48 mx-auto text-4xl' %}
+    </div>
+    <div class="mt-10">
+      {% render 'theme/simple/photos/uppy_area' %}
+    </div>
+  </div>
+
+  <div class="ms-2 md:border-l sm:flex-grow sm:ps-8 sm:order-2 border-1">
+
+    <div class="mb-5 bg-panel">
+      <nav class="flex flex-col sm:flex-row">
+        
+        <a href="/dashboard/profile/edit" class="text-content py-4 px-6 block hover:text-interaction focus:outline-none text-interaction border-b-2 font-medium border-interaction">
+          {{ 'app.profiles.basic_details' | t }}
+        </a>
+        <a href="/dashboard/profile/skills" class="text-content py-4 px-6 block hover:interaction focus:outline-none ">
+          Skills/Services
+        </a>
+        <a href="/dashboard/profile/trainings" class="text-content py-4 px-6 block hover:interaction focus:outline-none ">
+          Trainings
+        </a>
+        <a href="/dashboard/profile/trucks" class="text-content py-4 px-6 block hover:interaction focus:outline-none ">
+          Truck
+        </a>
+      </nav>
+    </div>
+
+    <form action="/dashboard/profile" method="post" enctype='multipart/form-data'>
+      {% render 'authenticity_token', context: context %}
+      <input type="hidden" name="_method" value="put" />
+
+
+      <!--<h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.basic_details' | t }} :</h1>-->
+      <div class="lg::w-1/2">
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="name">{{ 'app.profiles.username' | t }}:</label>
+          <input id="name" name="profile[name]" value="{{ object.name }}" type="text" maxlength="45" class="w-full form-input" autocomplete="nickname">
+          {% render 'theme/simple/field_error', errors: object.errors.name %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="email">{{ 'app.users.form.email' | t }}:</label>
+          <input id="email" name="profile[email]" value="{{ object.user.email }}" type="text" maxlength="45" class="w-full form-input" autocomplete="email">
+          {% render 'theme/simple/field_error', errors: object.errors.email %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="first-name">{{ 'app.profiles.first_name' | t }}:</label>
+          <input id="first-name" name="profile[first_name]" value="{{ object.first_name }}" type="text" maxlength="45" class="w-full form-input" autocomplete="given-name">
+          {% render 'theme/simple/field_error', errors: object.errors.first_name %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="last-name">{{ 'app.profiles.last_name' | t }}:</label>
+          <input id="last-name" name="profile[last_name]" value="{{ object.last_name }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="family-name">
+          {% render 'theme/simple/field_error', errors: object.errors.last_name %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="mobile-number">{{ 'app.profiles.mobile_number' | t }}:</label>
+          <input id="last-name" name="profile[mobile_number]" value="{{ object.mobile_number }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="mobile-number">
+          {% render 'theme/simple/field_error', errors: object.errors.mobile_number %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="company-name">{{ 'app.profiles.company_name' | t }}:</label>
+          <input id="last-name" name="profile[company_name]" value="{{ object.company_name }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="company-name">
+          {% render 'theme/simple/field_error', errors: object.errors.company_name %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="short_description">{{ 'app.profiles.short_description' | t }}:</label>
+          <input id="last-name" name="profile[short_description]" value="{{ object.short_description }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="family-name">
+          {% render 'theme/simple/field_error', errors: object.errors.short_description %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="position">{{ 'app.profiles.position' | t }}:</label>
+          <input id="last-name" name="profile[position]" value="{{ object.position }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="family-name">
+          {% render 'theme/simple/field_error', errors: object.errors.position %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="ready-for-travel">{{ 'app.profiles.ready_for_travel' | t }}:</label>
+          
+          <input type="radio" name="profile[ready_for_travel]" value="100" {% if object.ready_for_travel == "100" %}checked{%endif%} id=""> 100 + Mi &nbsp;
+          <input type="radio" name="profile[ready_for_travel]" value="200" {% if object.ready_for_travel == "200" %}checked{%endif%} id=""> 200 + Mi &nbsp;
+          <input type="radio" name="profile[ready_for_travel]" value="300" {% if object.ready_for_travel == "300" %}checked{%endif%} id=""> 300 + Mi &nbsp;
+          <input type="radio" name="profile[ready_for_travel]" value="400" {% if object.ready_for_travel == "400" %}checked{%endif%} id=""> 400 + Mi &nbsp;
+          <input type="radio" name="profile[ready_for_travel]" value="500" {% if object.ready_for_travel == "500" %}checked{%endif%} id=""> 500 + Mi &nbsp;
+
+          {% render 'theme/simple/field_error', errors: object.errors.ready_for_travel %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="total_experience">{{ 'app.profiles.total_experience' | t }}:</label>        
+          <input id="total_experience" name="profile[total_experience]" value="{{ object.total_experience }}" type="number" maxlength="45" class="w-full form-input"  autocomplete="family-name">
+
+          {% render 'theme/simple/field_error', errors: object.errors.total_experience %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="drivers_license">{{ 'app.profiles.drivers_license' | t }}:</label>
+          
+          <input type="checkbox" name="profile[drivers_license_class_a]" {% if object.drivers_license_class_a == "1" %}checked{%endif%} value="1" id=""> Class A &nbsp;
+          <input type="checkbox" name="profile[drivers_license_class_b]" {% if object.drivers_license_class_b == "1" %}checked{%endif%} value="1" id=""> Class B &nbsp;
+          <input type="checkbox" name="profile[drivers_license_class_c]" {% if object.drivers_license_class_c == "1" %}checked{%endif%} value="1" id=""> Class C &nbsp;
+          <input type="checkbox" name="profile[drivers_license_tanker]" {% if object.drivers_license_tanker == "1" %}checked{%endif%} value="1" id=""> Tanker &nbsp;
+
+          {% render 'theme/simple/field_error', errors: object.errors.drivers_license %}
+        </div>
+
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="driver_license_certificate">{{ 'app.profiles.driver_license_certificate' | t }}:</label>
+          <input type="file" name="profile[driver_license_certificate]" id="driver_license_certificate">
+
+          {% render 'theme/simple/field_error', errors: object.errors.driver_license_certificate %}
+        </div>
+      </div>
+
+      <!--
+      
+      <h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.address_details' | t }} :</h1>
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="plot_number">{{ 'app.profiles.plot_number' | t }}:</label>
+        <input id="plot_number" name="profile[plot_number]" value="{{ object.plot_number }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="plot_number">
+        {% render 'theme/simple/field_error', errors: object.errors.plot_number %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="street">{{ 'app.profiles.street' | t }}:</label>
+        <input id="street" name="profile[street]" value="{{ object.street }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="street">
+        {% render 'theme/simple/field_error', errors: object.errors.street %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="city">{{ 'app.profiles.city' | t }}:</label>
+        <input id="city" name="profile[city]" value="{{ object.city }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="city">
+        {% render 'theme/simple/field_error', errors: object.errors.city %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="state">{{ 'app.profiles.state' | t }}:</label>
+        <input id="state" name="profile[state]" value="{{ object.state }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="state">
+        {% render 'theme/simple/field_error', errors: object.errors.state %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="state">{{ 'app.profiles.country' | t }}:</label>
+        <input id="country" name="profile[country]" value="{{ object.country }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="country">
+        {% render 'theme/simple/field_error', errors: object.errors.state %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="zip_code">{{ 'app.profiles.zip_code' | t }}:</label>
+        <input id="zip_code" name="profile[zip_code]" value="{{ object.zip_code }}" type="text" maxlength="45" class="w-full form-input"  autocomplete="zip_code">
+        {% render 'theme/simple/field_error', errors: object.errors.zip_code %}
+      </div>
+
+      <h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.skill_details' | t }} :</h1>
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="service_category">{{ 'app.profiles.service_category' | t }}:</label>
+        
+        <input type="checkbox" name="profile[long_description]" id=""> Eart Work &nbsp;
+        <input type="checkbox" name="profile[long_description]" id=""> Mining &nbsp;
+        <input type="checkbox" name="profile[long_description]" id=""> Fleet Operations &nbsp;
+        <input type="checkbox" name="profile[long_description]" id=""> Pipeline &nbsp;
+
+        {% render 'theme/simple/field_error', errors: object.errors.service_category %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="long_description">{{ 'app.profiles.long_description' | t }}:</label>
+        <textarea id="bio" name="profile[long_description]" aria-invalid="false" rows="5" class="w-full form-input" autocomplete="bio">{{ object.long_description }}</textarea>
+        {% render 'theme/simple/field_error', errors: object.errors.long_description %}
+      </div>
+
+      
+
+      <h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.insurance_coverage_details' | t }} :</h1>
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="insurance_document">{{ 'app.profiles.insurance_document' | t }}:</label>
+        <input type="file" name="insurance_document" id="insurance_document" />
+
+        {% render 'theme/simple/field_error', errors: object.errors.insurance_document %}
+      </div>
+
+      <h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.skills_service_offerings' | t }} :</h1>
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="tech_type">{{ 'app.profiles.tech_type' | t }}:</label>
+        <input type="checkbox" name="profile[heavy_equipment_mechanic]" id=""> Heavy Equipment Mechanic &nbsp;
+        <input type="checkbox" name="profile[truck_mechanic]" id=""> Truck Mechcanic &nbsp;
+        <input type="checkbox" name="profile[welder_fabricator]" id=""> Welder/Fabricator &nbsp;
+        <input type="checkbox" name="profile[oiler_pm_tech]" id=""> Oilers/PM Tech &nbsp;
+
+        {% render 'theme/simple/field_error', errors: object.errors.tech_type %}
+      </div>
+
+      <div x-data="{ show_catepillar: false, show_john_deere: false, show_hitachi:false, show_bobcat:false, show_volvo:false, show_komatsu:false }">
+        <div class="mb-6">
+          <label class="block mb-2 cursor-pointer" for="brand_of_equipment">{{ 'app.profiles.brand_of_equipment' | t }}:</label>
+          <input type="checkbox" name="profile[caterpillar]" id="" @click="show_catepillar = !show_catepillar"> Caterpillar &nbsp;
+          <input type="checkbox" name="profile[john_deere]" id="" @click="show_john_deere = !show_john_deere"> John Deere &nbsp;
+          <input type="checkbox" name="profile[hitachi]" id="" @click="show_hitachi = !show_hitachi"> Hitachi &nbsp;
+          <input type="checkbox" name="profile[bobcat]" id="" @click="show_bobcat = !show_bobcat"> Bobcat &nbsp;
+          <input type="checkbox" name="profile[volvo]" id="" @click="show_volvo = !show_volvo"> Volvo &nbsp;
+          <input type="checkbox" name="profile[komatsu]" id="" @click="show_komatsu = !show_komatsu"> Komatsu &nbsp;
+
+          {% render 'theme/simple/field_error', errors: object.errors.brand_of_equipment %}
+        </div>
+
+        <div class="mb-6" x-show="show_catepillar">
+          <label class="block mb-2 cursor-pointer" for="caterpillar_type">{{ 'app.profiles.caterpillar_type' | t }}:</label>
+          <input type="radio" name="caterpillar_type" id="caterpillar_type_expert"> Expert&nbsp;
+          <input type="radio" name="caterpillar_type" id="caterpillar_type_familiar"> Familiar
+
+          {% render 'theme/simple/field_error', errors: object.errors.caterpillar_type %}
+        </div>
+
+        <div class="mb-6" x-show="show_john_deere">
+          <label class="block mb-2 cursor-pointer" for="john_deere_type">{{ 'app.profiles.john_deere_type' | t }}:</label>
+          <input type="radio" name="john_deere_type" id="john_deere_type_expert"> Expert&nbsp;
+          <input type="radio" name="john_deere_type" id="john_deere_type"> Familiar
+          
+          {% render 'theme/simple/field_error', errors: object.errors.john_deere_type %}
+        </div>
+
+        <div class="mb-6" x-show="show_hitachi">
+          <label class="block mb-2 cursor-pointer" for="hitachi_type">{{ 'app.profiles.hitachi_type' | t }}:</label>
+          <input type="radio" name="hitachi_type" id="hitachi_type_expert"> Expert&nbsp;
+          <input type="radio" name="hitachi_type" id="hitachi_type_type"> Familiar
+          
+          {% render 'theme/simple/field_error', errors: object.errors.hitachi_type %}
+        </div>
+
+        <div class="mb-6" x-show="show_bobcat">
+          <label class="block mb-2 cursor-pointer" for="bobcat_type">{{ 'app.profiles.bobcat_type' | t }}:</label>
+          <input type="radio" name="bobcat_type" id="bobcat_type_expert"> Expert&nbsp;
+          <input type="radio" name="bobcat_type" id="bobcat_type_familiar"> Familiar
+          
+          {% render 'theme/simple/field_error', errors: object.errors.bobcat_type %}
+        </div>
+
+        <div class="mb-6" x-show="show_volvo">
+          <label class="block mb-2 cursor-pointer" for="volvo_type">{{ 'app.profiles.volvo_type' | t }}:</label>
+          <input type="radio" name="volvo_type" id="volvo_type_expert"> Expert&nbsp;
+          <input type="radio" name="volvo_type" id="volvo_type_familiar"> Familiar
+          
+          {% render 'theme/simple/field_error', errors: object.errors.volvo_type %}
+        </div>
+
+        <div class="mb-6" x-show="show_komatsu">
+          <label class="block mb-2 cursor-pointer" for="komatsu_type">{{ 'app.profiles.komatsu_type' | t }}:</label>
+          <input type="radio" name="komatsu_type" id="komatsu_type_expert"> Expert&nbsp;
+          <input type="radio" name="komatsu_type" id="komatsu_type_familiar"> Familiar
+          
+          {% render 'theme/simple/field_error', errors: object.errors.komatsu_type %}
+        </div>
+      </div>
+
+      <h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.specialized_training' | t }} :</h1>
+      <div x-data="{ show_osha: false, show_msha: false, show_oem:false }">
+        <div class="mb-6">
+          
+          <input type="checkbox" name="profile[specialized_training]" id="" @click="show_osha = !show_osha"> OSHA &nbsp;
+          <input type="checkbox" name="profile[specialized_training]" id="" @click="show_msha = !show_msha"> MSHA &nbsp;
+          <input type="checkbox" name="profile[specialized_training]" id="" @click="show_oem = !show_oem"> OEM &nbsp;
+
+          {% render 'theme/simple/field_error', errors: object.errors.service_category %}
+        </div>
+
+        <div x-show="show_osha">
+          <div class="mb-6">
+            <label class="block mb-2 cursor-pointer" for="osha_training_certificate">{{ 'app.profiles.osha_training_certificate' | t }}:</label>
+            <input type="file" name="profile[osha_training_certificate]" id="osha_training_certificate">
+
+            {% render 'theme/simple/field_error', errors: object.errors.osha_training_certificate %}
+          </div>
+
+          <div class="mb-6">
+            <label class="block mb-2 cursor-pointer" for="osha_training_expiry">{{ 'app.profiles.osha_training_expiry' | t }}:</label> 
+            <div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
+              <div class="mb-5 w-64">
+                <div class="relative">
+                  <input type="hidden" name="date" x-ref="date" :value="datepickerValue" />
+                  <input type="text" x-on:click="showDatepicker = !showDatepicker" x-model="datepickerValue" x-on:keydown.escape="showDatepicker = false" class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none text-gray-600 font-medium focus:ring focus:ring-blue-600 focus:ring-opacity-50" placeholder="Select date" readonly />
+
+                  <div class="absolute top-0 right-0 px-3 py-2">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+
+
+                  <div class="bg-white mt-12 rounded-lg shadow p-4 absolute top-0 left-0" style="width: 17rem" x-show.transition="showDatepicker" @click.away="showDatepicker = false">
+                    <div class="flex justify-between items-center mb-2">
+                      <div>
+                        <span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
+                        <span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
+                      </div>
+                      <div>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 0) {
+                                year--;
+                                month = 12;
+                              } month--; getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 11) {
+                                month = 0; 
+                                year++;
+                              } else {
+                                month++; 
+                              } getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap mb-3 -mx-1">
+                      <template x-for="(day, index) in DAYS" :key="index">
+                        <div style="width: 14.26%" class="px-0.5">
+                          <div x-text="day" class="text-gray-800 font-medium text-center text-xs"></div>
+                        </div>
+                      </template>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-1">
+                      <template x-for="blankday in blankdays">
+                        <div style="width: 14.28%" class="text-center border p-1 border-transparent text-sm"></div>
+                      </template>
+                      <template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">
+                        <div style="width: 14.28%" class="px-1 mb-1">
+                          <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100" :class="{
+                              'bg-indigo-200': isToday(date) == true, 
+                              'text-gray-600 hover:bg-indigo-200': isToday(date) == false && isSelectedDate(date) == false,
+                              'bg-indigo-500 text-white hover:bg-opacity-75': isSelectedDate(date) == true 
+                            }"></div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+
+                  
+                </div>
+              </div>
+            </div>
+
+            {% render 'theme/simple/field_error', errors: object.errors.total_experience %}
+          
+          </div>
+        </div>
+
+        <div x-show="show_msha">
+          <div class="mb-6">
+            <label class="block mb-2 cursor-pointer" for="msha_training_certificate">{{ 'app.profiles.msha_training_certificate' | t }}:</label>
+            <input type="file" name="profile[msha_training_certificate]" id="msha_training_certificate">
+
+            {% render 'theme/simple/field_error', errors: object.errors.msha_training_certificate %}
+          </div>
+
+          <div class="mb-6">
+            <label class="block mb-2 cursor-pointer" for="msha_training_expiry">{{ 'app.profiles.msha_training_expiry' | t }}:</label>        
+            
+            <div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
+              <div class="mb-5 w-64">
+                <div class="relative">
+                  <input type="hidden" name="date" x-ref="date" :value="datepickerValue" />
+                  <input type="text" x-on:click="showDatepicker = !showDatepicker" x-model="datepickerValue" x-on:keydown.escape="showDatepicker = false" class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none text-gray-600 font-medium focus:ring focus:ring-blue-600 focus:ring-opacity-50" placeholder="Select date" readonly />
+
+                  <div class="absolute top-0 right-0 px-3 py-2">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+
+
+                  <div class="bg-white mt-12 rounded-lg shadow p-4 absolute top-0 left-0" style="width: 17rem" x-show.transition="showDatepicker" @click.away="showDatepicker = false">
+                    <div class="flex justify-between items-center mb-2">
+                      <div>
+                        <span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
+                        <span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
+                      </div>
+                      <div>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 0) {
+                                year--;
+                                month = 12;
+                              } month--; getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 11) {
+                                month = 0; 
+                                year++;
+                              } else {
+                                month++; 
+                              } getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap mb-3 -mx-1">
+                      <template x-for="(day, index) in DAYS" :key="index">
+                        <div style="width: 14.26%" class="px-0.5">
+                          <div x-text="day" class="text-gray-800 font-medium text-center text-xs"></div>
+                        </div>
+                      </template>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-1">
+                      <template x-for="blankday in blankdays">
+                        <div style="width: 14.28%" class="text-center border p-1 border-transparent text-sm"></div>
+                      </template>
+                      <template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">
+                        <div style="width: 14.28%" class="px-1 mb-1">
+                          <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100" :class="{
+                              'bg-indigo-200': isToday(date) == true, 
+                              'text-gray-600 hover:bg-indigo-200': isToday(date) == false && isSelectedDate(date) == false,
+                              'bg-indigo-500 text-white hover:bg-opacity-75': isSelectedDate(date) == true 
+                            }"></div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+
+                  
+                </div>
+              </div>
+            </div>
+
+            {% render 'theme/simple/field_error', errors: object.errors.msha_training_expiry %}
+          
+          </div>
+        </div>
+
+        <div x-show="show_oem">
+          <div class="mb-6">
+            <label class="block mb-2 cursor-pointer" for="oem_training_certificate">{{ 'app.profiles.oem_training_certificate' | t }}:</label>
+            <input type="file" name="profile[oem_training_certificate]" id="oem_training_certificate">
+
+            {% render 'theme/simple/field_error', errors: object.errors.oem_training_certificate %}
+          </div>
+
+          <div class="mb-6">
+            <label class="block mb-2 cursor-pointer" for="oem_training_expiry">{{ 'app.profiles.oem_training_expiry' | t }}:</label>        
+            
+            <div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
+              <div class="mb-5 w-64">
+                <div class="relative">
+                  <input type="hidden" name="date" x-ref="date" :value="datepickerValue" />
+                  <input type="text" x-on:click="showDatepicker = !showDatepicker" x-model="datepickerValue" x-on:keydown.escape="showDatepicker = false" class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none text-gray-600 font-medium focus:ring focus:ring-blue-600 focus:ring-opacity-50" placeholder="Select date" readonly />
+
+                  <div class="absolute top-0 right-0 px-3 py-2">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+
+
+                  <div class="bg-white mt-12 rounded-lg shadow p-4 absolute top-0 left-0" style="width: 17rem" x-show.transition="showDatepicker" @click.away="showDatepicker = false">
+                    <div class="flex justify-between items-center mb-2">
+                      <div>
+                        <span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
+                        <span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
+                      </div>
+                      <div>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 0) {
+                                year--;
+                                month = 12;
+                              } month--; getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 11) {
+                                month = 0; 
+                                year++;
+                              } else {
+                                month++; 
+                              } getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap mb-3 -mx-1">
+                      <template x-for="(day, index) in DAYS" :key="index">
+                        <div style="width: 14.26%" class="px-0.5">
+                          <div x-text="day" class="text-gray-800 font-medium text-center text-xs"></div>
+                        </div>
+                      </template>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-1">
+                      <template x-for="blankday in blankdays">
+                        <div style="width: 14.28%" class="text-center border p-1 border-transparent text-sm"></div>
+                      </template>
+                      <template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">
+                        <div style="width: 14.28%" class="px-1 mb-1">
+                          <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100" :class="{
+                              'bg-indigo-200': isToday(date) == true, 
+                              'text-gray-600 hover:bg-indigo-200': isToday(date) == false && isSelectedDate(date) == false,
+                              'bg-indigo-500 text-white hover:bg-opacity-75': isSelectedDate(date) == true 
+                            }"></div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+
+                  
+                </div>
+              </div>
+            </div>
+
+            {% render 'theme/simple/field_error', errors: object.errors.oem_training_expiry %}
+          
+          </div>
+        </div>
+      </div>
+
+      
+
+      <h1 style="font-weight:bold !important; font-size:24px !important;">{{ 'app.profiles.truck_details' | t }} :</h1>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="crane_certificate">{{ 'app.profiles.crane_certification' | t }}:</label>
+        <select name="profile[crane_certification]" id="crane_certification">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+        
+        {% render 'theme/simple/field_error', errors: object.errors.crane_certification %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="crane_certificate_expiry">{{ 'app.profiles.crane_certificate_expiry' | t }}:</label>
+        
+          <div x-data="app()" x-init="[initDate(), getNoOfDays()]" x-cloak>
+            <div class="">
+              <div class="mb-5 w-64">
+                <div class="relative">
+                  <input type="hidden" name="date" x-ref="date" :value="datepickerValue" />
+                  <input type="text" x-on:click="showDatepicker = !showDatepicker" x-model="datepickerValue" x-on:keydown.escape="showDatepicker = false" class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none text-gray-600 font-medium focus:ring focus:ring-blue-600 focus:ring-opacity-50" placeholder="Select date" readonly />
+
+                  <div class="absolute top-0 right-0 px-3 py-2">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+
+
+                  <div class="bg-white mt-12 rounded-lg shadow p-4 absolute top-0 left-0" style="width: 17rem" x-show.transition="showDatepicker" @click.away="showDatepicker = false">
+                    <div class="flex justify-between items-center mb-2">
+                      <div>
+                        <span x-text="MONTH_NAMES[month]" class="text-lg font-bold text-gray-800"></span>
+                        <span x-text="year" class="ml-1 text-lg text-gray-600 font-normal"></span>
+                      </div>
+                      <div>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 0) {
+                                year--;
+                                month = 12;
+                              } month--; getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button type="button" class="focus:outline-none focus:shadow-outline transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-100 p-1 rounded-full" @click="if (month == 11) {
+                                month = 0; 
+                                year++;
+                              } else {
+                                month++; 
+                              } getNoOfDays()">
+                          <svg class="h-6 w-6 text-gray-400 inline-flex" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap mb-3 -mx-1">
+                      <template x-for="(day, index) in DAYS" :key="index">
+                        <div style="width: 14.26%" class="px-0.5">
+                          <div x-text="day" class="text-gray-800 font-medium text-center text-xs"></div>
+                        </div>
+                      </template>
+                    </div>
+
+                    <div class="flex flex-wrap -mx-1">
+                      <template x-for="blankday in blankdays">
+                        <div style="width: 14.28%" class="text-center border p-1 border-transparent text-sm"></div>
+                      </template>
+                      <template x-for="(date, dateIndex) in no_of_days" :key="dateIndex">
+                        <div style="width: 14.28%" class="px-1 mb-1">
+                          <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100" :class="{
+                              'bg-indigo-200': isToday(date) == true, 
+                              'text-gray-600 hover:bg-indigo-200': isToday(date) == false && isSelectedDate(date) == false,
+                              'bg-indigo-500 text-white hover:bg-opacity-75': isSelectedDate(date) == true 
+                            }"></div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        {% render 'theme/simple/field_error', errors: object.errors.crane_certificate_expiry %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="crane_certificate_document">{{ 'app.profiles.crane_certificate_document' | t }}:</label>
+        <input type="file" name="profile[crane_certificate_document]" id="crane_certificate_document" />
+        
+        {% render 'theme/simple/field_error', errors: object.errors.crane_certificate_document %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="truck_type">{{ 'app.profiles.truck_type' | t }}:</label>
+        <input type="radio" name="profile[truck_type]" id=""> Welder Truck &nbsp;
+        <input type="radio" name="profile[truck_type]" id=""> Small Service(No Crane) &nbsp;
+        <input type="radio" name="profile[truck_type]" id=""> Service Truck(With crane) &nbsp;
+        <input type="radio" name="profile[truck_type]" id=""> Lube Truck &nbsp;
+
+        {% render 'theme/simple/field_error', errors: object.errors.truck_type %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="truck_capacity">{{ 'app.profiles.truck_capacity' | t }}:</label>
+        <input id="truck_capacity" name="profile[truck_capacity]" value="{{ object.truck_capacity }}" type="text" maxlength="45" class="w-full form-input">
+
+        {% render 'theme/simple/field_error', errors: object.errors.truck_capacity %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="truck_class">{{ 'app.profiles.truck_class' | t }}:</label>
+        <input type="radio" name="profile[truck_class]" id=""> Class 6 &nbsp;
+        <input type="radio" name="profile[truck_class]" id=""> Class 7 &nbsp;
+        <input type="radio" name="profile[truck_class]" id=""> Class 8  &nbsp;
+
+        {% render 'theme/simple/field_error', errors: object.errors.truck_class %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="air_compressor">{{ 'app.profiles.air_compressor' | t }}:</label>
+        <select name="profile[air_compressor]" id="air_compressor">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+        
+        {% render 'theme/simple/field_error', errors: object.errors.air_compressor %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="tooling">{{ 'app.profiles.tooling' | t }}:</label>
+        <input type="checkbox" name="profile[tooling]" id=""> Basic &nbsp;
+        <input type="checkbox" name="profile[tooling]" id=""> All Hand Tools &nbsp;
+        <input type="checkbox" name="profile[tooling]" id=""> Master Set Of Tools &nbsp;
+        <input type="checkbox" name="profile[tooling]" id=""> Speciality Tools &nbsp;
+        <input type="checkbox" name="profile[tooling]" id=""> Diagnostic PC &nbsp;
+        
+        {% render 'theme/simple/field_error', errors: object.errors.tooling %}
+      </div>
+
+      <div class="mb-6">
+        <label class="block mb-2 cursor-pointer" for="speciality_tool_type">{{ 'app.profiles.speciality_tool_type' | t }}:</label>
+        <input type="checkbox" name="profile[speciality_tool_type]" id=""> Line Boring &nbsp;
+        <input type="checkbox" name="profile[speciality_tool_type]" id=""> Mag Drill &nbsp;
+        
+        {% render 'theme/simple/field_error', errors: object.errors.speciality_tool_type %}
+      </div>-->
+
+      
+      <div class="mt-6">
+        {{ 'app.p-dashboard.enable_additional_security' | t }}:<br>
+        <a href="/dashboard/profile/2fa/new" class="mt-2 button button-secondary button-icon-left">
+          {% render 'theme/simple/ui/icon', icon: 'keys' %}
+          {{ 'app.p-dashboard.setup_two_factor' | t }}
+        </a>
+      </div>
+      
+
+      <div class="mt-4 text-right">
+        <button type="submit" class="text-sm button">{{ 'app.save' | t }}</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% render 'theme/simple/photos/uppy_form',
+  object_uuid: object.uuid,
+  presigned_url: presigned_url,
+  user_id: user.id,
+  photo_type: 'avatar',
+  note: 'Image up to 2MB',
+  max_number_of_files: 1,
+  update_img_selector: '[data-avatar]'
+%}
+
+  <script>
+    const MONTH_NAMES = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const MONTH_SHORT_NAMES = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    function app() {
+
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+
+      today = mm + '/' + dd + '/' + yyyy;
+      return {
+        showDatepicker: false,
+        datepickerValue: "",
+        selectedDate: today,
+        dateFormat: "DD-MM-YYYY",
+        month: "",
+        year: "",
+        no_of_days: [],
+        blankdays: [],
+        initDate() {
+          let today;
+          if (this.selectedDate) {
+            today = new Date(Date.parse(this.selectedDate));
+          } else {
+            today = new Date();
+          }
+          this.month = today.getMonth();
+          this.year = today.getFullYear();
+          this.datepickerValue = this.formatDateForDisplay(
+            today
+          );
+        },
+        formatDateForDisplay(date) {
+          let formattedDay = DAYS[date.getDay()];
+          let formattedDate = ("0" + date.getDate()).slice(
+            -2
+          ); // appends 0 (zero) in single digit date
+          let formattedMonth = MONTH_NAMES[date.getMonth()];
+          let formattedMonthShortName =
+            MONTH_SHORT_NAMES[date.getMonth()];
+          let formattedMonthInNumber = (
+            "0" +
+            (parseInt(date.getMonth()) + 1)
+          ).slice(-2);
+          let formattedYear = date.getFullYear();
+          if (this.dateFormat === "DD-MM-YYYY") {
+            return `${formattedDate}-${formattedMonthInNumber}-${formattedYear}`; // 02-04-2021
+          }
+          if (this.dateFormat === "YYYY-MM-DD") {
+            return `${formattedYear}-${formattedMonthInNumber}-${formattedDate}`; // 2021-04-02
+          }
+          if (this.dateFormat === "D d M, Y") {
+            return `${formattedDay} ${formattedDate} ${formattedMonthShortName} ${formattedYear}`; // Tue 02 Mar 2021
+          }
+          return `${formattedDay} ${formattedDate} ${formattedMonth} ${formattedYear}`;
+        },
+        isSelectedDate(date) {
+          const d = new Date(this.year, this.month, date);
+          return this.datepickerValue ===
+            this.formatDateForDisplay(d) ?
+            true :
+            false;
+        },
+        isToday(date) {
+          const today = new Date();
+          const d = new Date(this.year, this.month, date);
+          return today.toDateString() === d.toDateString() ?
+            true :
+            false;
+        },
+        getDateValue(date) {
+          let selectedDate = new Date(
+            this.year,
+            this.month,
+            date
+          );
+          this.datepickerValue = this.formatDateForDisplay(
+            selectedDate
+          );
+          // this.$refs.date.value = selectedDate.getFullYear() + "-" + ('0' + formattedMonthInNumber).slice(-2) + "-" + ('0' + selectedDate.getDate()).slice(-2);
+          this.isSelectedDate(date);
+          this.showDatepicker = false;
+        },
+        getNoOfDays() {
+          let daysInMonth = new Date(
+            this.year,
+            this.month + 1,
+            0
+          ).getDate();
+          // find where to start calendar day of week
+          let dayOfWeek = new Date(
+            this.year,
+            this.month
+          ).getDay();
+          let blankdaysArray = [];
+          for (var i = 1; i <= dayOfWeek; i++) {
+            blankdaysArray.push(i);
+          }
+          let daysArray = [];
+          for (var i = 1; i <= daysInMonth; i++) {
+            daysArray.push(i);
+          }
+          this.blankdays = blankdaysArray;
+          this.no_of_days = daysArray;
+        },
+      };
+    }
+  </script>
+</div>
+{% endcomment %}

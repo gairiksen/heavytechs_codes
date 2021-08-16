@@ -1,0 +1,18 @@
+{% liquid
+  assign selection = selection | default: 'model_create'
+
+  graphql r = mutation_name, args: object
+
+  if r.errors
+    assign type = 'errors.graphql.invalid showme: ' | append: mutation_name
+    log r.errors, type: type
+
+    hash_assign object['valid'] = false
+    hash_assign object['errors'] = r.errors
+  else
+    assign object = r[selection]
+    hash_assign object['valid'] = true
+  endif
+
+  return object
+%}

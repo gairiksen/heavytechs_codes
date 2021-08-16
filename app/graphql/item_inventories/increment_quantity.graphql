@@ -1,0 +1,16 @@
+mutation increment_quantity($id: ID!, $step: Float!) {
+  record_update(
+    id: $id
+    record: { properties: { name: "quantity", increment: $step } }
+  ) {
+    id
+    quantity: property_int(name: "quantity")
+    owner: related_record(
+      table: "organization"
+      join_on_property: "owner"
+      foreign_property: "id"
+    ) {
+      id
+    }
+  }
+}

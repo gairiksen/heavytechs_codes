@@ -1,0 +1,51 @@
+{% comment %}
+  user avatar that is generated from user initials as default
+  but replaced with the user image of correct size when the
+  user uplaods an image
+
+  arguments:
+  class - the class names to add to avatar, you need to set the size here too (string)
+  size - the size of the avatar you need in pixels (int)
+{% endcomment %}
+
+
+{% liquid
+  if size <= 100 or size == nil
+    assign version = 'tiny'
+  elsif size > 100 and size <= 256
+    assign version = 'small'
+  else
+    assign version = 'uncropped'
+  endif
+
+  assign avatar_url = profile.avatar.photo.versions[version]
+  assign size = size | default: 32
+%}
+
+
+{% if avatar_url %}
+
+  <img src="{{ avatar_url }}" width="{{ size }}" height="{{ size }}" alt="{{ alt }}"
+    class="object-cover rounded-full {{ class }}" data-avatar>
+
+{% else %}
+
+  {% liquid
+    if profile.first_name and profile.last_name
+      assign initial_name = profile.first_name | slice: 0
+      assign initial_surname = profile.last_name | slice: 0
+      assign initials = initial_name | append: initial_surname
+    else
+      assign initials = profile.slug | slice: 1 | default: false
+    endif
+  %}
+
+  <span class="flex items-center justify-center rounded-full bg-interaction-disabled text-interaction font-bold uppercase {{ class }}">
+    {% if initials %}
+      {{ initials }}
+    {% else %}
+      {% render 'theme/simple/ui/icon', icon: 'user', class: 'w-1/2' %}
+    {% endif %}
+  </span>
+
+{% endif %}

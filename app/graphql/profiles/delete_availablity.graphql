@@ -1,0 +1,5 @@
+mutation delete_profile_availability($id: ID!) {
+  model_delete(
+    id: $id
+  ){ id }
+}

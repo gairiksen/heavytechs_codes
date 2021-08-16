@@ -1,0 +1,810 @@
+<div class="flex flex-col md:flex-row">
+    {% render 'theme/simple/admin/new_menu', this_page: this_page %}
+
+    <div class="bg-gray-50 py-10 w-full md:w-4/5">
+        <div class="mx-auto px-3 md:px-10">
+            <div class="flex items-center justify-between mb-6">
+                <a href="javascript:history.go(-1)" class="flex items-center text-indigo-400 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    Mechanics listing</a>
+            </div>
+
+            {% assign dateStart = mechanic_basic_details.last_login | date: '%s' %}
+            {% assign nowTimestamp = 'now' | date: '%s' %}
+
+            {% comment %} difference in seconds {% endcomment %}
+            {% assign diffSeconds = nowTimestamp | minus: dateStart %}
+
+            {% comment %} difference in days {% endcomment %}
+            {% assign diffDays = diffSeconds | divided_by: 3600 | divided_by: 24 %}
+
+            {%comment%}
+            <p>difference in days = {{ diffDays }}</p>
+            {%endcomment%}
+            
+            
+
+            <div class="overflow-auto py-6">
+                <table class="border-collapse w-full">
+                    <thead>
+                        <tr>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Photo</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Name</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">sign up date</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Location</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Last login</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center whitespace-nowrap font-bold">% Complete</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white rounded-lg shadow">
+                        <td class="border-b border-gray-200 text-center h-20">
+                            {%if mechanic_details.photo.photo.url%}
+                                <img src="{{mechanic_details.photo.photo.url}}" alt="" class="w-10 h-10 rounded-full m-auto">
+                            {%else%}
+                                <img src="{{'images/signup-img2.png' | asset_url}}" alt="" class="w-10 h-10 rounded-full m-auto">
+                            {%endif%}
+                        </td>
+                        <td class="border-b border-gray-200 text-center h-20 text-base text-gray-600">{{mechanic_details.profile.first_name}} {{mechanic_details.profile.last_name}}</td>
+                        <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{ mechanic_details.created_at | date: "%b %y" }}</td>
+                        <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{mechanic_details.profile_bio.location}}</td>
+                        <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{ mechanic_basic_details.last_login | date: "%b %d, %Y %H:%M" }}</td>
+                        <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{%if mechanic_details.percent_complete %}{{mechanic_details.percent_complete}}{%else%}N/A{%endif%}</td>
+                        <td class="border-b border-gray-200 text-center h-20">&nbsp;</td>
+                        </tr>
+                        <tr class="bg-white rounded-lg shadow">
+                        
+                        
+                        
+                        <td colspan="7" class="border-b border-gray-200 text-center h-20 text-sm font-medium text-gray-600 whitespace-nowrap">
+                            <div class="flex items-center justify-between pr-10">
+
+                                <div class="flex items-center w-52"><img src="{{ 'images/mail-icon.svg' | asset_url }}" alt="" class="mr-3">
+                                    <a href="mailto:{{user_details.email}}">
+                                        {{user_details.email}}
+                                    </a>
+                                </div>
+
+                                <div class="flex items-center w-40"><img src="{{ 'images/call-icon.svg' | asset_url }}" alt="" class="mr-3">
+                                    <a href="callto:{{mechanic_details.profile.mobile_number}}">{{mechanic_details.profile.mobile_number}}</a>
+                                </div>
+
+                                <div class="flex items-center w-48"> 
+                                    <img src="{{ 'images/message-orng.svg' | asset_url }}" alt="" class="mr-3">
+                                    <a href="/inbox/?to_id={{ mechanic_details.profile.id }}">Instant message</a>
+                                </div>
+
+                                {%liquid
+                                    if mechanic_basic_details.is_blocked == '1'
+                                        assign toggle = '0'
+                                    else 
+                                        assign toggle = '1'
+                                    endif
+                                %}
+
+                                <div class="flex justify-center items-center" x-data="{ toggle: '{{toggle}}' }">
+                                    <a href="javascript:void(0)" onclick="change_status()">
+                                        <div class="relative rounded-full w-15 h-3 transition duration-200 ease-linear"
+                                                :class="[toggle === '1' ? 'bg-purple-400' : 'bg-gray-400']">
+                                            <label for="toggle" 
+                                                    class="absolute -top-1 left-0 bg-white border-2 w-5 h-5 rounded-full transition transform duration-100 ease-linear cursor-pointer"
+                                                    :class="[toggle === '1' ? 'translate-x-full border-purple-500 bg-purple-500' : 'translate-x-0 border-gray-400']">
+                                                    
+                                                </label>
+                                            <input type="checkbox" id="toggle" name="toggle" 
+                                                    class="appearance-none w-full h-full active:outline-none focus:outline-none"
+                                                    @click="toggle === '0' ? toggle = '1' : toggle = '0'">
+                                        </div>
+                                    </a>
+                                    {% if mechanic_basic_details.is_blocked == '1' %}
+                                        <span class="text-xs font-normal text-gray-500 ml-3.5">Unblock</span>                                        
+                                    {% else %}
+                                        <span class="text-xs font-normal text-gray-500 ml-3.5">Block</span>
+                                    {%endif%}
+
+                                    <input type="hidden" name="is_blocked" id="is_blocked" value="{{mechanic_basic_details.is_blocked}}">
+                                </div>  
+
+                            </div>
+                        </td>
+                        
+                      
+                        </tr>
+                        
+                    </tbody>
+                    </table>
+            </div>
+
+            
+            <script type="text/javascript">
+                function change_status(){
+                    //alert("aaaaa");
+                    var is_blocked = document.getElementById('is_blocked').value;
+                    if (is_blocked == '1') {
+                        var conf_text = "Do you really want to unblock this user?";
+                        var required_is_block = '0';
+                    } else {
+                        var conf_text = "Do you really want to block this user?";
+                        var required_is_block = '1';
+                    }
+                    var ans = confirm(conf_text);
+                    if (!ans) {
+                        return false;
+                    } else {
+
+                        var url = "/admin/user_change_status?profile_id={{mechanic_basic_details.id}}&user_id={{mechanic_basic_details.user_id}}&is_blocked="+required_is_block+"&profile_for=mechanic";
+                        window.location.href = url;
+                    }
+
+                    
+                }
+            </script>
+            
+
+
+            <div  
+            x-data="{ 
+                openTab: 1, 
+                activeClasses:'font-medium heavytechs-text-dark-orange border-b-2 heavytechs-border-color-orange',
+                inactiveClasses:'text-gray-800 font-normal'
+            }">
+                <div class="mb-8 bg-white shadow-sm border border-gray-100">
+                    <ul class="flex items-center flex-col md:flex-row">
+                        <li class="w-full md:w-auto" @click="openTab = 1">
+                            <a href="javascript:void(0)" 
+                            :class="openTab === 1 ? activeClasses : inactiveClasses"
+                            class="text-base w-full text-center h-12 flex items-center justify-center md:w-36">Bio</a>
+                        </li>
+                        <li class="w-full md:w-auto" @click="openTab = 2">
+                            <a href="javascript:void(0)" 
+                            :class="openTab === 2 ? activeClasses : inactiveClasses"
+                            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Skills/Services</a>
+                        </li>
+                        <li class="w-full md:w-auto" @click="openTab = 3">
+                            <a href="javascript:void(0)" 
+                            :class="openTab === 3 ? activeClasses : inactiveClasses"
+                            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Education/Certs</a>
+                        </li>
+                        <li class="w-full md:w-auto" @click="openTab = 4">
+                            <a href="javascript:void(0)" 
+                            :class="openTab === 4 ? activeClasses : inactiveClasses"
+                            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Truck</a>
+                        </li>
+                    </ul>
+                </div>
+            
+                <div x-show="openTab === 1">
+
+                    <div class="bg-white rounded-md pt-5 px-7 pb-24 shadow-sm">
+                        <div class="mb-3.5">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Company name:</strong>
+                            <span class="block text-base text-gray-500">{{profile_bio.company_name}}</span>
+                        </div>
+
+                        <div class="mb-3.5">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Position</strong>
+                            <span class="block text-base text-gray-500">{{profile_bio.position}}</span>
+                        </div>
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Location:</strong>
+                            <span class="block text-base text-gray-500">{{profile_bio.location}}</span>
+                        </div>
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Description </strong>
+                            <p class="block text-base text-gray-500">{{profile_bio.description}}</p>
+                        </div>
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Longer Description of service/skills offering</strong>
+                            <p class="block text-base text-gray-500">{{profile_bio.long_description}}</p>
+                        </div>
+
+                        <div class="mb-3.5">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">How far you prepeared to travel:</strong>
+                            <span class="block text-base text-gray-500">{{profile_bio.ready_for_travel}}</span>
+                        </div>
+
+                        <div class="mb-3.5">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Experience:</strong>
+                            <span class="block text-base text-gray-500">{{profile_bio.total_experience}}</span>
+                        </div>
+
+                        <div class="flex">
+                            <strong class="flex items-center text-base font-bold text-gray-600">
+                                Veteran
+                                <span class="bg-green-500 text-white w-5 h-5 flex items-center justify-center rounded-sm ml-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </span>
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div x-show="openTab === 2">
+
+                    <div class="bg-white rounded-md pt-5 px-7 pb-24 shadow-sm">
+                    <div class="mb-14">
+                        <h4 class="mb-4 text-base text-gray-700 font-bold">Industries Serviced (project type)*</h4>
+                        <ul class="customCheck flex items-center flex-col gap-4 md:flex-row md:gap-x-14">
+                            <!--<li>
+                                <input id="projecttype1" type="checkbox">
+                                <label for="projecttype1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Earth work</label>
+                            </li>-->
+                            {%if profile_skills.earthworks == '1' %}
+                            <li>
+                                <input id="projecttype2" type="checkbox" checked disabled>
+                                <label for="projecttype2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Earthworks</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.mining == '1' %}
+                            <li>
+                                <input id="projecttype2" type="checkbox" checked disabled>
+                                <label for="projecttype2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Mining</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.fleet == '1' %}
+                            <li>
+                                <input id="projecttype2" type="checkbox" checked disabled>
+                                <label for="projecttype2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Fleet</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.pipeline == '1' %}
+                            <li>
+                                <input id="projecttype2" type="checkbox" checked disabled>
+                                <label for="projecttype2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Pipeline</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.energy_production == '1' %}
+                            <li>
+                                <input id="projecttype2" type="checkbox" checked disabled>
+                                <label for="projecttype2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Energy Production</label>
+                            </li>
+                            {%endif%}
+                        </ul>
+                    </div>
+
+                    <div class="mb-14">
+                        <h4 class="mb-4 text-base text-gray-700 font-bold">Skills/ Service Offering</h4>
+                        <ul class="customCheck flex items-center flex-col gap-4 md:flex-row md:gap-x-14">
+                            <!--<li>
+                                <input id="skills1" type="checkbox">
+                                <label for="skills1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Heavy Equipment Mechanic</label>
+                            </li>-->
+                            {%if profile_skills.heavy_equipment_mechanic == '1' %}
+                            <li>
+                                <input id="skills2" type="checkbox" checked disabled>
+                                <label for="skills2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Heavy Equipment Mechanic</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.welder_fabricator == '1' %}
+                            <li>
+                                <input id="skills2" type="checkbox" checked disabled>
+                                <label for="skills2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Welder/Fabricator</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.truck_mechanic == '1' %}
+                            <li>
+                                <input id="skills2" type="checkbox" checked disabled>
+                                <label for="skills2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Truck Mechanic</label>
+                            </li>
+                            {%endif%}
+
+                            {%if profile_skills.oilers_pm_tech == '1' %}
+                            <li>
+                                <input id="skills2" type="checkbox" checked disabled>
+                                <label for="skills2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Oilers/PM Tech</label>
+                            </li>
+                            {%endif%}
+                        </ul>
+                    </div>
+
+                    <div class="mb-9">
+                        <h4 class="mb-4 text-base text-gray-700 font-bold">OEM</h4>
+                        <ul class="customCheck flex items-center flex-col gap-4 md:flex-row md:gap-x-14">
+                            <!--<li>
+                                <input id="OEM1" type="checkbox">
+                                <label for="OEM1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Caterpillar</label>
+                            </li>-->
+                            {%
+                            for oem in profile_all_oem
+                            %}
+                            <li>
+                                <input id="OEM2" type="checkbox" checked disabled>
+                                <label for="OEM2" class="text-base font-medium text-gray-800">
+                                    <span><span></span></span>
+                                    {{oem.oem_name}}<br>
+                                    ({{ oem.expert_familiar | capitalize }})<br>
+
+                                    {% for up in user_pdf.results %}
+                                        {% if up.item_category == oem.oem_name %}
+                                            <a href="{{up.direct_url}}">View Certificate</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    
+
+                    <div class="mb-9">
+                        <h4 class="mb-4 text-base text-gray-700 font-bold">Drivers Licence</h4>
+                        <ul class="customCheck flex items-center flex-col gap-4 mb-9 md:flex-row md:gap-x-14">
+                            <li>
+                                <input id="Licence1" type="checkbox" checked="" disabled>
+                                <label for="Licence1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>{{profile_skills.drivers_license_class}}</label>
+                            </li>                    
+                        </ul>
+
+                        {%comment%}
+                        <ul>
+                            <li class="flex items-center mb-3">
+                                <span class="block text-base text-gray-600 w-1/4">
+                                    Licence
+                                </span>
+                                {% for up in user_pdf.results %}
+                                    {% if up.item_category == 'skills' and up.item_category == 'insurance' %}
+                                        <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </li>                    
+                        </ul>
+                        {%endcomment%}
+                    </div>
+
+                    <div class="mb-10">
+                        <ul class="customCheck flex flex-col gap-4">
+                            {% if profile_skills.tanker == '1' %}
+                            <li>
+                                <input id="Tanker1" type="checkbox" checked disabled>
+                                <label for="Tanker1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Tanker</label>
+                            </li>
+                            {% endif %}
+                            
+                            {% if profile_skills.air_brakes == '1' %}
+                            <li>
+                                <input id="Tanker1" type="checkbox" checked disabled>
+                                <label for="Tanker1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Air Brakes</label>
+                            </li>
+                            {% endif %}
+                            
+                            {% if profile_skills.passenger == '1' %}
+                            <li>
+                                <input id="Tanker1" type="checkbox" checked disabled>
+                                <label for="Tanker1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Passenger</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_skills.doubles_triples == '1' %}
+                            <li>
+                                <input id="Tanker1" type="checkbox" checked disabled>
+                                <label for="Tanker1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Doubles/Triples</label>
+                            </li>
+                            {% endif %}
+                            
+                            {% if profile_skills.hazmat == '1' %}
+                            <li>
+                                <input id="Tanker1" type="checkbox" checked disabled>
+                                <label for="Tanker1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Hazmat</label>
+                            </li>
+                            {% endif %}                   
+                        </ul>
+                    </div>
+
+                    <div class="mb-14">
+                        <span class="block text-base text-gray-500 mb-4">Expiration date of hazmat endorsement: 
+                        <strong>{{ profile_skills.expiry_date_2 | date: "%d.%m.%Y" }}</strong></span>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-3.5 text-base text-gray-700 font-bold">Insurance Coverage</h4>
+                        <span class="block text-base text-gray-500 mb-2">Expiration date: 
+                        <strong>{{ profile_insurance.expiration_date | date: "%d.%m.%Y" }}</strong></span>
+                        <ul>
+                            <li class="flex items-center mb-3">
+                                <span class="block text-base text-gray-600 w-1/4">
+                                    Insurance
+                                </span>
+                                {% for up in user_pdf.results %}
+                                    {% if up.page_category == 'skills' and up.item_category == 'insurance' %}
+                                        <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </li>
+                            
+                        </ul>
+                    </div>
+                        
+                    </div>
+
+                </div>
+
+                <div x-show="openTab === 3">
+                    <div class="bg-white rounded-md p-7 shadow-sm mb-3.5">
+                    <div class="customCheck pb-5">
+                    
+                        <input {% if profile_education.automotive_service_excellence == '1' %}checked{% endif %} id="automotive1" type="checkbox" name="automotive" value="1" disabled>
+                        <label class="text-base font-medium text-gray-800" for="automotive1"><span></span>Automotive Service Excellence (ASE) certifications</label>
+                        
+                    </div>
+
+                    {% if profile_education.automotive_service_excellence == '1' %}
+                    <ul>
+                        {% for ase in profile_ase %}
+                        <li class="flex items-center mb-3">
+                            <span class="block text-base text-gray-600 w-2/4">
+                                {{ase.ase_name}}
+                            </span>
+                            {% for up in user_pdf.results %}
+                                {% if up.page_category == 'education' and  up.item_category == ase.ase_name %}
+                                    <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                {% endif %}
+                            {% endfor %}                    
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                </div>
+
+                <div class="bg-white rounded-md p-7 pb-16 shadow-sm">
+                    <div class="customCheck pb-5">
+                    
+                        <input {% if profile_education.osha == '1' %}checked{% endif %} id="OSHA1" type="checkbox" disabled>
+                        <label for="OSHA1" class="text-base font-medium text-gray-800">
+                        <span></span>OSHA (Occupation Safety Hazard Association)</label>
+                        
+                    </div>
+                    <span class="block text-base text-gray-500 mb-2">Expiration date: 
+                    <strong>{{ profile_education.osha_expiry | date: "%d.%m.%Y" }}</strong></span>
+
+
+                    {% if profile_education.osha == '1' %}
+                    <ul class="mb-11">
+                        <li class="flex items-center mb-3">
+                            <span class="block text-base text-gray-600 w-2/4">
+                                OSHA (Occupation Safety Hazard Association)
+                            </span>
+                            {% for up in user_pdf.results %}
+                                {% if up.page_category == 'education' and  up.item_category == 'osha_certificate' %}
+                                    <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    {% endif %}
+
+                    <div class="customCheck pb-5">
+                    
+                        <input {% if profile_education.msha == '1' %}checked{% endif %} id="OSHA1" type="checkbox" disabled>
+                        <label for="OSHA1" class="text-base font-medium text-gray-800">
+                        <span></span>MSHA (Mining Safety Hazard Association)</label>
+                        
+                    </div>
+                    <span class="block text-base text-gray-500 mb-2">Expiration date: 
+                    <strong>{{ profile_education.msha_expiry | date: "%d.%m.%Y" }}</strong></span>
+
+
+                    {% if profile_education.osha == '1' %}
+                    <ul class="mb-11">
+                        <li class="flex items-center mb-3">
+                            <span class="block text-base text-gray-600 w-2/4">
+                                MSHA (Mining Safety Hazard Association)
+                            </span>
+                            {% for up in user_pdf.results %}
+                                {% if up.page_category == 'education' and  up.item_category == 'msha_certificate' %}
+                                    <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    {% endif %}
+
+                    <div class="mb-11">
+                        <div class="customCheck pb-7">
+                    
+                            <input {% if profile_education.military_training == '1' %}checked{% endif %} id="military1" type="checkbox" disabled>
+                            <label for="military1" class="text-base font-medium text-gray-800">
+                            <span></span>Military Training</label>
+                            
+                        </div>
+
+                        {% if profile_education.military_training == '1' %}
+                        <span class="block text-base text-gray-500 mb-2.5">{{profile_education.most_advanced_training}}</span>
+                        <span class="block text-base text-gray-500 mb-4">Date completed: <strong>{{ profile_education.date_of_completion | date: "%d.%m.%Y" }}</strong></span>
+                        <p class="block text-base text-gray-500">{{profile_education.other_military_training}}</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <div class="customCheck pb-7">
+                    
+                            <input {% if profile_education.college_degree == '1' %}checked{% endif %} id="College1" type="checkbox" disabled>
+                            <label for="College1" class="text-base font-medium text-gray-800">
+                            <span></span>College degree</label>
+                            
+                        </div>
+
+                        {% if profile_education.college_degree == '1' %}
+                        <span class="block text-base text-gray-500 mb-2.5">{{profile_education.highest_degree}}</span>
+                        <span class="block text-base text-gray-500 mb-4">Date completed: <strong>{{ profile_education.highest_degree_d_o_completion | date: "%d.%m.%Y" }}</strong></span>
+                        <div class="flex items-center">
+                            <p class="block text-base text-gray-600 w-2/4">
+                                Diploma
+                            </p>
+                            {% for up in user_pdf.results %}
+                                {% if up.page_category == 'education' and  up.item_category == 'highest_degree' %}
+                                    <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                {% endif %}
+                            {% endfor %}
+                            <!--<a href="#" class="text-base text-blue-500 hover:underline">View diploma</a>-->
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                </div>
+                <div x-show="openTab === 4">
+                    <div class="bg-white rounded-md pt-5 px-7 pb-14 shadow-sm">
+                    <div class="mb-9">
+                        <h4 class="mb-5 text-base text-gray-700 font-bold">{{mechanic_basic_details.first_name}}’s Truck</h4>
+                        <p class="block text-base text-gray-500">{{profile_truck.short_description_service_skills}}</p>
+                    </div>
+
+                    <div class="mb-11">
+                        <ul class="flex flex-col gap-4 md:flex-row">
+                            {% for tImg in truck_photos %}
+                            <li>
+                                <figure><img style="width: 175px; height: 95px;" src="{{tImg.photo_path}}" alt="" class="rounded"></figure>
+                            </li>
+                            {%endfor%}
+                            <!--<li>
+                                <figure>
+                                    <img src="images/truck-img.jpg" alt="" class="rounded">
+                                </figure>
+                            </li>
+                            <li>
+                                <figure>
+                                    <img src="images/truck-img.jpg" alt="" class="rounded">
+                                </figure>
+                            </li>
+                            <li>
+                                <figure>
+                                    <img src="images/truck-img.jpg" alt="" class="rounded">
+                                </figure>
+                            </li>-->
+                        </ul>
+                    </div>
+
+                    <div class="mb-8">
+                        <strong class="block text-base font-bold text-gray-800 mb-2">Type</strong>
+                        <span class="block text-base text-gray-500">{{profile_truck.truck_type}}: Class {{profile_truck.truck_class}}</span>
+                    </div>
+
+                    <div class="flex mb-5">
+                        <strong class="flex items-center text-base font-bold text-gray-800">
+                            Crane Certification
+                            <!--<span class="bg-green-500 text-white w-5 h-5 flex items-center justify-center rounded-sm ml-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </span>-->
+                        </strong>
+                    </div>
+
+                    <div class="mb-14">
+                        <ul>
+                            <li class="flex items-center mb-3">
+                                <span class="block text-base text-gray-600 w-1/5">
+                                    Crane cert
+                                </span>
+                                {% for up in user_pdf.results %}
+                                    {% if up.page_category == 'truck' and  up.item_category == 'crane_certification' %}
+                                        <a href="{{up.direct_url}}" class="text-base text-blue-500 hover:underline">View Certificate</a>
+                                    {% endif %}
+                                {% endfor %}  
+                            </li>
+                            
+                        </ul>
+
+                        <span class="block text-base text-gray-500 my-3">Expiration date: <strong>{{ profile_truck.crane_cert_expiry_date | date: "%d.%m.%Y" }}</strong></span>
+                        
+                        <span class="block text-base text-gray-500 mb-4">Capacity under: <strong>{{ profile_truck.capacity }}</strong></span>
+                    </div>
+
+                    {% if truck.air_compressor == 'Yes' %}
+                    <div class="flex mb-7">
+                        <strong class="flex items-center text-base font-bold text-gray-800">
+                            CompressorAir
+                            <!--<span class="bg-green-500 text-white w-5 h-5 flex items-center justify-center rounded-sm ml-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </span>-->
+                        </strong>
+                    </div>
+                    {%endif%}
+
+                    <div class="flex mb-7">
+                        <h4 class="mb-4 text-base text-gray-700 font-bold">Tooling</h4>
+                        <ul class="customCheck flex flex-col gap-3">
+                            {% if profile_truck.tooling_basic == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Basic (1/2 drive" w/ power tools)</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.master_set == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Master set of tools</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.tooling_basic_1_drive == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Basic + 1 drive"</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.tooling_speciality_tool == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Speciality tools</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.tooling_generic_diagnostics == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Generic Diagnostic PC</label>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                    {% if profile_truck.tooling_speciality_tool == '1' %}
+                    <div>
+                        <h4 class="mb-4 text-base text-gray-700 font-bold">Speciality Tools</h4>
+                        <ul class="customCheck flex flex-col gap-3">
+                            {% if profile_truck.line_boring == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Line Boring</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.nitrogen_charge_kit == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Nitrogen charge kit</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.mag_drill == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Mag Drill</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.fifty_t_hydraulic_jacks == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>50T hydraulic jacks</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.track_pin_press == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Track pin press</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.field_hose_press == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Field hose press- with fittings and hose</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.hydraulic_pulling_rams == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Hydraulic pulling rams</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.hydraulic_torque_wrench == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Hydraulic torque wrench</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.generic_diagnostic_pc == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Generic Diagnostic PC</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.oem_diagnostic_software == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>OEM diagnostic software</label>
+                            </li>
+                            {% endif %}
+
+                            {% if profile_truck.lube_skid == '1' %}
+                            <li>
+                                <input id="tooling1" type="checkbox" checked disabled>
+                                <label for="tooling1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Lube skid</label>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

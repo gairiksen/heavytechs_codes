@@ -1,0 +1,34 @@
+<div class="container relative flex-wrap justify-between text-white xs:flex xs:-top-3">
+  <div class="flex flex-col flex-1 p-6 mb-2 bg-no-repeat bg-cover me-2 card" style="background-image: url({{ 'images/card_bg.png' | asset_url }})">
+    <h3 class="bigtitle">
+      <a href="/dashboard/items/new" class="text-white hover:text-white">Sell</a>
+    </h3>
+    <p>with confidence</p>
+
+    <a href="/dashboard/items/new" class="flex items-center justify-center p-4 ml-auto text-white rounded bg-interaction hover:bg-interaction-hover hover:text-white">
+      {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'w-5' %}
+    </a>
+  </div>
+
+  <div class="flex flex-col flex-1 p-6 mb-2 bg-no-repeat bg-cover me-2 card" style="background-image: url({{ 'images/card_bg2.png' | asset_url }})">
+    <h3 class="bigtitle">
+      <a href="/search" class="text-white hover:text-white">Buy</a>
+    </h3>
+    <p>from favorite merchants</p>
+
+    <a href="/search" class="flex items-center justify-center p-4 ml-auto text-white rounded bg-interaction hover:bg-interaction-hover hover:text-white">
+      {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'w-5' %}
+    </a>
+  </div>
+
+  <div class="flex flex-col flex-1 p-6 mb-2 bg-no-repeat bg-cover me-2 card" style="background-image: url({{ 'images/card_bg3.png' | asset_url }})">
+    <h3 class="bigtitle">
+      <a href="/questions" class="text-white hover:text-white">Questions</a>
+    </h3>
+    <p>about the process</p>
+
+    <a href="/questions" class="flex items-center justify-center p-4 ml-auto text-white rounded bg-interaction hover:bg-interaction-hover hover:text-white">
+      {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'w-5' %}
+    </a>
+  </div>
+</div>

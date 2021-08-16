@@ -1,0 +1,271 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+    <div class="w-full mb-6 md:mb-0 md:w-60">
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md mb-4">
+            <div class="flex flex-col w-77 mb-0 text-center">
+            <figure>
+            {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-32 h-32 m-auto rounded-full' %}
+            </figure>
+            <div class="px-0 mt-5 mechanic_logo">
+            {% render 'theme/simple/photos/uppy_area' %}
+            </div>
+            </div>
+        </div>
+        {%endcomment%}
+
+        {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+        {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object, search_mechanic_deatils: search_mechanic_deatils %}
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+            <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+            <p class="text-sm font-normal text-gray-400 mb-5">
+                To make your profile visible to other users, fill in the required fields
+            </p>
+
+            <div>
+                <span class="block text-right text-sm text-gray-400 mb-2">30%</span>
+                <ul class="flex justify-between items-center">
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                </ul>
+            </div>
+        </div>
+        {%endcomment%}
+        <div class="pt-8 pb-5 md:pb-0">
+            <ul class="customRadio flex md:block">
+                <li class="mr-4 md:mr-0 md:mb-3">
+                    <input {%if profile_availability.availability == '1'%}checked{%endif%} id="available" class="mechanic_availability" type="radio" name="available" value="1">
+                    <label for="available" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>Available</label>
+                </li>
+                <li>
+                    <input {%if profile_availability.availability == '0'%}checked{%endif%} id="unavailable" class="mechanic_availability" type="radio" name="available" value="0">
+                    <label for="unavailable" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>Unavailable</label>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="profileEdit_right w-full">
+        <div class="mb-8 bg-white">
+            <ul class="flex items-center flex-col md:flex-row">
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/bio" 
+                    class="text-base w-full text-center h-12 flex items-center justify-center md:w-36 heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Bio</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/skills"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Skills/Services</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/education"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Education/Certs</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/truck"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Truck</a>
+                </li>
+            </ul>
+        </div>
+
+        <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyD6Jnj9azQxyTeT1Q9XBzYNU1OGNpEHwRM"></script>-->
+        <script type="text/javascript">
+            function initialize() {
+                var input = document.getElementById('location');
+                const options = {
+                    componentRestrictions: { country: "us" },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                new google.maps.places.Autocomplete(input, options);
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+    
+        <div class="bg-white rounded-md">
+
+        <div class="pb-10 px-7 pt-7 shadow-sm">
+        <form action="/dashboard/profile" method="post" name="bio_from" id="bio_frm" enctype='multipart/form-data'>
+            {% render 'authenticity_token', context: context %}
+            <input type="hidden" name="_method" value="put" />
+
+            <input type="hidden" name="profile_type" value="bio" />
+            <input type="hidden" name="bio[id]" value="{{profile_bio.id}}" id="id" />
+            <input type="hidden" name="bio[user_id]" value="{{profile_bio.user_id}}" id="user_id" />
+            <input type="hidden" name="bio[location_lat]" value="{{profile_bio.location_lat}}" id="location_lat" />
+            <input type="hidden" name="bio[location_lng]" value="{{profile_bio.location_lng}}" id="location_lng" />
+            
+            <ul>
+                <li class="mb-5">
+                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{{ 'app.profiles.company_name' | t }}</label>
+                    <input type="text" name="bio[company_name]" value="{{ profile_bio.company_name }}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </li>
+
+                <li class="mb-5">
+                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{{ 'app.profiles.position' | t }}</label>
+                    <input type="text" name="bio[position]" value="{{ profile_bio.position }}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </li>
+
+                <li class="mb-5">
+                    <label class="block mb-0.5 pl-4 text-base text-gray-800">{{ 'app.profiles.location' | t }}</label>
+                    <input type="text" name="bio[location]" id="location" value="{{ profile_bio.location }}" placeholder="Enter zip" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </li>
+
+                <li class="mb-5">
+                    <!--<label class="block mb-0.5 pl-4 text-base text-gray-800">Latitude</label>-->
+                    <input type="hidden" name="bio[latitude]" id="latitude" value="{{ profile_bio.latitude }}" placeholder="Enter latitude" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </li>
+
+                <li class="mb-5">
+                    <!--<label class="block mb-0.5 pl-4 text-base text-gray-800">Longitude</label>-->
+                    <input type="hidden" name="bio[longitude]" id="longitude" value="{{ profile_bio.longitude }}" placeholder="Enter longitude" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </li>
+            </ul>
+
+            <div class="pt-5 mb-10">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.">{{ 'app.profiles.ready_for_travel' | t }}</h4>
+                <ul class="customRadio flex gap-4 flex-col md:flex-row md:gap-x-10 flex-wrap">
+                    <li>
+                        <input type="radio" name="bio[ready_for_travel]" {% if profile_bio.ready_for_travel == 'Up to 50Mi' %}checked{%endif%} value="Up to 50Mi">
+                        <label for="travel1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Up to 50</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="bio[ready_for_travel]" {% if profile_bio.ready_for_travel == '100 + Mi' %}checked{%endif%} value="100 + Mi">
+                        <label for="travel2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>100 + Mi</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="bio[ready_for_travel]" {% if profile_bio.ready_for_travel == '200 + Mi' %}checked{%endif%} value="200 + Mi">
+                        <label for="travel3" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>200 + Mi</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="bio[ready_for_travel]" {% if profile_bio.ready_for_travel == '300 + Mi' %}checked{%endif%} value="300 + Mi">
+                        <label for="travel4" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>300 + Mi</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="bio[ready_for_travel]" {% if profile_bio.ready_for_travel == '400 + Mi' %}checked{%endif%} value="400 + Mi">
+                        <label for="travel5" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>400 + Mi</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.short_description' | t }}</h4>
+                <textarea name="bio[short_description]" class="bg-gray-100 border border-gray-200 h-24 rounded-lg resize-none p-2 outline-none text-base text-gray-700 w-full lg:w-2/4" placeholder="Type">{{ profile_bio.short_description }}</textarea>
+                <div class="flex items-center justify-end text-right text-xs text-gray-400 w-full md:w-2/4 pt-4">
+                    <img src="{{ 'images/warning.svg' | asset_url }}" alt="" class="mr-2"> Max 150 characters
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.long_description' | t }}</h4>
+                <textarea name="bio[long_description]" class="bg-gray-100 border border-gray-200 h-40 rounded-lg resize-none p-2 outline-none text-base text-gray-700 w-full lg:w-2/4" placeholder="Type">{{ profile_bio.long_description }}</textarea>
+                <div class="flex items-center justify-end text-right text-xs text-gray-400 w-full md:w-2/4 pt-4">
+                    <img src="{{ 'images/warning.svg' | asset_url }}" alt="" class="mr-2"> Max 750 characters
+                </div>
+            </div>
+
+            <div class="mb-10">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.total_experience' | t }}</h4>
+                <ul class="customRadio flex gap-4 flex-col md:flex-row md:gap-x-10 flex-wrap">
+                    <li>
+                        <input type="radio" {% if profile_bio.total_experience == '1-4 Years' %}checked{%endif%} name="bio[total_experience]" value="1-4 Years" />
+                        <label for="experience1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>1-4 years</label>
+                    </li>
+                    <li>
+                        <input type="radio" {% if profile_bio.total_experience == '5-9 Years' %}checked{%endif%} name="bio[total_experience]" value="5-9 Years" />
+                        <label for="experience2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>5-9 years</label>
+                    </li>
+                    <li>
+                        <input type="radio" {% if profile_bio.total_experience == '10-20 Years' %}checked{%endif%} name="bio[total_experience]" value="10-20 Years" />
+                        <label for="experience3" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>10-20 years</label>
+                    </li>
+                    <li>
+                        <input type="radio" {% if profile_bio.total_experience == '20+ Years' %}checked{%endif%} name="bio[total_experience]" value="20+ Years" />
+                        <label for="experience4" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>20+ years</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mb-14">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.veteran' | t }}</h4>
+
+                <ul class="customRadio flex items-center gap-10">
+                    <li>
+                        <input type="radio" {% if profile_bio.veteran == 'Yes' %}checked{%endif%} name="bio[veteran]" value="Yes" />
+                        <label for="veteran1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Yes</label>
+                    </li>
+                    <li>
+                        <input type="radio" {% if profile_bio.veteran == 'No' %}checked{%endif%} name="bio[veteran]" value="No" />
+                        <label for="veteran2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>No</label>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div>
+                <!--<button class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block">Save</button>-->
+                <input onclick="saveBio()" class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block cursor-pointer" type="button" name="save_bio" id="save_bio" value="Save">
+            </div>
+
+        </form>
+        </div>
+
+        <script type="text/javascript">
+        function saveBio(){            
+            var geocoder = new google.maps.Geocoder();
+
+            var location = document.getElementById('location').value;
+            if(location.includes("USA") == false){
+                location = location + ", USA";
+            }
+            
+            geocoder.geocode( { 'address': location}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+
+                    document.getElementById('bio_frm').submit();
+                } 
+            });           
+                      
+        }
+        </script>
+
+        </div>
+    </div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+
+
+
+

@@ -1,0 +1,645 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+<div class="w-full mb-6 md:mb-0 md:w-60">
+
+   
+    {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+    {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object, search_mechanic_deatils: search_mechanic_deatils %}
+
+    {%comment%}
+    <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+        <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+        <p class="text-sm font-normal text-gray-400 mb-5">
+            To make your profile visible to other users, fill in the required fields
+        </p>
+
+        <div>
+            <span class="block text-right text-sm text-gray-400 mb-2">30%</span>
+            <ul class="flex justify-between items-center">
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+            </ul>
+        </div>
+    </div>
+    {%endcomment%}
+
+        <div class="pt-8 pb-5 md:pb-0">
+            <ul class="customRadio flex md:block">
+                <li class="mr-4 md:mr-0 md:mb-3">
+                <input {%if profile_availability.availability == '1'%}checked{%endif%} id="available" class="mechanic_availability" type="radio" name="available" value="1">
+                <label for="available" class="text-base font-medium text-gray-800"><span><span></span></span>Available</label>
+            </li>
+            <li>
+                <input {%if profile_availability.availability == '0'%}checked{%endif%} id="unavailable" class="mechanic_availability" type="radio" name="available" value="0">
+                <label for="unavailable" class="text-base font-medium text-gray-800"><span><span></span></span>Unavailable</label>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="profileEdit_right w-full">
+<div class="mb-8 bg-white">
+    <ul class="flex items-center flex-col md:flex-row">
+        <li class="w-full md:w-auto">
+            <a href="/dashboard/profile/bio?edit=1" 
+            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Bio</a>
+        </li>
+        <li class="w-full md:w-auto">
+            <a href="/dashboard/profile/skills"
+            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Skills/Services</a>
+        </li>
+        <li class="w-full md:w-auto">
+            <a href="/dashboard/profile/education"
+            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3  heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Education/Certs</a>
+        </li>
+        <li class="w-full md:w-auto">
+            <a href="/dashboard/profile/truck"
+            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Truck</a>
+        </li>
+    </ul>
+</div>
+
+<div class="rounded-md">
+
+<div class="pb-10 pt-7">
+
+  <div>
+  <form action="/dashboard/profile" method="post">
+  {% render 'authenticity_token', context: context %}
+  <input type="hidden" name="_method" value="put" />
+
+  <input type="hidden" name="profile_type" value="education" />
+
+  <input type="hidden" name="education[id]" value="{{profile_education.id}}" id="id" />
+  <input type="hidden" name="education[user_id]" value="{{profile_education.user_id}}" id="user_id" />
+
+
+  {%liquid 
+    assign a1_checked = false | default: false
+    assign a2_checked = false | default: false
+    assign a3_checked = false | default: false
+    assign a4_checked = false | default: false
+    assign a5_checked = false | default: false
+    assign a6_checked = false | default: false
+    assign a7_checked = false | default: false
+    assign a8_checked = false | default: false
+    assign a9_checked = false | default: false
+    assign a10_checked = false | default: false
+    assign a11_checked = false | default: false
+    assign a12_checked = false | default: false
+    assign a13_checked = false | default: false
+    assign a14_checked = false | default: false
+    assign a15_checked = false | default: false
+    assign a16_checked = false | default: false
+    assign a17_checked = false | default: false
+    assign a18_checked = false | default: false
+    assign a19_checked = false | default: false
+    assign a20_checked = false | default: false
+    assign a21_checked = false | default: false
+    assign a22_checked = false | default: false
+    assign a23_checked = false | default: false
+    assign a24_checked = false | default: false
+    assign a25_checked = false | default: false
+    assign a26_checked = false | default: false
+    assign a27_checked = false | default: false
+    assign a28_checked = false | default: false
+    assign a29_checked = false | default: false
+    assign a30_checked = false | default: false
+    assign a31_checked = false | default: false
+
+    for ase in profile_ase
+
+      if ase.ase_name == 'A1 - Engine Repair'
+        assign a1_checked = true
+      endif
+      if ase.ase_name == 'A2 - Automatic Transmission/Transaxle'
+        assign a2_checked = true
+      endif
+      if ase.ase_name == 'A3 - Manual Drive Train and Axles'
+        assign a3_checked = true
+      endif
+      if ase.ase_name == 'A4 - Suspension and Steering'
+        assign a4_checked = true
+      endif
+      if ase.ase_name == 'A5 - Brakes'
+        assign a5_checked = true
+      endif
+      if ase.ase_name == 'A6 - Electrical/Electronic Systems'
+        assign a6_checked = true
+      endif
+      if ase.ase_name == 'A7 - Heating and Air Conditioning'
+        assign a7_checked = true
+      endif
+      if ase.ase_name == 'A8 - Engine Performance'
+        assign a8_checked = true
+      endif
+      if ase.ase_name == 'A9 - Light Vehicle Diesel Engines'
+        assign a9_checked = true
+      endif
+      if ase.ase_name == 'B2 - Painting and Refinishing'
+        assign a10_checked = true
+      endif
+      if ase.ase_name == 'B3 - Non-Structural Analysis and Damage Repair'
+        assign a11_checked = true
+      endif
+      if ase.ase_name == 'B4 - Structural Analysis and Damage Repair'
+        assign a12_checked = true
+      endif
+      if ase.ase_name == 'B5 - Mechanical and Electrical Components'
+        assign a13_checked = true
+      endif
+      if ase.ase_name == 'C1 - Automobile Service Consultant Certification Test'
+        assign a14_checked = true
+      endif
+      if ase.ase_name == 'E1 - Truck Equipment Installation and Repair'
+        assign a15_checked = true
+      endif
+      if ase.ase_name == 'E2 - Electrical/Electronic Systems Installation and Repair'
+        assign a16_checked = true
+      endif
+      if ase.ase_name == 'E3 - Auxiliary Power Systems Installation and Repair'
+        assign a17_checked = true
+      endif
+      if ase.ase_name == 'G1 - Auto Maintenance and Light Repair Certification Test'
+        assign a18_checked = true
+      endif
+      if ase.ase_name == 'L1 - Advanced Engine Performance Specialist Certification Test'
+        assign a19_checked = true
+      endif
+      if ase.ase_name == 'L2 - Electronic Diesel Engine Diagnosis Specialist Certification Test'
+        assign a20_checked = true
+      endif
+      if ase.ase_name == 'P1 - Medium-Heavy Truck Parts Specialist'
+        assign a21_checked = true
+      endif
+      if ase.ase_name == 'P2 - Automobile Parts Specialist'
+        assign a22_checked = true
+      endif
+      if ase.ase_name == 'P4 - General Motors Parts Consultant'
+        assign a23_checked = true
+      endif
+      if ase.ase_name == 'T1 - Gasoline Engines'
+        assign a24_checked = true
+      endif
+      if ase.ase_name == 'T2 - Diesel Engines'
+        assign a25_checked = true
+      endif
+      if ase.ase_name == 'T3 - Drive Train'
+        assign a26_checked = true
+      endif
+      if ase.ase_name == 'T4 - Brakes'
+        assign a27_checked = true
+      endif
+      if ase.ase_name == 'T5 - Suspension and Steering'
+        assign a28_checked = true
+      endif
+      if ase.ase_name == 'T6 - Electrical/ Electronic Systems'
+        assign a29_checked = true
+      endif
+      if ase.ase_name == 'T7 - Heating, Ventilation and Air Conditioning (HVAC)'
+        assign a30_checked = true
+      endif      
+      if ase.ase_name == 'T8 - Preventive Maintenance Inspection'
+        assign a31_checked = true
+      endif
+
+    endfor
+
+    if profile_education.automotive_service_excellence == '1'
+      assign ase_det_display = 'block' | default: 'none'
+    else 
+      assign ase_det_display = 'none' | default: 'none'
+    endif
+
+    if profile_education.osha == '1'
+      assign osha_det_display = 'block' | default: 'none'
+    else 
+      assign osha_det_display = 'none' | default: 'none'
+    endif
+
+    if profile_education.msha == '1'
+      assign msha_det_display = 'block' | default: 'none'
+    else 
+      assign msha_det_display = 'none' | default: 'none'
+    endif
+
+    if profile_education.military_training == '1'
+      assign military_training_det_display = 'block' | default: 'none'
+    else 
+      assign military_training_det_display = 'none' | default: 'none'
+    endif
+
+    if profile_education.college_degree == '1'
+      assign college_degree_det_display = 'block' | default: 'none'
+    else 
+      assign college_degree_det_display = 'none' | default: 'none'
+    endif
+  %}
+
+  <div class="bg-white rounded-md px-6 mb-3">
+      <div class="customCheck py-6">
+      
+          <input id="ase_chk" onclick="showDetails('ase_chk','ase_details')" {%if profile_education.automotive_service_excellence == '1'%}checked{%endif%} id="automotive_service_excellence" type="checkbox" name="education[automotive_service_excellence]" value="1">
+          <label class="text-base font-medium text-gray-800" for="automotive_service_excellence"><span></span>{{ 'app.profiles.automotive_service_excellence' | t }}</label>
+          
+      </div>
+
+      <div id="ase_details" style="display:{{ase_det_display}};" class="bg-gray-50 pt-5 pb-14 px-7 -mx-6">
+          <div x-data="{isOpen: false}" class="mb-6">
+              <div class="relative w-full md:w-2/4">
+                  <input @click="isOpen = !isOpen" type="text" placeholder="Choose" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full">
+                  <img src="{{ 'images/down-arrow.svg' | asset_url }}" alt="" class="absolute bottom-4 right-4">
+              </div>
+              
+              <ul style="height:500px; width:800px !important; overflow:scroll;" class="customCheck p-2 w-full max-w-md bg-white shadow-lg border border-gray-100 absolute z-10 ml-3.5" 
+              :aria-expanded="isOpen ? 'true' : 'false'" 
+              :class="{ 'hidden': !isOpen }"
+              @click.away="isOpen = false"
+              >
+
+                  <li class="mb-2"><b>Automobile & Light Truck Certification Tests - A Series</b></li>
+                  <li class="mb-2">
+                      <input {%if a1_checked == true %}checked{%endif%} onclick="showPU('A1','A1 - Engine Repair','1')" name="education[ase][]" value="A1 - Engine Repair" id="testing1" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing1">
+                      <span></span>A1 – Engine Repair</label>          
+                  </li>
+                  <li>
+                      <input {%if a2_checked == true %}checked{%endif%} onclick="showPU('A2','A2 - Automatic Transmission/Transaxle','2')" name="education[ase][]" value="A2 - Automatic Transmission/Transaxle" id="testing2" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing2">
+                      <span></span>A2 – Automatic Transmission/Transaxle</label>          
+                  </li>
+                  <li>
+                      <input {%if a3_checked == true %}checked{%endif%} onclick="showPU('A3','A3 - Manual Drive Train and Axles','3')" name="education[ase][]" value="A3 - Manual Drive Train and Axles" id="testing3" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing3">
+                      <span></span>A3 – Manual Drive Train & Axles</label>          
+                  </li>
+                  <li>
+                      <input {%if a4_checked == true %}checked{%endif%} onclick="showPU('A4','A4 - Suspension and Steering','4')" name="education[ase][]" value="A4 - Suspension and Steering" id="testing4" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing4">
+                      <span></span>A4 – Suspension & Steering</label>          
+                  </li>
+                  <li>
+                      <input {%if a5_checked == true %}checked{%endif%} onclick="showPU('A5','A5 - Brakes','5')" name="education[ase][]" value="A5 - Brakes" id="testing5" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing5">
+                      <span></span>A5 – Brakes</label>          
+                  </li>
+                  <li>
+                      <input {%if a6_checked == true %}checked{%endif%} onclick="showPU('A6','A6 - Electrical/Electronic Systems','6')" name="education[ase][]" value="A6 - Electrical/Electronic Systems" id="testing6" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing6">
+                      <span></span>A6 – Electrical/Electronic Systems</label>          
+                  </li>
+                  <li>
+                      <input {%if a7_checked == true %}checked{%endif%} onclick="showPU('A7','A7 - Heating and Air Conditioning','7')" name="education[ase][]" value="A7 - Heating and Air Conditioning" id="testing7" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing7">
+                      <span></span>A7 – Heating & Air Conditioning</label>          
+                  </li>
+                  <li>
+                      <input {%if a8_checked == true %}checked{%endif%} onclick="showPU('A8','A8 - Engine Performance','8')" name="education[ase][]" value="A8 - Engine Performance" id="testing8" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing8">
+                      <span></span>A8 – Engine Performance</label>          
+                  </li>
+                  <li>
+                      <input {%if a9_checked == true %}checked{%endif%} onclick="showPU('A9','A9 - Light Vehicle Diesel Engines','9')" name="education[ase][]" value="A9 - Light Vehicle Diesel Engines" id="testing9" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing9">
+                      <span></span>A9 – Light Vehicle Diesel Engines</label>          
+                  </li>
+
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Collision Repair & Refinish Certification Tests - B Series</b></li>
+                  <li class="mb-2">
+                      <input {%if a10_checked == true %}checked{%endif%} onclick="showPU('B2','B2 - Painting and Refinishing','10')" name="education[ase][]" value="B2 - Painting and Refinishing" id="testing10" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing10">
+                      <span></span>B2 – Painting & Refinishing</label>          
+                  </li>
+                  <li>
+                      <input {%if a11_checked == true %}checked{%endif%} onclick="showPU('B3','B3 - Non-Structural Analysis and Damage Repair','11')" name="education[ase][]" value="B3 - Non-Structural Analysis and Damage Repair" id="testing11" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing11">
+                      <span></span>B3 – Non-Structural Analysis & Damage Repair</label>          
+                  </li>
+                  <li>
+                      <input {%if a12_checked == true %}checked{%endif%} onclick="showPU('B4','B4 - Structural Analysis and Damage Repair','12')" name="education[ase][]" value="B4 - Structural Analysis and Damage Repair" id="testing12" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing12">
+                      <span></span>B4 – Structural Analysis & Damage Repair</label>          
+                  </li>
+                  <li>
+                      <input {%if a13_checked == true %}checked{%endif%} onclick="showPU('B5','B5 - Mechanical and Electrical Components','13')" name="education[ase][]" value="B5 - Mechanical and Electrical Components" id="testing13" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing13">
+                      <span></span>B5 – Mechanical & Electrical Components</label>          
+                  </li>
+
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Automobile Service Consultant Certification Test (C1)</b></li>
+                  <li class="mb-2">
+                      <input {%if a14_checked == true %}checked{%endif%} onclick="showPU('C1','C1 - Automobile Service Consultant Certification Test (C1)','14')" name="education[ase][]" value="C1 - Automobile Service Consultant Certification Test" id="testing14" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing14">
+                      <span></span>Automobile Service Consultant Certification Test (C1)</label>          
+                  </li>
+                  
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Truck Equipment Certification Tests - E Series</b></li>
+                  <li class="mb-2">
+                      <input {%if a15_checked == true %}checked{%endif%} onclick="showPU('E1','E1 - Truck Equipment Installation and Repair','15')" name="education[ase][]" value="E1 - Truck Equipment Installation and Repair" id="testing15" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing15">
+                      <span></span>E1 – Truck Equipment Installation & Repair</label>          
+                  </li>
+                  <li>
+                      <input {%if a16_checked == true %}checked{%endif%} onclick="showPU('E2','E2 - Electrical/Electronic Systems Installation and Repair','16')" name="education[ase][]" value="E2 - Electrical/Electronic Systems Installation and Repair" id="testing16" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing16">
+                      <span></span>E2 – Electrical/Electronic Systems Installation & Repair</label>   
+                  </li>       
+                  </li>
+                      <input {%if a17_checked == true %}checked{%endif%} onclick="showPU('E3','E3 - Auxiliary Power Systems Installation and Repair','17')" name="education[ase][]" value="E3 - Auxiliary Power Systems Installation and Repair" id="testing17" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing17">
+                      <span></span>E3 – Auxiliary Power Systems Installation & Repair</label>          
+                  </li>
+
+                  
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Auto Maintenance and Light Repair Certification Test (G1)</b></li>
+                  <li class="mb-2">
+                      <input {%if a18_checked == true %}checked{%endif%} onclick="showPU('G1','G1 - Auto Maintenance and Light Repair Certification Test','18')" name="education[ase][]" value="G1 - Auto Maintenance and Light Repair Certification Test" id="testing18" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing18">
+                      <span></span>Auto Maintenance and Light Repair Certification Test (G1)</label>          
+                  </li>
+
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Advanced Engine Performance Specialist Certification Test (L1)</b></li>
+                  <li>
+                      <input {%if a19_checked == true %}checked{%endif%} onclick="showPU('L1','L1 - Advanced Engine Performance Specialist Certification Test','19')" name="education[ase][]" value="L1 - Advanced Engine Performance Specialist Certification Test" id="testing19" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing19">
+                      <span></span>Advanced Engine Performance Specialist Certification Test (L1)</label>          
+                  </li>
+
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Electronic Diesel Engine Diagnosis Specialist Certification Test (L2)</b></li>
+                  <li>
+                      <input {%if a20_checked == true %}checked{%endif%} onclick="showPU('L2','L2 - Electronic Diesel Engine Diagnosis Specialist Certification Test','20')" name="education[ase][]" value="L2 - Electronic Diesel Engine Diagnosis Specialist Certification Test" id="testing20" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing20">
+                      <span></span>Electronic Diesel Engine Diagnosis Specialist Certification Test (L2)</label>          
+                  </li>
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Parts Specialist Certification Tests - P Series</b></li>
+                  <li>
+                      <input {%if a21_checked == true %}checked{%endif%} onclick="showPU('P1','P1 - Medium-Heavy Truck Parts Specialist','21')" name="education[ase][]" value="P1 - Medium-Heavy Truck Parts Specialist" id="testing21" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing21">
+                      <span></span>P1 – Medium-Heavy Truck Parts Specialist</label>          
+                  </li>
+                  <li>
+                      <input {%if a22_checked == true %}checked{%endif%} onclick="showPU('P2','P2 - Automobile Parts Specialist','22')" name="education[ase][]" value="P2 - Automobile Parts Specialist" id="testing22" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing22">
+                      <span></span>P2 – Automobile Parts Specialist</label>          
+                  </li>
+                  <li>
+                      <input {%if a23_checked == true %}checked{%endif%} onclick="showPU('P4','P4 - General Motors Parts Consultant','23')" name="education[ase][]" value="P4 - General Motors Parts Consultant" id="testing23" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing23">
+                      <span></span>P4 – General Motors Parts Consultant</label>          
+                  </li>
+
+                  <li class="mb-2">&nbsp;</li>
+                  <li class="mb-2"><b>Medium-Heavy Truck Certification Tests (T Series)</b></li>
+                  <li>
+                      <input {%if a24_checked == true %}checked{%endif%} onclick="showPU('T1','T1 - Gasoline Engines','24')" name="education[ase][]" value="T1 - Gasoline Engines" id="testing24" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing24">
+                      <span></span>T1 – Gasoline Engines</label>          
+                  </li>
+                  <li>
+                      <input {%if a25_checked == true %}checked{%endif%} onclick="showPU('T2','T2 - Diesel Engines','25')" name="education[ase][]" value="T2 - Diesel Engines" id="testing25" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing25">
+                      <span></span>T2 – Diesel Engines</label>          
+                  </li>
+                  <li>
+                      <input {%if a26_checked == true %}checked{%endif%} onclick="showPU('T3','T3 - Drive Train','26')" name="education[ase][]" value="T3 - Drive Train" id="testing26" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing26">
+                      <span></span>T3 – Drive Train</label>          
+                  </li>
+                  <li>
+                      <input {%if a27_checked == true %}checked{%endif%} onclick="showPU('T4','T4 - Brakes','27')" name="education[ase][]" value="T4 - Brakes" id="testing27" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing27">
+                      <span></span>T4 – Brakes</label>          
+                  </li>
+                  <li>
+                      <input {%if a28_checked == true %}checked{%endif%} onclick="showPU('T5','T5 - Suspension and Steering','28')" name="education[ase][]" value="T5 - Suspension and Steering" id="testing28" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing28">
+                      <span></span>T5 – Suspension & Steering</label>          
+                  </li>
+                  <li>
+                      <input {%if a29_checked == true %}checked{%endif%} onclick="showPU('T6','T6 - Electrical/ Electronic Systems','29')" name="education[ase][]" value="T6 - Electrical/ Electronic Systems" id="testing29" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing29">
+                      <span></span>T6 – Electrical/ Electronic Systems</label>          
+                  </li>
+                  <li>
+                      <input {%if a30_checked == true %}checked{%endif%} onclick="showPU('T7','T7 - Heating, Ventilation and Air Conditioning (HVAC)','30')" name="education[ase][]" value="T7 - Heating, Ventilation and Air Conditioning (HVAC)" id="testing30" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing30">
+                      <span></span>T7 – Heating, Ventilation & Air Conditioning (HVAC)</label>          
+                  </li>
+                  <li>
+                      <input {%if a31_checked == true %}checked{%endif%} onclick="showPU('T8','T8 - Preventive Maintenance Inspection','31')" name="education[ase][]" value="T8 - Preventive Maintenance Inspection" id="testing31" type="checkbox">
+                      <label class="text-base font-medium text-gray-800" for="testing31">
+                      <span></span>T8 – Preventive Maintenance Inspection</label>          
+                  </li>                  
+              </ul>
+          </div>
+
+          
+
+          <div id="ase_pdf_upload_div">
+            
+            {%
+              for ase in profile_ase 
+            %}
+                
+                <div class="bg-gray-50 py-9 px-7 -mx-6" id="ase_pdf_div_{{ase.ase_code}}">
+                  <label>{{ase.ase_name}}</label>
+                  <div>
+                    <label onclick="showPdfUpload('education','{{ase.ase_name}}')" class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                      Upload
+                      <span>
+                        <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                      </span>
+                    </label>
+                  </div>
+                </div>
+            {%endfor%}
+            
+          </div>
+      </div>
+
+      <div class="customCheck py-6">
+      
+          <input id="osha_chk" onclick="showDetails('osha_chk', 'osha_details')" {%if profile_education.osha == '1'%}checked{%endif%} id="osha" type="checkbox" name="education[osha]" value="1">
+          <label class="text-base font-medium text-gray-800" for="osha"><span></span>{{ 'app.profiles.osha_training_certificate' | t }}</label>
+          
+      </div>
+
+      <div id="osha_details" style="display:{{osha_det_display}};" class="bg-gray-50 py-9 px-7 -mx-6">
+        <div class="custom-file">
+          <label onclick="showPdfUpload('education','osha_certificate')" class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+              Upload 
+              <span>
+                  <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+              </span>
+          </label>
+        </div>
+
+        <div class="pt-6">
+          <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.expiration_date' | t }}</h4>
+          <input type="date" name="education[osha_expiry]" value="{{profile_education.osha_expiry}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+        </div>
+      </div>
+
+      <div class="customCheck py-6">
+        
+          <input id="msha_chk" onclick="showDetails('msha_chk', 'msha_details')" id="msha" {%if profile_education.msha == '1'%}checked{%endif%} type="checkbox" name="education[msha]" value="1">
+          <label class="text-base font-medium text-gray-800" for="msha"><span></span>{{ 'app.profiles.msha_training_certificate' | t }}</label>
+        
+      </div>
+
+      <div id="msha_details" style="display:{{msha_det_display}};" class="bg-gray-50 py-9 px-7 -mx-6">
+        <div class="custom-file">
+          <label onclick="showPdfUpload('education','msha_certificate')" class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+              Upload 
+              <span>
+                  <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+              </span>
+          </label>
+        </div>
+
+        <div class="pt-6">
+          <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.expiration_date' | t }}</h4>
+          <input type="date" name="education[msha_expiry]" value="{{profile_education.msha_expiry}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+        </div>
+      </div>
+
+      <div class="customCheck py-6">
+        
+          <input id="military_chk" onclick="showDetails('military_chk', 'military_details')" id="military_training" {%if profile_education.military_training == '1'%}checked{%endif%} type="checkbox" name="education[military_training]" value="1">
+          <label class="text-base font-medium text-gray-800" for="military_training"><span></span>{{ 'app.profiles.military_training' | t }}</label>            
+                 
+      </div>
+
+      <div id="military_details" style="display:{{military_training_det_display}};" class="bg-gray-50 py-5 px-7 -mx-6">
+        <ul>
+            <li class="mb-5">
+                <label class="block mb-2 pl-4 text-base text-gray-800">{{ 'app.profiles.most_advanced_training' | t }}</label>
+                <input type="text" value="{{profile_education.most_advanced_training}}" name="education[most_advanced_training]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+            </li>
+            <li class="mb-5">
+                <label class="block mb-2 pl-4 text-base text-gray-800">{{ 'app.profiles.date_of_completion' | t }}</label>
+                <input type="date" value="{{profile_education.date_of_completion}}" name="education[date_of_completion]" placeholder="MM/YYYY" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+            </li>
+            <li>
+                <label class="block mb-2 pl-4 text-base text-gray-800">{{ 'app.profiles.other_military_training' | t }}</label>
+                <textarea name="education[other_military_training]" class="bg-gray-100 border border-gray-200 h-24 rounded-lg resize-none p-2 outline-none text-base text-gray-700 w-full md:w-2/4" placeholder="Type">{{profile_education.other_military_training}}</textarea>
+                <div class="flex items-center justify-end text-right text-xs text-gray-400 w-full md:w-2/4 pt-4">
+                    <img src="{{ 'images/warning.svg' | asset_url }}" alt="" class="mr-2"> {{ 'app.profiles.max_300_characters' | t }}
+                </div>
+            </li>
+        </ul>
+      </div>
+
+      <div class="customCheck py-6">
+      
+          <input id="college_chk" onclick="showDetails('college_chk', 'college_details')" {%if profile_education.college_degree == '1'%}checked{%endif%} id="collegedegree" type="checkbox" name="education[college_degree]" value="1">
+          <label class="text-base font-medium text-gray-800" for="collegedegree"><span></span>{{ 'app.profiles.college_degree' | t }}</label>
+          
+      </div>
+
+      <div id="college_details" style="display:{{college_degree_det_display}};" class="bg-gray-50 py-5 px-7 -mx-6">
+        <ul>
+          <li class="mb-5">
+              <label class="block mb-2 pl-4 text-base text-gray-800">{{ 'app.profiles.highest_degree' | t }}</label>
+              <input type="text" value="{{profile_education.highest_degree}}" name="education[highest_degree]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+          </li>
+          <li class="mb-5">
+              <label class="block mb-2 pl-4 text-base text-gray-800">{{ 'app.profiles.date_of_completion' | t }}</label>
+              <input type="date" value="{{profile_education.highest_degree_d_o_completion}}" name="education[highest_degree_d_o_completion]" placeholder="MM/YYYY" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+          </li>
+          <li>
+              <div class="custom-file">
+                  <!--<input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">-->
+                  <label onclick="showPdfUpload('education','highest_degree')" class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                      Upload 
+                      <span>
+                          <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                      </span>
+                  </label>
+                </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="py-10">
+          <button class="heavytechs-bg-dark-orange text-white mr-2 px-6 leading-10 rounded-3xl text-base inline-block">{{ 'app.profiles.save' | t }}</button>
+      </div>
+
+  </div>
+  </form>
+  </div>
+
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+<script type="text/javascript">
+function showPdfUpload(pageCat, itemCat){
+  var pdf_upload_url = "/dashboard/profile/pdf_upload?page_cat="+pageCat+"&item_cat="+itemCat
+  window.open(pdf_upload_url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+}
+
+function showDetails(thisID, detID){
+  if(document.querySelector('#'+thisID+':checked') !== null){
+    document.getElementById(detID).style.display = 'block';
+  }else{
+    document.getElementById(detID).style.display = 'none';
+  }
+}
+</script>
+
+<script type="text/javascript">
+function showPU(idText, valText, idCount){
+
+  if(document.querySelector('#testing'+idCount+':checked') !== null){
+    
+
+    var new_node = '<label>'+valText+'</label>';
+    new_node += '<div>';
+    new_node += '<label onclick="showPdfUpload(\'education\',\''+valText+'\')" class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">';
+    new_node += 'Upload';
+    new_node += '<span>';
+    new_node += '<img src="images/upload-icon.svg" alt="">';
+    new_node += '</span>';
+    new_node += '</label>';  
+    new_node += '</div>';       
+    
+    var node = document.createElement("DIV");
+    node.className += "bg-gray-50 py-9 px-7 -mx-6";
+    node.setAttribute("id", "ase_pdf_div_"+idText);
+    node.innerHTML = new_node;
+    document.getElementById("ase_pdf_upload_div").appendChild(node);
+
+
+  } else {
+      var elem = document.getElementById("ase_pdf_div_"+idText);
+      elem.remove();
+  }
+}
+</script>

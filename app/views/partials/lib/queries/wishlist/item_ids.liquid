@@ -1,0 +1,10 @@
+{% liquid
+  if profile_id == blank
+    log 'Something went wrong. profile_id cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  function rels = 'lib/queries/relationships/search_by_left', l_id: profile_id, name: 'wishlist', model: ['profile', 'item']
+  assign ids = rels.results | map: 'r_id'
+  return ids
+%}

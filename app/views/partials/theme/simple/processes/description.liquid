@@ -1,0 +1,14 @@
+{% liquid
+  assign payload = process.payload | parse_json
+  case process.command
+  when 'organizations/create_member'
+    echo 'organizations_create_member' | t: scope: 'app.processes.types', email: payload.email, first_name: payload.first_name, last_name: payload.last_name, organization_name: payload.organization_name
+  when 'items/publish_version'
+    render 'theme/simple/processes/items_publish_version', process: process
+  when 'organizations/update'
+    render 'theme/simple/processes/organizations_update', process: process
+  when 'items/unpublish'
+    function url = 'link_to' item: payload.item
+    echo 'app.admin.processes.show.items_unpublish' | t: item_url: url, item_name: payload.item.item_detail.name
+  endcase
+%}

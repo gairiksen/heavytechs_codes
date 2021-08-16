@@ -1,0 +1,60 @@
+<div class="bg-gray-100 py-6 px-3.5">
+  <div class="w-full bg-white shadow rounded-lg p-5 m-auto md:px-12 md:w-96">
+      <h2 class="text-center text-gray-700 text-3xl mb-7 font-bold">{{ 'app.account.reset_password.title' | t }}</h2>
+
+      <form action="/authentication_links/create" method="post">
+          {% include 'authenticity_token' %}
+
+          <p>{{ 'app.account.reset_password.description' | t }}</p>
+          <p>&nbsp;</p>
+
+          <ul>
+              <li class="pb-4">
+                  <input name="authentication_link[email]" type="email" id="email" value="{{ object.email }}" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full" autofocus required>
+                  {% include 'theme/simple/field_error', errors: object.errors.email %}
+              </li>
+              <li class="text-center">
+                  <button class="heavytechs-bg-dark-orange text-white px-10 leading-10 rounded-3xl text-base inline-block">{{ 'app.login_form.log_in' | t }}</button>
+              </li>
+          </ul>
+
+      </form>
+
+      {%comment%}
+      <div class="text-center pt-5">
+          <div class="flex justify-center">
+              <span class="block mr-2 font-normal text-base text-gray-800">{{ 'app.login_form.anonymous' | t }}</span>
+              <a href="/sign-up-main" class="block text-blue-500 underline hover:no-underline">{{ 'app.login_form.register' | t }}</a>
+          </div>
+          <div class="flex justify-center">
+              <span class="block mr-2 font-normal text-base text-gray-800">{{ 'app.login_form.password_lost' | t }}</span>
+              <a href="/passwords/reset" class="block text-blue-500 underline hover:no-underline">{{ 'app.login_form.reset' | t }}</a>
+          </div>
+      </div>
+      {%endcomment%}
+  </div>
+</div>
+
+{%comment%}
+<section class="my-10 container items-center">
+  <h2 class="bigtitle text-center">{{ 'app.account.reset_password.title' | t }}</h2>
+
+  <form action="/authentication_links/create" method="post" class="card w-full md:w-96 mx-auto">
+    {% include 'authenticity_token' %}
+
+    <p>{{ 'app.account.reset_password.description' | t }}</p>
+
+    <fieldset class="mt-5">
+      <label for="email">{{ 'app.users.attr.email' | t }}</label>
+      <input name="authentication_link[email]" type="email" id="email" value="{{ object.email }}" class="w-full" autofocus required>
+      {% include 'theme/simple/field_error', errors: object.errors.email %}
+    </fieldset>
+
+
+    {% include 'hcaptcha', object: object %}
+
+    <fieldset class="mt-5 text-center">
+      <button class="button">{{ 'app.account.reset_password.send_link' | t }}</button>
+    </fieldset>
+</section>
+{%endcomment%}

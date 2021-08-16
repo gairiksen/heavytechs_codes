@@ -1,0 +1,20 @@
+{% parse_json buyer %} {"id": "5"} {% endparse_json %}
+{% liquid
+  function item = 'test/fixtures/item', quantity: 3
+  function order = 'test/fixtures/order', current_profile: buyer, item: item
+%}
+{% comment %} test {% endcomment %}
+{% liquid
+  function line_item = 'lib/commands/line_items/create', item: item, quantity: 2, current_profile: buyer, order: order
+  include 'test/assertions/valid_object', contract: contract, object: line_item, field_name: 'line_item_create'
+%}
+{% comment %} test confirmed {% endcomment %}
+{% liquid
+  function status = 'lib/commands/statuses/create', profile_id: buyer.id, object_id: order.id, name: 'app.statuses.orders.confirmed', scope: 'app.statuses.orders'
+  include 'test/assertions/valid_object', contract: contract, object: status, field_name: 'status'
+
+  assign params = '{"quantity": 3}' | parse_json
+  function line_item = 'lib/commands/line_items/update', object: params, line_item: line_item
+
+  include 'test/assertions/invalid_object', contract: contract, object: line_item, field_name: 'order_status'
+%}

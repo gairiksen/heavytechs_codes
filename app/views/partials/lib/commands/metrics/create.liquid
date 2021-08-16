@@ -1,0 +1,29 @@
+{% liquid
+  assign income = 0
+  function orders = 'lib/queries/orders/search', limit: 100
+
+  for order in orders.results
+    if order.status.name == 'app.statuses.orders.paid'
+      assign income = income | plus: order.total
+    endif
+  endfor
+
+  function items = 'lib/queries/items/search', limit: 1
+  function users = 'lib/queries/users/search', limit: 1
+%}
+
+{%
+  function object = 'lib/commands/metrics/create/build',
+    items:  items.total_entries,
+    users:  users.total_entries,
+    orders: orders.total_entries,
+    income: income,
+    name: 'total'
+%}
+
+{% liquid
+  function object = 'lib/commands/metrics/create/check', object: object
+  function object = 'lib/commands/metrics/create/execute', object: object
+
+  return object
+%}

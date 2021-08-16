@@ -1,0 +1,65 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'check', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.processes' | t }}
+  </h2>
+  <div class="flex gap-4">
+    <div class="pe-4 border-frame text-center">
+      <strong class="subtitle leading-tight">{{ processes.total_entries }}</strong>
+      <div class="sidenote">{{ 'app.admin.processes.title' | t }}</div>
+    </div>
+  </div>
+
+</header>
+
+<form action="" id="admin-form"></form>
+
+<div class="flex min-h-screen">
+
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>{{ 'app.admin.processes.attr.name' | t }}</div>
+        <div>{{ 'app.admin.processes.attr.status' | t }}</div>
+        <div>{{ 'app.admin.processes.attr.changed_at' | t }}</div>
+      </header>
+
+      <div class="table-content">
+        {% for process in processes.results %}
+          <ul>
+            <li>
+              <div class="flex items-center">
+                <span class="lg:hidden">{{ 'app.admin.processes.attr.name' | t }}</span>
+                <a href="/admin/processes/{{process.id}}">
+                  {% render 'theme/simple/admin/processes/name', process: process %}
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <span class="lg:hidden">{{ 'app.admin.processes.attr.requested_by' | t }}</span>
+                <a href="/admin/processes/{{process.id}}">
+                  {% render 'theme/simple/admin/processes/status', process: process %}
+                </a>
+              </div>
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.admin.processes.attr.changed_at' | t }}</span>
+              {% if process.status.created_at %}
+                {{ process.status.created_at | l: 'compact' }}
+              {% endif %}
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% liquid
+      assign page = page | default: 1 | plus: 0
+    %}
+    {% render 'theme/simple/ui/pagination', form: 'admin-form' collection: processes, current_page: filters.page %}
+  </div>
+  {% render 'theme/simple/admin/processes/filters', filters: filters %}
+</div>

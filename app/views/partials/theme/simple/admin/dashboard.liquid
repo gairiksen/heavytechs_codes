@@ -1,0 +1,21 @@
+<header class="mb-6 -mx-8 px-8 pb-7 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'dashboard', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.dashboard' | t }}
+  </h2>
+
+</header>
+
+<form action="" id="admin-form"></form>
+
+<div class="min-h-screen flex">
+  <div class="w-full">
+    <section class="grid-masonry">
+      {% render 'theme/simple/admin/widgets/sales', income: report.metrics.income, orders: report.metrics.orders, filters: filters %}
+      {% render 'theme/simple/admin/widgets/users', users: report.metrics.users, filters: filters %}
+      {% render 'theme/simple/admin/widgets/items', items: report.metrics.items, filters: filters %}
+    </section>
+  </div>
+  {% render 'theme/simple/admin/index/filters', filters: filters %}
+</div>

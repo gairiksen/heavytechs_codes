@@ -1,0 +1,12 @@
+{% liquid
+  if organization_id == blank
+    log 'Something went wrong. Organization cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  assign page = page | to_positive_integer: 1
+  graphql r = 'organization_reviews/search', limit: limit, page: page, with_organization: with_organization, organization_id: organization_id, score_gte: score_gte
+  include 'lib/handle_graphql_response', r: r, name: 'queries/organization_reviews/search_by_organization'
+
+  return r.organization_reviews
+%}

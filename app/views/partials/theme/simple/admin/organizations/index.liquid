@@ -1,0 +1,56 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'usersMoney', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.organizations' | t }}
+  </h2>
+  <div class="flex gap-4">
+      <div class="pe-4 border-frame text-center">
+        <strong class="subtitle leading-tight">{{ organizations.total_entries }}</strong>
+        <div class="sidenote">{{ 'app.admin.organizations.title' | t }}</div>
+      </div>
+  </div>
+
+</header>
+
+<form action="" id="admin-form"></form>
+
+<div class="flex min-h-screen">
+
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>{{ 'app.organizations.attr.name' | t }}</div>
+        <div>{{ 'app.organizations.attr.created_at' | t }}</div>
+      </header>
+
+      <div class="table-content">
+        {% for organization in organizations.results %}
+          <ul>
+            <li>
+              <span class="lg:hidden">{{ 'app.organizations.attr.id' | t }}</span>
+              <a href="/admin/organizations/{{organization.id}}" class="flex items-center">
+                <img src="{{ organization.logo.url }}" alt="" class="w-10 me-5">
+                {{ organization.name }}
+              </a>
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.organizations.attr.created_at' | t }}</span>
+              {{ organization.created_at | l: 'compact' }}
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% liquid
+      assign page = page | default: 1 | plus: 0
+    %}
+    {% render 'theme/simple/ui/pagination', form: 'admin-form' collection: organizations, current_page: filters.page %}
+  </div>
+
+  {% render 'theme/simple/admin/organizations/filters', filters: filters %}
+
+</div>
+

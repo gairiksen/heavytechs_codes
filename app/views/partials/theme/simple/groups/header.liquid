@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="p-16 bg-content">
+    <h2 class="text-center bigtitle text-content-inverted">
+      {{ group.name }}
+    </h2>
+    <h3 class="text-center subtitle text-content-inverted">
+      {{ group.summary }}
+    </h3>
+  </div>
+
+  {% render 'theme/simple/groups/nav', group: group, tab: tab, current_profile: current_profile %}
+</div>

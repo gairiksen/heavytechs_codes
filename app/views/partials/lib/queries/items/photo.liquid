@@ -1,0 +1,6 @@
+{% liquid
+  assign version = version | default: 'tiny'
+  assign url = item.photos[0].photo.versions[version]
+
+  return url
+%}

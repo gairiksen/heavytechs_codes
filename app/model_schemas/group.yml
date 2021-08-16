@@ -1,0 +1,22 @@
+name: group
+properties:
+  - name: uuid
+  - name: name
+  - name: summary
+  - name: description
+  - name: content_type
+
+# Predefined type of group [public, moderated, private, secret, custom]
+  - name: group_type
+
+# Can users ask to join a group [yes, no]
+  - name: ask_to_join
+
+# Permissions
+# Minimum role required to perform an action
+# [anon, member, moderator, admin]
+  - name: meta_visible
+  - name: content_visible
+  - name: approve_request
+  - name: post_content
+  - name: invite_member

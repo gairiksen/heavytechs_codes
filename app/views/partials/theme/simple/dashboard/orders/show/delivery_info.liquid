@@ -1,0 +1,103 @@
+{% liquid
+  case order.status.name
+  when 'app.statuses.orders.paid'
+    assign delivery_1 = 'active'
+  when 'app.statuses.orders.in_progress'
+    assign delivery_1 = 'completed'
+    assign delivery_2 = 'active'
+  when 'app.statuses.orders.delivered'
+    assign delivery_1 = 'completed'
+    assign delivery_2 = 'completed'
+    assign delivery_3 = 'active'
+  when 'app.statuses.orders.completed'
+    assign delivery_1 = 'completed'
+    assign delivery_2 = 'completed'
+    assign delivery_3 = 'completed'
+  endcase
+%}
+
+<h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.delivery_title' | t }}</h3>
+<section class="card">
+  <div class="ms-16 relative">
+    <div class="absolute top-0 bottom-10 -start-10.5 border-s-2"></div>
+    {% render 'theme/simple/dashboard/orders/show/section_header', number: 1, title: 'app.orders.show.new_order', state: delivery_1  %}
+
+    <div class="lg:flex gap-8 mb-16">
+      <div class="lg:w-1/2">
+        <div class="flex justify-between">
+          <span>{{ order.shipping_type | t: scope: 'app.orders.checkout.delivery_type' }}</span>
+          <span class="font-semibold">{% render 'theme/simple/price', amount_cents: order.total_shipping_cost_cents, currency: order.currency %}</span>
+        </div>
+        {% if role == 'seller' and order.status.name == 'app.statuses.orders.paid' %}
+          <div class="mt-4">
+            {% render 'theme/simple/dashboard/orders/show/mark_in_progress', order: order, context: context %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="mt-8 lg:mt-0 lg:ps-4 lg:border-l">
+        {% render 'theme/simple/dashboard/orders/show/status_created_at', order: order, status_name: 'app.statuses.orders.in_progress' %}
+      </div>
+    </div>
+
+
+    {% render 'theme/simple/dashboard/orders/show/section_header', number: 2, title: 'app.orders.show.order_delivered', state: delivery_2  %}
+
+    <div class="md:flex gap-8 mb-16">
+      <div class="lg:w-1/2 mt-4 md:mt-0">
+        {% if delivery_2 %}
+          {% if transaction.status.name == 'app.statuses.transactions.success' %}
+            {% liquid
+              assign delivery_status = order.order_delivery.status.name
+              case delivery_status
+              when blank
+                assign status_class = 'bg-warning-disabled border-warning'
+                if role == "buyer"
+                  assign status_label = 'app.orders.checkout.status_type.progress' | t
+                else
+                  assign status_label = 'app.orders.checkout.status_type.new' | t
+                endif
+              when 'app.statuses.order_deliveries.delivered'
+                assign status_class = 'bg-confirmation-disabled border-confirmation'
+                assign status_label = 'app.statuses.order_deliveries.shipping_types.' | append: order.shipping_type | t
+              endcase
+            %}
+            <div class="flex justify-between">
+              <span>{{ 'app.status' | t }}</span>
+              <span class="ms-4 px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status_label }}</span>
+            </div>
+          {% endif %}
+
+          {{ 'app.orders.checkout.delivery_info' | t }}
+
+          {% if role == 'seller' %}
+            {% if order.status.name == 'app.statuses.orders.in_progress' and delivery_status == blank %}
+              {% render 'theme/simple/dashboard/orders/show/delivery_form', order: order, object: order.order_delivery, cancelled: cancelled, context: context %}
+            {% elsif delivery_status == 'app.statuses.order_deliveries.delivered' %}
+              <input type="text" class="w-full mb-2" value="{{order.order_delivery.delivery_information}}" disabled>
+              <span class="sidenote">{{ 'app.orders.checkout.already_delivered' | t }}</span>
+            {% endif %}
+          {% else %}
+            <div>
+              <input type="text" class="w-full mb-2" value="{{order.order_delivery.delivery_information}}" disabled>
+              <span class="sidenote">{{ 'app.orders.checkout.delivery_link' | t }}</span>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="mt-8 lg:mt-0 lg:ps-4 lg:border-l">
+        {% render 'theme/simple/dashboard/orders/show/status_created_at', order: order, status_name: 'app.statuses.orders.delivered' %}
+      </div>
+    </div>
+
+
+    {% render 'theme/simple/dashboard/orders/show/section_header', number: 3, title: 'app.orders.show.order_completed', state: delivery_3  %}
+    <div class="md:flex gap-8 relative">
+      <div class="lg:w-1/2">
+        {% render 'theme/simple/dashboard/orders/show/complete', order: order, role: role, context: context %}
+      </div>
+      <div class="mt-4 lg:mt-0 lg:ps-4 lg:border-l">
+        {% render 'theme/simple/dashboard/orders/show/status_created_at', order: order, status_name: 'app.statuses.orders.completed' %}
+      </div>
+    </div>
+  </div>
+</section>

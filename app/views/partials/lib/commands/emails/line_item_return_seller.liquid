@@ -1,0 +1,26 @@
+---
+metadata:
+  parameters:
+    - line_item_return
+---
+{% liquid
+  context_rc language: line_item_return.order.seller.language | default: 'en'
+%}
+{% parse_json object %}
+  {
+    "to": {{ line_item_return.order.seller.contact_emails | json }},
+    "from": {{ 'app.support_email' | t | json }},
+    "line_item_return": {{ line_item_return | json }}
+  }
+{% endparse_json %}
+{% liquid
+  assign site_name = 'app.title' | t
+  hash_assign object['subject'] = 'app.emails.orders.return.seller.subject' | t: buyer_name: line_item_return.order.buyer.first_name
+  hash_assign object['site_name'] = site_name
+  function object = 'lib/commands/emails/send', template: 'orders/line_item_return_seller', object: object
+  unless object.valid
+    log object, type: 'ERROR when sending line item return notification email to the seller'
+  endunless
+  return object
+%}
+

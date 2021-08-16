@@ -1,0 +1,27 @@
+{% liquid
+  assign transaction = object.object.transaction
+  assign delay_minutes = context.constants.ORDER_CANCEL_UNPAID_AFTER_X_HOURS | default: 1 | plus: 0 | times: 60
+%}
+{% background source_name: 'cancel_order_when_remain_unpaid', transaction_id: transaction.id, delay: delay_minutes %}
+  {% liquid
+    function transaction = 'lib/queries/transactions/find', id: transaction_id
+    if transaction.status.name == 'app.statuses.transactions.new' or transaction.status == null
+      assign transaction_object = '{"payment_status": "expired"}' | parse_json
+      function object = 'lib/commands/transactions/update_status', object: transaction_object, transaction: transaction, current_profile: order.buyer
+      if object.valid != true
+        log object, type: 'ERROR: cancel_order_when_remain_unpaid'
+      endif
+    endif
+
+    assign order_ids = transaction.order_ids
+    function orders = 'lib/queries/orders/search', ids: order_ids, limit: 100
+    for order in orders.results
+      if order.status.name == 'app.statuses.orders.confirmed'
+        function object = 'lib/commands/orders/cancel', order: order, role: 'buyer', current_profile: order.buyer
+        if object.valid != true
+          log object, type: 'ERROR: cancel_order_when_remain_unpaid'
+        endif
+      endif
+    endfor
+  %}
+{% endbackground %}

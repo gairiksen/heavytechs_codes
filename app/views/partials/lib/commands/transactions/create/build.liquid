@@ -1,0 +1,17 @@
+{% liquid
+  assign orders = order_results.results
+%}
+{% parse_json object %}
+  {
+    "profile_id": {{ profile.id | json }},
+    "order_ids": {{ orders | map: 'id' | json }},
+    "amount": {{ order_results.total_price_cents | json }},
+    "currency": {{ orders.first.currency | json }},
+    "gateway": {{ orders.first.payment_type | json }},
+    "c__status": {{ 'new' | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

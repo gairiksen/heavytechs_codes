@@ -1,0 +1,14 @@
+en:
+  app:
+    relationships:
+      type:
+        - followship:profile
+        - followship:tag
+        - followship:post
+        - followship
+        - membership
+        - organization_membership
+        - collaboration
+        - owner
+        - ownership
+        - wishlist

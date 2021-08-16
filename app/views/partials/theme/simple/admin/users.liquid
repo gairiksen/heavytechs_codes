@@ -1,0 +1,91 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'user', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.users' | t }}
+  </h2>
+  <div class="flex gap-4">
+      <div class="pe-4 border-frame text-center">
+        <strong class="subtitle leading-tight">{{ users.total_entries }}</strong>
+        <div class="sidenote">{{ 'admin.users.title' | t }}</div>
+      </div>
+  </div>
+
+</header>
+
+<form action="" id="admin-form"></form>
+
+<div class="flex min-h-screen">
+
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>{{ 'app.users.attr.id' | t }}</div>
+        <div>{{ 'app.users.attr.first_name' | t }}</div>
+        <div>{{ 'app.users.attr.last_name' | t }}</div>
+        <div>{{ 'app.users.attr.email' | t }}</div>
+        <div>{{ 'app.users.attr.created_at' | t }}</div>
+        <div>{{ 'app.admin.users.list.permissions' | t }}</div>
+      </header>
+
+      <div class="table-content">
+        {% for user in users.results %}
+          <ul>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.id' | t }}</span>
+              {{ user.profile.id }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.first_name' | t }}</span>
+              {{ user.profile.first_name }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.last_name' | t }}</span>
+              {{ user.profile.last_name }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.email' | t }}</span>
+              {{ user.email }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.created_at' | t }}</span>
+              {{ user.created_at | l: 'compact' }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.admin.users.list.permissions' | t }}</span>
+                <div class="flex justify-between gap-3 items-start">
+                  <span>
+                    {% liquid
+                      assign permissions = user.profile.permissions | default: '{}' | parse_json
+                      for permission in permissions
+                        if permission[1]
+                          echo permission[0]
+                          unless forloop.last
+                            echo ', '
+                          endunless
+                        endif
+                      endfor
+                    %}
+                  </span>
+                  <a href="/admin/users/{{user.profile.id}}/permissions" class="button button-secondary button-small">
+                    {{ 'app.edit' | t }}
+                  </a>
+                </div>
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+
+    </section>
+
+    {% liquid
+      assign page = page | default: 1 | plus: 0
+    %}
+    {% render 'theme/simple/ui/pagination', form: 'admin-form' collection: users, current_page: filters.page %}
+  </div>
+
+  {% render 'theme/simple/admin/users/filters', filters: filters %}
+
+</div>
+

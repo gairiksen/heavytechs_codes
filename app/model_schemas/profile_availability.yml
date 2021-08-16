@@ -1,0 +1,6 @@
+name: profile_availability
+properties:
+  - name: uuid
+  - name: user_id
+  - name: availability
+  - name: availability_status

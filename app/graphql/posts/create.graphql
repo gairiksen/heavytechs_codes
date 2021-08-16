@@ -1,0 +1,61 @@
+mutation create_post(
+  $uuid: String!
+  $parent_id: String
+  $group_id: String
+  $creator_id: String!
+  $title: String
+  $body: String!
+  $tags: [String]
+  $upvote_profile_ids: [String]
+  $downvote_profile_ids: [String]
+  $accepted_post_id: String
+  $c__score: Int
+) {
+  record_create(
+    record: {
+      table: "post"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "parent_id", value: $parent_id }
+        { name: "group_id", value: $group_id }
+        { name: "creator_id", value: $creator_id }
+        { name: "title", value: $title }
+        { name: "body", value: $body }
+        { name: "tags", value_array: $tags }
+        { name: "upvote_profile_ids", value_array: $upvote_profile_ids }
+        { name: "downvote_profile_ids", value_array: $downvote_profile_ids }
+        { name: "accepted_post_id", value: $accepted_post_id }
+        { name: "c__score", value_int: $c__score }
+      ]
+    }
+  ) {
+    id
+    created_at
+    deleted_at
+
+    type: table
+
+    parent_id: property(name: "parent_id")
+    group_id: property(name: "group_id")
+    creator_id: property(name: "creator_id")
+    title: property(name: "title")
+    body: property(name: "body")
+    tags: property_array(name: "tags")
+    upvote_profile_ids: property_array(name: "upvote_profile_ids")
+    downvote_profile_ids: property_array(name: "downvote_profile_ids")
+    accepted_post_id: property(name: "accepted_post_id")
+    c__score: property_int(name: "c__score")
+    slug: property(name: "slug")
+
+    group: related_record(
+      table: "group"
+      join_on_property: "group_id"
+      foreign_property: "id"
+    ) {
+      id
+      type: table
+      name: property(name: "name")
+    }
+
+  }
+}

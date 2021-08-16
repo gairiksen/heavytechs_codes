@@ -1,0 +1,52 @@
+name: projects
+properties:
+  - name: uuid
+  - name: user_id
+  - name: project_name
+  - name: longer_description
+  - name: location_of_project
+  - name: expected_start_date
+  - name: expected_end_date
+  - name: start_time_stamp
+    type: integer
+  - name: end_time_stamp
+    type: integer
+  - name: duration_type
+  - name: special_pay
+  - name: short_description
+  - name: osha
+  - name: msha
+  - name: additionally_insured
+  - name: insurance_cert_holder
+  - name: liability_limits
+  - name: crane_required
+  - name: driver_license_required
+  - name: driver_license_class
+  - name: tanker
+  - name: air_brakes
+  - name: passenger
+  - name: doubles_triples
+  - name: hazmat
+  - name: earthworks
+  - name: mining
+  - name: fleet
+  - name: pipeline
+  - name: paving
+  - name: energy_production
+  - name: heavy_equipment_training
+  - name: welder_fabricator
+  - name: truck_mechanic
+  - name: oiler_pm_tech
+  - name: welding
+  - name: electrical_troubleshooting
+  - name: computer_diagnostics
+  - name: company_supplied
+  - name: not_offered
+  - name: per_diem
+  - name: paid_not_paid
+  - name: status
+  - name: object_uuid
+  - name: latitude
+  - name: longitude
+  - name: geo_location
+    type: geojson

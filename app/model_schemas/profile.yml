@@ -1,0 +1,31 @@
+name: profile
+properties:
+  - name: uuid
+  - name: name
+  - name: user_id
+  - name: profile_type
+    type: boolean
+  - name: anonymous_session_id
+  - name: slug
+  - name: first_name
+  - name: last_name
+  - name: bio
+  - name: company_name
+  - name: mobile_number
+  - name: ready_for_travel
+  - name: position
+  - name: total_experience
+  - name: drivers_license_class_a
+  - name: drivers_license_class_b
+  - name: drivers_license_class_c
+  - name: drivers_license_tanker
+  - name: drivers_licence_path
+  - name: short_description
+  - name: default_address_id
+  - name: language
+  - name: profile_for
+  - name: last_login
+  - name: percent_complete
+  - name: is_blocked
+  - name: otp_configured
+    type: boolean

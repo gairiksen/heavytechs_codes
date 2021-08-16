@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/items/delete/build', item: item
+  function object = 'lib/commands/items/delete/check',  object: object
+
+  if object.valid
+    function object = 'lib/commands/items/delete/execute', object: object
+  endif
+
+  return object
+%}

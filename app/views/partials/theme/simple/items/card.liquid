@@ -1,0 +1,56 @@
+<article class="card p-0 flex flex-col relative overflow-hidden">
+  {% function item_url = 'link_to', path: '/items/', item: item %}
+
+  <a class="flex items-center justify-center self-center flex-shrink-0 mb-3 rounded-t" href="{{ item_url }}">
+    {% function cover_url = 'theme/simple/items/cover_url', item: item %}
+    {% if cover_url %}
+      <img alt="{{ item.item_detail.name }}" class="max-w-full block object-center object-contain" src="{{ cover_url }}">
+    {% else %}
+      {% render 'theme/simple/ui/picture-placeholder', class: 'max-w-full block object-center object-contain"' %}
+    {% endif %}
+
+    {% if item.item_inventory.status.name == 'app.statuses.items.unavailable' %}
+      {% render 'theme/simple/ui/badge', class: 'bg-danger', label_key: 'app.items.sold-out' %}
+    {% endif %}
+  </a>
+
+  {% render 'theme/simple/wishlists/button', profile_id: current_profile.id, item_id: item.id  %}
+
+  <div class="flex px-4 flex-col justify-between h-full">
+    <header>
+      {% if item_url %}
+      <h2 class="subtitle">
+        <a href="{{ item_url }}" class="font-semibold">{{ item.item_detail.name }}</a>
+      </h2>
+      {% endif %}
+
+      {% if item.category and showMeta %}
+        <a href="{% render 'link_to', category: item.category %}">
+          {% print 'categories.' | append: item.category | t %}
+        </a>
+      {% endif %}
+    </header>
+
+    <div class="flex items-center justify-between mt-4">
+      <div>
+        <span class="font-bold subtitle">
+          {% if item.item_inventory.purchasable %}
+            {% render 'theme/simple/price', amount_cents: item.price, currency: item.currency %}
+          {% endif %}
+        </span>
+
+        {% if item.original_price %}
+          <span class="text-danger line-through">
+            {% render 'theme/simple/price', amount_cents: item.original_price, currency: item.currency %}
+          </span>
+        {% endif %}
+      </div>
+
+    {% if showMeta %}
+      <div class="sidenote">
+        {% render 'theme/simple/business_card', user: item.item_inventory.owner, current_profile: current_profile %}
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</article>

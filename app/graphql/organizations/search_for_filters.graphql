@@ -1,0 +1,25 @@
+query search($id: ID $limit: Int!) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "organization" }
+      related_records: {
+        join: { join_on_property: "id", foreign_property: "owner"}
+        filter: {
+          table: { value: "item_inventory" }
+        }
+      }
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      slug: property(name: "slug")
+      name: property(name: "name")
+    }
+  }
+}

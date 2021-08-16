@@ -1,0 +1,63 @@
+{% for i in list.results %}
+  {{ i }}
+{% endfor %}
+<div class="container">
+  <section class="">
+    {% if list.results.size > 0 %}
+      <table class="table w-full bg-white">
+        <thead>
+          <tr>
+            <th class="text-left">Invited user</th>
+            <th class="text-left">Invited by</th>
+            <th class="text-left">Invited at</th>
+            <th class="pr-5 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in list.results %}
+            <tr>
+              <td>
+                <a href="#" class="flex items-center">
+                  <!-- TODO: Use correct data -->
+                  {% render 'theme/simple/ui/avatar', profile: current_profile, size: 24, class: 'w-7 h-7 me-2' %}
+                  Kawel Powalski (<em>kavelloz</em>)
+                </a>
+              </td>
+              <td>
+                <a href="#" class="flex items-center">
+                  <!-- TODO: Use correct data -->
+                  {% render 'theme/simple/ui/avatar', profile: current_profile, size: 24, class: 'w-7 h-7 me-2' %}
+                  Ziomislaw Paliblant (<em>ziombello</em>)
+                  <!-- When user "asked to join" himself: Use the same data as in "User" -->
+                </a>
+              </td>
+              <!-- TODO: Use correct data -->
+              <td>{{ 'now' | to_time }}</td>
+              <td class="flex justify-end">
+                <!-- TODO: Use correct data -->
+                <form action="/groups/{{ group.id }}/invitations/decline">
+                  <input type="hidden" name="invitation_id" value="123">
+                  <button class="button button-small button-danger button-compact" title="Decline">
+                    {% render 'theme/simple/ui/icon', icon: 'trash' %}
+                  </button>
+                </form>
+
+                <!-- TODO: Get user.id to open proper conversation -->
+                {% render "modules/chat/theme/simple/message_button", to_id: user.id, label: '', button: true, class: 'mx-3 button button-small button-secondary button-compact' %}
+
+                <form action="/groups/{{ group.id }}/invitations/accept">
+                  <input type="hidden" name="invitation_id" value="123">
+                  <button class="button button-small button-primary">
+                    Accept
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="text-lg">{{ 'app.groups.no_invitations_found' | t }}</p>
+    {% endif %}
+  </section>
+</div>

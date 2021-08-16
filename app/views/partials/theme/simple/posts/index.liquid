@@ -1,0 +1,22 @@
+<div class="container mx-auto">
+  <header class="mb-5 md:flex items-center justify-between">
+    <h2 class="bigtitle">{{ 'app.models.posts.title' | t }}</h2>
+
+    <a href="/dashboard/posts/new" class="button">
+      {{ 'app.models.posts.add' | t }}
+    </a>
+  </header>
+
+  {% liquid
+    if context.params.tag
+      assign title = 'app.models.posts.questions-tagged-by' | t: tag: context.params.tag
+      render 'theme/simple/ui/title', label: title
+    endif
+
+    for post in posts.results
+      render 'theme/simple/groups/content/summary', post: post, content_type: group.content_type, context: context
+    else
+     render 'theme/simple/posts/empty_state'
+    endfor
+  %}
+</div>

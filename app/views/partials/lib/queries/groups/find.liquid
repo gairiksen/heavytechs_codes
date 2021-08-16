@@ -1,0 +1,11 @@
+{% liquid
+  if id == blank and name == blank
+    log 'Something went wrong when finding group. Required fields: id, name', type: 'ERROR'
+    return null
+  endif
+
+  graphql r  = 'groups/search', id: id, name: name, limit: 1, with_owner: with_owner
+  include 'lib/handle_graphql_response', r: r, name: 'queries/groups/find'
+
+  return r.groups.results.first
+%}

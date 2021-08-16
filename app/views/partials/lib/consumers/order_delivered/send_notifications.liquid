@@ -1,0 +1,4 @@
+{% liquid
+  function order = 'lib/queries/orders/find', id: event.target.id
+  function object = 'lib/commands/emails/order_delivered_buyer', order: order
+%}

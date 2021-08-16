@@ -1,0 +1,12 @@
+{%  liquid
+  function object = 'lib/commands/orders/mark_completed/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/statuses/create', profile_id: current_profile.id, object_id: object.id, name: 'app.statuses.orders.completed', scope: 'app.statuses.orders'
+    if object.valid
+      function res = 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: object.id, target_id: object.object_id, delay: 0
+    endif
+  endif
+
+  return object
+%}

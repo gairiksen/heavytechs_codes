@@ -1,0 +1,10 @@
+mutation update($id: ID!, $quantity: ID!){
+  record_update(
+    id: $id
+    record: {
+      properties: { name: "quantity", value: $quantity }
+    }
+  ){
+    id
+  }
+}

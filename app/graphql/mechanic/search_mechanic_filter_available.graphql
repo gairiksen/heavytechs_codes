@@ -1,0 +1,156 @@
+query search(
+    $id: ID
+    $limit: Int = 20
+    $user_id: String
+    $total_experience: String
+    $earthworks: String
+    $mining: String
+    $fleet: String
+    $pipeline: String
+    $paving: String
+    $energy_production: String
+    $heavy_equipment_mechanic: String
+    $truck_mechanic: String
+    $welder_fabricator: String
+    $oilers_pm_tech: String
+    $caterpillar: String
+    $john_deere: String
+    $hitachi: String
+    $volvo: String
+    $komatsu: String
+    $other: String
+    $insurance_coverage: String
+    $ase: String
+    $osha: String
+    $msha: String
+    $oem: String
+    $truck_type: String
+    $point: GeometryJSON
+    $distance: Int
+    $availability: String
+    $keyword_search: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "search_mechanic_params" }
+      properties: [
+        { name: "user_id", value: $user_id }
+        { name: "total_experience", value: $total_experience }
+        { name: "earthworks", value: $earthworks }
+        { name: "mining", value: $mining }
+        { name: "fleet", value: $fleet }
+        { name: "pipeline", value: $pipeline }
+        { name: "paving", value: $paving }
+        { name: "energy_production", value: $energy_production }
+        { name: "heavy_equipment_mechanic", value: $heavy_equipment_mechanic }
+        { name: "truck_mechanic", value: $truck_mechanic }
+        { name: "welder_fabricator", value: $welder_fabricator }
+        { name: "oilers_pm_tech", value: $oilers_pm_tech }
+        { name: "caterpillar", value: $caterpillar }
+        { name: "john_deere", value: $john_deere }
+        { name: "hitachi", value: $hitachi }
+        { name: "volvo", value: $volvo }
+        { name: "komatsu", value: $komatsu }
+        { name: "other", value: $other }
+        { name: "insurance_coverage", value: $insurance_coverage }
+        { name: "ase", value: $ase }
+        { name: "osha", value: $osha }
+        { name: "msha", value: $msha }
+        { name: "oem", value: $oem }
+        { name: "truck_type", value: $truck_type }
+        { name: "is_blocked", value: "0" }
+        { name: "user_name", not_value_in: "" }     
+        { name: "availability", value: $availability }  
+        { name: "geo_location", distance_sphere: {
+            center: $point,
+            distance_in_km: $distance
+          } 
+        } 
+      ]
+
+      or: [
+        { properties: { name: "mechanic_name", contains: $keyword_search } }
+        { properties: { name: "company_name", contains: $keyword_search } }
+        { properties: { name: "position", contains: $keyword_search } }
+        { properties: { name: "short_description", contains: $keyword_search } }
+        { properties: { name: "description", contains: $keyword_search } }
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+
+      total_experience: property(name: "total_experience")
+      earthworks: property(name: "earthworks")
+      mining: property(name: "mining")
+      fleet: property(name: "fleet")
+      pipeline: property(name: "pipeline")
+      paving: property(name: "paving")
+      energy_production: property(name: "energy_production")
+      heavy_equipment_mechnic: property(name: "heavy_equipment_mechnic")
+      truck_mechanic: property(name: "truck_mechanic")
+      welder_fabricator: property(name: "welder_fabricator")
+      oilers_pm_tech: property(name: "oilers_pm_tech")
+      caterpillar: property(name: "caterpillar")
+      john_deere: property(name: "john_deere")
+      hitachi: property(name: "hitachi")
+      volvo: property(name: "volvo")
+      komatsu: property(name: "komatsu")
+      bobcat: property(name: "bobcat")
+      other: property(name: "other")
+      insurance_coverage: property(name: "insurance_coverage")
+      ase: property(name: "ase")
+      osha: property(name: "osha")
+      msha: property(name: "msha")
+      oem: property(name: "oem")
+      availability: property(name: "availability")
+      truck_type: property(name: "truck_type")     
+      object_uuid: property(name: "object_uuid") 
+
+      photo: related_record(
+        table: "photo"
+        join_on_property: "object_uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      profile_bio: related_record(
+        table: "profile_bio"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        short_description: property(name: "short_description")
+        long_description: property(name: "long_description")
+        position: property(name: "position")
+        location: property(name: "location")
+        total_experience: property(name: "total_experience")
+        ready_for_travel: property(name: "ready_for_travel")
+        company_name: property(name: "company_name")
+      }
+
+      profile_skills: related_record(
+        table: "profile_skills"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        drivers_license_class: property(name: "drivers_license_class")
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+---
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function tags = 'lib/queries/tags/search', limit: 100
+
+  render 'theme/simple/admin/tags/index', tags: tags, context: context
+%}

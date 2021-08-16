@@ -1,0 +1,83 @@
+<h2 class="title">{{ 'admin.users.profile.orders' | t }}</h2>
+<div class="flex">
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>Item</div>
+        <div>{{ 'app.orders.history.number' | t }}</div>
+        <div>{{ 'app.orders.show.unit_price' | t }}</div>
+        <div>{{ 'app.orders.show.quantity' | t }}</div>
+        <div>{{ 'app.orders.show.category' | t }}</div>
+        <div>{{ 'app.orders.shipping_type' | t }}</div>
+        <div>{{ 'app.status' | t }}</div>
+        <div>{{ 'app.created_at' | t }}</div>
+      </header>
+
+      <div class="table-content">
+        {% for order in orders.results %}
+          {% for line_item in order.line_items %}
+            <ul>
+              <li class="align-center">
+                {% function item_url = 'link_to', path: '/items/', item: line_item.item %}
+                <a href="{{ item_url }}" class="flex justify-start items-center gap-4">
+                  {{ line_item.item.item_detail.name }}
+                </a>
+              </li>
+
+              <li>
+                <span class="lg:hidden">{{ 'app.models.orders.form.id' | t }}: </span>
+                <a data-tc="order-id" href="{% render 'link_to', object: order, namespace: 'admin' %}" class="font-bold lg:font-normal">
+                  {{ order.id }}
+                </a>
+              </li>
+
+              <li>
+                <span class="lg:hidden">{{ 'app.orders.total' | t }}: </span>
+                {% render 'theme/simple/price', amount_cents: line_item.item.price, currency: line_item.currency %}
+              </li>
+
+              <li class="text-right">
+                <span class="lg:hidden">{{ 'app.orders.show.quantity' | t }}: </span>
+                {{ line_item.quantity }}
+              </li>
+
+              <li>
+                <span class="lg:hidden">{{ 'app.orders.show.category' | t }}</span>
+                {% function category_url = 'link_to', category: line_item.item.category %}
+                <a href="{{ category_url }}">{{ 'categories.' | append: line_item.item.category | t }}</a>
+              </li>
+
+              <li class="align-middle lg:ps-4 lg:py-4">
+                <span class="lg:hidden">{{ 'app.orders.shipping_type' | t }}: </span>
+                {% if order.shipping_type %}
+                  {{ 'app.orders.shipping_types.' | append: order.shipping_type | t }}
+                {% endif %}
+              </li>
+
+              <li>
+                {% if order.status.timestamp %}
+                  <span class="lg:hidden">{{ 'app.status' | t }}: </span>
+                  <span class="px-2 py-1 inline-block rounded border leading-normal uppercase">{{ order.status.name | t }}</span>
+                {% endif %}
+              </li>
+
+              <li>
+                <span class="lg:hidden">{{ 'app.created_at' | t }}: </span>
+                <time datetime="{{ order.created_at }}">{{ order.created_at | l: 'compact' }}</time>
+              </li>
+            </ul>
+          {% endfor %}
+        {% endfor %}
+
+      </div>
+
+    </section>
+
+    {% liquid
+      assign page = page | default: 1 | plus: 0
+    %}
+
+    {% render 'theme/simple/ui/pagination', form: 'dashboard-form' collection: orders, current_page: filters.page %}
+  </div>
+</div>

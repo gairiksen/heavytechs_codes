@@ -1,0 +1,42 @@
+en:
+  app:
+    errors:
+      already_logged_in: You are already logged in.
+      cannot_sell_to_yourself: You cannot sell to yourself
+      disallowed: is not valid
+      blank: cannot be blank
+      not_included: not valid value
+      hcaptcha: Captcha has not been solved properly, please try again
+      length:
+        minimum: 'is too short (minimum is %{count} characters)'
+        maximum: 'is too long (maximum is %{count} characters)'
+        is: 'is the wrong length (should be %{count} characters)'
+      number:
+        greater_than: 'must be greater than %{count}'
+        greater_than_or_equal: 'must be greater than or equal to %{count}'
+        less_than: 'must be less than %{count}'
+        less_than_or_equal: 'must be less than or equal to %{count}'
+        equal_to: 'must be equal to %{count}'
+      too_little: 'has to be equal or greater than %{value}'
+      too_much: 'has to be equal or smaller than %{value}'
+      too_short: 'has to longer than %{value} letters'
+      taken: already taken
+      invalid_email_or_password: Invalid email or password
+      unauthorized: >-
+        The system has determined that <span class="font-semibold">you are
+        not</span> presently <span class="font-semibold">authorized</span> to
+        use this system function.
+      unauthenticated: >-
+        Please <b class="font-semibold">sign in</b> with you credentials or <b
+        class="font-semibold">register</b> new account before continuing.
+      organization_required: >-
+        Please <b class="font-semibold">create organization</b>
+        before continuing.
+      denied: Permission denied
+      must_be_selected: Must be selected
+      matches: not valid format
+      not_truthy: not true
+      password:
+        lowercase: 'must include at least one lower case'
+        uppercase: 'must include at least one upper case'
+        number: 'must include at least one number'

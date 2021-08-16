@@ -1,0 +1,8 @@
+{% liquid
+  assign ids = activities.results | map: 'payload' | map: 'object' | map: 'id' | compact
+
+  graphql r = 'activities/records_for_activities', limit: limit, page: 1, ids: ids
+  include 'lib/handle_graphql_response', r: r, name: 'queries/activities/records_for_activities'
+
+  return r.records
+%}

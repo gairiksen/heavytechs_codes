@@ -1,0 +1,16 @@
+---
+slug: api/photos
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile
+
+  function object = 'lib/commands/photos/create', object: context.params.photo, current_profile: current_profile
+
+  if object.valid and object.photo_type == 'avatar'
+    function profile = 'lib/queries/profiles/find', id: current_profile.id
+  endif
+
+  include 'theme/json/shared/show', object: object
+%}

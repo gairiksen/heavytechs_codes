@@ -1,0 +1,15 @@
+{% liquid
+  if relationship.name != 'wishlist'
+    return true
+  endif
+
+  case do
+  when 'create'
+    if relationship.name == 'wishlist' and actor.id == relationship.l_id
+      return true
+    endif
+
+  else
+    return false
+  endcase
+%}

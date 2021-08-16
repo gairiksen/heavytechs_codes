@@ -1,0 +1,24 @@
+---
+method: delete
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function item_inventory = 'lib/queries/item_inventories/find', id: context.params.id, withOrders: true, owner: current_profile.id
+
+  function object = 'lib/commands/processes/wrap', command: 'items/unpublish', object: item_inventory, current_profile: current_profile
+  if object.valid
+    if object.require_acceptance
+      include 'redirect_to', url: '/dashboard/sell/items', notice: 'app.items.need_to_be_accepted_before_unpublish'
+    else
+      include 'redirect_to', url: '/dashboard/sell/items', notice: 'app.items.deleted'
+    endif
+  else
+    assign error = object.errors.base[0]
+
+    function item_url = 'link_to', path: '/items/', item: item_inventory.item
+    include 'redirect_to', url: item_url, error: error
+  endif
+%}
+

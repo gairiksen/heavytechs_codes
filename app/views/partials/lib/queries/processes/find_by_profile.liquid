@@ -1,0 +1,14 @@
+{% liquid
+  if id == blank
+    return null
+  endif
+
+  if profile_id == blank
+    log 'Something went wrong. Profile cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  graphql r  = 'processes/search', id: id, limit: 1, profile_id: profile_id
+
+  return r.processes.results.first
+%}

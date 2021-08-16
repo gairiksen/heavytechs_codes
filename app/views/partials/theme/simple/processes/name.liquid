@@ -1,0 +1,19 @@
+{% liquid
+  assign payload = process.payload | parse_json
+  case process.command
+  when 'organizations/create_member'
+    echo 'organizations_create_member' | t: scope: 'app.processes.types', email: payload.email, first_name: payload.first_name, last_name: payload.last_name, organization_name: payload.organization_name
+  when 'organizations/create'
+    echo 'organizations_create' | t: scope: 'app.processes.types', name: payload.name
+  when 'organizations/update'
+    echo 'organizations_update' | t: scope: 'app.processes.types', name: payload.name
+  when 'items/publish_version'
+    echo 'items_publish_version' | t: scope: 'app.processes.types', name: payload.old_item.item_detail.name
+  when 'items/publish'
+    echo 'items_publish' | t: scope: 'app.processes.types', name: payload.name
+  when 'items/unpublish'
+    echo 'items_unpublish' | t: scope: 'app.processes.types', name: payload.item.item_detail.name
+  else
+    echo 'app.processes.types.unknown' | t
+  endcase
+%}

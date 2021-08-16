@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <title>TestCafé: Web Testing Framework | DevExpress</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/control_panel.js"></script>
+</head>
+<body>
+<script>
+    ControlPanel.get('OptionsView').init();
+    window.HOME_DIR = '<%= homeDir.replace(/\\/g, "\\\\") %>';
+</script>
+<div class="wrapper">
+    <% var selected = 'OPTIONS'; %>
+    <% include partial/header.ejs %>
+    <div class="options-tabs-push"></div>
+    <div class="options-tabs-cont">
+        <ul class="options-tabs">
+            <li data-tab="browsers-options" class="active">Browsers</li>
+            <li data-tab="server-options">Network</li>
+            <li data-tab="reports-options">Reports</li>
+        </ul>
+        <div class="header-line"></div>
+    </div>
+
+    <div class="content options-cont">
+        <div id="change-browser-dialog" data-title="Change browser" class="dir-operations-dialog">
+            <div class="input-path-wrap first-cell">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="text" value="" id="input-path" class="input-path" />
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td>
+                            <a class="home-dir button" title="Home Directory"><span></span></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class='fs-tree-cont'>
+                <div class="fs-tree-wrap">
+                    <ul id="fs-tree" class="fs-tree"></ul>
+                </div>
+            </div>
+            <div class="btns-wrap">
+                <button class="button" id="change_browser_cancel">Cancel</button>
+                <button class="button" id="change_browser_btn">OK</button>
+            </div>
+        </div>
+        <div id="delete-browser-dialog" data-title="Remove browser" class="dir-operations-dialog">
+            <div class="dialog-text">
+                <h2>Are you sure you want to remove</h2>
+            </div>
+
+            <button id="delete-browser-no-btn" class="button">No</button>
+            <button id="delete-browser-yes-btn" class="button">Yes</button>
+        </div>
+        <div id="reports-path-dialog" data-title="Change reports path" class="dir-operations-dialog">
+            <div class="input-path-wrap first-cell">
+                <table>
+                    <tr>
+                        <td>
+                            <input type="text" value="" id="reports-path-dialog-input" class="input-path"/>
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td>
+                            <a class="home-dir button" title="Home Directory"><span></span></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class='fs-tree-cont'>
+                <div class="fs-tree-wrap">
+                    <ul id="reports-path-fs-tree" class="fs-tree"></ul>
+                </div>
+            </div>
+            <div class="btns-wrap">
+                <button class="button" id="reports-path-cancel">Cancel</button>
+                <button class="button" id="reports-path-ok">OK</button>
+            </div>
+        </div>
+
+        <div id="browser-options-dialog" data-title="&nbsp;" class="dir-operations-dialog">
+            <table class="dialog-edit-form">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="edit-browser-name">Browser name:</label>
+                        </td>
+                        <td>
+                            <input type="text" value="" id="edit-browser-name"/>
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="edit-browser-path">Path:</label>
+                        </td>
+                        <td>
+                            <button class="button" id="browser-file">Browse...</button>
+                            <input type="text" value="" id="edit-browser-path"/>
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="edit-browser-cmd">Command line options:</label>
+                        </td>
+                        <td>
+                            <input type="text" value="" id="edit-browser-cmd"/>
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Browser icon:</label>
+                        </td>
+                        <td>
+                            <ul class="icon-types">
+                                <li title="Google Chrome" data-browser-icon="chrome"><span class="browser-icon chrome"></span></li>
+                                <li title="Mozilla Firefox" data-browser-icon="ff"><span class="browser-icon ff"></span></li>
+                                <li title="Internet Explorer" data-browser-icon="ie"><span class="browser-icon ie"></span></li>
+                                <li title="Opera" data-browser-icon="opera"><span class="browser-icon opera"></span></li>
+                                <li title="Apple Safari" data-browser-icon="safari"><span class="browser-icon safari"></span></li>
+                                <li title="Unknown Browser" data-browser-icon="unknown"><span class="browser-icon unknown"></span></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="btns-cont">
+                <button id="configure-browser-cancel-btn" class="button">Cancel</button>
+                <button id="configure-browser-ok-btn" class="button">OK</button>
+            </div>
+        </div>
+
+        <div id="server-options" class="tab-content">
+            <div class="msg-cont">
+                <span></span>
+                <p></p>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Hostname:</td>
+                        <td>
+                            <input type="text" value="<%=hostname.value%>" id="hostname"
+                            <%= (hostname.autoDetect ? 'class=readonly readonly=readonly' : '') %> />
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td class="auto-detect">
+                            <input type="checkbox" id="auto-detect-hostname"
+                            <%= (hostname.autoDetect ? 'checked=checked' : '') %> />
+                            <label for="auto-detect-hostname">auto detect</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Control panel port:</td>
+                        <td>
+                            <%var attr = "";
+
+                            if(!controlPanelPort.portFree)
+                                attr = 'class="readonly port-busy" readonly=readonly';
+                            else if(controlPanelPort.autoDetect)
+                                attr = 'class=readonly readonly=readonly';
+                            %>
+                            <input type="text" value="<%=controlPanelPort.value %>" id="control_panel_port" <%-attr%> />
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td class="auto-detect">
+                            <input type="checkbox" id="auto-detect-control-panel-port"
+                            <%= (controlPanelPort.autoDetect ? 'checked=checked' : '') %> />
+                            <label for="auto-detect-control-panel-port">auto detect</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%var attr = "";
+
+                        if(!servicePort1.portFree)
+                            attr = 'class="readonly port-busy" readonly=readonly';
+                        else if(servicePort1.autoDetect)
+                            attr = 'class=readonly readonly=readonly';
+                        %>
+                        <td>Service port 1:</td>
+                        <td>
+                            <input type="text" value="<%=servicePort1.value%>" id="service_post1" <%-attr%> />
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td class="auto-detect">
+                            <input type="checkbox" id="auto-detect-service-port1"
+                            <%= (servicePort1.autoDetect ?  'checked=checked' : '') %> />
+                            <label for="auto-detect-service-port1">auto detect</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%var attr = "";
+
+                        if(!servicePort2.portFree)
+                        attr = 'class="readonly port-busy" readonly=readonly';
+                        else if(servicePort2.autoDetect)
+                        attr = 'class=readonly readonly=readonly';
+                        %>
+                        <td>Service port 2:</td>
+                        <td>
+                            <input type="text" value="<%=servicePort2.value%>" id="service_post2" <%-attr%> />
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td class="auto-detect">
+                            <input type="checkbox" id="auto-detect-service-port2"
+                            <%= (servicePort2.autoDetect ?  'checked=checked' : '') %> />
+                            <label for="auto-detect-service-port2">auto detect</label>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <td colspan="2">
+                        <button class="button submit" id="apply-network-options">Apply</button>
+                    </td>
+                </tfoot>
+            </table>
+        </div>
+        <div id="browsers-options" class="tab-content">
+            <% include partial/browsers.ejs %>
+        </div>
+        <div id="reports-options" class="tab-content">
+            <div class="msg-cont">
+                <span></span>
+                <p></p>
+            </div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td colspan="2">Reports path:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" value="<%=reportsPath.value%>" id="reports-path-input" />
+                            <div class="input-err"><p class="err-text"></p></div>
+                        </td>
+                        <td>
+                            <button id="change-report-btn" class="button">Browse</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <td colspan="2">
+                        <button class="button submit" id="apply-reports-options">Apply</button>
+                    </td>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+    <div class="footer-push"></div>
+</div>
+
+    <% include partial/footer.ejs %>
+
+</body>
+</html>

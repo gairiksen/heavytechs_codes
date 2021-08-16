@@ -1,0 +1,16 @@
+---
+slug: admin/activities/events/:uuid/trigger
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function event = 'lib/queries/events/find', uuid: context.params.uuid
+
+  if context.params.trigger
+    function event = 'lib/commands/events/broadcast/execute', object: event
+  endif
+
+  render 'theme/simple/events/show', event: event, context: context
+%}

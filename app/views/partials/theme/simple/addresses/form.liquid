@@ -1,0 +1,46 @@
+{% comment %}
+  Required params:
+    address: object with pre-filled values
+    errors: object with errors
+    name: prefix for inputs' name attribute
+{% endcomment %}
+<label class="block" for="address_full_name">{{ 'app.models.addresses.form.full_name' | t }} *</label>
+<input class="w-full mb-4 form-input" type="text" id="address_full_name" name="{{ name }}[full_name]" value="{{ address.full_name }}" required>
+{% render 'theme/simple/field_error', errors: errors.full_name %}
+
+<label class="block" for="address_country">{{ 'app.models.addresses.form.country' | t }} *</label>
+<input class="w-full mb-4 form-input" type="text" id="address_country" name="{{ name }}[country]" value="{{ address.country }}" required>
+{% render 'theme/simple/field_error', errors: errors.country %}
+
+<label class="block" for="address_city">{{ 'app.models.addresses.form.city' | t }} *</label>
+<input class="w-full mb-4 form-input" type="text" id="address_city" name="{{ name }}[city]" value="{{ address.city }}" required>
+{% render 'theme/simple/field_error', errors: errors.city %}
+
+<label class="block" for="address_state">{{ 'app.models.addresses.form.state' | t }} *</label>
+<input class="w-full mb-4 form-input" type="text" id="address_state" name="{{ name }}[state]" value="{{ address.state }}" required>
+{% render 'theme/simple/field_error', errors: errors.state %}
+
+<label class="block" for="address_street">{{ 'app.models.addresses.form.street' | t }} *</label>
+<input class="w-full mb-4 form-input" type="text" id="address_street" name="{{ name }}[street]" value="{{ address.street }}" required>
+{% render 'theme/simple/field_error', errors: errors.street %}
+
+<div class="flex gap-4">
+  <div class="w-1/2">
+    <label class="block" for="address_zip">{{ 'app.models.addresses.form.zip' | t }} *</label>
+    <input class="w-full mb-4 form-input" type="text" id="address_zip" name="{{ name }}[zip]" value="{{ address.zip }}" required>
+    {% render 'theme/simple/field_error', errors: errors.zip %}
+  </div>
+</div>
+
+<div class="flex gap-4">
+  <div class="w-1/2">
+    <label class="block" for="address_building_number">{{ 'app.models.addresses.form.building_number' | t }}</label>
+    <input class="w-full mb-6 form-input" type="text" dir="auto" id="address_building_number" name="{{ name }}[building_number]" value="{{ address.building_number }}">
+    {% render 'theme/simple/field_error', errors: errors.building_number %}
+  </div>
+  <div class="w-1/2">
+    <label class="block" for="address_flat_number">{{ 'app.models.addresses.form.flat_number' | t }}</label>
+    <input class="w-full mb-6 form-input" type="text" dir="auto" id="address_flat_number" name="{{ name }}[flat_number]" value="{{ address.flat_number }}">
+    {% render 'theme/simple/field_error', errors: errors.flat_number %}
+  </div>
+</div>

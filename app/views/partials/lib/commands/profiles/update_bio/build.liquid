@@ -1,0 +1,49 @@
+{%liquid
+  assign short_description = object.short_description | default: ''
+  assign long_description = object.long_description | default: ''
+  assign company_name = object.company_name | default: ''
+  assign position = object.position | default: ''
+  assign location = object.location | default: ''
+  assign ready_for_travel = object.ready_for_travel | default: ''
+  assign total_experience = object.total_experience | default: ''
+  assign veteran = object.veteran | default: ''
+  assign latitude = object.latitude | default: ''
+  assign longitude = object.longitude | default: ''
+  assign user_id = object.user_id | default: context.current_user.id
+  
+%}
+
+{% parse_json geo_location %}
+{
+  "type": "Point",
+  "coordinates": [
+    {{longitude}},
+    {{latitude}}    
+  ]
+}
+{% endparse_json %}
+
+
+{% parse_json object %}
+  {
+    "id":           {{ object.id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "short_description":   {{ short_description | json }},
+    "long_description":   {{ long_description | json }},
+    "company_name":    {{ company_name | json }},
+    "position":    {{ position | json }},
+    "location":    {{ location | json }},
+    "ready_for_travel":    {{ ready_for_travel | json }},
+    "total_experience":    {{ total_experience | json }},
+    "veteran":    {{ veteran | json }},
+    "latitude":    {{ latitude | json }},
+    "longitude":    {{ longitude | json }},
+    "geo_location": {{geo_location}}
+    
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

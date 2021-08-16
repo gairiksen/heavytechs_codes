@@ -1,0 +1,46 @@
+{%  liquid
+  function object = 'lib/commands/orders/cancel/check', object: order, role: role
+
+  if object.valid
+    assign event_type = 'order_cancelled_by_' | append: role
+    include 'lib/commands/events/create', type: event_type, actor_id: current_profile.id, target_id: object.id, object_id: object.id
+
+    assign status_name = 'app.statuses.orders.cancelled_' | append: role
+    function status = 'lib/commands/statuses/create', profile_id: current_profile.id, object_id: object.id, name: status_name, scope: 'app.statuses.orders'
+    include 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: status.id, target_id: status.object_id
+
+    hash_assign object['status'] = status
+
+    assign take_back_stock = '[]' | parse_json
+    assign line_items = '{}' | parse_json
+    for item in order.line_items
+      hash_assign line_items[item.id] = item
+      if role == 'buyer'
+        assign stock_item = '{}' | parse_json
+        hash_assign stock_item['inventory_id'] = item.item.item_inventory.id
+        hash_assign stock_item['step'] = item.quantity
+        assign take_back_stock = take_back_stock | add_to_array: stock_item
+      endif
+    endfor
+
+    if role == 'seller'
+      for restock_item in restock
+        if restock_item[1] == 'on'
+          assign item = '{}' | parse_json
+          hash_assign item['inventory_id'] = line_items[restock_item[0]].item.item_inventory.id
+          hash_assign item['step'] = line_items[restock_item[0]].quantity
+          assign take_back_stock = take_back_stock | add_to_array: item
+        endif
+      endfor
+    endif
+
+    if take_back_stock.size > 0
+      function result = 'lib/commands/orders/take_back_to_inventory', object: take_back_stock
+      unless result.valid
+        log result, type: 'ERROR could not restock the items'
+      endunless
+    endif
+  endif
+
+  return object
+%}

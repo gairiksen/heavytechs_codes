@@ -1,0 +1,29 @@
+{% liquid
+  function object = 'lib/commands/profiles_anonymous/convert_orders/build', profile_anonymous: profile_anonymous, profile: profile
+  function object = 'lib/commands/profiles_anonymous/convert_orders/check', object: object
+
+  if object.valid
+    if object.orders_to_add.size > 0
+      hash_assign object['ids'] = object.orders_to_add | map: 'id'
+      function object = 'lib/commands/execute', object: object, mutation_name: 'profiles_anonymous/convert_orders', selection: 'records_update_all'
+    endif
+    if object.line_items_to_add.size > 0
+      for line_item in object.line_items_to_add
+        function res = 'lib/commands/execute', object: line_item, mutation_name: 'profiles_anonymous/change_line_item_order', selection: 'record_update'
+        if res.valid != true
+          log res, type: 'ERROR: profiles_anonymous/change_line_item_order'
+        endif
+      endfor
+    endif
+    if object.line_items_to_change.size > 0
+      for line_item in object.line_items_to_change
+        function res = 'lib/commands/execute', object: line_item, mutation_name: 'profiles_anonymous/change_line_item_quantity', selection: 'record_update'
+        if res.valid != true
+          log res, type: 'ERROR: profiles_anonymous/change_line_item_quantity'
+        endif
+      endfor
+    endif
+  endif
+
+  return object
+%}

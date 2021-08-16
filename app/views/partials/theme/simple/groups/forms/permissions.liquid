@@ -1,0 +1,86 @@
+<fieldset class="w-2/3 mt-6">
+  <label class="mb-1 block cursor-pointer" for="groupType">{{ 'app.groups.form.privacy' | t }} ({{ 'app.required' | t }})</label>
+
+  {% liquid
+    assign scope = 'app.groups.permissions_explanation'
+  %}
+
+  <div x-data="{ templates: {{ lib.group_templates | json }}, group_type: '{{ group.group_type | default: 'public' }}' }">
+
+    <div>
+      {% render 'theme/simple/groups/forms/group_types', group_templates: lib.group_templates %}
+
+      <div x-cloak x-show.transition="group_type != 'custom'">
+          {% capture privacy_tip %}
+            <ul class="space-y-1">
+              <li>
+                <span x-show="templates[group_type].ask_to_join">
+                  {{ 'ask_to_join' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[group_type].ask_to_join">
+                  {{ 'ask_to_join' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].meta_visible"></span>
+                {{ 'meta_visible' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].content_visible"></span>
+                {{ 'content_visible' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].approve_request"></span>
+                {{ 'approve_request' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].post_content"></span>
+                {{ 'post_content' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].invite_member"></span>
+                {{ 'invite_member' | t: scope: scope }}
+              </li>
+            </ul>
+          {% endcapture %}
+          {% liquid
+            assign privacy_tip = privacy_tip | html_safe
+            render 'theme/simple/ui/form-tip', content: privacy_tip
+          %}
+      </div>
+
+      {% comment %}
+      <!-- Custom groups permissions are not yet supported -->
+      <div x-show.transition="group_type == 'custom'" x-cloak class="grid grid-cols-1">
+        <label for="group[ask_to_join]" class="flex flex-wrap mb-3">
+          <span class="w-full">{{ "ask_to_join" | t: scope: 'app.groups.permissions_explanation' }}</span>
+
+          <select name="group[ask_to_join]" id="group[ask_to_join]" class="pt-1 pb-1 ps-1 text-sm">
+            <option
+              value="yes"
+              x-bind:selected="templates[group_type].ask_to_join == 'yes'"
+              {% if group[ask_to_join] == "yes" %}selected{% endif %}
+            >
+              Yes
+            </option>
+            <option
+              value="no"
+              x-bind:selected="templates[group_type].ask_to_join == 'no'"
+              {% if group[ask_to_join] == "no" %}selected{% endif %}
+            >
+              No
+            </option>
+          </select>
+        </label>
+
+        {% render 'theme/simple/groups/forms/group_roles', name: "meta_visible", group: group %}
+        {% render 'theme/simple/groups/forms/group_roles', name: "content_visible", group: group %}
+        {% render 'theme/simple/groups/forms/group_roles', name: "approve_request", group: group %}
+        {% render 'theme/simple/groups/forms/group_roles', name: "post_content", group: group %}
+        {% render 'theme/simple/groups/forms/group_roles', name: "invite_member", group: group %}
+      </div>
+      {% endcomment %}
+
+    </div>
+  </div>
+</fieldset>

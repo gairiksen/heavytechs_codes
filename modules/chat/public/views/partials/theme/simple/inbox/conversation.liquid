@@ -1,0 +1,59 @@
+{% if conversation.id != current_conversation.id %}
+	<a href="/inbox?conversation_id={{ conversation.id }}">
+{% endif %}
+		{% liquid
+			assign active_class = 'bg-white'
+			unless conversation.id == current_conversation.id
+				assign active_class = 'text-gray-600 border-b'
+			endunless
+		%}
+
+		<div class="px-3 py-2 flex items-center {{ active_class }}">
+
+      {%comment%}
+			<div>
+        {% render 'theme/simple/ui/avatar', profile: from_user, size: 64, class: 'w-16 h-16 mx-auto md:mx-0' %}
+			</div>
+      {%endcomment%}
+      {%if from_user.photo.photo.url %}
+        <div>
+          <img src="{{from_user.photo.photo.url}}" width="32" height="32" alt="" class="object-cover rounded-full w-16 h-16 mx-auto md:mx-0">
+        </div>
+      {%else%}
+        <div>
+          <img src="{{ 'images/signup-img2.png' | asset_url }}" width="32" height="32" alt="" class="object-cover rounded-full w-16 h-16 mx-auto md:mx-0">
+        </div>
+      {%endif%}
+
+			<div class="ms-4 flex-1">
+				<div class="flex items-bottom justify-between">
+
+          {% liquid
+            if from_user.first_name
+              assign name = from_user.first_name | append: ' ' | append: from_user.last_name
+            else
+              assign name = from_user.name
+            endif
+          %}
+
+          <p>{{ name }}</p>
+
+          {% unless conversation.participant_read_ids contains current_profile.id %}
+            <span class="flex items-center justify-center w-3 h-3 text-xs text-white rounded-full bg-interaction"></span>
+          {% endunless %}
+
+				</div>
+
+        {% if conversation.last_message %}
+          <p class="text-gray-500 mt-1 text-sm">
+            {{ conversation.last_message.created_at | l: 'compact' }}
+          </p>
+        {% endif %}
+
+			</div>
+
+		</div>
+
+{% if conversation.id != current_conversation.id %}
+	</a>
+{% endif %}

@@ -1,0 +1,6 @@
+{% liquid
+  assign statuses = 'published,unavailable' | split: ','
+  function items = 'lib/queries/items/search', promoted: true, limit: limit, statuses: statuses, lang: context.language, only_public: true
+
+  return items
+%}

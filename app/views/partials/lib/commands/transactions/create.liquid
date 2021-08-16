@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/transactions/create/build', order_results: order_results, profile: profile
+  function object = 'lib/commands/transactions/create/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: 'transactions/create' object: object, selection: 'record_create'
+  endif
+
+  return object
+%}

@@ -1,0 +1,9 @@
+{% liquid
+  function object = 'modules/stripe/lib/account/update/build', object: object
+  function object = 'modules/stripe/lib/account/update/validate', object: object
+
+  if object.valid
+    function object = 'modules/stripe/lib/account/update/execute', object: object
+  endif
+  return object
+%}

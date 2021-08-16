@@ -1,0 +1,21 @@
+{% comment %}
+  when returning null it means current user has no session - should log in
+  otherwise returing organization - if there is no organization return profile
+{% endcomment %}
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: user_id
+
+  if current_profile == blank
+    return null
+  endif
+
+  function rels = 'lib/queries/relationships/search_by_left', l_id: current_profile.id, name: 'membership', model: ['profile','organization'], include_related: true
+  if rels.total_entries > 1
+    log 'Current user has multiple organizations assigned. It is not supported in this version. Returning first.', type: 'WARNING'
+    return rels.results.first.r
+  elsif rels.total_entries == 0
+    return current_profile
+  else
+    return rels.results.first.r
+  endif
+%}

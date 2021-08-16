@@ -1,0 +1,4 @@
+{% liquid
+  graphql r = 'tags/search', limit: limit, page: 1
+  return r.tags
+%}

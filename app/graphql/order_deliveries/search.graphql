@@ -1,0 +1,31 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $order_id: String
+  $delivery_information: String
+) {
+  order_deliveries: records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "order_delivery" }
+      properties: [
+              { name: "order_id" value: $order_id }
+              { name: "delivery_information" value: $delivery_information }
+            ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+          order_id: property(name: "order_id")
+          delivery_information: property(name: "delivery_information")
+        }
+  }
+}

@@ -1,0 +1,15 @@
+{% liquid
+  if owner == blank
+    log 'Something went wrong. Owner cannot be blank.', type: 'ERROR'
+    return null
+  endif
+  if statuses
+    assign statuses = statuses | split: ','
+  endif
+
+  function query = 'lib/queries/items/search/build', limit: limit, owner: owner, params: params, withStatuses: true, statuses: statuses, status: status, lang: context.language
+  graphql r = 'item_inventories/search', args: query
+  include 'lib/handle_graphql_response', r: r, name: 'queries/item_inventories/search_by_owner'
+
+  return r.item_inventories
+%}

@@ -1,0 +1,26 @@
+<ul class="mb-5 text-lg rounded-t-none card lg:text-xl">
+  <li class="flex justify-between pb-3 border-b gap-4">
+    <div>
+      {{ 'app.orders.show.subtotal' | t }}
+    </div>
+    <div>
+      {% render 'theme/simple/price', amount_cents: object.products_price_cents, currency: object.currency %}
+    </div>
+  </li>
+  <li class="flex justify-between py-3 border-b gap-4">
+    <div>
+      {{ 'app.orders.show.delivery' | t }}
+    </div>
+    <div>
+      {% render 'theme/simple/price', amount_cents: object.total_shipping_cost_cents currency: object.currency %}
+    </div>
+  </li>
+  <li class="flex justify-between pt-3 text-xl font-bold gap-4 lg:text-2xl">
+    <div>
+      {{ 'app.orders.show.total' | t }}
+    </div>
+    <div>
+      {% render 'theme/simple/price', amount_cents: object.total_price_cents currency: object.currency %}
+    </div>
+  </li>
+</ul>

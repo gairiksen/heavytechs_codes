@@ -1,0 +1,60 @@
+en:
+  app:
+    header:
+      add_content: Add content
+      add_group: Create group
+      add_item: Create item
+      add_post: Add post
+      add_question: Add question
+      buying: Buying
+      cart: Cart
+      chat: Inbox
+      dashboard: Dashboard
+      log-out: Log out
+      notifications: Notifications
+      profile: Profile
+      purchases: Purchases
+      register: Sign up
+      selling: Selling
+      profile: Profile
+      wishlist: Wishlist
+      admin: Admin
+    footer:
+      description: >-
+        MVP Marketplace template is modern marketplace to gather your clients together
+      copyrights:
+        year: © 2020
+        title: MVP Marketplace — Powered by
+        product_owner: platformOS
+      social_links:
+        twitter: https://twitter.com/platformOS
+        instagram: Instagram
+        facebook: Facebook
+      contact:
+        email: support@platformos.com
+      header:
+        title:
+          general: GENERAL
+          join: JOIN
+          support: SUPPORT
+        list:
+          home: Home
+          about_us: About us
+          terms_of_service: Terms of service
+          sign_up: Sign up
+          log_in: Log in
+          contact_us: Contact Us
+          faq: FAQ
+    notifications:
+      empty: Your notifications will appear right here when something will come up.
+    hero:
+      shop: Find your dream watch
+      sell: Sell part of your collection
+      main-sentence: Find Your Time
+      secondary-sentence: MVP Marketplace is a social marketplace to buy and sell all things
+    safety_list:
+      safe-shopping: Safe online <strong class="text-interaction font-bold">Shopping</strong>
+      verified-merchants: Verified <strong class="text-interaction font-bold">Merchants</strong>
+      secure-payment: Secure <strong class="text-interaction font-bold">Payment</strong>
+      unsatisfied-returns: Not satisfied <strong class="text-interaction font-bold">Return</strong>
+      order-tracking: Order <strong class="text-interaction font-bold">Tracking</strong>

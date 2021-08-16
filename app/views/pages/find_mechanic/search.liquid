@@ -1,0 +1,68 @@
+---
+slug: find_mechanic/search
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.params.user_id
+
+  assign user_id = context.params.user_id | default: ''
+
+  assign keyword_search = context.params.keyword_search | default: ''
+  assign availability = context.params.availability | default: ''
+  assign total_experience = context.params.total_experience | default: ''
+  assign earthworks = context.params.earthworks | default: ''
+  assign mining = context.params.mining | default: ''
+  assign fleet = context.params.fleet | default: ''
+  assign pipeline = context.params.pipeline | default: ''
+  assign paving = context.params.paving | default: ''
+  assign energy_production = context.params.energy_production | default: ''
+
+  assign heavy_equipment_mechanic = context.params.heavy_equipment_mechanic | default: ''
+  assign truck_mechanic = context.params.truck_mechanic | default: ''
+  assign welder_fabricator = context.params.welder_fabricator | default: ''
+  assign oilers_pm_tech = context.params.oilers_pm_tech | default: ''
+  assign caterpillar = context.params.caterpillar | default: ''
+  assign john_deere = context.params.john_deere | default: ''
+  assign hitachi = context.params.hitachi | default: ''
+  assign volvo = context.params.volvo | default: ''
+  assign komatsu = context.params.komatsu | default: ''
+  assign bobcat = context.params.bobcat | default: ''
+  assign other = context.params.other | default: ''
+  assign insurance_coverage = context.params.insurance_coverage | default: ''
+  assign ase = context.params.ase | default: ''
+  assign osha = context.params.osha | default: ''
+  assign msha = context.params.msha | default: ''
+  assign oem = context.params.oem | default: ''
+  assign truck_type = context.params.truck_type | default: ''  
+  assign latitude = context.params.latitude | default: ''
+  assign longitude = context.params.longitude | default: ''
+  assign distance = context.params.distance | plus: 0
+  assign location = context.params.location
+
+  assign area_of_expertise = context.params.area_of_expertise | default: ''
+  if area_of_expertise and area_of_expertise == 'hes'
+    assign heavy_equipment_mechanic = '1' | default: ''
+  endif
+
+  if area_of_expertise and area_of_expertise == 'tm'
+    assign truck_mechanic = '1' | default: ''
+  endif
+
+  if area_of_expertise and area_of_expertise == 'wf'
+    assign welder_fabricator = '1' | default: ''
+  endif
+
+  if area_of_expertise and area_of_expertise == 'opt'
+    assign oilers_pm_tech = '1' | default: ''
+  endif
+  
+
+  function records = 'lib/queries/mechanic/search', keyword: context.params.qkeyword, limit: 15, lang: context.language, total_experience: total_experience, earthworks: earthworks, mining: mining, fleet: fleet, pipeline: pipeline, paving: paving, energy_production: energy_production, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic,welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, caterpillar: caterpillar, john_deere: john_deere, hitachi: hitachi, volvo: volvo, komatsu: komatsu, other: other, insurance_coverage: insurance_coverage, ase: ase. osha: osha, msha: msha, oem: oem, truck_type: truck_type, availability: availability, latitude: latitude, longitude: longitude, distance: distance, keyword_search: keyword_search, location: location
+
+  function favorites = 'lib/queries/profiles/find_my_favourites', limit: 15, lang: context.language, user_id: context.params.user_id
+
+%}
+{%
+
+  render 'theme/simple/find_mechanic/index', records: records, total_experience: total_experience, earthworks: earthworks, mining: mining, fleet: fleet, pipeline: pipeline, paving: paving, energy_production: energy_production, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic,welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, caterpillar: caterpillar, john_deere: john_deere, hitachi: hitachi, volvo: volvo, komatsu: komatsu, other: other, insurance_coverage: insurance_coverage, ase: ase. osha: osha, msha: msha, oem: oem, truck_type: truck_type, user_id: user_id, availability: availability, latitude: latitude, longitude: longitude, distance: distance, area_of_expertise: area_of_expertise, keyword_search: keyword_search, location: location, favorites: favorites
+%}

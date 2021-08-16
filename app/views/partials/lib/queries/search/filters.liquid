@@ -1,0 +1,24 @@
+{% liquid
+  assign search_form = '{}' | parse_json
+
+  assign sort_options = 'app.search.sort_options' | t
+  hash_assign search_form['sort_options'] = sort_options
+
+  function categories = 'lib/queries/categories/search', limit: 100
+  hash_assign search_form['categories'] = categories | dig: 'results' | map: 'key'
+
+  function organizations = 'lib/queries/organizations/search_for_filters', limit: 30
+  hash_assign search_form['organizations'] = organizations.results
+
+  hash_assign search_form['query'] = query
+
+  hash_assign search_form['statuses'] = 'app.statuses' | t
+  if query.price_min
+    hash_assign search_form['price_min'] = query.price_min | fractional_to_amount: context.constants.CURRENCY
+  endif
+  if query.price_max
+    hash_assign search_form['price_max'] = query.price_max | fractional_to_amount: context.constants.CURRENCY
+  endif
+
+  return search_form
+%}

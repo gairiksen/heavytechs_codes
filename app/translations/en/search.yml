@@ -1,0 +1,42 @@
+en:
+  app:
+    search:
+      total_entries: Total results
+      no_items_found:
+        title: We couldn’t find any results matching your criteria
+        desc: Things we can try to help with that
+        refilter: Adjust the filters or <a href="/search">clear them</a> and start over
+        rephrase: Try a different <label for="keyword">search phrase</label> and check the spelling
+        browse: Browse through <a href="/search">all our products</a>
+      all_categories: All categories
+      all_tags: All tags
+      all_filters: All Filters
+      search: Search
+      reset: Clear filter
+      keywords: Keywords
+      category: Category
+      tags: Tags
+      sort_by: Sort by
+      price: Price
+      price_min: min
+      price_max: max
+      date_range:
+        header: Date range
+        from: From
+        to: To
+      organizations: Sellers
+      statuses: Statuses
+      sort_options:
+        relevance: Relevance
+        price_asc: Price (lowest first)
+        price_desc: Price (highest first)
+        created_at_asc:  Oldest first
+        created_at_desc: Most Recent
+    quick_search:
+      name: Search in everything
+      type:
+        profile: Profile
+        group: Group
+        comment: Post
+        item: Item
+        post: Question

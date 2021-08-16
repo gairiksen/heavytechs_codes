@@ -1,0 +1,19 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/must_be_superadmin', profile: current_profile
+
+  include 'theme/simple/__admin_old/menu', section: 'home'
+
+  assign today = 'now' | to_date | json
+  assign yesterday = 'yesterday' | to_date | json
+
+  function today = 'lib/queries/metrics/find', limit: 1, date: today
+  function yesterday = 'lib/queries/metrics/find', limit: 1, date: yesterday
+
+  function report = 'lib/commands/metrics/report', today: today, yesterday: yesterday
+  function currency = 'lib/queries/constants/find' name: "CURRENCY", context: context
+
+  include 'theme/simple/__admin_old/recent', metrics: report, currency: currency
+%}
+

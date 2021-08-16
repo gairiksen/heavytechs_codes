@@ -1,0 +1,11 @@
+<h2 class="bigtitle">{% echo 'app.activities.list' | t %} ({{ activities.total_entries }})</h2>
+<table class="w-full table-auto">
+  {% for activity in activities.results %}
+    <tr>
+      <td class="px-4 py-2 border-b">{% print activity.payload.date | to_time %}</td>
+      <td class="px-4 py-2 border-b">{% print activity.payload.type  %}</td>
+      <td class="px-4 py-2 border-b">{{ activity.payload.object.id }}</td>
+      <td class="px-4 py-2 border-b">{{ activity.payload.actor.id }}</td>
+    </tr>
+  {% endfor %}
+</table>

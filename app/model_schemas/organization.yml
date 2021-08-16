@@ -1,0 +1,17 @@
+name: organization
+properties:
+  - name: uuid
+  - name: name
+  - name: slug
+  - name: contact_emails
+  - name: promoted
+    type: boolean
+  - name: offline_stores
+    type: array
+  - name: logo
+    type: upload
+  - name: shipping_types
+    type: array
+  - name: delivery_fee
+    type: integer
+  - name: language

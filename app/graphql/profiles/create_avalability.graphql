@@ -1,0 +1,27 @@
+mutation create( 
+    $uuid: String!,
+    $user_id: String!,
+    $availability: String!,
+    $availability_status: String!
+    
+) {
+  model_create(
+    model: {
+      model_schema_name: "profile_availability"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "availability" value: $availability } 
+        { name: "availability_status" value: $availability_status }  
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    availability: property(name: "availability")
+    availability_status: property(name: "availability_status")
+  }
+}

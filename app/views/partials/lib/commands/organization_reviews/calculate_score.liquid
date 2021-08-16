@@ -1,0 +1,13 @@
+{% liquid
+  assign review_scores = '' | split: ','
+  if review.recommend
+    assign review_scores = review_scores | add_to_array: 5
+  else
+    assign review_scores = review_scores | add_to_array: 1
+  endif
+  assign review_scores = review_scores | add_to_array: review.delivery_score | add_to_array: review.description_score | add_to_array: review.service_score
+  assign review_scores_count = review_scores.size | plus: 0.0
+  assign review_score = review_scores | sum_array | divided_by: review_scores_count | times: 20
+
+  return review_score
+%}

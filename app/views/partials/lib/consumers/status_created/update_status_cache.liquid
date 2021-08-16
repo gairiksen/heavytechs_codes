@@ -1,0 +1,35 @@
+{% liquid
+  function status = 'lib/queries/statuses/find', id: event.object.id
+
+  assign object = '{}' | parse_json
+  if status.name contains 'app.'
+    hash_assign object['c__status'] = status.name
+  else
+    hash_assign object['c__status'] = status.fullname
+  endif
+
+
+  if status.name contains 'app.statuses.items'
+    hash_assign object['id'] = event.target.id
+    function object = 'lib/commands/execute', mutation_name: 'item_inventories/update' object: object, selection: 'record_update'
+
+    assign item_object = '{}' | parse_json
+    hash_assign item_object['id'] = object.item_id
+    hash_assign item_object['c__status'] = object['c__status']
+    function object = 'lib/commands/execute', mutation_name: 'items/update' object: item_object, selection: 'record_update'
+  endif
+
+  if status.name contains 'app.statuses.orders'
+    if event.target.id
+      hash_assign object['id'] = event.target.id
+      function object = 'lib/commands/execute', mutation_name: 'orders/update' object: object, selection: 'model_update'
+    else
+      log event, type: 'OrderNotFoundError. Event has no valid target'
+    endif
+  endif
+
+  if status.name contains 'app.statuses.line_item_returns'
+    hash_assign object['id'] = event.target.id
+    function object = 'lib/commands/execute', mutation_name: 'line_item_returns/update' object: object, selection: 'record_update'
+  endif
+%}

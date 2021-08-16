@@ -1,0 +1,47 @@
+{% liquid
+  assign object = '{}' | parse_json
+  hash_assign object['profile_id'] = profile.id
+  hash_assign object['profile_anonymous_id'] = profile_anonymous.id
+  function orders_for_anonymous = 'lib/queries/orders/search_by_buyer', buyer: profile_anonymous.id, limit: 100
+  function orders_for_registered = 'lib/queries/orders/search_by_buyer', buyer: profile.id, limit: 100
+  assign orders_for_anonymous = orders_for_anonymous.results
+  assign orders_for_registered = orders_for_registered.results
+  assign orders_to_add = '[]' | parse_json
+  assign line_items_to_add = '[]' | parse_json
+  assign line_items_to_change = '[]' | parse_json
+
+  for order in orders_for_anonymous
+    assign order_for_registered = orders_for_registered | select: seller_id: order.seller_id | first
+    if order_for_registered
+      for line_item in order.line_items
+        assign line_item_for_registered = order_for_registered.line_items | select: item_id: line_item.item_id | first
+        if line_item_for_registered
+          if line_item.quantity > line_item_for_registered.quantity
+            assign line = '{}' | parse_json
+            hash_assign line['id'] = line_item_for_registered.id
+            hash_assign line['quantity'] = line_item.quantity
+            assign line_items_to_change = line_items_to_change | add_to_array: line
+          endif
+        else
+          assign line = '{}' | parse_json
+          hash_assign line['id'] = line_item.id
+          hash_assign line['order_id'] = order_for_registered.id
+
+          assign line_items_to_add = line_items_to_add | add_to_array: line
+        endif
+  comment
+  add orders to remove
+  endcomment
+      endfor
+    else
+      assign orders_to_add = orders_to_add | add_to_array: order
+    endif
+  endfor
+
+  hash_assign object['orders_to_add'] = orders_to_add
+  hash_assign object['line_items_to_add'] = line_items_to_add
+  hash_assign object['line_items_to_change'] = line_items_to_change
+
+  log object, type: 'object'
+  return object
+%}

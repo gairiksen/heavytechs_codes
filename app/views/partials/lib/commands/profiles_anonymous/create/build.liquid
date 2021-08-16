@@ -1,0 +1,13 @@
+{% liquid
+  assign uuid = '' | uuid
+%}
+{% parse_json object %}
+  {
+    "uuid":    {{ uuid | json }},
+    "anonymous_session_id": {{ object.session_id | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

@@ -1,0 +1,64 @@
+{% liquid
+  assign uuid = '' | uuid
+  if images == null
+    assign images = true
+  endif
+%}
+<div
+  x-data="frames()" x-init='init({where: "afterbegin", target: "feed"})' x-on:submit.prevent='
+    insert().then(() => {
+      api.photoUploadReset($refs.form.elements["post[uuid]"], document.querySelector("#uppy-form-{{group.id}}"));
+      upload = false;
+      sizeTextarea();
+    });'
+>
+  <form
+    action="/posts.frame"
+    method="post"
+    class="mb-6 p-4 rounded !bg-panel-highlight"
+    x-ref="form"
+  >
+    {% render 'authenticity_token', token: context.authenticity_token %}
+    <input type="hidden" name="post[group_id]" value="{{ group.id }}">
+    <input type="hidden" name="post[content_type]" value="post">
+    <input type="hidden" name="post[uuid]" value="{{ uuid }}" autocomplete="off">
+
+    <fieldset class="flex gap-4 items-start">
+      {% render 'theme/simple/ui/avatar', profile: current_profile, size: 36, class: 'w-9 h-9 flex-shrink-0' %}
+      <textarea
+        name="post[body]"
+        class="w-full h-11 transition-all"
+        placeholder="{{ placeholder | t }}"
+        required
+        rows="1"
+        x-ref="content"
+        x-on:blur="sizeTextarea(false)"
+        x-on:focus="sizeTextarea(true)"
+      ></textarea>
+    </fieldset>
+
+    <fieldset class="mt-2 flex gap-2 items-center justify-end">
+      {% if images %}
+        <button type="button" class="button button-small button-secondary button-compact" x-on:click="upload=!upload">{% render 'theme/simple/ui/icon', icon: 'camera' %}</button>
+      {% endif %}
+      <button type="submit" class="button button-small relative">
+        <div class="card-overlay" x-show="spinner" x-cloak>
+          {% render 'theme/simple/ui/spinner', size: 8 %}
+        </div>
+        {{ 'app.posts.feed_new_entry.submit' | t }}
+      </button>
+    </fieldset>
+
+    {% if images %}
+      <fieldset x-cloak x-show.transition="upload">
+        {% render 'theme/simple/photos/uppy_area', class: "mt-5" %}
+      </fieldset>
+    {% endif %}
+  </form>
+
+  {% liquid
+    if images
+      render 'theme/simple/photos/uppy_form', object_uuid: uuid, object_id: group.id, presigned_url: context.presigned_url, user_id: current_profile.id, photo_type: 'main', max_number_of_files: 3
+    endif
+  %}
+</div>

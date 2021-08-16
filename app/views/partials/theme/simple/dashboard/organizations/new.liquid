@@ -1,0 +1,12 @@
+<div class="container flex flex-wrap items-center mx-auto">
+  <h2 class="bigtitle">{{ 'app.organizations.new' | t }}</h2>
+</div>
+
+<div class="container flex flex-wrap items-center mx-auto">
+  <form action="/dashboard/sell/organizations" method="post">
+    {% include 'authenticity_token' %}
+    <button class="button" type="submit">
+      {{ 'app.organizations.create' | t }}
+    </button>
+  </form>
+</div>

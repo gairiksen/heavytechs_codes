@@ -1,0 +1,20 @@
+---
+en:
+  app:
+    models:
+      addresses:
+        new: New address
+        add: Add address
+        edit: Edit address
+        empty_state: You haven't added any addresses yet. <br> Create your first one now!
+        building: Building
+        flat: Flat
+        form:
+          full_name: Full Name
+          country: Country
+          city: City
+          state: State
+          street: Street
+          zip: Zip
+          building_number: Building Number
+          flat_number: Flat Number

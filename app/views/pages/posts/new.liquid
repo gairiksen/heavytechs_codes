@@ -1,0 +1,27 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+%}
+
+{% liquid
+  function group = 'lib/queries/groups/main'
+
+  function can = "lib/can", actor: current_profile, do: "see_meta", object: group
+  unless can.valid
+    include 'lib/present_or_404', property: null
+  endunless
+%}
+
+{% liquid
+  assign object = '{}' | parse_json
+  function presigned_url = 'lib/queries/presigned_url'
+%}
+
+{%
+  render 'theme/simple/groups/content/new',
+    context: context,
+    current_profile: current_profile,
+    group: group,
+    object: object,
+    presigned_url: presigned_url
+%}

@@ -1,0 +1,24 @@
+<div class="container relative w-full xs:-top-20 -mb-24">
+  <ul class="flex flex-wrap text-content">
+    <li class="flex items-center flex-auto mb-2 card me-2">
+      {% render 'theme/simple/ui/icon', icon: 'houseShield', class: 'w-8 text-content' %}
+      <span class="flex flex-col ms-3">{{ 'app.safety_list.safe-shopping' | t }}</span>
+    </li>
+    <li class="flex items-center flex-auto mb-2 card me-2">
+      {% render 'theme/simple/ui/icon', icon: 'userShield', class: 'w-8' %}
+      <span class="flex flex-col ms-3">{{ 'app.safety_list.verified-merchants' | t }}</span>
+    </li>
+    <li class="flex items-center flex-auto mb-2 card me-2">
+      {% render 'theme/simple/ui/icon', icon: 'creditCardShield', class: 'w-8' %}
+      <span class="flex flex-col ms-3">{{ 'app.safety_list.secure-payment' | t }}</span>
+    </li>
+    <li class="flex items-center flex-auto mb-2 card me-2">
+      {% render 'theme/simple/ui/icon', icon: 'travelInsuranceShield', class: 'w-8' %}
+      <span class="flex flex-col ms-3">{{ 'app.safety_list.unsatisfied-returns' | t }}</span>
+    </li>
+    <li class="flex items-center flex-auto mb-2 card me-2">
+      {% render 'theme/simple/ui/icon', icon: 'shieldCheck', class: 'w-8' %}
+      <span class="flex flex-col ms-3">{{ 'app.safety_list.order-tracking' | t }}</span>
+    </li>
+  </ul>
+</div>

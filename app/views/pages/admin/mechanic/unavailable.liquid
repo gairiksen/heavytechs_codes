@@ -1,0 +1,9 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  function records = 'lib/queries/mechanic/search_initial_unavailable', keyword: context.params.qkeyword, limit: 15, lang: context.language
+
+  assign this_page = 'unavailable_mechanic' | default: ''
+%}
+{%
+  render 'theme/simple/admin/mechanic/index', records: records, user_id: context.current_user.id, this_page: this_page 
+%}

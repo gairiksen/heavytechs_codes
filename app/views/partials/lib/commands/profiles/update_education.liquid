@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/profiles/update_education/build', object: object, profile: profile, user_id: user_id
+
+  
+    graphql r = 'profiles/update_education', args: object 
+
+    
+
+  return object
+%}

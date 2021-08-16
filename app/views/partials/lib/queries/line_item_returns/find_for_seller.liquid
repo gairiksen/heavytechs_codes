@@ -1,0 +1,9 @@
+{% liquid
+  if id == blank or seller_id == blank
+    return null
+  endif
+
+  graphql r  = 'line_item_returns/search', id: id, limit: 1, seller_id: seller_id
+
+  return r.line_item_returns.results.first
+%}

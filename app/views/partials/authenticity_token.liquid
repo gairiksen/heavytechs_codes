@@ -1,0 +1,7 @@
+{% liquid
+  if context == blank
+    log 'MISSING CONTEXT', type: 'INFO:authenticity_token.liquid:3'
+  endif
+%}
+{% assign token = authenticity_token | default: context.authenticity_token %}
+<input type="hidden" name="authenticity_token" value="{{ token }}">

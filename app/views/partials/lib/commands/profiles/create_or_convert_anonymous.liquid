@@ -1,0 +1,9 @@
+{% liquid
+  if object.id
+    function object = 'lib/commands/profiles_anonymous/convert', object: object
+  else
+    function object = 'lib/commands/profiles/create', object: object
+  endif
+
+  return object
+%}

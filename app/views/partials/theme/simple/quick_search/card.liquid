@@ -1,0 +1,37 @@
+{% liquid
+  function url = "link_to", object: model
+
+  if model.type == 'item'
+    assign model_name = model.item_detail.name
+  elsif model.type == 'post'
+    assign model_name = model.name | default: model.title
+  else
+    assign model_name = model.name
+  endif
+%}
+
+<div class="px-0 overflow-hidden bg-panel rounded card">
+  <a class="relative block h-64 overflow-hidden shadow-sm" href="{{ url }}">
+    {% if model.photo.photo.versions.small.size > 0 %}
+      <img alt="{{ object.name | default: object.id | truncate: 120 }}"
+        class="block object-cover object-center w-full h-full"
+        src="{{ model.photo.photo.versions.small | default: default_photo }}">
+    {% else %}
+      {% render 'theme/simple/ui/picture-placeholder' %}
+    {% endif %}
+  </a>
+
+  <div class="md:p-4">
+    <header class="text-xs">
+      {% print model.type | t: scope: 'app.quick_search.type' %}
+    </header>
+
+    <div class="mt-4">
+      {% if url %}
+        <h2 class="text-lg font-medium">
+          <a href="{{ url }}">{{ model_name }}</a>
+        </h2>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{% liquid
+  function profile = 'lib/queries/profiles/find', id: event.target.id
+  function organization = 'lib/queries/organizations/find', id: event.object.id
+
+  assign object = '{}' | parse_json
+  hash_assign object['profile'] = profile
+  hash_assign object['organization'] = organization
+  function email = 'lib/commands/emails/organizations_member_added_existing_profile', object: object
+%}

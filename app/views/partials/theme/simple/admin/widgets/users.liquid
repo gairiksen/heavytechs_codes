@@ -1,0 +1,11 @@
+<section class="card mt-8 p-4">
+
+  <h3 class="sidenote w-full uppercase">{{ 'admin.users.title' | t }}</h3>
+
+  <strong class="title">
+    {{ users.total_entries }}
+  </strong>
+
+  {% render 'theme/simple/admin/widgets/footer', path: '/admin/users', filters: filters %}
+
+</section>

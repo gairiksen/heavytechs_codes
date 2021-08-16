@@ -1,0 +1,43 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $gateway: String
+  $external_id: String
+  $payload: String
+  $response: String
+  $response_status: String
+  $api_call_name: String
+) {
+  gateway_requests: records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "gateway_request" }
+      properties: [
+              { name: "gateway" value: $gateway }
+              { name: "external_id" value: $external_id }
+              { name: "payload" value: $payload }
+              { name: "response" value: $response }
+              { name: "response_status" value: $response_status }
+              { name: "api_call_name" value: $api_call_name }
+            ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+          gateway: property(name: "gateway")
+          external_id: property(name: "external_id")
+          payload: property(name: "payload")
+          response: property(name: "response")
+          response_status: property(name: "response_status")
+          api_call_name: property(name: "api_call_name")
+        }
+  }
+}

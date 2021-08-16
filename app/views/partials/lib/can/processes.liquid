@@ -1,0 +1,19 @@
+{% liquid
+  assign can = false
+
+  if process == blank
+    return false
+  endif
+  if actor.id == process.profile_id
+    assign owner = true
+  endif
+
+  case do
+  when 'update'
+    if owner and process.status.name == 'app.statuses.processes.requested'
+      return true
+    endif
+  endcase
+
+  return can
+%}

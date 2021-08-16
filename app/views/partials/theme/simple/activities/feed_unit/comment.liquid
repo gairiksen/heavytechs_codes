@@ -1,0 +1,26 @@
+<li class="mt-4 first:mt-0 flex"
+  {% if index > 2 %} x-show="!hidden" {% endif %}
+>
+  <div class="w-full">
+    <div class="flex items-center gap-4">
+      <a href="{% render 'link_to', profile: comment.creator %}" class="flex items-center gap-2 font-semibold text-content">
+        {% render 'theme/simple/ui/avatar', profile: comment.creator, size: 24, class: 'w-6 h-6 text-xs' %}
+        {% if comment.creator.first_name %}
+          {{ comment.creator.first_name }} {{ comment.creator.last_name }}
+        {% else %}
+          {{ comment.creator.name }}
+        {% endif %}
+      </a>
+      <date title="{{ comment.created_at | l: 'compact' }}" datetime="{{ comment.created_at }}" class="sidenote text-content-sidenote timeago">
+        {{ comment.created_at | l: 'compact' }}
+      </date>
+    </div>
+
+    <div class="mt-1 prose">
+      {% liquid
+        assign comment_body_formatted = comment.body | markdown: '{ "elements": ["b","strong","i","em","a","code", "pre"], "attributes":{ "a": ["href"] } }'
+        echo comment_body_formatted
+      %}
+    </div>
+  </div>
+</li>

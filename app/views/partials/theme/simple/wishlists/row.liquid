@@ -1,0 +1,33 @@
+<ul data-wishlist-item{{ item.id }} class="overflow-hidden">
+
+  <li>
+    <a href="{% render 'link_to', item: item %}" class="flex items-center">
+      {% function photo = 'lib/queries/items/photo', item: item, version: 'tiny' %}
+      {% if photo %}
+        <img src="{{ photo }}" class="w-20 rounded me-5">
+      {% else %}
+        {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+      {% endif %}
+      {{ item.item_detail.name }}
+    </a>
+  </li>
+
+  <li class="text-end">
+    <span class="w-20 me-4 inline-block lg:hidden">{{ 'app.wishlists.show.unit_price' | t }}: </span>
+    {% render 'theme/simple/price', amount_cents: item.price, currency: item.currency %}
+  </li>
+
+  <li class="text-end">
+    {% render 'theme/simple/wishlists/buy_item', item: item, authenticity_token: authenticity_token %}
+  </li>
+
+  <li class="text-end">
+      <button
+        class="items-center lg:p-3 text-interaction hover:text-danger"
+        x-on:click="remove({{ item.id }})"
+      >
+      {% render 'theme/simple/ui/icon', icon: 'x' %}
+    </button>
+  </li>
+
+</ul>

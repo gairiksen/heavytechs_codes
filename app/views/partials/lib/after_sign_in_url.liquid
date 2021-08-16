@@ -1,0 +1,14 @@
+{% liquid
+  function profile = 'lib/current_organization_profile', user_id: user_id
+  if profile.type == 'organization'
+    assign url = '/'
+  else
+    function be_admin = "lib/can", actor: profile, do: "be_admin", object: profile
+    if be_admin.valid
+      assign url = '/'
+    else
+      assign url = '/'
+    endif
+  endif
+  return url
+%}

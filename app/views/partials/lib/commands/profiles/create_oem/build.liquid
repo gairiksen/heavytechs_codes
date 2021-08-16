@@ -1,0 +1,22 @@
+{%liquid
+  if oem_name != 'Caterpillar' and oem_name != 'John Deere'  and oem_name != 'Hitachi' and oem_name != 'Volvo' and oem_name != 'Komatsu' and oem_name != 'Bobcat'
+    assign is_custom = '1'
+  else
+    assign is_custom = '0'
+  endif
+%}
+
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "oem_name":   {{ oem_name | json }},
+    "expert_familiar":    {{ expert_familiar | json }},
+    "cert_name":    {{ cert_name | json }},
+    "is_custom":    {{ is_custom | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

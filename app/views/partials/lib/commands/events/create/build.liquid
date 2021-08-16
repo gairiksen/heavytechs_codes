@@ -1,0 +1,15 @@
+{% parse_json obj %}
+  {
+    "type": {{ type | json }},
+    "date": {{ 'now' | to_time | json }}
+  }
+{%  endparse_json %}
+
+{% liquid
+  hash_assign obj['actor'] = actor
+  hash_assign obj['object'] = object
+  hash_assign obj['target'] = target
+  hash_assign obj['attributed_to'] = attributed_to
+
+  return obj
+%}

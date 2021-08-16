@@ -1,0 +1,16 @@
+name: organization_review
+properties:
+  - name: profile_id
+  - name: order_id
+  - name: organization_id
+  - name: score
+    type: float
+  - name: description_score
+    type: integer
+  - name: delivery_score
+    type: integer
+  - name: service_score
+    type: integer
+  - name: body
+  - name: recommend
+    type: boolean

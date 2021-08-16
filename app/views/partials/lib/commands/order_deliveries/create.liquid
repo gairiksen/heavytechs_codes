@@ -1,0 +1,16 @@
+{%  liquid
+  function object = 'lib/commands/order_deliveries/create/build', object: object
+  function object = 'lib/commands/order_deliveries/create/check', object: object
+
+  if object.valid
+    assign delivered = object.delivered
+    function object = 'lib/commands/execute', mutation_name: 'order_deliveries/create' object: object, selection: 'record_create'
+
+    if delivered
+      function status = 'lib/commands/statuses/create', profile_id: current_profile.id, object_id: object.id, name: 'app.statuses.order_deliveries.delivered', scope: 'app.statuses.order_deliveries'
+      include 'lib/commands/events/create', type: 'order_delivered', actor_id: current_profile.id, target_id: object.order_id, object_id: object.id, delay: 0
+    endif
+  endif
+
+  return object
+%}

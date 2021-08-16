@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% liquid
+  function direction = 'text_direction', lang: context.language
+%}
+
+<html dir="{{direction}}" lang="{{context.language}}">
+  <head>
+    {% include 'theme/simple/layout/head' %}
+    {% yield 'metatags' %}
+    {% yield 'custom_styles' %}
+    {%- capture canonical_url -%}{%- yield 'canonical' -%}{%- endcapture -%}
+    {% if canonical_url != blank %}
+      <link rel="canonical" href="https://{{ context.location.host }}{% print canonical_url | strip %}" />
+    {% endif %}
+    {% include 'theme/simple/layout/js_global_variables', current_profile: context.exports.current_profile %}
+  </head>
+
+  <body class="font-sans antialiased leading-normal text-content bg-page">
+    {% include 'theme/simple/layout/main', current_profile: context.exports.current_profile %}
+    {% yield 'custom_scripts' %}
+  </body>
+</html>

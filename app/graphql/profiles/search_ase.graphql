@@ -1,0 +1,33 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+  $ase_code: String
+  $ase_name: String
+  
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "user_ase" }
+      properties: [
+        { name: "user_id", value: $user_id }
+        { name: "ase_code" value: $ase_code }
+        { name: "ase_name", value: $ase_name }              
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+      ase_code: property(name: "ase_code")    
+      ase_name: property(name: "ase_name")  
+    }
+  }
+}

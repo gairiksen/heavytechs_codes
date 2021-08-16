@@ -1,0 +1,25 @@
+---
+slug: dashboard/buy/line_item_returns
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_uncompleted: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function line_item = 'lib/queries/line_items/find_by_buyer', id: context.params.line_item_return.line_item_id, buyer_id: current_profile.id
+  include 'lib/present_or_404', property: line_item.id
+
+  function object = 'lib/commands/line_item_returns/create', object: context.params.line_item_return, line_item: line_item, profile: current_profile
+
+  if object.valid
+    function status = 'lib/commands/statuses/create', object_id: object.id, name: 'app.statuses.line_item_returns.requested', scope: 'app.statuses.line_item_returns', profile_id: current_profile.id
+    include 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: status.id, target_id: status.object_id
+    include 'lib/commands/events/create', type: 'line_item_return_requested', actor_id: current_profile.id, object_id: object.id, target_id: object.line_item_id
+
+    function order_url = 'link_to', order: line_item.order, current_profile: current_profile
+    include 'redirect_to', url: order_url
+  else
+    function order = 'lib/queries/orders/search_by_buyer', buyer: current_profile.id, id: line_item.order.id, lang: context.language, limit: 1, load_status_history: true
+    include 'theme/simple/dashboard/line_item_returns/new', object: object, line_item: line_item, order: order.results.first, profile: current_profile
+  endif
+%}

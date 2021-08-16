@@ -1,0 +1,28 @@
+en:
+  app:
+    dashboard: Dashboard
+    p-dashboard:
+      selling: Selling
+      buying: Buying
+      settings: Settings
+      community: Community
+      bank_account: Bank Account
+      credit_cards: Credit Cards
+      profile: Profile
+      payments: Payments
+      edit-profile: Edit Profile
+      your-profile: Public Profile
+      my-groups: My Groups
+      posts: Questions
+      chat: Chat
+      inbox: Inbox
+      your-feed: Activity Feed
+      items-for-sell: Items for sell
+      items-to-buy: Items to buy
+      list-an-item: List an Item
+      buy-orders: Purchases
+      sell-orders: Sold
+      returns: Returns
+      sales: Sales Report
+      enable_additional_security: Enable additional login security
+      setup_two_factor: Setup two-factor authentication

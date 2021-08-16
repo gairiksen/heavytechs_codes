@@ -1,0 +1,19 @@
+{% liquid
+  context_rc language: buyer.language | default: 'en'
+
+  assign object = '{}' | parse_json
+  hash_assign object['to'] = buyer.user.email
+  hash_assign object['from'] = 'app.support_email' | t
+  hash_assign object['order'] = order
+  hash_assign object['buyer'] = buyer
+  assign site_name = 'app.title' | t
+  hash_assign object['subject'] = 'app.emails.orders.cancelled_buyer.buyer.subject' | t: order_id: object.order.id, site_name: site_name
+
+  function object = 'lib/commands/emails/send', template: 'orders/cancelled_by_buyer', object: object
+  if object.valid != true
+    log object, type: 'ERROR: order_cancelled_by_buyer'
+  endif
+
+  return object
+%}
+

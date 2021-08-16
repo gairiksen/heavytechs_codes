@@ -1,0 +1,19 @@
+{% parse_json data %}
+  {
+    "url": "https://{{ host }}{{path}}",
+    "connect": "{{connect}}",
+    "enabled_events": {
+       "0": "{{event}}"
+    }
+  }
+{% endparse_json %}
+{% liquid
+  if data.indempotency_key == blank
+    assign indempotency_key = 20 | random_string
+    assign data = data | add_hash_key: "indempotency_key", indempotency_key
+  endif
+  graphql response = 'modules/stripe/api_call', template: 'modules/stripe/webhook_create', data: data
+  log response, type: 'webhooks/create api_call'
+  assign response = response | dig: 'api_call', 'response'
+  return response
+%}

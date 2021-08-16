@@ -1,0 +1,11 @@
+---
+slug: orders/failed/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function transaction = 'lib/queries/transactions/find_by_profile', id: context.params.id, profile_id: current_profile.id
+
+  render 'theme/simple/orders/failed', transaction: transaction
+%}

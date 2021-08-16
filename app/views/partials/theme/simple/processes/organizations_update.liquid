@@ -1,0 +1,25 @@
+<div class="table">
+  <header>
+    <div>
+      {{ 'app.admin.processes.show.property' | t }}
+    </div>
+    <div>
+      {{ 'app.admin.processes.show.old' | t }}
+    </div>
+    <div>
+      {{ 'app.admin.processes.show.new' | t }}
+    </div>
+  </header>
+  <div class="table-content">
+    {% liquid
+      assign new = process.new_organization
+      assign old = process.old_organization
+
+      render 'theme/simple/processes/diff', new: new, old: old, name: 'name', key: 'app.organizations.attr.name'
+      render 'theme/simple/processes/diff', new: new, old: old, name: 'contact_emails', key: 'app.organizations.attr.contact_emails'
+      render 'theme/simple/processes/diff', new: new, old: old, name: 'offline_stores', key: 'app.organizations.attr.offline_stores'
+      render 'theme/simple/processes/diff', new: new, old: old, name: 'shipping_types', key: 'app.organizations.attr.shipping_types'
+      render 'theme/simple/processes/diff', new: new, old: old, name: 'delivery_fee', key: 'app.organizations.attr.delivery_fee'
+    %}
+  </div>
+</div>

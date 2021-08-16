@@ -1,0 +1,27 @@
+{% parse_json buyer %} {"id": "5999"} {% endparse_json %}
+
+{% comment %}before{% endcomment %}
+{% liquid
+  function item = 'test/fixtures/item', quantity: 3
+
+  function orders = 'lib/queries/orders/search', buyer: buyer.id, limit: 100
+  assign msg = 'deleting orders for seller: ' | append: buyer.id
+  for order in orders.results
+    function r = 'lib/commands/orders/delete', object: order
+  endfor
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function order = 'lib/commands/line_items/find_or_create_order', item: item, current_profile: buyer
+  assign params = '{"quantity": "2"}' | parse_json
+
+  function line_item = 'lib/commands/line_items/create', item: item, params: params, current_profile: buyer, order: order
+  include 'test/assertions/valid_object', contract: contract, object: line_item, field_name: 'line_item'
+
+  function order = 'lib/queries/orders/find_new_by_seller_and_buyer', seller: item.item_inventory.owner.id, buyer: buyer.id
+
+  include 'test/assertions/equal', contract: contract, field_name: 'total_price_cents', given: order.total_price_cents, expected: 2000
+  include 'test/assertions/equal', contract: contract, field_name: 'products_price_cents', given: order.products_price_cents, expected: 2000
+  include 'test/assertions/equal', contract: contract, field_name: 'total_shipping_cost_cents', given: order.total_shipping_cost_cents, expected: 0
+%}

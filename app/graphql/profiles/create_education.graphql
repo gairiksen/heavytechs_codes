@@ -1,0 +1,58 @@
+mutation create( 
+    $uuid: String!
+    $user_id: String!
+    $automotive_service_excellence: String!
+    $osha: String!
+    $osha_expiry: String!
+    $msha: String!
+    $msha_expiry: String!
+    $military_training: String!
+    $most_advanced_training: String!
+    $date_of_completion: String!
+    $other_military_training: String!
+    $college_degree: String!
+    $highest_degree: String!
+    $highest_degree_d_o_completion: String!
+    
+) {
+  model_create(
+    model: {
+      model_schema_name: "profile_education"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "automotive_service_excellence", value: $automotive_service_excellence }
+        { name: "osha", value: $osha }
+        { name: "osha_expiry", value: $osha_expiry }
+        { name: "msha", value: $msha }
+        { name: "msha_expiry", value: $msha_expiry }
+        { name: "military_training", value: $military_training }
+        { name: "most_advanced_training", value: $most_advanced_training }
+        { name: "date_of_completion", value: $date_of_completion}
+        { name: "other_military_training", value: $other_military_training }
+        { name: "college_degree", value: $college_degree }
+        { name: "highest_degree", value: $highest_degree }
+        { name: "highest_degree_d_o_completion", value: $highest_degree_d_o_completion }       
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    automotive_service_excellence: property(name: "automotive_service_excellence")
+    osha: property(name: "osha")
+    osha_expiry: property(name: "osha_expiry")
+    msha: property(name: "msha")
+    msha_expiry: property(name: "msha_expiry")
+    military_training: property(name: "military_training")
+    most_advanced_training: property(name: "most_advanced_training")
+    date_of_completion: property(name: "date_of_completion")
+    other_military_training: property(name: "other_military_training")
+    college_degree: property(name: "college_degree")
+    highest_degree: property(name: "highest_degree")
+    highest_degree_d_o_completion: property(name: "highest_degree_d_o_completion")
+
+  }
+}

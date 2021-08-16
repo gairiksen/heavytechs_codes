@@ -1,0 +1,23 @@
+{% parse_json data %}
+  {
+    "id": {{ object.id | json }},
+    "description_score": {{ object.description_score | plus: 0 | json }},
+    "delivery_score": {{ object.delivery_score | plus: 0 | json }},
+    "service_score": {{ object.service_score | plus: 0 | json }},
+    "body": {{ object.body | json }}
+  }
+{% endparse_json %}
+
+
+{% liquid
+  case object.recommend
+  when '1'
+    hash_assign data['recommend'] = true
+  when '0'
+    hash_assign data['recommend'] = false
+  endcase
+  function score = 'lib/commands/organization_reviews/calculate_score', review: data
+  hash_assign data['score'] = score
+
+  return data
+%}

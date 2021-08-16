@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/mechanic_availability/update_status/build', id: id, is_blocked: is_blocked
+
+  
+    graphql r = 'mechanic/update_status_search_mechanic', args: object 
+
+    
+
+  return object
+%}

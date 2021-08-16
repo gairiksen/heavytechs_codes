@@ -1,0 +1,16 @@
+{% liquid
+  assign profile = '{"id":"1000", "type": "profile"}' | parse_json
+  function item = 'test/fixtures/item', quantity: 1
+
+  function result = 'lib/can', actor: profile, do: 'display', object: item
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'display'
+%}
+
+{% liquid
+  assign profile = '{"id":"1000", "type": "profile"}' | parse_json
+  function item = 'test/fixtures/item', quantity: 1
+  hash_assign item['item_inventory']['status']['name'] = 'app.statuses.items.unpublished'
+
+  function result = 'lib/can', actor: profile, do: 'display', object: item
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'display'
+%}

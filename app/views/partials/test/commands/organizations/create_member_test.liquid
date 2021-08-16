@@ -1,0 +1,37 @@
+{% parse_json payload %}
+  {
+    "email": "foo@example.com",
+    "first_name": "first",
+    "last_name": "last"
+  }
+{% endparse_json %}
+{% liquid
+  hash_assign payload['email'] = 4 | random_string | append: payload.email
+  function organization = 'test/fixtures/organization', name: "organization 5889"
+  hash_assign payload['organization_id'] = organization.id
+  hash_assign payload['organization_name'] = organization.name
+  function object = 'lib/commands/organizations/create_member', object: payload, organization: organization
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: object, field_name: 'id'
+  include 'test/assertions/presence', contract: contract, object: object.profile, field_name: 'id'
+  include 'test/assertions/presence', contract: contract, object: object.profile.user, field_name: 'id'
+%}
+
+{% comment %}invite existing user with organization{% endcomment %}
+{% liquid
+  function object = 'lib/commands/organizations/create_member', object: payload, organization: organization
+
+  function contract = 'test/assertions/not_valid_object', contract: contract, object: object, field_name: 'id'
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'errors', given: object.errors.email[0], expected: "Selected email is already used by user that belongs to organization"
+%}
+
+{% comment %}invite existing user{% endcomment %}
+{% liquid
+  function user = 'test/fixtures/user'
+  function profile = 'test/fixtures/profile', user_id: user.id
+  hash_assign payload['email'] = profile.user.email
+
+  function object = 'lib/commands/organizations/create_member', object: payload, organization: organization
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: object, field_name: 'id'
+%}

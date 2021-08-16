@@ -1,0 +1,21 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.orders.buyer
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_uncompleted: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function orders = 'lib/queries/orders/search', limit: 100, buyer: current_profile.id, withStatuses: true, status: 'app.statuses.orders.placed', lang: context.language
+  function object = 'lib/commands/orders/ready_for_confirmation', orders: orders.results
+
+  if object.valid
+    render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs
+    include 'theme/simple/dashboard/orders/confirm', orders: orders
+  else
+    include 'redirect_to', url: '/dashboard/buy/review', error: 'app.orders.confirm.errors.order_changed'
+  endif
+%}

@@ -1,0 +1,22 @@
+{% liquid
+  assign object = '{}' | parse_json
+
+  hash_assign object['item_inventory_id'] = item_inventory.id
+  hash_assign object['price'] = item_inventory.item.price
+  hash_assign object['return_days'] = item_inventory.item.return_days
+  hash_assign object['currency'] = item_inventory.item.currency
+  hash_assign object['tax_rate'] = item_inventory.item.tax_rate
+  hash_assign object['category'] = item_inventory.item.category
+  hash_assign object['owner'] = item_inventory.item.owner
+  hash_assign object['quantity'] = item_inventory.quantity
+  hash_assign object['max_in_one_order'] = item_inventory.max_in_one_order
+  hash_assign object['photos'] = item_inventory.item.photos
+
+  assign details = '{}' | parse_json
+  for detail in item_inventory.item.item_details
+    hash_assign details[detail.lang] = detail
+  endfor
+  hash_assign object['details'] = details
+
+  return object
+%}

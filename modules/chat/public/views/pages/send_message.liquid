@@ -1,0 +1,156 @@
+---
+slug: send_message
+---
+
+{%liquid 
+  assign context.params.msgDetails.autor_id = "21705"
+  assign autor_id = "21385"
+
+  function conversationDet = 'modules/chat/lib/queries/conversations/find_conversation_id', autor_id: autor_id
+
+  for rp in conversationDet.conversations[0].participant_ids
+    if rp != autor_id
+      assign recipient_id = rp
+    endif
+  endfor
+
+  assign recipient_user_id = conversationDet.participants[0].user_id
+%}
+
+{% parse_json conversation_object %}
+{
+    "conversation_id":      {{ conversationDet.conversation_id | json }},
+    "slug":    {{ 'inbox' | json }},  
+    "format": {{ 'html' | json }}
+}
+{% endparse_json %}
+
+{%liquid 
+  function recipient_profile = 'lib/current_organization_profile', user_id: recipient_user_id
+
+  function current_conversation = 'modules/chat/lib/commands/conversations/find_or_create', object: conversation_object, current_profile: recipient_profile
+
+  if current_conversation
+    function res = 'modules/chat/lib/commands/conversations/mark_read', conversation: current_conversation, participant_id: recipient_id
+  endif
+%}
+
+{{conversationDet}}
+---------------
+{{conversationDet.conversations[0].participant_ids}}
+-----------
+{{recipient_id}}
+------------
+{{autor_id}}
+
+{%comment%}
+{% liquid 
+    function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+    include 'lib/profile_present_or_redirect', profile: current_profile
+    assign room_id = 22113 | plus: 0
+    function conversation = 'modules/chat/lib/queries/conversations/find_by_participant', id: room_id, participant_id: current_profile.id
+
+    for cv in conversation.participants
+
+        if cv.id != current_profile.id
+            assign recipient_id = cv.id
+            assign recipient_first_name = cv.first_name
+            assign recipient_last_name = cv.last_name
+            assign recipient_user_id = cv.user_id
+        endif
+
+        if cv.id == current_profile.id
+            assign sender_id = cv.id
+            assign sender_first_name = cv.first_name
+            assign sender_last_name = cv.last_name
+            assign sender_user_id = cv.user_id
+        endif
+
+    endfor
+
+    function recipient = 'lib/queries/users/find', id: recipient_user_id
+    assign recipient_email = recipient.email
+
+    function sender = 'lib/queries/users/find', id: sender_user_id
+
+%}
+{{recipient_first_name}}
+----------------
+{{sender_last_name}}
+
+{% parse_json conversation_object %}
+{
+    "recipient_first_name":      {{ recipient_first_name | json }},
+    "recipient_last_name":    {{ recipient_last_name | json }},
+    "recipient_email":    {{ recipient_email | json }},
+    "sender_first_name":     {{ sender_first_name | json }},
+    "sender_last_name":     {{ sender_last_name | json }},
+    "recipient_id":     {{ recipient_id | json }},
+    "sender_id":     {{ sender_id | json }},
+    "recipient_user_id":     {{ recipient_user_id | json }},
+    "sender_user_id":     {{ sender_user_id | json }},
+    "room_id":            {{ room_id }}
+}
+{% endparse_json %}
+
+----------------
+{{conversation_object.recipient_id}}
+----------------
+{{conversation_object.sender_id}}
+-------------------
+{{room_id}}
+
+{% background priority: 'low', delay: 0.5, max_attempts: 3, conversation_object: conversation_object  %}
+
+    {% liquid 
+    function conversation = 'modules/chat/lib/queries/conversations/find_by_participant', id: conversation_object.room_id, participant_id: conversation_object.sender_id
+    %}
+
+    {% unless conversation.participant_read_ids contains conversation_object.recipient_id %}
+
+        {% parse_json object %}
+        {
+            "to":      {{ 'sen.gairik86@gmail.com' | json }},
+            "from":    {% print 'app.support_email' | t | json %},    
+            "subject": {{ 'Instant Message Notification' | json }},
+            "recipient_first_name":     {{ conversation_object.recipient_first_name | json }},
+            "recipient_last_name":     {{ conversation_object.recipient_last_name | json }},
+            "sender_first_name":     {{ conversation_object.sender_first_name | json }},
+            "sender_last_name":     {{ conversation_object.sender_last_name | json }},
+            "host": {{ context.location.host | json }}
+        }
+        {% endparse_json %}
+
+
+        {% liquid
+            function object = 'lib/commands/emails/send', template: 'orders/delivered_buyer', object: object
+        %}
+
+    {% endunless %}
+
+{% endbackground %}
+
+{%comment%}
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+
+  function current_conversation = 'modules/chat/lib/commands/conversations/find_or_create', object: context.params, current_profile: current_profile
+  if current_conversation.valid == false
+    assign current_conversation = null
+  endif
+  if current_conversation
+    function res = 'modules/chat/lib/commands/conversations/mark_read', conversation: current_conversation, participant_id: current_profile.id
+  endif
+  function conversations = 'modules/chat/lib/queries/conversations/search_by_participant', participant_id: current_profile.id, limit: 20, page: 1
+%}
+{%liquid
+  if conversations.total_entries > 0
+    include 'modules/chat/theme/simple/inbox/inbox', current_conversation: current_conversation, conversations: conversations, current_profile: current_profile
+  else
+    include 'modules/chat/theme/simple/inbox/blank'
+  endif
+%}
+{%endcomment%}
+{%endcomment%}

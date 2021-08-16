@@ -1,0 +1,10 @@
+mutation update($id: ID!, $order_id: ID!){
+  record_update(
+    id: $id
+    record: {
+      properties: { name: "order_id", value: $order_id }
+    }
+  ){
+    id
+  }
+}

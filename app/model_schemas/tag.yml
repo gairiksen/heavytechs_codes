@@ -1,0 +1,6 @@
+name: tag
+properties:
+  - name: name
+    type: string
+  - name: disabled_at
+    type: datetime

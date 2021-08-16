@@ -1,0 +1,173 @@
+<div class="relative pt-10 bg-gray-100">
+
+    <!-- <figure>
+        <img src="images/faq-bg.svg" alt="" class="w-full h-full absolute left-0 top-0 object-cover">
+    </figure> -->
+
+    <div class="relative">
+        
+        <div class="w-full text-center">
+            <div class="container mx-auto px-3.5">
+                <h2 class="text-gray-600 text-4xl mb-4 font-extrabold">Frequently Asked Questions</h2>
+                <span class="text-gray-400 block text-lg">The most common questions about how our business works and what can do for you.</span>
+            </div>
+        </div>
+    </div>
+
+
+    {%comment%}
+    <div class="py-10 relative">
+        <div class="max-w-2xl mx-auto px-3.5" x-data="{
+            faqs: [
+                {
+                    question: 'What is an Independent Contract Mechanic?',
+                    answer: 'An Independent Contract Mechanic is a mechanic that is a self-employed person or entity contracted to perform work or provide services to another entity as a nonemployee.',
+                    isOpen: true,
+                },
+                {
+                    question: 'What if there aren\'t any projects listed near me?',
+                    answer: 'Remove the distance filter.  If you know of projects or contractors  that are not listed please contact us and we will try to get the contractor signed up.',
+                    isOpen: false,
+                },
+                {
+                    question: 'How do I add the Heavy Techs website to my home screen?',
+                    answer: ' iPad or iPhone:<br />1. Launch “Safari” app.  This does not work from the “Chrome” app.',
+                    isOpen: false,
+                },
+                {
+                    question: 'When should I select unavailable on my profile?',
+                    answer: 'Only mark yourself “unavailable” If you wish to not be contacted by contractors for potential jobs.  We recommend leaving your profile status to “available” . It never hurts to talk to potential customers.',
+                    isOpen: false,
+                },
+                {
+                    question: 'Will I be paid through Heavy Techs\' website or directly from the contractor?',
+                    answer: 'Heavy Techs is only a lead generation service.  All payments, invoicing and deals will be made between the Mechanic and Contractor.  We don\'t offer invoicing services at this time.',
+                    isOpen: false,
+                },
+                {
+                    question: 'Is there a mobile app?',
+                    answer: 'Heavy Techs does not have a mobile app at this time, but our website is mobile friendly. Please follow the instructions on how to add the Heavy Techs website to your phone’s home screen.',
+                    isOpen: false,
+                }
+            ]
+        }">
+            
+        <template x-for="faq in faqs" :key="faq.question">
+            <div class="bg-white rounded-lg">
+            <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0"
+                @click="faqs = faqs.map(f => ({ ...f, isOpen: f.question !== faq.question ? false : !f.isOpen}))"><!-- Specs has it that only one component can be open at a time and also you should be able to toggle the open state of the active component too -->
+                
+                <svg x-show="!faq.isOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+
+                <svg x-show="faq.isOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                <div x-text="faq.question"></div>
+                </a>
+    
+            <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen"></div>
+            </div>
+        </template>
+
+        </div>
+    </div>
+    {%endcomment%}
+
+    <div class="py-10 relative">
+    <div class="max-w-2xl mx-auto px-3.5">
+      <div class="bg-white rounded-lg">
+        <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0" @click="">
+            <div x-text="faq.question">What is an Independent Contract Mechanic?</div>
+        </a>
+
+        <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen">An Independent Contract Mechanic is a mechanic that is a self-employed person or entity contracted to perform work or provide services to another entity as a nonemployee.</div>
+      </div>
+
+      <div class="bg-white rounded-lg">
+        <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0" @click="">
+            <div x-text="faq.question">What if there aren't any projects listed near me?</div>
+        </a>
+
+        <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen">Remove the distance filter.  If you know of projects or contractors  that are not listed please contact us and we will try to get the contractor signed up.</div>
+      </div>
+
+      <div class="bg-white rounded-lg">
+        <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0" @click="">
+            <div x-text="faq.question">How do I add the Heavy Techs website to my home screen?</div>
+        </a>
+
+        <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen"> <u>iPad or iPhone</u>:<br>
+                  1. Launch “Safari” app.  This does not work from the “Chrome” app.<br>
+                  2. Enter into the address field the URL of the website you want to create a shortcut to.  Tap “Go.”<br>
+                  3. Tap the icon featuring a right-pointing arrow coming out of a box along the top of the Safari window to open a drop-down menu.<br>
+                  4. Tap “Add to Home Screen.”  The Add to Home dialog box will appear, with the icon that will be used for the website on the left side of the dialog box.<br>
+                  5. Enter the name for the shortcut using the on-screen keyboard and tap “Add.”  Safari will close automatically and you will be taken to where the icon is located on your iPad’s desktop.<br><br>
+                  <u>Android</u><br>
+                  1. Launch “Chrome” app.<br>
+                  2. Open the website or web page you want to pin to your home screen.<br>
+                  3. Tap the menu icon (3 dots in the upper right-hand corner) and tap Add to home screen. <br>
+                  4. You’ll be able to enter a name for the shortcut and then Chrome will add it to your home screen.<br>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg">
+        <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0" @click="">
+            <div x-text="faq.question">When should I select unavailable on my profile?</div>
+        </a>
+
+        <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen">Only mark yourself “unavailable” If you wish to not be contacted by contractors for potential jobs.  We recommend leaving your profile status to “available” . It never hurts to talk to potential customers.</div>
+      </div>
+
+      <div class="bg-white rounded-lg">
+        <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0" @click="">
+            <div x-text="faq.question">Will I be paid through Heavy Techs’ website or directly from the contractor?</div>
+        </a>
+
+        <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen">Heavy Techs is only a lead generation service.  All payments, invoicing and deals will be made between the Mechanic and Contractor.  We don’t offer invoicing services at this time.</div>
+      </div>
+
+      <div class="bg-white rounded-lg">
+        <a href="javascript:void(0)" class="w-full font-bold px-3 flex mt-4 shadow-sm text-gray-700 text-base py-2 leading-normal items-start sm:items-center sm:leading-10 sm:py-0" @click="">
+            <div x-text="faq.question">Is there a mobile app?</div>
+        </a>
+
+        <div class="text-gray-700 overflow-hidden transition-all duration-700 p-3 text-base" x-text="faq.answer" x-show="faq.isOpen">Heavy Techs does not have a mobile app at this time, but our website is mobile friendly. Please follow the instructions on how to add the Heavy Techs website to your phone’s home screen.</div>
+      </div>
+    </div>
+    </div>
+
+</div>
+{%comment%}
+<section class="container py-24 mx-auto text-gray-700">
+  <div class="text-center mb-20">
+    <h1 class="text-4xl text-center mb-4 font-heading">{{'static-pages.faq.title' | t}}</h1>
+    <p class="text-base leading-relaxed xl:w-3/4 lg:w-3/4 mx-auto">
+      {{'static-pages.faq.subtitle' | t}}
+    </p>
+  </div>
+  <div class="flex flex-wrap lg:w-4/5 sm:mx-auto sm:mb-2 -mx-2">
+    {% assign sections = 'static-pages.faq.questions' | t %}
+    {% for section_item in sections %}
+      {% assign section = section_item[1] %}
+      <div class="w-full lg:w-1/2 px-4 py-2">
+        <h3>
+          {{ section.title }}
+        <h3>
+        {% for item in section.questions %}
+          {% assign value = item[1] %}
+          <details class="mb-4">
+            <summary class="cursor-pointer font-semibold bg-panel rounded-md py-2 px-4">
+              {{ value.question }}
+            </summary>
+            <span class="prose">
+              {{ value.answer }}
+            </span>
+          </details>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{%endcomment%}

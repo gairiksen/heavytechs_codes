@@ -1,0 +1,75 @@
+query search(
+  $id: ID,
+  $slugs: [String!],
+  $limit: Int!,
+  $page: Int = 1
+  $name: String
+  $with_members: Boolean = false
+) {
+  records(
+    per_page: $limit
+    page: $page
+    filter: {
+      id: { value: $id },
+      table: { value: "organization" }
+      properties: [
+        { name: "slug", value_in: $slugs },
+        { name: "name", contains: $name }
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      name: property(name: "name")
+      contact_emails: property(name: "contact_emails")
+      offline_stores: property_array(name: "offline_stores")
+      logo: property_upload(name: "logo") {
+        url
+        file_name
+        extension
+      }
+      shipping_types: property_array(name: "shipping_types")
+      delivery_fee: property_int(name: "delivery_fee")
+
+
+      members: related_records(
+        table: "relationship"
+        join_on_property: "id"
+        foreign_property: "r_id"
+        filter: { properties: { name: "name", value: "membership"  } }
+        sort: { created_at: { order: DESC } }
+      ) @include(if: $with_members) {
+        id
+        l_accepted_at: property(name: "l_accepted_at")
+        r_accepted_at: property(name: "r_accepted_at")
+        profile: related_record(table: "profile", join_on_property: "l_id") {
+          id
+          username: property(name: "username")
+          first_name: property(name: "first_name")
+          last_name: property(name: "last_name")
+          slug: property(name: "slug")
+          avatar: related_record(
+            table: "photo"
+            join_on_property: "uuid"
+            foreign_property: "object_uuid"
+            filter: { properties: { name: "photo_type", value: "avatar" } }
+          ) {
+            photo: property_upload(name: "photo") {
+              url
+              versions
+            }
+          }
+          user: related_user(join_on_property: "user_id", foreign_property: "id") {
+            id
+            email
+          }
+        }
+      }
+    }
+  }
+}

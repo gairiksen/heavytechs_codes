@@ -1,0 +1,4 @@
+{% liquid
+ assign rp = path | append: '{?from,to}' | expand_url_template: filters
+ return rp
+%}

@@ -1,0 +1,140 @@
+<div>
+
+  <h2 class="bigtitle">{{ 'app.models.line_item_returns.edit.title' | t }}</h2>
+
+  <section class="card md:p-8 w-full flex flex-col md:flex-row gap-8">
+
+    <form action="/dashboard/sell/line_item_returns" method="post" class="flex flex-col md:w-1/2 pt-7 md:pt-0 order-2 md:order-1 border-t md:border-t-0">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="_method" value="put">
+      <input type="hidden" name="line_item_return[id]" value="{{ line_item_return.id }}">
+
+      <dl class="flex justify-between flex-wrap leading-loose">
+
+        <dt class="subtitle w-full md:w-1/2">Return requested at:</dt>
+        <dd class="subtitle w-full md:w-1/2">
+          {{ line_item_return.created_at | l }}
+        </dd>
+
+        <dt class="w-full md:w-1/2 mt-4 md:mt-0">{{ 'app.status' | t }}:</dt>
+        <dd class="w-full md:w-1/2">
+          {% liquid
+            assign status = line_item_return.status.name
+
+            case status
+            when 'app.statuses.line_item_returns.requested'
+              assign status_class = 'bg-warning-disabled border-warning'
+            when 'app.statuses.line_item_returns.accepted'
+              assign status_class = 'bg-warning-disabled border-warning'
+            when 'app.statuses.line_item_returns.rejected'
+              assign status_class = 'bg-danger-disabled border-danger'
+            when 'app.statuses.line_item_returns.returned'
+              assign status_class = 'bg-confirmation-disabled border-confirmation'
+            endcase
+          %}
+
+          <span class="px-2 py-1 inline-block rounded border {{ status_class }} leading-tight uppercase">
+            {{ line_item_return.status.name | t }}
+          </span>
+        </dd>
+
+        <dt class="w-full md:w-1/2 mt-4 md:mt-0">{{ 'app.models.line_item_returns.edit.amount_returned' | t }}:</dt>
+        <dd class="w-full md:w-1/2 font-semibold">
+          {% assign amount_cents = line_item_return.line_item.price_cents | times: line_item_return.quantity %}
+          {% render 'theme/simple/price', amount_cents: amount_cents, currency: line_item_return.order.currency %}
+        </dd>
+
+        <dt class="w-full md:w-1/2 mt-4 md:mt-0">
+          {{ 'app.models.line_item_returns.form.reason' | t }}:
+        </dt>
+        <dd class="w-full md:w-1/2 italic">
+          {{ line_item_return.reason }}
+        </dd>
+
+        <dt class="w-full mt-4 md:mt-0">
+          {{ 'app.models.line_item_returns.form.reason_details' | t }}:
+        </dt>
+        <dd class="w-full italic">
+          {{ line_item_return.reason_details }}
+        </dd>
+
+        <dt class="w-full md:w-1/2 mt-4 md:mt-0">
+          {{ 'app.models.line_item_returns.form.return_way' | t }}:
+        </dt>
+        <dd class="w-full md:w-1/2 italic">
+          {{ 'app.models.line_item_returns.form.shipping_type_' | append: line_item_return.shipping_type | t }}
+        </dd>
+
+        <dt class="w-full mt-4 md:mt-0">
+          {% render 'theme/simple/dashboard/orders/address', delivery_title: 'app.models.line_item_returns.form.pickup_address'
+                                                             object: line_item_return %}
+        </dt>
+      </dl>
+
+      <div class="mt-8 md:mt-auto flex justify-between">
+        {% if line_item_return.status.name == 'app.statuses.line_item_returns.requested' %}
+          <button class="button button-icon-left" name="line_item_return[action]" value="reject">
+            {% render 'theme/simple/ui/icon', icon: 'x' %}
+            {{ 'app.models.line_item_returns.reject' | t }}
+          </button>
+          <button class="button button-icon-right" name="line_item_return[action]" value="accept">
+            {{ 'app.models.line_item_returns.accept' | t }}
+            {% render 'theme/simple/ui/icon', icon: 'check' %}
+          </button>
+        {% elsif line_item_return.status.name == 'app.statuses.line_item_returns.accepted' %}
+          <button class="button ms-auto whitespace-normal" name="line_item_return[action]" value="return">
+            {{ 'app.models.line_item_returns.returned' | t }}
+          </button>
+        {% endif %}
+      </div>
+    </form>
+
+    <div class="md:w-1/2 md:ps-8 md:border-l order-1 md:order-2">
+      <div>
+        {% function item_url = 'link_to', path: '/items/', item: line_item_return.line_item.item %}
+
+        <a href="{{ item_url }}">
+          {% function cover_url = 'theme/simple/items/cover_url', item: line_item_return.line_item.item %}
+          {% if cover_url %}
+              <img src="{{ cover_url }}" class="rounded">
+          {% else %}
+            {% render 'theme/simple/ui/picture-placeholder', class: 'rounded w-full' %}
+          {% endif %}
+        </a>
+        <div class="subtitle mt-4 flex gap-4 justify-between font-bold">
+          <span>
+            <a href="{{ item_url }}">{{ line_item_return.line_item.item.item_detail.name }}</a>
+          </span>
+          <span>
+            {% render 'theme/simple/price', amount_cents: line_item_return.line_item.price_cents, currency: line_item_return.order.currency %}
+          </span>
+        </div>
+        <dl class="mt-4 flex justify-between flex-wrap">
+          <dt class="w-1/2">{{ 'app.orders.attr.buyer' | t }}:</dt>
+          <dd class="w-1/2 text-end">
+            {% function seller_url = 'link_to', organization: line_item_return.order.buyer %}
+            <a href="{{ seller_url }}">
+              {% if line_item_return.order.buyer.first_name  %}
+                {{ line_item_return.order.buyer.first_name }} {{ line_item_return.order.buyer.last_name }}
+              {% else %}
+                {{ line_item_return.order.buyer.name }}
+              {% endif %}
+            </a>
+          </dd>
+
+          <dt class="w-1/2">{{ 'app.models.line_item_returns.form.date' | t }}:</dt>
+          <dd class="w-1/2 text-end">{{ line_item_return.order.created_at | l: 'compact' }}</dd>
+
+          <dt class="w-1/2">{{ 'app.models.line_item_returns.form.delivery_date' | t }}:</dt>
+          {% for status in line_item_return.order.statuses %}
+              {% if status.name == 'app.statuses.orders.delivered' %}
+                <dd class="w-1/2 text-end">{{ status.created_at | l: 'compact' }}</dd>
+                {% break %}
+              {% endif %}
+          {% endfor %}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+</div>

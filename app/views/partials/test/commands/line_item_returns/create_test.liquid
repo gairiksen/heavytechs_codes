@@ -1,0 +1,47 @@
+{% parse_json buyer %}{"id": "5"}{% endparse_json %}
+{% parse_json payload %}
+{
+  "quantity": 1,
+  "reason": "mistake",
+  "reason_details": "simple mistake",
+  "shipping_type": "return_to_store"
+}
+{% endparse_json %}
+{% parse_json line_item %}
+{
+  "id": "1",
+  "created_at": {{ 'now' | to_time | json }},
+  "order_id": "3",
+  "quantity": 2
+}
+{% endparse_json %}
+{% liquid
+  function object = 'lib/commands/line_item_returns/create', object: payload, line_item: line_item
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'line_item_return'
+%}
+
+{% liquid
+  hash_assign payload['quantity'] = 3
+  function object = 'lib/commands/line_item_returns/create', object: payload, line_item: line_item
+
+  include 'test/assertions/not_valid_object', contract: contract, object: object, field_name: 'line_item_return'
+%}
+
+{% liquid
+  hash_assign payload['quantity'] = 1
+  assign line_item_returns = '[{"quantity": 2}]' | parse_json
+  hash_assign line_item['line_item_returns'] = line_item_returns
+  function object = 'lib/commands/line_item_returns/create', object: payload, line_item: line_item
+
+  include 'test/assertions/not_valid_object', contract: contract, object: object, field_name: 'line_item_return'
+%}
+
+{% liquid
+  hash_assign payload['quantity'] = 1
+  assign line_item_returns = '[{"quantity": 1}]' | parse_json
+  hash_assign line_item['line_item_returns'] = line_item_returns
+  function object = 'lib/commands/line_item_returns/create', object: payload, line_item: line_item
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'line_item_return'
+%}

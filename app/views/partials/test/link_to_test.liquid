@@ -1,0 +1,199 @@
+{% comment %}group{% endcomment %}
+{% liquid
+  assign object = '{"id":7889, "type":"group"}' | parse_json
+
+  assign expected = '/groups/7889'
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'group', given: url, expected: expected
+
+  assign expected = '/groups/7889/edit'
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'group', given: url, expected: expected
+
+  assign expected = '/admin/groups/7889/edit'
+  function url = 'link_to', object: object, action: 'edit', namespace: 'admin'
+  include 'test/assertions/equal', contract: contract, field_name: 'group', given: url, expected: expected
+%}
+
+{% comment %}profile{% endcomment %}
+{% liquid
+  assign object = '{"id": 1, "slug":"john", "type":"profile"}' | parse_json
+  assign current_profile = '{"id": 1, "slug":"john", "type":"profile"}' | parse_json
+
+  assign expected = '/my/feed'
+  function url = 'link_to', object: object, current_profile: current_profile
+  include 'test/assertions/equal', contract: contract, field_name: 'profile', given: url, expected: expected
+
+  assign expected = '/my/feed/edit'
+  function url = 'link_to', object: object, action: 'edit', current_profile: current_profile
+  include 'test/assertions/equal', contract: contract, field_name: 'profile', given: url, expected: expected
+
+  assign expected = '/admin/profile/john/edit'
+  function url = 'link_to', object: object, action: 'edit', namespace: 'admin', current_profile: current_profile
+  include 'test/assertions/equal', contract: contract, field_name: 'profile', given: url, expected: expected
+%}
+
+{% comment %}profile{% endcomment %}
+{% liquid
+  assign object = '{"slug":"john", "type":"profile"}' | parse_json
+
+  assign expected = '/profile/john'
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'profile', given: url, expected: expected
+
+  assign expected = '/profile/john/edit'
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'profile', given: url, expected: expected
+
+  assign expected = '/admin/profile/john/edit'
+  function url = 'link_to', object: object, action: 'edit', namespace: 'admin'
+  include 'test/assertions/equal', contract: contract, field_name: 'profile', given: url, expected: expected
+%}
+
+{% comment %}organizations{% endcomment %}
+{% liquid
+  assign object = '{"slug":"nearme", "type":"organization"}' | parse_json
+
+  assign expected = '/o/nearme'
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'organization', given: url, expected: expected
+
+  assign expected = '/o/nearme/edit'
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'organization', given: url, expected: expected
+
+  assign expected = '/admin/organizations/nearme/edit'
+  function url = 'link_to', object: object, action: 'edit', namespace: 'admin'
+  include 'test/assertions/equal', contract: contract, field_name: 'organization', given: url, expected: expected
+%}
+
+{% comment %}unknown{% endcomment %}
+{% liquid
+  assign object = '{"id": 404, "type":"unknown"}' | parse_json
+
+  assign expected = '/404?type=unknown&id=404'
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'unknown', given: url, expected: expected
+
+  assign expected = '/404?type=unknown&id=404'
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'unknown', given: url, expected: expected
+
+  assign expected = '/404?type=unknown&id=404'
+  function url = 'link_to', object: object, action: 'edit', namespace: 'admin'
+  include 'test/assertions/equal', contract: contract, field_name: 'unknown', given: url, expected: expected
+%}
+
+{% comment %}item{% endcomment %}
+{% liquid
+  assign object = '{"id": 123, "type":"item", "item_detail": { "name": "clock" }}' | parse_json
+
+  assign expected = '/items/clock-123'
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'item', given: url, expected: expected
+
+  assign expected = '/items/clock-123/edit'
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'item', given: url, expected: expected
+%}
+
+{% comment %}category{% endcomment %}
+{% liquid
+  assign object = 'electronics'
+
+  assign expected = '/categories/electronics'
+  function url = 'link_to', category: object
+  include 'test/assertions/equal', contract: contract, field_name: 'category', given: url, expected: expected
+
+  assign expected = '/categories/electronics/edit'
+  function url = 'link_to', category: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'category', given: url, expected: expected
+
+  assign expected = '/admin/categories/electronics/edit'
+  function url = 'link_to', category: object, action: 'edit', namespace: 'admin'
+  include 'test/assertions/equal', contract: contract, field_name: 'category', given: url, expected: expected
+%}
+
+{% comment %}comment{% endcomment %}
+{% liquid
+  assign object = '{ "url": "/comment/url", "type": "comment" }' | parse_json
+
+  assign expected = "/comment/url"
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'commenr', given: url, expected: expected
+
+  assign expected = "/comment/url/edit"
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'commenr', given: url, expected: expected
+
+  assign expected = "/comment/url/edit"
+  function url = 'link_to', object: object, action: 'edit', namespace: 'admin'
+  include 'test/assertions/equal', contract: contract, field_name: 'commenr', given: url, expected: expected
+%}
+
+{% comment %}seller_order{% endcomment %}
+{% liquid
+  assign object = '{ "id": "321", "type": "order" }' | parse_json
+
+  assign expected = "/dashboard/sell/orders/321"
+  function url = 'link_to', seller_order: object
+  include 'test/assertions/equal', contract: contract, field_name: 'seller_order', given: url, expected: expected
+%}
+
+{% comment %}buyer_order{% endcomment %}
+{% liquid
+  assign object = '{ "id": "321", "type": "order" }' | parse_json
+
+  assign expected = "/dashboard/buy/orders/321"
+  function url = 'link_to', buyer_order: object
+  include 'test/assertions/equal', contract: contract, field_name: 'buyer_order', given: url, expected: expected
+%}
+
+{% comment %}order{% endcomment %}
+{% liquid
+  assign object = '{ "id": "321", "type": "order" }' | parse_json
+  assign profile = '{ "id": "321", "type": "organization" }' | parse_json
+
+  assign expected = "/dashboard/sell/orders/321"
+  function url = 'link_to', object: object, role: 'organization'
+  include 'test/assertions/equal', contract: contract, field_name: 'order', given: url, expected: expected
+
+  assign expected = "/dashboard/sell/orders/321"
+  function url = 'link_to', object: object, current_profile: profile
+  include 'test/assertions/equal', contract: contract, field_name: 'order', given: url, expected: expected
+
+  assign expected = "/dashboard/buy/orders/321"
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'order', given: url, expected: expected
+
+  assign expected = "/admin/orders/321"
+  function url = 'link_to', object: object, namespace: "admin"
+  include 'test/assertions/equal', contract: contract, field_name: 'order', given: url, expected: expected
+%}
+
+{% comment %}line_item_return{% endcomment %}
+{% liquid
+  assign object = '{ "id": "329", "type": "line_item_return" }' | parse_json
+  assign profile = '{ "id": "21", "type": "organization" }' | parse_json
+
+  assign expected = "/dashboard/sell/line_item_returns/329"
+  function url = 'link_to', object: object, current_profile: profile
+  include 'test/assertions/equal', contract: contract, field_name: 'line_item_returns', given: url, expected: expected
+
+  assign expected = "/dashboard/buy/line_item_returns/329"
+  function url = 'link_to', object: object
+  include 'test/assertions/equal', contract: contract, field_name: 'line_item_returns', given: url, expected: expected
+%}
+
+{% comment %}post{% endcomment %}
+{% liquid
+  assign object = '{ "id": "429", "type": "post", "group_id": 4, "title": "title with space" }' | parse_json
+
+  assign expected = "/groups/4/content/title-with-space-429"
+  function url = 'link_to', object: object, current_profile: profile
+  include 'test/assertions/equal', contract: contract, field_name: 'post', given: url, expected: expected
+
+  assign expected = "/groups/4/content/title-with-space-429/edit"
+  function url = 'link_to', object: object, action: 'edit'
+  include 'test/assertions/equal', contract: contract, field_name: 'post', given: url, expected: expected
+%}

@@ -1,0 +1,15 @@
+---
+slug: admin/users/:id/permissions
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_superadmin', return_url: '/admin/users'
+
+  function profile = 'lib/queries/profiles/find', id: context.params.id
+  function actions = 'lib/queries/profiles/permission_actions'
+  hash_assign profile['permissions'] = profile.permissions | default: '{}' | parse_json
+
+  include 'theme/simple/admin/users/permissions', profile: profile, actions: actions
+%}

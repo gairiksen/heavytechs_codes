@@ -1,0 +1,38 @@
+mutation create_version(
+  $item_inventory_id: ID!
+  $uuid: String!
+  $currency: String!
+  $price: Int!
+  $return_days: Int!
+  $tax_rate: String
+  $category: String
+  $owner: String!
+  $photo_ids: [String!]
+
+  $details_input: [CustomizationImport!]!
+) {
+  item: record_create(
+    record: {
+      table: "item"
+      properties: [
+        { name: "item_inventory_id", value: $item_inventory_id }
+        { name: "category", value: $category }
+        { name: "currency", value: $currency }
+        { name: "price", value_int: $price }
+        { name: "return_days", value_int: $return_days }
+        { name: "uuid", value: $uuid }
+        { name: "tax_rate", value: $tax_rate }
+        { name: "owner", value: $owner }
+        { name: "photo_ids", value_array: $photo_ids }
+      ]
+    }
+  ) {
+    id
+  }
+
+  item_details: import_models(
+    models: $details_input
+  ) {
+    ids
+  }
+}

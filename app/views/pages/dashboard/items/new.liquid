@@ -1,0 +1,21 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.items.list
+      url: /dashboard/sell/items
+    - label: app.new
+---
+
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function filters = 'lib/queries/search/filters', query: context.params
+  function presigned_url = 'lib/queries/presigned_url'
+  function default_currency = 'lib/queries/constants/find' name: "CURRENCY", context: context
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs
+  include 'theme/simple/dashboard/items/new', lib: filters, presigned_url: presigned_url, user: context.current_user, default_currency: default_currency
+%}

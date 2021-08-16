@@ -1,0 +1,11 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/must_be_superadmin', profile: current_profile
+
+  function list = 'lib/queries/users/search', limit: 200, sort_order: 'DESC'
+
+  include 'theme/simple/__admin_old/menu', section: 'users'
+  render 'theme/simple/__admin_old/users/index', list: list
+%}
+

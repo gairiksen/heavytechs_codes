@@ -1,0 +1,22 @@
+{%liquid
+  assign general_liability = object.general_liability | default: ''
+  assign auto_truck_policy = object.auto_truck_policy | default: ''
+  assign garage_keepers = object.garage_keepers | default: ''
+  assign expiration_date = object.expiration_date | default: ''
+  
+%}
+{% parse_json object %}
+  {
+    "id":           {{ object.id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "general_liability":   {{ general_liability | json }},
+    "auto_truck_policy":   {{ auto_truck_policy | json }},
+    "garage_keepers":    {{ garage_keepers | json }},
+    "expiration_date":    {{ expiration_date | json }}    
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

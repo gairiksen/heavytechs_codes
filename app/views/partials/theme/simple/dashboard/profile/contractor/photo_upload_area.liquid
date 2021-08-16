@@ -1,0 +1,39 @@
+<div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md mb-4">
+    <div class="flex flex-col w-77 mb-0 text-center">
+        <figure>
+        {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-32 h-32 m-auto rounded-full' %}
+        </figure>
+        <div class="px-0 mt-5 mechanic_logo">
+        {% render 'theme/simple/photos/uppy_area' %}
+        </div>
+
+        <ul class="px-5 mb-5">
+            <li class="mb-2">
+                <a href="/dashboard/profile/edit" class="text-base font-medium text-gray-400 block my-2.5 border rounded-3xl border-gray-500 leading-7">Edit Profile Info</a>
+            </li>
+        </ul>
+
+        <!--
+        <ul>
+            <li class="flex items-center mb-5">
+                <img src="{{'images/mail-icon.svg' | asset_url}}" alt="" class="mr-3">
+                <a href="javascript:void(0);">{{object.user.email}}</a>
+            </li>
+            <li class="flex items-center mb-5">
+                <img src="{{'images/call-icon.svg' | asset_url}}" alt="" class="mr-3">
+                <a href="javascript:void(0);">{{object.mobile_number}}</a>
+            </li>
+        </ul>  
+        -->
+    </div>
+</div>
+
+{% render 'theme/simple/photos/uppy_form',
+  object_uuid: object.uuid,
+  presigned_url: presigned_url,
+  user_id: user.id,
+  photo_type: 'avatar',
+  note: 'Image up to 2MB',
+  max_number_of_files: 1,
+  update_img_selector: '[data-avatar]'
+%}

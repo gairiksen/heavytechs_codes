@@ -1,0 +1,9 @@
+{% liquid
+  if uuid == blank
+    return null
+  endif
+
+  function events = 'lib/queries/events/search', limit: 1, uuids: uuid
+
+  return events.results.first.payload
+%}

@@ -1,0 +1,20 @@
+mutation create_item_detail(
+  $item_id: String!
+  $name: String!
+  $lang: String!
+  $description: String!
+) {
+  record_create(
+    record: {
+      table: "item_detail"
+      properties: [
+        { name: "item_id", value: $item_id }
+        { name: "name", value: $name }
+        { name: "lang", value: $lang }
+        { name: "description", value: $description }
+      ]
+    }
+  ) {
+    id
+  }
+}

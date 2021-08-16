@@ -1,0 +1,26 @@
+---
+slug: dashboard/posts/vote
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  function post = 'lib/queries/posts/find', id: context.params.post.id
+  include 'lib/present_or_404', property: post.id
+
+  function object = 'lib/commands/posts/vote', object: context.params.post, current_profile: current_profile, post: post
+
+  if object.valid
+    include 'lib/commands/events/create', type: 'post_voted', actor_id: current_profile.id, object_id: object.id
+  else
+    assign errors = object.errors.base | join: ', '
+    include 'lib/flash/publish', error: errors
+  endif
+
+  if post.parent_id != null
+    assign post = post.parent
+  endif
+  function url = 'link_to', post: post
+  redirect_to url
+%}

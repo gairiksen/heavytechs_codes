@@ -1,0 +1,82 @@
+<header class="mt-2.5 mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'users', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'app.admin.organizations.organization' | t }} - {{ organization.name }}
+  </h2>
+</header>
+
+<div class="grid md:grid-cols-2 text-sm mb-6 pb-7 border-b">
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.organizations.attr.name' | t }}</div>
+    <div class="px-4 py-2">{{organization.name}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.organizations.attr.contact_emails' | t }}</div>
+    <div class="px-4 py-2">{{organization.contact_emails}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.organizations.attr.promoted' | t }}</div>
+    <div class="px-4 py-2">{{organization.promoted}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.organizations.attr.offline_stores' | t }}</div>
+    <div class="px-4 py-2">{{organization.offline_stores | join: ', '}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.organizations.attr.shipping_types' | t }}</div>
+    <div class="px-4 py-2">{{organization.shipping_types | join: ', '}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.organizations.attr.delivery_fee' | t }}</div>
+    <div class="px-4 py-2">{{organization.delivery_fee}}</div>
+  </div>
+</div>
+
+<form action="" id="admin-form"></form>
+
+
+<h2 class="subtitle pb-3">
+  {{ 'app.admin.organizations.merchant_admins' | t }}
+</h2>
+<a href="/admin/organizations/{{organization.id}}/members/new" class="button mb-5">
+  {{ 'app.admin.organizations.invite_merchant_admin' | t }}
+</a>
+<div class="flex">
+
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>{{ 'app.users.attr.email' | t }}</div>
+        <div>{{ 'app.users.attr.name' | t }}</div>
+        <div>{{ 'app.admin.organizations.show.invited_at' | t }}</div>
+      </header>
+
+      <div class="table-content">
+        {% for membership in organization.members %}
+          {% assign profile = membership.profile %}
+          <ul>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.email' | t }}</span>
+              {{ profile.user.email }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.users.attr.name' | t }}</span>
+              {{ profile.first_name }} {{ profile.last_name  }}
+            </li>
+            <li>
+              <span class="lg:hidden">{{ 'app.admin.organizations.show.invited_at' | t }}</span>
+              {% if membership.l_accepted_at %}
+                {{ membership.l_accepted_at | l: 'compact' }}
+              {% endif %}
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

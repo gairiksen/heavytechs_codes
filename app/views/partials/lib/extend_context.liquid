@@ -1,0 +1,11 @@
+{% liquid
+  function presigned_url = 'lib/queries/presigned_url'
+  hash_assign context['presigned_url'] = presigned_url
+
+  if tags
+    function tags = 'lib/queries/tags/search', limit: 20
+    hash_assign context['tags'] = tags
+  endif
+
+  return true
+%}

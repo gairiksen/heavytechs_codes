@@ -1,0 +1,13 @@
+{% parse_json object %}
+  {
+    "new_item_id": {{ object.new_item.id | json }},
+    "new_item_status": "app.statuses.items.published",
+    "old_item_id": {{ object.old_item.id | json }},
+    "old_item_status": "app.statuses.items.unpublished",
+    "item_inventory_id": {{ object.old_item.item_inventory_id | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

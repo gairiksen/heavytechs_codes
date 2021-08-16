@@ -1,0 +1,29 @@
+mutation update(
+$id: ID! 
+$user_id: String 
+$first_name: String 
+$last_name: String
+$language: String
+$profile_for: String
+){
+  record_update(
+    id: $id
+    record: {
+      properties: [
+        { name: "user_id" value: $user_id }
+        { name: "first_name" value: $first_name }
+        { name: "last_name" value: $last_name }
+        { name: "language" value: $language }
+        { name: "profile_for" value: $profile_for }
+      ]
+    }
+  ){
+    id
+    created_at
+    user_id: property(name: "user_id")
+    first_name: property(name: "first_name")
+    last_name: property(name: "last_name")
+    language: property(name: "language")
+    profile_for: property(name: "profile_for")
+  }
+}

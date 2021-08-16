@@ -1,0 +1,11 @@
+{% liquid
+  graphql r = 'events/search', limit: limit, uuids: uuids
+  assign page = r.activities.total_pages
+
+  graphql r = 'events/search', limit: limit, page: page, uuids: uuids
+
+  assign events = r.activities
+  hash_assign events['results'] = events.results | reverse
+
+  return events
+%}

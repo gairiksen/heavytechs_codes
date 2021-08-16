@@ -1,0 +1,25 @@
+<section class="card mb-9">
+  <fieldset>
+    <label class="block" for="shipping_first_name">{{ 'app.models.orders.form.shipping_first_name' | t }} *</label>
+    <input class="w-full form-input" type="text" id="shipping_first_name" name="cart[shipping_first_name]" value="{{ object.shipping_first_name  | default: profile.first_name}}" autofocus required />
+    {% render 'theme/simple/field_error', errors: object.errors.shipping_first_name %}
+  </fieldset>
+
+  <fieldset class="mt-4">
+    <label class="block" for="shipping_last_name">{{ 'app.models.orders.form.shipping_last_name' | t }} *</label>
+    <input class="w-full form-input" type="text" id="shipping_last_name" name="cart[shipping_last_name]" value="{{ object.shipping_last_name | default: profile.last_name}}" autofocus required />
+    {% render 'theme/simple/field_error', errors: object.errors.shipping_last_name %}
+  </fieldset>
+
+  <fieldset class="mt-4">
+    <label class="block" for="shipping_email">{{ 'app.models.orders.form.shipping_email' | t }} *</label>
+    <input class="w-full form-input" type="email" dir="auto" id="shipping_email" name="cart[shipping_email]" value="{{ object.shipping_email | default: profile.user.email }}" autofocus required />
+    {% render 'theme/simple/field_error', errors: object.errors.shipping_email %}
+  </fieldset>
+
+  <fieldset class="mt-4">
+    <label class="block" for="shipping_phone">{{ 'app.models.orders.form.shipping_phone' | t }} *</label>
+    <input class="w-full form-input" type="tel" dir="auto" id="shipping_phone" name="cart[shipping_phone]" value="{{ object.shipping_phone }}" autofocus required />
+    {% render 'theme/simple/field_error', errors: object.errors.shipping_phone %}
+  </fieldset>
+</section>

@@ -1,0 +1,10 @@
+{% liquid
+  if id == blank
+    return null
+  endif
+
+  assign lang = lang | default: context.language
+  graphql r  = 'item_inventories/search', id: id, limit: 1, owner: owner, lang: lang, withAllLangs: withAllLangs
+
+  return r.item_inventories.results.first
+%}

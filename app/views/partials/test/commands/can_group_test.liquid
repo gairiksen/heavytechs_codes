@@ -1,0 +1,54 @@
+{% comment %}before{% endcomment %}
+{% liquid
+  assign actor = '{"id":1000}' | parse_json
+  assign object = '{"id":2000, "type":"group"}' | parse_json
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'join', object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result0'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+
+{% comment %}before{% endcomment %}
+{% liquid
+  assign actor = '{"id":1001}' | parse_json
+  assign object = '{"id":2001, "type":"group", "properties": { "ask_to_join": "yes", "approve_request": "anon" }}' | parse_json
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'join', object: object
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'result1'
+  include 'test/assertions/blank', contract: contract, object: result, field_name: 'errors'
+%}
+
+
+{% comment %}before{% endcomment %}
+{% liquid
+  assign actor = '{"id":1002}' | parse_json
+  assign object = '{"id":2002, "type":"group", "properties": { "ask_to_join": "yes", "approve_request": "member" }}' | parse_json
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'join', object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result2'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+
+{% comment %}before{% endcomment %}
+{% liquid
+  assign actor = '{"id":1003}' | parse_json
+  assign object = '{"id":2003, "type":"group", "properties": { "ask_to_join": "no" }}' | parse_json
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'join', object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result3'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}

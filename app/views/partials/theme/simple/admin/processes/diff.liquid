@@ -1,0 +1,13 @@
+{% if old[name] != new[name]%}
+  <ul>
+    <li>
+      {{ key | t }}
+    </li>
+    <li>
+      {{ old[name] }}
+    </li>
+    <li>
+      {{ new[name] }}
+    </li>
+  </ul>
+{% endif %}

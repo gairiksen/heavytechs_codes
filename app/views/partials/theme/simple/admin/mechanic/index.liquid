@@ -1,0 +1,94 @@
+<div class="flex flex-col md:flex-row">
+    {% render 'theme/simple/admin/new_menu', this_page: this_page %}
+
+    <div class="bg-gray-50 py-10 w-full md:w-4/5">
+        <div class="mx-auto px-3 md:px-10">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-gray-600 text-3xl font-bold">Mechanic</h2>
+
+                {%liquid
+                    if this_page == 'unavailable_mechanic'
+                        assign toggle = '0'
+                        assign list_url = '/admin/mechanic'
+                        assign available_text = 'Show Available'
+                    else
+                        assign toggle = '1'
+                        assign list_url = '/admin/mechanic/unavailable'
+                        assign available_text = 'Show Unavailable'
+                    endif
+                %}
+
+                <a href="{{list_url}}">
+                    <div class="flex justify-center items-center" x-data="{ toggle: '{{toggle}}' }">
+                        <div class="relative rounded-full w-12 h-4 transition duration-200 ease-linear"
+                                :class="[toggle === '1' ? 'bg-purple-400' : 'bg-gray-400']">
+                            <label for="toggle" 
+                                    class="absolute -top-1 left-0 bg-white border-2 w-6 h-6 rounded-full transition transform duration-100 ease-linear cursor-pointer"
+                                    :class="[toggle === '1' ? 'translate-x-full border-purple-500 bg-purple-500' : 'translate-x-0 border-gray-400']">
+                                    
+                                </label>
+                            <input type="checkbox" id="toggle" name="toggle" 
+                                    class="appearance-none w-full h-full active:outline-none focus:outline-none"
+                                    @click="toggle === '0' ? toggle = '1' : toggle = '0'">
+                        </div>
+                        <span class="text-xs font-normal text-gray-500 ml-3.5">{{available_text}}</span>
+                    </div>
+                </a>
+
+            </div>
+            
+
+            <div class="overflow-auto py-6">
+                <table class="border-collapse w-full">
+                    <thead>
+                        <tr>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Photo</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Name</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">sign up date</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Location</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">Last login</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">% Complete</th>
+                        <th class="uppercase text-sm text-gray-600 h-10 text-center font-bold">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if records.results.size == 0 %}
+                            <tr class="bg-white rounded-lg shadow"><td colspan="7">No Records.</td></tr>
+                        {% else %}
+
+                            {% for u in records.results %}
+                            <tr class="bg-white rounded-lg shadow">
+                                <td class="border-b border-gray-200 text-center h-20">
+                                    {%if u.photo.photo.url %}
+                                        <img src="{{u.photo.photo.url}}" alt="" class="w-10 h-10 rounded-full m-auto">
+                                    {%else%}
+                                        <img src="{{'images/signup-img2.png' | asset_url}}" alt="" class="w-10 h-10 rounded-full m-auto">
+                                    {%endif%}
+                                </td>
+                                <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{u.profile.first_name}} {{u.profile.last_name}}</td>
+                                <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{ u.created_at | date: "%b %y" }}</td>
+                                <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{u.profile_bio.location}}</td>
+                                <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{ u.profile.last_login | date: "%b %d, %Y %H:%M" }}</td>
+                                <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">
+                                {% if u.percent_complete %}
+                                {{u.percent_complete}}
+                                {%else%}
+                                0
+                                {%endif%}
+                                </td>
+                                <td class="border-b border-gray-200 text-center h-20">
+                                    <a href="/admin/mechanic/details?m_id={{u.user_id}}" class="w-24 m-auto text-base font-normal text-gray-600 heavytechs-border-color-orange heavytechs-text-dark-orange border rounded-3xl leading-7 block">Details</a>    
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        {% endif %}
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+    

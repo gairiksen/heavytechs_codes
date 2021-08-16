@@ -1,0 +1,48 @@
+name: search_mechanic_params
+properties:
+  - name: uuid
+  - name: user_id
+  - name: distance
+  - name: mechanic_name
+  - name: company_name
+  - name: position
+  - name: short_description
+  - name: description  
+  - name: type_of_job
+  - name: area_of_expertise
+  - name: availability
+  - name: total_experience
+  - name: earthworks
+  - name: mining
+  - name: fleet
+  - name: pipeline
+  - name: paving
+  - name: energy_production
+  - name: heavy_equipment_mechnic
+  - name: truck_mechanic
+  - name: welder_fabricator
+  - name: oilers_pm_tech
+  - name: caterpillar
+  - name: john_deere
+  - name: hitachi
+  - name: volvo
+  - name: komatsu
+  - name: bobcat
+  - name: other
+  - name: insurance_coverage
+  - name: ase
+  - name: osha
+  - name: msha
+  - name: oem
+  - name: truck_type
+  - name: object_uuid
+  - name: user_name
+  - name: percent_complete
+  - name: is_blocked
+  - name: location
+  - name: latitude
+  - name: longitude
+  - name: geo_location
+    type: geojson
+
+  

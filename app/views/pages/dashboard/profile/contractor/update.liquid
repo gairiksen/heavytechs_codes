@@ -1,0 +1,70 @@
+---
+slug: dashboard/profile/contractor
+method: put
+---
+
+
+{% if context.params.profile_type and context.params.profile_type == 'bio' %}
+
+  {%liquid
+    function profile_bio = 'lib/queries/profiles/contractor/find_bio', user_id: context.current_user.id
+    if profile_bio == blank
+      function object = 'lib/commands/profiles/contractor/create_bio', object: context.params.bio, user_id: context.current_user.id
+      include 'redirect_to', url: '/dashboard/profile/contractor/projects'
+    else
+      function object = 'lib/commands/profiles/contractor/update_bio', object: context.params.bio, user_id: context.current_user.id
+      include 'redirect_to', url: '/dashboard/profile/contractor/projects'
+    endif
+
+
+    function sm_params = 'lib/queries/profiles/find_mechanic_search_params', user_id: context.current_user.id
+    function build_object = 'lib/commands/mechanic_availability/update_search_params/build_contractor_bio', object: context.params.bio, sm_params: sm_params, user_id: context.current_user.id, object_uuid: current_profile.uuid, user_name: current_profile.name, latitude: latitude, longitude: longitude
+    function smp_object = 'lib/commands/mechanic_availability/update_search_params', object: build_object
+  %}  
+
+{% endif %} 
+
+
+{% if context.params.profile_type and context.params.profile_type == 'post_a_project' %}
+
+  {% parse_json geo_location %}
+  {
+    "type": "Point",
+    "coordinates": [
+      {{context.params.project.longitude}},
+      {{context.params.project.latitude}}      
+    ]
+  }
+  {% endparse_json %}
+
+  {%liquid
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+    
+    function object = 'lib/commands/profiles/contractor/create_project', object: context.params.project, user_id: context.current_user.id, object_uuid: current_profile.uuid, geo_location: geo_location, latitude: latitude, longitude: longitude
+    include 'redirect_to', url: '/dashboard/profile/contractor/projects'
+    
+  %}  
+
+{% endif %} 
+
+{% if context.params.profile_type and context.params.profile_type == 'edit_project' %}
+
+  {% parse_json geo_location %}
+  {
+    "type": "Point",
+    "coordinates": [
+      {{context.params.project.longitude}},
+      {{context.params.project.latitude}}      
+    ]
+  }
+  {% endparse_json %}
+
+  {%liquid
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+    function object = 'lib/commands/profiles/contractor/update_project', object: context.params.project, user_id: context.current_user.id, object_uuid: current_profile.uuid, geo_location: geo_location, latitude: latitude, longitude: longitude
+    include 'redirect_to', url: '/dashboard/profile/contractor/projects'
+    
+  %}  
+
+{% endif %} 

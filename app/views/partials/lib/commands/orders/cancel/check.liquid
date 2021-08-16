@@ -1,0 +1,20 @@
+{% liquid
+  assign c = '{ "valid": true, "errors": {} }' | parse_json
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'id'
+
+  if role == 'seller' and object.status.name != 'app.statuses.orders.paid'
+    assign msg = 'app.orders.errors.wrong-order-status' | t: status: object.status.name
+    include 'lib/register_error', contract: c, field_name: 'order_status', message: msg
+  endif
+
+  if role == 'buyer' and object.status.name != 'app.statuses.orders.confirmed'
+    assign msg = 'app.orders.errors.wrong-order-status' | t: status: object.status.name
+    include 'lib/register_error', contract: c, field_name: 'order_status', message: msg
+  endif
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}

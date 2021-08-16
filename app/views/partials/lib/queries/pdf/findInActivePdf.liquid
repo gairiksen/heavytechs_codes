@@ -1,0 +1,13 @@
+{% liquid
+  if uuid == blank and slug == blank and id == blank and user_id == blank and anonymous_session_id == blank
+    return null
+  endif
+%}
+
+{% graphql r = 'pdf/search_active_pdf', limit: 20, id: id, user_id: user_id,page_category: page_category, item_category: item_category, is_active: "0" %}
+
+{% liquid
+  include 'lib/handle_graphql_response', r: r, name: 'queries/pdf/findInActivePdf'
+
+  return r.records.results
+%}

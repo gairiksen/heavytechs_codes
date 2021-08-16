@@ -1,0 +1,37 @@
+{% liquid
+  assign show_checkout_btn = false
+  for order in orders
+    if order.status.name == 'app.statuses.orders.placed'
+      assign show_checkout_btn = true
+      break
+    endif
+  endfor
+%}
+{% if show_checkout_btn %}
+  <div class="mt-6 gap-5 flex flex-wrap justify-end items-center">
+    <form action="/dashboard/buy/check_multiple" method="post">
+      {% include 'authenticity_token' %}
+      {% for order in orders %}
+        <input type="hidden" name="ids[]" value="{{ order.id }}" />
+      {% endfor %}
+      <button type="submit" class="button button-icon-right" data-cart-checkout>
+        {{ 'app.orders.show.checkout' | t }}
+        {% render 'theme/simple/ui/icon', icon: 'shoppingCart' %}
+      </button>
+    </form>
+  </div>
+{% elsif order.status.name == 'app.statuses.orders.confirmed' %}
+<div class="mt-6 gap-5 flex flex-wrap justify-end items-center">
+  <div>
+    <form action="/dashboard/transactions" method="post">
+      {% include 'authenticity_token' %}
+      {% for order in orders %}
+        <input type="hidden" name="order_ids[]" value="{{ order.id }}">
+      {% endfor %}
+      <button type="submit" class="button button-icon-right">
+        {{ 'app.orders.show.pay' | t }}
+      </button>
+    </form>
+  </div>
+</div>
+{% endif %}

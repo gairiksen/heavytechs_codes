@@ -1,0 +1,23 @@
+<article class="card">
+  <header class="mb-2 flex gap-4">
+    {% render 'theme/simple/ui/logo' %}
+
+    <div>
+      {{ 'app.title' | t }}<br>
+      <time class="sidenote text-content-sidenote timeago" datetime="{{ current_profile.created_at }}">{{ current_profile.created_at | l: 'compact' }}</time>
+    </div>
+  </header>
+
+  <div>
+    <p>{{ 'app.welcome_message.intro' | t | markdown }}</p>
+    {{ 'app.welcome_message.how_to_start' | t }}
+    <ol class="ms-5 list-decimal">
+      <li>
+        <a href="{% render 'link_to', group: '' %}">{% render 'theme/simple/ui/icon', icon: 'users', class: 'w-4 mb-1 inline' %} {{ 'app.welcome_message.join_communities.title' | t }}</a> {{ 'app.welcome_message.join_communities.desc' | t }}
+        </li>
+      <li>
+        <a href="/about-us">{% render 'theme/simple/ui/icon', icon: 'bookFlipPage', class: 'w-4 mb-1 inline' %} {{ 'app.welcome_message.learn_more.title' | t }}</a> {{ 'app.welcome_message.learn_more.desc' | t }}
+      </li>
+    </ol>
+  </div>
+</article>

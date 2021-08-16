@@ -1,0 +1,26 @@
+{% parse_json buyer %} {"id": "5999"} {% endparse_json %}
+{% parse_json object %}
+  {
+    "shipping_first_name": "foo",
+    "shipping_last_name": "bar",
+    "shipping_email": "foo@example.com",
+    "shipping_phone": "123445",
+    "shipping_type": "delivery",
+    "shipping_address_id": "1234",
+    "payment_type": "example"
+  }
+{% endparse_json %}
+{% liquid
+  function item = 'test/fixtures/item', quantity: 3, contract: contract
+  function order = 'lib/commands/line_items/find_or_create_order', item: item, current_profile: buyer
+  assign params = '{"quantity": "1"}' | parse_json
+  function line_item = 'lib/commands/line_items/create', item: item, params: params, current_profile: buyer, order: order
+  function order = 'lib/queries/orders/find', id: line_item.order_id
+  function object = 'lib/commands/orders/update', object: object, order: order
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+
+  function order = 'lib/queries/orders/find', id: line_item.order_id
+  function object = 'lib/commands/orders/confirm/check', object: order, order: order
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'order'
+%}

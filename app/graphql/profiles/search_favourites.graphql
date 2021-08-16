@@ -1,0 +1,121 @@
+query search(
+    $limit: Int = 20
+    $user_id: String
+
+) {
+  records(
+    per_page: $limit
+    filter: {
+      table: { value_in: ["user_favourites"] }
+      properties: [
+        { name: "user_id", value: $user_id }     
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+      fav_id: property(name: "fav_id")
+      fav_for: property(name: "fav_for")
+
+      photo: related_record(
+        table: "photo"
+        join_on_property: "fav_uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      profile_bio: related_record(
+        table: "profile_bio"
+        join_on_property: "fav_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        short_description: property(name: "short_description")
+        long_description: property(name: "long_description")
+        position: property(name: "position")
+        location: property(name: "location")
+        total_experience: property(name: "total_experience")
+        ready_for_travel: property(name: "ready_for_travel")
+        company_name: property(name: "company_name")
+      }
+
+      profile: related_record(
+        table: "profile"
+        join_on_property: "fav_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        company_name: property(name: "company_name")
+        drivers_licence_path: property(name: "drivers_licence_path")
+        drivers_license_class_a: property(name: "drivers_license_class_a")
+        drivers_license_class_b: property(name: "drivers_license_class_b")
+        drivers_license_class_c: property(name: "drivers_license_class_c")
+        drivers_license_tanker: property(name: "drivers_license_tanker")
+        first_name: property(name: "first_name")
+        is_blocked: property(name: "is_blocked")
+        language: property(name: "language")
+        last_login: property(name: "last_login")
+        last_name: property(name: "last_name")
+        mobile_number: property(name: "mobile_number")
+        name: property(name: "name")
+        position: property(name: "position")
+        profile_for: property(name: "profile_for")
+        short_description: property(name: "short_description")
+        
+      }
+
+      profile_contractor_bio: related_record(
+        table: "profile_contractor_bio"
+        join_on_property: "contractor_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        short_description: property(name: "short_description")
+        long_description: property(name: "long_description")
+        position: property(name: "position")
+        location: property(name: "location")
+        total_experience: property(name: "total_experience")
+        ready_for_travel: property(name: "ready_for_travel")
+        company_name: property(name: "company_name")
+      }
+
+      projects: related_record(
+        table: "projects"
+        join_on_property: "fav_id"
+        foreign_property: "id"
+      ) {
+        id
+        type: table
+        additionally_insured: property(name: "additionally_insured")
+        location_of_project: property(name: "location_of_project")
+        longer_description: property(name: "longer_description")
+        duration_type: property(name: "duration_type")
+      }
+
+      profile_skills: related_record(
+        table: "profile_skills"
+        join_on_property: "fav_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        drivers_license_class: property(name: "drivers_license_class")
+      }
+
+      
+    }
+  }
+}

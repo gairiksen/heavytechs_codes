@@ -1,0 +1,12 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  graphql presigned_url = 'photos/presign' | dig: 'presigned'
+
+  assign project_id = context.params.project_id | default: 0
+
+   graphql r = 'profiles/delete_project', id: project_id 
+   include 'redirect_to', url: '/dashboard/profile/contractor/projects'
+  
+%}

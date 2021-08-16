@@ -1,0 +1,703 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+    <div class="w-full mb-6 md:mb-0 md:w-60">
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md mb-4">
+            <div class="flex flex-col w-77 mb-0 text-center">
+            <figure>
+            {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-32 h-32 m-auto rounded-full' %}
+            </figure>
+            <div class="px-0 mt-5 mechanic_logo">
+            {% render 'theme/simple/photos/uppy_area' %}
+            </div>
+            </div>
+        </div>
+        {%endcomment%}
+
+        {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+        {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object, search_mechanic_deatils: search_mechanic_deatils %}
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+            <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+            <p class="text-sm font-normal text-gray-400 mb-5">
+                To make your profile visible to other users, fill in the required fields
+            </p>
+
+            <div>
+                <span class="block text-right text-sm text-gray-400 mb-2">30%</span>
+                <ul class="flex justify-between items-center">
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                </ul>
+            </div>
+        </div>
+        {%endcomment%}
+
+        <div class="pt-8 pb-5 md:pb-0">
+            <ul class="customRadio flex md:block">
+                <li class="mr-4 md:mr-0 md:mb-3">
+                    <input {%if profile_availability.availability == '1'%}checked{%endif%} id="available" class="mechanic_availability" type="radio" name="available" value="1">
+                    <label for="available" class="text-base font-medium text-gray-800"><span><span></span></span>Available</label>
+                </li>
+                <li>
+                    <input {%if profile_availability.availability == '0'%}checked{%endif%} id="unavailable" class="mechanic_availability" type="radio" name="available" value="0">
+                    <label for="unavailable" class="text-base font-medium text-gray-800"><span><span></span></span>Unavailable</label>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="profileEdit_right w-full">
+        <div class="mb-8 bg-white">
+            <ul class="flex items-center flex-col md:flex-row">
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/bio?edit=1" 
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Bio</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/skills"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3  heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Skills/Services</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/education"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Education/Certs</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/truck"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Truck</a>
+                </li>
+            </ul>
+        </div>
+    
+        <div class="rounded-md">
+
+        <div class="pb-10 pt-7">
+
+
+        <form action="/dashboard/profile" method="post">
+        {% render 'authenticity_token', context: context %}
+        <input type="hidden" name="_method" value="put" />
+
+        <input type="hidden" name="profile_type" value="skills" />
+
+        <input type="hidden" name="skills[id]" value="{{profile_skills.id}}" id="id" />
+        <input type="hidden" name="skills[user_id]" value="{{profile_skills.user_id}}" id="user_id" />
+
+
+        <div class="bg-white rounded-md px-6 pt-5 mb-3 shadow-sm">
+            <div class="mb-11">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.industries_serviced' | t }}*</h4>
+
+                <ul class="customCheck gap-4 flex flex-col flex-wrap w-full lg:w-3/4 md:flex-row md:gap-y-2">
+                    <li class="md:w-2/4 lg:w-3/12">
+                        <input id="industries1" type="checkbox" name="skills[earthworks]" value="1" {% if profile_skills.earthworks == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="industries1"><span></span>Earthworks</label>
+                    </li>
+                    <li class="md:w-2/4 lg:w-3/12">
+                        <input id="industries2" type="checkbox" name="skills[mining]" value="1" {% if profile_skills.mining == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="industries2"><span></span>Mining</label>
+                    </li>
+                    <li class="md:w-2/4 lg:w-3/12">
+                        <input id="industries3" type="checkbox" name="skills[fleet]" value="1" {% if profile_skills.fleet == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="industries3"><span></span>Fleet</label>
+                    </li>
+                    <li class="md:w-2/4 lg:w-3/12">
+                        <input id="industries4" type="checkbox" name="skills[pipeline]" value="1" {% if profile_skills.pipeline == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="industries4"><span></span>Pipeline</label>
+                    </li>
+                    <li class="md:w-2/4 lg:w-3/12">
+                        <input id="industries5" type="checkbox" name="skills[paving]" value="1" {% if profile_skills.paving == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="industries5"><span></span>Paving</label>
+                    </li>
+                    <li class="w-auto">
+                        <input id="industries6" type="checkbox" name="skills[energy_production]" value="1" {% if profile_skills.energy_production == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="industries6"><span></span>Energy Production</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-full md:w-4/6">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.specialized_training' | t }}</h4>
+                <ul class="customCheck flex flex-col flex-wrap gap-4 md:flex-row md:gap-y-2">
+                    <li class="lg:w-2/4">
+                        <input id="specialize1" type="checkbox" name="skills[heavy_equipment_mechanic]" value="1" {% if profile_skills.heavy_equipment_mechanic == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="specialize1"><span></span>Heavy Equipment Mechanic</label>
+                    
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input id="specialize2" type="checkbox" name="skills[welder_fabricator]" value="1" {% if profile_skills.welder_fabricator == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="specialize2"><span></span>Welder/Fabricator</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input id="specialize3" type="checkbox" name="skills[truck_mechanic]" value="1" {% if profile_skills.truck_mechanic == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="specialize3"><span></span>Truck Mechanic</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input id="specialize4" type="checkbox" name="skills[oilers_pm_tech]" value="1" {% if profile_skills.oilers_pm_tech == '1' %}checked{%endif%}>
+                        <label class="text-base font-medium text-gray-800" for="specialize4"><span></span>Oilers/PM Tech</label>
+                    </li>
+                </ul>
+            </div>
+
+            {%comment%}
+            {%liquid
+              if profile_skills.welding == '1'
+                assign show_wc_val = true
+              else 
+                assign show_wc_val = false
+              endif
+
+              if profile_skills.electrical_troubleshooting == '1'
+                assign show_etc_val = true
+              else 
+                assign show_etc_val = false
+              endif
+
+              if profile_skills.computer_diagnostics == '1'
+                assign show_cdc_val = true
+              else 
+                assign show_cdc_val = false
+              endif
+
+            %}
+
+            <div x-data="{show_wc:{{show_wc_val}}, show_etc: {{show_etc_val}}, show_cdc: {{show_cdc_val}}}">
+              <div>
+                  <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.qualification_area_of_expertise' | t }}</h4>
+                  <ul class="customCheck flex gap-4 flex-col md:flex-row md:gap-10">
+                      <li>
+                          <input @click="show_wc = !show_wc" id="expertise1" type="checkbox" name="skills[welding]" value="1" {% if profile_skills.welding == '1' %}checked{%endif%}>
+                          <label class="text-base font-medium text-gray-800" for="expertise1"><span></span>Welding</label>
+                      </li>
+                      <li>
+                          <input @click="show_etc = !show_etc" id="expertise2" type="checkbox" name="skills[electrical_troubleshooting]" value="1" {% if profile_skills.electrical_troubleshooting == '1' %}checked{%endif%}>
+                          <label class="text-base font-medium text-gray-800" for="expertise2"><span></span>Electrical Troubleshooting</label>
+                      </li>
+                      <li>
+                          <input @click="show_cdc = !show_cdc" id="expertise3" type="checkbox" name="skills[computer_diagnostics]" value="1" {% if profile_skills.computer_diagnostics == '1' %}checked{%endif%}>
+                          <label class="text-base font-medium text-gray-800" for="expertise3"><span></span>Computer Diagnostics</label>
+                      </li>
+                  </ul>
+              </div>
+
+              <div x-show="show_wc" class="bg-gray-50 py-5 px-7 -mx-6 mt-11">
+                  <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.choose_welding_certification' | t }}</h4>
+                  <div class="mb-6">
+                      <input type="text" name="skills[welding_cert]" value="{{profile_skills.welding_cert}}" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                  </div>
+
+                  <div class="custom-file">
+                      <!--<div class="pdf-upload-area"></div>-->
+                      <!--
+                      <input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">
+                      <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                          Upload 
+                          <span>
+                              <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                          </span>
+                      </label>-->
+                    </div>
+              </div>
+
+              <div x-show="show_etc" class="bg-gray-50 py-5 px-7 -mx-6 mt-11">
+                  <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.choose_electrical_troubleshooting_certificate' | t }}</h4>
+                  <div class="mb-6">
+                      <input type="text" name="skills[electrical_troubleshooting_cert]" value="{{profile_skills.electrical_troubleshooting_cert}}" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                  </div>
+
+                  <div class="custom-file">
+                      <!--<div class="pdf-upload-area"></div>-->
+                      <!--
+                      <input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">
+                      <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                          Upload 
+                          <span>
+                              <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                          </span>
+                      </label>-->
+                    </div>
+              </div>
+
+              <div x-show="show_cdc" class="bg-gray-50 py-5 px-7 -mx-6 mt-11">
+                  <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.choose_computer_diagnostics_certificate' | t }}</h4>
+                  <div class="mb-6">
+                      <input type="text" name="skills[computer_diagnostics_cert]" value="{{profile_skills.computer_diagnostics_cert}}" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                  </div>
+
+                  <div class="custom-file">
+                      <!--<div class="pdf-upload-area"></div>-->
+                      <!--
+                      <input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">
+                      <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                          Upload 
+                          <span>
+                              <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                          </span>
+                      </label>-->
+                    </div>
+              </div>
+            </div>
+            {%endcomment%}
+
+            
+
+            <div class="py-11">
+              {%liquid 
+                assign caterpillarChk = ''
+                assign johnDeereChk = ''
+                assign hitachiChk = ''
+                assign volvoChk = ''
+                assign komatsuChk = ''
+                assign bobcatChk = ''
+
+                for all_oem in profile_all_oem
+                  if all_oem.oem_name == 'Caterpillar'
+                    assign caterpillarChk = 'checked'
+                  endif
+                  if all_oem.oem_name == 'John Deere'
+                    assign johnDeereChk = 'checked'
+                  endif
+                  if all_oem.oem_name == 'Hitachi'
+                    assign hitachiChk = 'checked'
+                  endif
+                  if all_oem.oem_name == 'Volvo'
+                    assign volvoChk = 'checked'
+                  endif
+                  if all_oem.oem_name == 'Komatsu'
+                    assign komatsuChk = 'checked'
+                  endif
+                  if all_oem.oem_name == 'Bobcat'
+                    assign bobcatChk = 'checked'
+                  endif 
+
+                endfor              
+              %}
+
+
+                <h4 class="text-base font-normal text-gray-800 mb-7">{{ 'app.profiles.oem' | t }}</h4>
+
+                <ul id="oem_list" class="customCheck flex flex-col flex-wrap gap-4 w-full mb-12 md:w-3/4 md:flex-row md:gap-y-2 md:gap-x-0">
+                    <li class="md:w-1/3">
+                        <input {{caterpillarChk}} id="oem_Caterpillar" type="checkbox" name="oem[Caterpillar]" value="1" onclick="showCertDiv('Caterpillar');">
+                        <label class="text-base font-medium text-gray-800" for="oem_Caterpillar"><span></span>Caterpillar</label>
+                    </li>
+                    <li class="md:w-1/3">
+                        <input {{johnDeereChk}} id="oem_John_Deere" type="checkbox" name="oem[John Deere]" value="1" onclick="showCertDiv('John Deere');">
+                        <label class="text-base font-medium text-gray-800" for="oem_John_Deere"><span></span>John Deere</label>
+                    </li>
+                    <li class="md:w-1/3">
+                        <input {{hitachiChk}} id="oem_Hitachi" type="checkbox" name="oem[Hitachi]" value="1" onclick="showCertDiv('Hitachi');">
+                        <label class="text-base font-medium text-gray-800" for="oem_Hitachi"><span></span>Hitachi</label>
+                    </li>
+                    <li class="md:w-1/3">
+                        <input {{volvoChk}} id="oem_Volvo" type="checkbox" name="oem[Volvo]" value="1" onclick="showCertDiv('Volvo');">
+                        <label class="text-base font-medium text-gray-800" for="oem_Volvo"><span></span>Volvo</label>
+                    </li>
+                    <li class="md:w-1/3">
+                        <input {{komatsuChk}} id="oem_Komatsu" type="checkbox" name="oem[Komatsu]" value="1" onclick="showCertDiv('Komatsu');">
+                        <label class="text-base font-medium text-gray-800" for="oem_Komatsu"><span></span>Komatsu</label>
+                    </li>
+                    <li class="md:w-1/3">
+                        <input {{bobcatChk}} id="oem_Bobcat" type="checkbox" name="oem[Bobcat]" value="1" onclick="showCertDiv('Bobcat');">
+                        <label class="text-base font-medium text-gray-800" for="oem_Bobcat"><span></span>Bobcat</label>
+                    </li>
+
+                    {% for custom_oem in profile_custom_oem %}
+                    <li class="md:w-1/3">
+                        <input id="oem_{{custom_oem.oem_name}}" type="checkbox" name="oem[{{custom_oem.oem_name}}]" value="1" onclick="showCertDiv('{{custom_oem.oem_name}}');" checked>
+                        <label class="text-base font-medium text-gray-800" for="oem_{{custom_oem.oem_name}}"><span></span>{{custom_oem.oem_name}}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+              
+                <h4 class="text-base font-normal text-gray-800 mb-7">{{ 'app.profiles.add_another_oem' | t }}</h4>
+
+                <div class="sm:flex">
+                    <span id="err_add_more_oem" style="color:red; display:none;">{{ 'app.profiles.enter_some_value' | t }}</span>
+                    <input type="text" name="add_more_oem" id="add_more_oem" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full mr-2 md:w-64 mb-1 sm:mb-0">
+                    <input type="button" onclick="addMoreOEM()" value="+ Add" class="heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border-2 px-10 leading-10 rounded-3xl text-base inline-block">
+                    <input type="hidden" name="hid_tot_oem" id="hid_tot_oem" value="7" />
+                </div>
+                
+            </div>
+
+            <div id="oem_certificate_div">
+              {% for all_oem in profile_all_oem %}
+              
+                <div class="bg-gray-50 py-5 px-7 -mx-6 mt-11" id="oem_{{ all_oem.oem_name | replace: ' ', '_' }}_details">
+                  <h1>{{all_oem.oem_name}} Details</h1>
+                  <ul class="customRadio flex items-center gap-10 mb-7">
+                    <li>
+                      <input id="{{all_oem.oem_name}}_expert" type="radio" name="skills[{{all_oem.oem_name}}][expert_familiar]" value="expert" {% if all_oem.expert_familiar == 'expert' %}checked{%endif%}>
+                      <label for="{{all_oem.oem_name}}_expert" class="text-base font-medium text-gray-800">
+                      <span><span></span></span>Expert</label>
+                    </li>
+                    <li>
+                      <input id="{{all_oem.oem_name}}_familiar" type="radio" name="skills[{{all_oem.oem_name}}][expert_familiar]" value="familiar" {% if all_oem.expert_familiar == 'familiar' %}checked{%endif%}>
+                      <label for="{{all_oem.oem_name}}_familiar" class="text-base font-medium text-gray-800">
+                      <span><span></span></span>Familiar</label>
+                    </li>
+                  </ul>
+                  <h4 class="text-base font-normal text-gray-800 mb-2.5">Certification</h4>
+                  <div class="mb-6">
+                    <input type="text" name="skills[{{all_oem.oem_name}}][cert_name]" value="{{all_oem.cert_name}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                  </div>
+                  
+                  <div class="custom-file">
+                    <label  onclick="showPdfUpload('skills','{{all_oem.oem_name}}')" class="custom-file-label relative w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                        Upload 
+                        <span>
+                            <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                        </span>
+                    </label>
+                  </div>
+
+                </div>
+              {% endfor %}
+
+              <!--<div class="bg-gray-50 py-5 px-7 -mx-6 mt-11">
+                  <ul class="customRadio flex items-center gap-10 mb-7">
+                      <li>
+                          <input id="Expert1" type="radio" name="Expert" value="1">
+                          <label for="Expert1" class="text-base font-medium text-gray-800"><span><span></span></span>Expert</label>
+                      </li>
+                      <li>
+                          <input id="Expert2" type="radio" name="Expert" value="1">
+                          <label for="Expert2" class="text-base font-medium text-gray-800"><span><span></span></span>Familiar</label>
+                      </li>
+                  </ul>
+                  <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.choose_certification' | t }}</h4>
+                  <div class="mb-6">
+                      <input type="text" placeholder="Harry" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                  </div>
+
+                  <div class="custom-file">
+                      <input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">
+                      <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                          Upload 
+                          <span>
+                              <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                          </span>
+                      </label>
+                  </div>
+
+              </div>-->
+            </div>
+
+            <div class="py-10">
+                <h4 class="text-base font-normal text-gray-800 mb-5">{{ 'app.profiles.drivers_license' | t }}</h4>
+
+                <ul class="customRadio flex items-center gap-10">
+                    <li>
+                        <input id="license1" type="radio" name="skills[drivers_license_class]" {% if profile_skills.drivers_license_class == 'Class A' %}checked{%endif%} value="Class A">
+                        <label for="license1" class="text-base font-medium text-gray-800"><span><span></span></span>Class A</label>
+                    </li>
+                    <li>
+                        <input id="license2" type="radio" name="skills[drivers_license_class]" {% if profile_skills.drivers_license_class == 'Class B' %}checked{%endif%} value="Class B">
+                        <label for="license2" class="text-base font-medium text-gray-800"><span><span></span></span>Class B</label>
+                    </li>
+                    <li>
+                        <input id="license3" type="radio" name="skills[drivers_license_class]" {% if profile_skills.drivers_license_class == 'Class C' %}checked{%endif%} value="Class C">
+                        <label for="license3" class="text-base font-medium text-gray-800"><span><span></span></span>Class C</label>
+                    </li>
+                    <li>
+                        <input id="license4" type="radio" name="skills[drivers_license_class]" {% if profile_skills.drivers_license_class == 'Class D' %}checked{%endif%} value="Class D">
+                        <label for="license4" class="text-base font-medium text-gray-800"><span><span></span></span>Class D</label>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="bg-gray-50 p-7 -mx-6 mt-11">
+                <ul class="flex gap-4 mb-7">
+                    <li>
+                        <div class="custom-file">
+
+                          <!--<div class="pdf-upload-area"></div>-->
+                          <!--Upload PDF Area -- STARTS -->
+                          <!--<div class="pdf-upload-area">
+                          <div class="uppy-Root"><div class="uppy-Dashboard uppy-Dashboard--animateOpenClose uppy-Dashboard--isInnerWrapVisible" data-uppy-theme="light" data-uppy-num-acquirers="0" data-uppy-drag-drop-supported="true" aria-hidden="false" aria-label="File Uploader"><div class="uppy-Dashboard-overlay" tabindex="-1"></div><div class="uppy-Dashboard-inner" style="width: 100%; height: 300px;"><div class="uppy-Dashboard-innerWrap"><div class="uppy-Dashboard-dropFilesHereHint">Drop your files here</div><div class="uppy-Dashboard-AddFiles"><input class="uppy-Dashboard-input" hidden="" aria-hidden="true" tabindex="-1" type="file" name="files[]" multiple="" accept="application/pdf"><input class="uppy-Dashboard-input" hidden="" aria-hidden="true" tabindex="-1" webkitdirectory="" type="file" name="files[]" multiple="" accept="application/pdf"><div class="uppy-Dashboard-AddFiles-title">Drop files here or <button type="button" class="uppy-u-reset uppy-Dashboard-browse" data-uppy-super-focusable="true">browse files</button></div><div class="uppy-Dashboard-AddFiles-info"></div></div><div class="uppy-Dashboard-progressindicators"><div class="uppy-StatusBar is-waiting" aria-hidden="true"><div class="uppy-StatusBar-progress
+                           " role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div><div class="uppy-StatusBar-actions"></div></div><div class="uppy uppy-Informer" aria-hidden="true"><p role="alert"> </p></div></div></div></div></div></div>
+                          </div>-->
+                          <!--Upload PDF Area -- ENDS -->
+
+                          <!--<input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">
+                          <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                              Upload 
+                              <span>
+                                  <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                              </span>
+                          </label>-->
+                        </div>
+                    </li>
+                    <!--<li>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">
+                            <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                                Upload 
+                                <span>
+                                    <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                                </span>
+                            </label>
+                          </div>
+                    </li>-->
+                </ul>
+
+                <div class="mb-16" style="display:none;">
+                    <h4 class="text-base font-normal text-gray-800 mb-5">{{ 'app.profiles.expiry_date' | t }} *</h4>
+                
+                    <input type="date" name="skills[expiry_date]" value="{{profile_skills.expiry_date}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-2/4">
+                </div>
+
+                <ul class="customCheck gap-4 flex flex-col flex-wrap w-full mb-10 md:w-2/4 md:flex-row md:gap-y-2 md:gap-x-14">
+                    <li>
+                        <input id="expiration1" type="checkbox" name="skills[tanker]" {% if profile_skills.tanker == '1' %}checked{%endif%} value="1">
+                        <label class="text-base font-medium text-gray-800" for="expiration1">
+                        <span></span>Tanker</label>
+                    </li>
+                    <li>
+                        <input id="expiration2" type="checkbox" name="skills[air_brakes]" {% if profile_skills.air_brakes == '1' %}checked{%endif%} value="1">
+                        <label class="text-base font-medium text-gray-800" for="expiration2">
+                        <span></span>Air Brakes</label>
+                    </li>
+                    <li>
+                        <input id="expiration3" type="checkbox" name="skills[passanger]" {% if profile_skills.passanger == '1' %}checked{%endif%} value="1">
+                        <label class="text-base font-medium text-gray-800" for="expiration3">
+                        <span></span>Passenger</label>
+                    </li>
+                    <li>
+                        <input id="expiration4" type="checkbox" name="skills[double_triples]" {% if profile_skills.double_triples == '1' %}checked{%endif%} value="1">
+                        <label class="text-base font-medium text-gray-800" for="expiration4">
+                        <span></span>Doubles/Triples</label>
+                    </li>
+                    <li>
+                        <input id="expiration5" type="checkbox" name="skills[hazmat]" {% if profile_skills.hazmat == '1' %}checked{%endif%} value="1">
+                        <label class="text-base font-medium text-gray-800" for="expiration5">
+                        <span></span>Hazmat</label>
+                    </li>
+                </ul>
+
+                <div>
+                    <h4 class="text-base font-normal text-gray-800 mb-5">{{ 'app.profiles.expiry_date' | t }} *</h4>
+                
+                    <input type="date" name="skills[expiry_date_2]" value="{{profile_skills.expiry_date_2}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-2/4">
+                </div>
+            </div>
+
+            <!--
+            <div class="py-10">
+                <button class="heavytechs-bg-dark-orange text-white mr-2 px-6 leading-10 rounded-3xl text-base inline-block">{{ 'app.profiles.save' | t }}</button>
+            </div>-->
+
+        {%comment%}
+        </div>
+
+    
+    </form>
+
+    <form method="POST" action="/dashboard/profile">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="_method" value="put" />
+
+    <input type="hidden" name="profile_type" value="insurance" />
+
+    
+    <input type="hidden" name="insurance[user_id]" value="{{profile_insurance.user_id}}" id="user_id" />
+    
+
+        <div class="bg-white rounded-md px-6 pt-5 shadow-sm">
+        {%endcomment%}
+        <input type="hidden" name="insurance[id]" value="{{profile_insurance.id}}" id="id" />
+            <h2 class="text-base font-bold text-gray-800 mb-8">{{ 'app.profiles.insurance_coverage' | t }}</h2>
+
+            <ul class="customCheck flex items-center gap-10 mb-9">
+                <li>
+                    <input {% if profile_insurance.general_liability == '1' %}checked{%endif%} value="1" id="general_liability" type="checkbox" name="insurance[general_liability]">
+                    <label for="general_liability" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>General Liability</label>
+                </li>
+                <li>
+                    <input {% if profile_insurance.auto_truck_policy == '1' %}checked{%endif%} value="1" id="auto_truck_policy" type="checkbox" name="insurance[auto_truck_policy]">
+                    <label for="auto_truck_policy" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>Auto/Truck Policy</label>
+                </li>
+                <li>
+                    <input {% if profile_insurance.garage_keepers == '1' %}checked{%endif%} value="1" id="garage_keepers" type="checkbox" name="insurance[garage_keepers]">
+                    <label for="garage_keepers" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>Garage Keepers</label>
+                </li>
+            </ul>
+
+            <div class="items-center md:flex md:gap-x-20 mb-9">
+                <div class="custom-file">
+                    <!--<input style="display:none;" type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">-->
+                    <label  onclick="showPdfUpload('skills','insurance')" class="custom-file-label relative w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                        Upload 
+                        <span>
+                            <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                        </span>
+                    </label>
+                  </div>
+
+                  <!--<div class="customCheck">
+                    <input id="keepers1" type="checkbox" name="keepers">
+                    <label for="keepers1" class="text-base font-medium text-gray-800"><span><span></span></span>Garage Keepers</label>
+                  </div>-->
+                  
+            </div>
+
+            <div>
+                <h4 class="text-base font-normal text-gray-800 mb-5">{{ 'app.profiles.expiration_date' | t }} *</h4>
+            
+                <input type="date" value="{{profile_insurance.expiration_date}}" name="insurance[expiration_date]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-2/4">
+            </div>
+
+            <div class="py-10">
+                <button class="heavytechs-bg-dark-orange text-white mr-2 px-6 leading-10 rounded-3xl text-base inline-block">{{ 'app.profiles.save' | t }}</button>
+            </div>
+
+        </div>
+    </form>
+        
+        </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+<div id="pdf_upload_frm">
+  <form action="{{ presigned_url.upload_url }}"
+    data-s3-uppy-photo="form"
+    data-s3-uppy-upload-type="pdf"
+    data-s3-uppy-object-uuid="{{ object.uuid }}"
+    data-s3-uppy-photo-type="pdf"
+    data-s3-uppy-note="{{ note }}"
+    data-s3-uppy-max-number-of-files=1
+    data-s3-uppy-photos='{{ existing_photos | json }}'
+    {% if update_img_selector %}
+      data-update-img-selector='[data-avatar]'
+    {% endif %}
+    hidden>
+    {% for field in presigned_url.upload_url_payload %}
+      <input type="hidden" name="{{ field[0] }}" value='{{ field[1] }}'>
+    {% endfor %}
+  </form>
+</div>
+
+
+<script type="text/javascript">
+
+function showPdfUpload(pageCat, itemCat){
+  var pdf_upload_url = "/dashboard/profile/pdf_upload?page_cat="+pageCat+"&item_cat="+itemCat
+  window.open(pdf_upload_url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+}
+            
+function addMoreOEM(){
+  var new_oem = document.getElementById('add_more_oem').value;
+  if(new_oem == '') {
+    document.getElementById('err_add_more_oem').style.display = 'block';
+    return false;
+  } else {
+    document.getElementById('err_add_more_oem').style.display = 'none';
+  }
+  var tot_oem = document.getElementById('hid_tot_oem').value;
+  var next_oem = parseInt(tot_oem) + parseInt(1);
+  document.getElementById("hid_tot_oem").value = next_oem;
+
+  var new_oem_id =new_oem;
+  var i = 0, strLength = new_oem_id.length;
+  for(i; i < strLength; i++) {
+    var new_oem_id = new_oem_id.replace(" ", "_");
+  }
+  
+  var new_node = '<input id="oem_'+new_oem_id+'" type="checkbox" name="oem['+new_oem+']" value="1" onclick="showCertDiv(\''+new_oem+'\');">';
+  new_node += '<label class="text-base font-medium text-gray-800" for="oem_'+new_oem_id+'"><span></span>'+new_oem+'</label>';
+  new_node += '<input type="button" onclick="removeOEM(\'oem_'+new_oem_id+'\')" name="rem_oem" value="&times;" title="Click here to remove this OEM" class="remove_btn" />';
+
+  var node = document.createElement("LI");
+  node.className += "md:w-1/3 d-flex align-items-center";
+  node.setAttribute("id", "oem_"+new_oem_id+"_li");
+  node.innerHTML = new_node;
+  document.getElementById("oem_list").appendChild(node);
+  document.getElementById('add_more_oem').value = '';
+
+}
+
+function removeOEM(new_oem){
+    var elem = document.getElementById(new_oem+"_li");
+    elem.remove();
+
+    var elem = document.getElementById(new_oem+"_details");
+    elem.remove();
+}
+
+
+function showCertDiv(oemType){
+
+  var oemTypeOrg = oemType;
+  var i = 0, strLength = oemType.length;
+  for(i; i < strLength; i++) {
+    oemType = oemType.replace(" ", "_");
+  }
+
+  //alert(oemType);
+
+  if(document.querySelector('#oem_'+oemType+':checked') !== null){
+    //alert("aaaaaaa")
+
+    var new_node = '<h1>'+oemTypeOrg+' Details</h1>';
+    new_node += '<ul class="customRadio flex items-center gap-10 mb-7"><li>';
+    new_node += '<li>';
+    new_node += '<input id="'+oemType+'_expert" type="radio" name="skills['+oemTypeOrg+'][expert_familiar]" value="expert" checked="checked">';
+    new_node += '<label for="'+oemType+'_expert" class="text-base font-medium text-gray-800">';
+    new_node += '<span><span></span></span>Expert</label>';
+    new_node += '</li>';
+
+    new_node += '<li>';
+    new_node += '<input id="'+oemType+'_familiar" type="radio" name="skills['+oemTypeOrg+'][expert_familiar]" value="familiar">';
+    new_node += '<label for="'+oemType+'_familiar" class="text-base font-medium text-gray-800">';
+    new_node += '<span><span></span></span>Familiar</label>';
+    new_node += '</li>';
+    new_node += '</ul>';
+    
+    new_node += '<h4 class="text-base font-normal text-gray-800 mb-2.5">Certification</h4>';
+    new_node += '<div class="mb-6">';
+    new_node += '<input type="text" name="skills['+oemTypeOrg+'][cert_name]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">';
+    new_node += '</div>';
+    new_node += '<div class="custom-file">';
+    //new_node += '<input type="file" class="custom-file-input w-40 h-24 cursor-pointer" id="customFile" name="filename">';
+    new_node += '<label onclick="showPdfUpload(\'skills\',\''+oemTypeOrg+'\')" class="custom-file-label relative w-40 h-24 flex items-center justify-center flex-col-reverse border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">';
+    new_node += 'Upload';
+    new_node += '<span>';
+    new_node += '<img src="images/upload-icon.svg" alt="">';      
+    new_node += '<div class="pdf-upload-area"></div>'         
+    new_node += '</span>';               
+    new_node += ' </label>';               
+    new_node += '</div>';            
+    
+    var node = document.createElement("DIV");
+    node.className += "bg-gray-50 py-5 px-7 -mx-6 mt-11";
+    node.setAttribute("id", "oem_"+oemType+"_details");
+    node.innerHTML = new_node;
+    document.getElementById("oem_certificate_div").appendChild(node);
+
+
+  } else {
+      var elem = document.getElementById("oem_"+oemType+"_details");
+      elem.remove();
+  }
+}
+</script>

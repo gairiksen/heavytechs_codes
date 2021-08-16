@@ -1,0 +1,122 @@
+{% parse_json payload %}
+{
+  "id":"ActivityStreams::Activity.431663","uuid":"1bfd8edf-9aeb-4c6b-baf9-ad4448a5154c",
+  "type":"order_delivered","date":"2021-06-17T13:08:15.542Z",
+  "actor":{"type":"profile","id":"12","name":"Friesen-Parker-1","first_name":"Friesen-Parker-1","last_name":null,"uuid":"cd17cff4-ce47-492d-87c4-9a3b4ec447af","parent_id":null,"group_id":null,"order_id":null,"order_ids":[],"item_id":null,"slug":"friesen-parker-1","description":null,"body":null,"title":null,"photo":null,"photos":[],
+    "organization":{"id":"8","type":"organization","name":"Friesen-Parker Inc 2036", "slug": "friesen-parker"}},
+  "object":{"type":"order_delivery","id":"2780","name":null,"first_name":null,"last_name":null,"uuid":null,"parent_id":null,"group_id":null,"order_id":"2771","order_ids":[],"item_id":null,"slug":null,"description":null,"body":null,"title":null,"photo":null,"memberships":[],"photos":[]},
+  "target":{"type":"order","id":"2771","name":null,"first_name":null,"last_name":null,"uuid":null,"parent_id":null,"group_id":null,"order_id":null,"order_ids":[],"item_id":null,"slug":null,"description":null,"body":null,"title":null,"photo":null,"memberships":[],"photos":[]},"attributed_to":null,"valid":true,"errors":{}
+}
+{% endparse_json %}
+
+{% comment %}
+  anonymous user or buyer
+{% endcomment %}
+{% liquid
+  assign role = null
+  assign namespace = null
+  assign name = "Friesen-Parker Inc 2036"
+  function url = 'link_to', object: payload.actor.organization
+
+  assign header = '{"name": "", "url": ""}' | parse_json
+  hash_assign header['name'] = name
+  hash_assign header['url'] = url
+
+  function link = 'lib/commands/activities/header', payload: payload, role: role, namespace: namespace
+  include 'test/assertions/equal', contract: contract, field_name: 'header-link', given: link, expected: header
+%}
+
+{% comment %}
+  merchant
+{% endcomment %}
+{% liquid
+  assign namespace = null
+  assign role = 'organization'
+  assign name = "Friesen-Parker-1 (Friesen-Parker Inc 2036)"
+  function url = 'link_to', object: payload.actor.organization
+
+  assign header = '{"name": "", "url": ""}' | parse_json
+  hash_assign header['name'] = name
+  hash_assign header['url'] = url
+
+  function link = 'lib/commands/activities/header', payload: payload, role: role, namespace: namespace
+  include 'test/assertions/equal', contract: contract, field_name: 'header-link', given: link, expected: header
+%}
+
+{% comment %}
+  merchant
+{% endcomment %}
+{% liquid
+  assign namespace = 'admin'
+  assign role = null
+  assign name = "Friesen-Parker-1 (Friesen-Parker Inc 2036)"
+  function url = 'link_to', object: payload.actor.organization, namespace: namespace
+
+  assign header = '{"name": "", "url": ""}' | parse_json
+  hash_assign header['name'] = name
+  hash_assign header['url'] = url
+
+  function link = 'lib/commands/activities/header', payload: payload, role: role, namespace: namespace
+  include 'test/assertions/equal', contract: contract, field_name: 'header-link', given: link, expected: header
+%}
+
+{% parse_json payload %}
+{
+  "id":"ActivityStreams::Activity.431663","uuid":"1bfd8edf-9aeb-4c6b-baf9-ad4448a5154c",
+  "type":"order_delivered","date":"2021-06-17T13:08:15.542Z",
+  "actor":{"type":"profile","id":"12","name":"Friesen-Parker-1","first_name":"Friesen-Parker-1","last_name":null,"uuid":"cd17cff4-ce47-492d-87c4-9a3b4ec447af","parent_id":null,"group_id":null,"order_id":null,"order_ids":[],"item_id":null,"slug":"friesen-parker-1","description":null,"body":null,"title":null,"photo":null,"photos":[]},
+  "object":{"type":"order_delivery","id":"2780","name":null,"first_name":null,"last_name":null,"uuid":null,"parent_id":null,"group_id":null,"order_id":"2771","order_ids":[],"item_id":null,"slug":null,"description":null,"body":null,"title":null,"photo":null,"memberships":[],"photos":[]},
+  "target":{"type":"order","id":"2771","name":null,"first_name":null,"last_name":null,"uuid":null,"parent_id":null,"group_id":null,"order_id":null,"order_ids":[],"item_id":null,"slug":null,"description":null,"body":null,"title":null,"photo":null,"memberships":[],"photos":[]},"attributed_to":null,"valid":true,"errors":{}
+}
+{% endparse_json %}
+
+{% comment %}
+  anonymous user or buyer
+{% endcomment %}
+{% liquid
+  assign role = null
+  assign namespace = null
+  assign name = payload.actor.name
+  function url = 'link_to', object: payload.actor
+
+  assign header = '{"name": "", "url": ""}' | parse_json
+  hash_assign header['name'] = name
+  hash_assign header['url'] = url
+
+  function link = 'lib/commands/activities/header', payload: payload, role: role, namespace: namespace
+  include 'test/assertions/equal', contract: contract, field_name: 'header-link', given: link, expected: header
+%}
+
+{% comment %}
+  anonymous user or buyer
+{% endcomment %}
+{% liquid
+  assign role = 'organization'
+  assign namespace = null
+  assign name = payload.actor.name
+  function url = 'link_to', object: payload.actor, role: role
+
+  assign header = '{"name": "", "url": ""}' | parse_json
+  hash_assign header['name'] = name
+  hash_assign header['url'] = url
+
+  function link = 'lib/commands/activities/header', payload: payload, role: role, namespace: namespace
+  include 'test/assertions/equal', contract: contract, field_name: 'header-link', given: link, expected: header
+%}
+
+{% comment %}
+  anonymous user or buyer
+{% endcomment %}
+{% liquid
+  assign role = null
+  assign namespace = 'admin'
+  assign name = payload.actor.name
+  function url = 'link_to', object: payload.actor, role: role, namespace: namespace
+
+  assign header = '{"name": "", "url": ""}' | parse_json
+  hash_assign header['name'] = name
+  hash_assign header['url'] = url
+
+  function link = 'lib/commands/activities/header', payload: payload, role: role, namespace: namespace
+  include 'test/assertions/equal', contract: contract, field_name: 'header-link', given: link, expected: header
+%}

@@ -1,0 +1,152 @@
+query search(
+  $limit: Int = 20
+  $keyword: String
+  $sort: RecordsSortInput = { created_at: { order: DESC } }
+  $lang: String
+) {
+  items: records(
+    per_page: $limit
+    filter: {
+      table: { value: "item" }
+      deleted_at: { exists: false }
+      properties: { name: "c__status", value_in: ["app.statuses.items.published", "app.statuses.items.unavailable"] }
+      related_records: {
+        join: { join_on_property: "id", foreign_property: "item_id"}
+        filter: {
+          table: { value: "item_detail" },
+          or: [
+            { properties: { name: "name", contains: $keyword } }
+            { properties: { name: "description", contains: $keyword } }
+          ]
+        }
+      }
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      photo: related_record(table: "photo" join_on_property: "uuid" foreign_property: "object_uuid") {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+      item_detail: related_record(
+        table: "item_detail"
+        join_on_property: "id"
+        foreign_property: "item_id"
+        filter: { properties: { name: "lang", value: $lang } }
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+      }
+    }
+  }
+
+
+  groups: records(
+    per_page: $limit
+    filter: {
+      table: { value: "group" }
+      deleted_at: { exists: false }
+      properties: { name: "meta_visible", value: "anonymous" }
+      or: [
+        { properties: { name: "name", contains: $keyword } }
+        { properties: { name: "summary", contains: $keyword } }
+        { properties: { name: "description", contains: $keyword } }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      photo: related_record(table: "photo" join_on_property: "uuid" foreign_property: "object_uuid") {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+      name: property(name: "name")
+      description: property(name: "description")
+    }
+  }
+  profiles: records(
+    per_page: $limit
+    filter: {
+      table: { value: "profile" }
+      deleted_at: { exists: false }
+      or: [
+        { properties: { name: "name", contains: $keyword } }
+        { properties: { name: "first_name", contains: $keyword } }
+        { properties: { name: "last_name", contains: $keyword } }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      photo: related_record(table: "photo" join_on_property: "uuid" foreign_property: "object_uuid") {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+      name: property(name: "name")
+      slug: property(name: "slug")
+    }
+  }
+  posts: records(
+    per_page: $limit
+    filter: {
+      table: { value: "post" }
+      deleted_at: { exists: false }
+      properties: { name: "title", exists: true }
+      related_records: {
+        join: { join_on_property: "group_id", foreign_property: "id" }
+        filter: {
+          table: { value: "group" }
+          properties: { name: "meta_visible", value: "anonymous" }
+        }
+      }
+      or: [
+        { properties: { name: "tags", array_contains: $keyword } }
+        { properties: { name: "title", contains: $keyword } }
+        { properties: { name: "body", contains: $keyword } }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      photo: related_record(table: "photo" join_on_property: "uuid" foreign_property: "object_uuid") {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+      name: property(name: "title")
+      group_id: property(name: "group_id")
+    }
+  }
+}

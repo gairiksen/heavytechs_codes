@@ -1,0 +1,17 @@
+{%  liquid
+  function object = 'lib/commands/line_item_returns/create/build', object: object, line_item: line_item
+  function object = 'lib/commands/line_item_returns/create/check', object: object, line_item: line_item
+
+  if object.valid
+    if object.shipping_type == 'delivery'
+      function address = 'lib/commands/addresses/create', object: object.shipping_address, profile: profile
+      unless address.valid
+        log address, type: 'Error: can not save the address when returning an item'
+      endunless
+      hash_assign object['shipping_address_id'] = address.id
+    endif
+    function object = 'lib/commands/execute', mutation_name: 'line_item_returns/create' object: object, selection: 'record_create'
+  endif
+
+  return object
+%}

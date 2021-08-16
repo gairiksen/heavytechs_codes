@@ -1,0 +1,24 @@
+{% for order in orders %}
+
+  <h4 class="mb-3 font-medium">
+    {{ 'app.orders.checkout.shipping_for' | t }} – {{ order.seller.name }}
+  </h4>
+
+  <section class="card mb-9">
+    {% render 'theme/simple/dashboard/orders/confirm/shipping_line_items', order: order %}
+    <div class="pt-3 border-t">
+      {% render 'theme/simple/dashboard/orders/address', pickup_title: 'app.models.orders.form.shipping_type_personal_pickup',
+                                                         delivery_title: 'app.orders.checkout.shipping_type_delivery'
+                                                         delivery_subtitle: 'app.models.orders.form.shipping_type_delivery_hours'
+                                                         object: order %}
+      <p class="mt-3">
+        <a href="/dashboard/buy/review">
+          {{ 'app.orders.confirm.change' | t }}
+        </a>
+      </p>
+
+    </div>
+
+  </section>
+
+{% endfor %}

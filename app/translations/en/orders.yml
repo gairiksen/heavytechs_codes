@@ -1,0 +1,270 @@
+en:
+  app:
+    models:
+      line_items:
+        new: New line_item
+        add: Add line_item
+        edit: Edit line_item
+        empty_state: You haven't added any line_items yet. <br> Create your first one now!
+        deleted: Items removed from order
+        update_failed: We can't update the order
+        updated: Line item updated
+        form:
+          item_id: item_id
+          order_id: order_id
+          name: name
+          description: description
+          price_cents: price_cents
+          quantity: quantity
+          total_price_cents: total_price_cents
+        errors:
+          order_has_different_currency: The order has different currency
+      line_item_returns:
+        new: New return
+        header: Return item
+        accept: Accept
+        reject: Reject
+        accept_reject: Accept/Reject
+        returned: Mark as returned and refund payment
+        return_details: Return details
+        edit:
+          title: Accept or Reject return
+          amount_returned: Total amount to be returned
+        updated: Return status updated
+        form:
+          intro: >-
+            Please fill out the form with detailed information about the reason and the shape of the product. We will inform you when the merchant accepts your return request.
+          quantity: Quantity
+          reason: Reason for return
+          reason_details: Detailed information
+          accept: Send return request
+          date: Order date
+          delivery_date: Delivery date
+          select_prefered_option: Select the way of return
+          shipping_type_personal_pickup: Return to a store
+          shipping_type_delivery: Return with delivery service
+          shipping_type_delivery_details: Please provide your address so the delivery service can pick up the package from you. The pick up cost is paid by the merchant.
+          shipping_pickup_point: Store
+          return_way: Way of return
+          pickup_address: The address where the delivery service can pick up the package
+        errors:
+          expired_return_period: Expired return period
+      orders:
+        form:
+          id: ID
+          shipping_first_name: First Name
+          shipping_last_name: Last Name
+          shipping_email: Email
+          shipping_phone: Mobile Number
+          shipping_type_personal_pickup: Personal pickup at one of the Store pickup points (FREE)
+          shipping_type_delivery: Home delivery service (%{shipping_price} / package) - pay upfront
+          shipping_type_delivery_hours: Home delivery on workdays during working hours.
+          shipping_pickup_point: Store
+          payment_type_stripe: Stripe
+          payment_type_example: Example Payment
+      order_delivery:
+        form:
+          delivery_information: Delivery information
+      transactions:
+        errors:
+          no_orders: There are no pending orders to be paid
+          failed_to_create_payment: Failed to create payment
+    line_item_returns:
+      list:
+        returns: Returns
+        none: Your returns will apear here. Right now you don't have any
+        number: Return number
+        item: Item
+    line_item_returns:
+      list:
+        returns: Returns
+        none: Your returns will apear here. Right now you don't have any
+        number: Return number
+        item: Item
+    order: Order
+    your-orders: Your orders
+    orders:
+      sales: Sales
+      buyer: Buyer
+      seller: Seller
+      total: Total
+      ship: Ship
+      checkout: Checkout
+      pay: Pay
+      pay_online: Pay online
+      mark-as-paid: Mark as paid
+      order_history: Order history
+      payment_method: Payment method
+      shipping_type: Shipping type
+      created: Order has been placed
+      new: new order
+      list: Orders
+      payment_success: Payment success
+      none: Your orders will appear here. Right now you don't have any.
+      adjust_filters: You might also try adjusting the filters to show more items
+      status:
+        updated: Order status changed
+        not_updated: Failed to change status
+      attr:
+        id: ID
+        created_at: Created at
+        seller: Seller
+        buyer: Buyer
+        total: Total
+      errors:
+        max_price: You have reached the maximum price for one order
+      show:
+        order: Order
+        item: Item
+        qtd: Qtd
+        quantity: Quantity
+        category: Category
+        unit: Unit
+        unit_price: Unit price
+        total_price: Total price
+        return_info: Return info
+        remove_item: Remove item
+        subtotal: Subtotal
+        delivery: Delivery
+        checkout: Checkout
+        total: Total
+        tax: Tax
+        continue-shopping: Continue shopping
+        empty: This order is empty
+        pay: Pay
+        return: Return
+        mark_as_delivered: Mark as delivered
+        expired_return_period: Expired return period
+        return_days_remaining:
+          one: '%{count} day remaining'
+          other: '%{count} days remaining'
+        auto_cancellation: Unpaid order will be automatically cancelled
+        auto_cancellation_hours:
+          one: '%{count} hour after confirmation at'
+          other: '%{count} hours after confirmation at'
+      cart:
+        title: My Cart
+        empty: There are no items in your cart
+        empty_description: Browse our products and add them to the cart
+        browse_products: Browse products
+      shipping:
+        title: Select shipping method
+      checkout:
+        title: Checkout for order
+        contact_title: Contact details
+        review_title: Review
+        delivery_title: Delivery
+        merchant_name: Merchant Name
+        delivery_details: Delivery details
+        shipping_type_delivery: Home delivery service
+        delivery_type:
+          delivery: Home delivery
+          personal_pickup: Store pickup
+        status: Status
+        status_type:
+          new: new
+          progress: in progress
+        delivery_info: Delivery Information
+        delivery_link: Provide tracking link or store related information here.
+        delivery_notice: Please keep in mind that you won’t be able to edit this information later and that we will send an e-mail with this information to the buyer.
+        already_delivered: Order has been already marked as delivered.
+        contact_subtitle: Add or modify your contact information if necessary.
+        shipping_title: Select shipping method can complete the order.
+        shipping_subtitle: You need to select shipping method by Merchant.
+        payment_title: Payment
+        payment_subtitle: >-
+          After confirming the order the site redirects you to Payment site
+          where you can complete the order.
+        not_finished:
+          card_title: Your order is not finalised
+          card_info: Payment is not completed. To finalise your order continue with the %{payment_type} payment. If you don’t want to buy the items cancel your order.
+          pay: Continue with payment
+          cancel: Cancel order
+          confirm: Are you sure you want to cancel this order?
+          waiting_for_payment_confirmation: We are waiting for payment confirmation.
+        cancel:
+          form:
+            card_title: Cancelling the order
+            card_info: After the payment only you can cancel the order. Discuss the details with the client via chat and when you submit the cancellation, we'll send you and the client a confirmation message via email.
+            select_title: Put selected items back into stock.
+            cancel_button: Cancel order and manage stock
+            confirm: Are you sure you would like to proceed and cancel the order?
+          info:
+            card_title: Cancelled order
+            by_seller: Cancelled by Merchant
+            by_buyer: Cancelled by Buyer
+            date: 'Date of cancellation: %{cancel_date}'
+        payment_confirmation:
+          payment_confirmed: Confirmed payment via %{payment_type}
+          card_info: Your credit card information was not shared with this merchant.
+          order_date: Order Date
+          paid: paid
+          payment_failed: payment failed
+        cta_button: Review and Confirm
+        in_your_cart: In your cart
+        pieces: pieces
+        shipping_for: Shipping for
+        select_prefered_option: Select prefered option
+        confirm: Please confirm and choose payment method
+        pay: Please choose payment method
+        order_total: 'Order total: '
+        orders_numbers: 'Orders numbers'
+        transaction_number: 'Transaction number'
+        success_title: Thanks for your order!
+        success_subtitle: Your payment was successful.
+        success_content: >-
+          We sent the order details to %{email}.
+
+          You can check the status of the order under your <a href="/dashboard/buy/orders">Order history</a>.
+        failed_title: Sorry, order payment failed!
+        failed_subtitle: We couldn't process your payment.
+        failed_retry: Try payment again
+        failed_content: >-
+          If you have any questions about your checkout, send an email to %{support_email} and we’ll get right back to you.
+        pay-manually: Pay Manually
+        pay-online: Pay Online
+        pay-online-example: Pay Online Example
+        save_as_default: Save as default
+        payment_with: Payment with
+        review_info:
+          share_feedback: Help others by sharing your feedback
+          review_feedback: What do you think about this purchase? Was it delivered on time? Describe your experience with this merchant.
+          add_review: Add my review
+      confirm:
+        title: Review and confirm of order
+        change: Change
+        cta_button: Confirm
+        errors:
+          order_changed: It seems that at least one of the items you try to buy is not valid anymore.
+      line-items:
+        created: Item added to shopping cart
+        errors:
+          quantity-too-big: 'The quantity you’ve choosen is not available.'
+          quantity-no-items: 'item is no longer available'
+          failed-to-create: Failed to add the item to the shopping cart
+          item-changed: We are sorry, the item has changed since you had added it to the cart. Please remove it to proceed.
+          wrong-order-status: 'Updating line-item of %{status} order if not allowed.'
+          item-outdated: This item has been modified by the Merchant and it cannot be bought anymore.
+          item-not-published: The item is not available for sale anymore.
+      payment_types:
+        example: Example Payment Gateway
+        stripe: Stripe
+      shipping_types:
+        delivery: Home delivery
+        personal_pickup: Personal pickup
+      history:
+        title: Orders history
+        number: Order number
+        from: from
+        view_details: View details
+        order_summary: Order summary
+        delivery_price: Delivery price
+        total: Total
+        status: Status
+    sellers:
+      title: All of your favoure merchants
+      subtitle: Take your pick from our featured Merchants.
+      become:
+        title: Become a Partner
+        subtitle: Partner with Arab Bank and grow your business.
+        contact: Contact us

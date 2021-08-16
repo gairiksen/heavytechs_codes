@@ -1,0 +1,15 @@
+<section class="card bg-warning-disabled border border-warning !shadow-none">
+  <h3 class="subtitle mt-0 font-bold">{{ 'app.orders.checkout.cancel.info.card_title' | t }}</h3>
+  <div class="flex">
+    <p class="w-full">
+      {% if order.status.name == 'app.statuses.orders.cancelled_seller' %}
+        {% assign sts = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_seller' | t %}
+        {{ sts | capitalize }}
+      {% else %}
+        {% assign sts = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_buyer' | t %}
+        {{ sts | capitalize }}
+      {% endif %}
+    </p>
+    <p class="w-full mt-0 text-right">{{ 'app.orders.checkout.cancel.info.date' | t: cancel_date: cancel_date }}</p>
+  </div>
+</section>

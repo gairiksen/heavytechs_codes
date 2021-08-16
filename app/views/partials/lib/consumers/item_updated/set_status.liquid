@@ -1,0 +1,9 @@
+{% liquid
+  assign item_id = event.object.id
+  assign profile_id = event.actor.id
+
+  function status = 'lib/commands/statuses/create', object_id: item_id, name: 'app.statuses.items.unavailable', scope: 'app.statuses.items', profile_id: profile_id
+  if status['valid']
+    include 'lib/commands/events/create', type: 'status_created', actor_id: profile_id, object_id: status.id, target_id: status.object_id
+  endif
+%}

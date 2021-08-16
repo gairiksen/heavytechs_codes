@@ -1,0 +1,93 @@
+  {%comment%}
+  <div
+    class="container"
+    id="chat-inbox"
+    style="height: calc((100vh - 112px) - 20px)"
+    data-error-connection="{{ 'modules/chat/error_connection' | t }}"
+  >
+  {%endcomment%}
+  
+
+  <div
+    class="container"
+    id="chat-inbox"
+    data-error-connection="{{ 'modules/chat/error_connection' | t }}"
+  >
+      <div class="flex border rounded h-full flex-col md:flex-row">
+        <div class="w-full md:w-1/3 flex flex-col chat_list">
+          {% comment %} add "disabled_chats" class to the following <div> when open a chat {% endcomment %}
+          <div class="flex-1 overflow-auto {% if current_conversation %}disabled_chats{%endif%}">
+            {% liquid
+            for conversation in conversations.results
+              assign participants = conversation.participants
+              assign current_participants = participants | select: id: current_profile.id
+              assign other_participants = participants | subtract_array: current_participants
+              assign from_profile = other_participants | first
+
+              render 'modules/chat/theme/simple/inbox/conversation', conversation: conversation, current_conversation: current_conversation, current_profile: current_profile, from_user: from_profile, messages: messages
+            endfor
+            %}
+		      </div>
+
+          {% if current_conversation %}
+          <div class="active_chat p-3 font-bold">
+            <a href="/inbox" class="back">
+              <img src="{{ 'images/chevron-left.svg' | asset_url }}" alt=""> Back
+            </a>
+            
+            {%liquid
+              for pr in current_conversation.participants
+                if pr.id != current_profile.id
+                  assign sender_name = pr.first_name | append: ' ' | append: pr.last_name
+                endif
+              endfor
+            %}
+
+            <span>{{sender_name}}</span>
+
+          </div>
+          {%endif%}
+
+        </div>
+
+        {% if current_conversation %}
+          <div class="w-full md:w-2/3 border-l flex flex-col relative bg-white chat-window">
+            <div class="hidden absolute left-0 right-0 text-center" id="chat-loadingIndicator" data-more="true">
+              <span class="inline-block mt-2 py-2 px-4 bg-blue-600 rounded shadow-md text-white">{{ 'modules/chat/loading_previous' | t }}</span>
+            </div>
+            <div class="flex-1 overflow-auto" id="chat-messagesList-container">
+              <ul class="max-w-full p-3" id="chat-messagesList">
+                {% liquid
+                  assign list = current_conversation.messages | reverse
+                  for message in list
+                    if message["autor_id"] != current_profile.id
+                      render "modules/chat/theme/simple/inbox/message", message: message, justify: 'justify-start', bg_color: 'bg-gray-300'
+                    else
+                      render "modules/chat/theme/simple/inbox/message", message: message, justify: 'justify-end', bg_color: 'bg-indigo-200'
+                    endif
+                  endfor
+                %}
+                </ul>
+            </div>
+            <div class="bg-grey-lighter px-3 my-3 flex items-center chat-field">
+              <input
+                placeholder="{{ 'modules/chat/message_input_placeholder' | t }}"
+                id="chat-messageInput"
+                class="bg-grey-lighter w-full border border-gray-500 rounded-full focus-visible:shadow-none focus:shadow-none"
+                type="text"
+                data-from-name="{{ current_profile.name }}" data-conversation-id="{{ current_conversation.id}}"
+                data-current-profile-id="{{ current_profile.id }}"
+                disabled
+              >
+              <img src="{{ 'images/send-icon.png' | asset_url }}" alt="Send" id="send_chat" class="w-8 ml-1 p-1 h-8 cursor-pointer">
+            </div>
+          </div>
+        {% else %}
+          <div class="md:w-2/3 border-l flex items-center justify-center p-3 md:p-0 chat_blank_box">
+            <span class="title mb-0">
+              {{ 'modules/chat/pick_conversation' | t }}
+            </span>
+          </div>
+        {% endif %}
+      </div>
+  </div>

@@ -1,0 +1,36 @@
+{%liquid
+    assign page_category = context.params.page_cat
+    assign item_category = context.params.item_cat
+    assign user_id = context.current_user.id
+%}
+<div class="pdf-upload-area"></div>
+<br />
+<input type="button" value="Close" onclick="closeWindow()" class="heavytechs-bg-dark-orange text-white mr-2 px-6 leading-10 rounded-3xl text-base inline-block">
+
+<div id="pdf_upload_frm">
+  <form action="{{ presigned_url.upload_url }}"
+    data-s3-uppy-photo="form"
+    data-s3-uppy-upload-type="pdf"
+    data-s3-uppy-object-uuid="{{ object.uuid }}"
+    data-s3-uppy-photo-type="pdf"
+    data-s3-uppy-note="{{ note }}"
+    data-s3-uppy-page-category="{{ page_category }}"
+    data-s3-uppy-item-category="{{ item_category }}"
+    data-s3-uppy-user-id="{{ user_id }}"
+    data-s3-uppy-max-number-of-files=1
+    data-s3-uppy-photos='{{ existing_photos | json }}'
+    {% if update_img_selector %}
+      data-update-img-selector='[data-avatar]'
+    {% endif %}
+    hidden>
+    {% for field in presigned_url.upload_url_payload %}
+      <input type="hidden" name="{{ field[0] }}" value='{{ field[1] }}'>
+    {% endfor %}
+  </form>
+</div>
+
+<script type="text/javascript">
+  function closeWindow(){
+    window.close();
+  }
+</script>

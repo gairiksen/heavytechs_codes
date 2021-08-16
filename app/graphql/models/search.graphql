@@ -1,0 +1,88 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $tag: String
+  $keyword: String
+  $category: String
+  $sort: RecordsSortInput = { created_at: { order: DESC } }
+  $lang: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value_in: ["item", "group", "profile", "post"] }
+      deleted_at: { exists: false }
+      properties: [
+        { name: "tags", contains: $tag }
+        { name: "category", starts_with: $category }
+      ]
+      or: [
+        { properties: { name: "description", contains: $keyword } }
+        { properties: { name: "name", contains: $keyword } }
+        { properties: { name: "tags", contains: $keyword } }
+        { properties: { name: "category", contains: $keyword } }
+        { properties: { name: "body", contains: $keyword } }
+        { properties: { name: "title", contains: $keyword } }
+        {
+          related_records: {
+            join: { join_on_property: "id", foreign_property: "item_id"}
+            filter: {
+              table: { value: "item_detail" },
+              or: [
+                { properties: { name: "name", contains: $keyword } }
+                { properties: { name: "description", contains: $keyword } }
+              ]
+            }
+          }
+        }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      name: property(name: "name")
+      category: property(name: "category")
+      description: property(name: "description")
+      slug: property(name: "slug")
+      title: property(name: "title")
+      group_id: property(name: "group_id")
+      tags: property_array(name: "tags")
+
+      owner: related_user(join_on_property: "owner", foreign_property: "id") {
+        id
+        email
+      }
+
+      photo: related_record(
+        table: "photo"
+        join_on_property: "uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      item_detail: related_record(
+        table: "item_detail"
+        join_on_property: "id"
+        foreign_property: "item_id"
+        filter: { properties: { name: "lang", value: $lang } }
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+        description: property(name: "description")
+        lang: property(name: "lang")
+      }
+    }
+  }
+}

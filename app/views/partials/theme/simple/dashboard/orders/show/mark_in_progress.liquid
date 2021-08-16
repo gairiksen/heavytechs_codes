@@ -1,0 +1,7 @@
+<form action="/dashboard/sell/orders/mark_in_progress" method="post">
+  {% render 'authenticity_token', context: context %}
+  <input type="hidden" name="order[id]" value="{{ order.id }}" />
+  <button type="submit" class="button mt-2">
+    {{ 'app.orders.show.mark_in_progress' | t }}
+  </button>
+</form>

@@ -1,0 +1,23 @@
+{% liquid
+  assign object = '{}' | parse_json
+
+  for order in orders
+    assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+    function c = 'lib/validations/presence', c: c, object: order, field_name: 'shipping_type'
+    function c = 'lib/validations/presence', c: c, object: order, field_name: 'shipping_first_name'
+    function c = 'lib/validations/presence', c: c, object: order, field_name: 'shipping_last_name'
+    function c = 'lib/validations/presence', c: c, object: order, field_name: 'shipping_email'
+    function c = 'lib/validations/presence', c: c, object: order, field_name: 'shipping_phone'
+    function c = 'lib/validations/shipping_type', c: c, object: order
+
+    if c.valid != true
+      hash_assign object['errors'] = c.errors
+      break
+    endif
+  endfor
+
+  hash_assign object['valid'] = c.valid
+
+  return object
+%}

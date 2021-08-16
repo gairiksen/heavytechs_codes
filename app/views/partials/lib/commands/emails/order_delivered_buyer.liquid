@@ -1,0 +1,22 @@
+{% liquid
+  context_rc language: order.buyer.language | default: 'en'
+%}
+{% parse_json object %}
+  {
+    "to": {{ order.shipping_email | json }},
+    "from": {{ 'app.support_email' | t | json }},
+    "order": {{ order | json }}
+  }
+{% endparse_json %}
+{% liquid
+  assign site_name = 'app.title' | t
+  hash_assign object['subject'] = order.shipping_type | t: order_id: order.id, site_name: site_name, scope: 'app.emails.orders.delivered.buyer.subject'
+
+  function object = 'lib/commands/emails/send', template: 'orders/delivered_buyer', object: object
+  if object.valid != true
+    log object, type: 'order_delivered_buyer'
+  endif
+
+  return object
+%}
+

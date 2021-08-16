@@ -1,0 +1,11 @@
+{% liquid
+  function object = 'lib/commands/users/create/build', object: object, profile: profile
+  function object = 'lib/commands/users/create/check', object: object, profile: profile, hcaptcha_params: hcaptcha_params
+
+  if object.valid
+    function user = 'lib/commands/execute', object: object, mutation_name: 'users/create', selection: 'user_create'
+    return user
+  else
+    return object
+  endif
+%}

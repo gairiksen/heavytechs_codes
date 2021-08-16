@@ -1,0 +1,45 @@
+<div class="container flex flex-wrap mx-auto mt-6">
+  <div class="flex flex-wrap w-full">
+    <div class="lg:w-1/2 md:w-full">
+      <div class="flex flex-col p-6 border border-gray-200 rounded-lg sm:flex-row">
+        <div class="flex-grow">
+          <h2 class="mb-3 text-lg font-medium text-gray-900">Recent items</h2>
+          <div class="mx-4">
+
+            <h2>users</h2>
+            <table class="table table-auto">
+              <tr>
+                {% for user in users.results %}
+                  <td>{% print user.id %}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.created_at | l: 'compact' }}</td>
+                {% endfor %}
+              </tr>
+            </table>
+
+            <h2>items</h2>
+            {% for item in items.results %}
+              <li>
+                {{ item }}
+              </li>
+            {% endfor %}
+
+            <h2>orders</h2>
+            {% for order in orders.results %}
+              <li>
+                {{ order }}
+              </li>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ps-4 lg:w-1/2 md:w-full">
+      <div class="flex flex-col p-6 border border-gray-200 rounded-lg sm:flex-row">
+        <div class="flex-grow">
+          <h2 class="mb-3 text-lg font-medium text-gray-900">Event logs</h2>
+        </div>
+      </div>
+    </div>
+  </div>

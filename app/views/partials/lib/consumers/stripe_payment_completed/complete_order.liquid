@@ -1,0 +1,10 @@
+{% liquid
+  assign object_id = event.object.id
+  assign profile_id = event.actor.id
+
+  comment
+    TODO create event transaction_succeeded and test
+    include 'lib/commands/events/create', type: 'transaction_succeeded', actor_id: profile.id, target_id: object.id, object_id: object.id
+  endcomment
+  function status = 'lib/commands/statuses/create', profile_id: profile_id, object_id: object_id, name: 'app.statuses.orders.paid', scope: 'app.statuses.orders'
+%}

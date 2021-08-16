@@ -1,0 +1,99 @@
+<aside
+  class="fixed inset-y-0 left-0 z-20 flex-shrink-0 w-64 me-5 md:ms-0 lg:static focus:outline-none bg-panel lg:bg-transparent"
+  tabindex="-1"
+  x-transition:enter="transition-all transform duration-300 ease-in-out"
+  x-transition:enter-start="-translate-x-full opacity-0"
+  x-transition:enter-end="translate-x-0 opacity-100"
+  x-transition:leave="transition-all transform duration-300 ease-in-out"
+  x-transition:leave-start="translate-x-0 opacity-100"
+  x-transition:leave-end="-translate-x-full opacity-0"
+  x-show="isSidebarOpen"
+  x-ref="sidebar"
+>
+  <div class="flex flex-col h-full">
+    <nav aria-label="Main" class="flex-1 px-5 lg:-ms-5 py-5 lg:pt-0 space-y-6 overflow-y-auto">
+      <div class="w-full mb-5">
+        <button x-on:click="reset()" class="button button-small button-icon-right">
+          {{ 'app.search.reset' | t }}
+          {% render 'theme/simple/ui/icon', icon: 'refreshArrows' %}
+        </button>
+      </div>
+
+      <div class="w-full mb-5">
+        <label for="category" class="block mb-1 capitalize">{{ 'app.search.category' | t }}</label>
+        <select class="w-full form-select" id="category" name="category" form="search_form" autocomplete="off"
+          x-on:change="submitSearch()"
+        >
+          <option value="" class="font-bold">{{ 'app.search.all_categories' | t }}</option>
+          {% for category in filters.categories %}
+            {% assign ident = category | split: '/' | size | minus: 1 | times: 2 %}
+            <option value="{{ category }}" {% if filters.query.category == category %}selected{% endif %} {% if ident == 0 %} class="font-bold" {% endif %}>
+              {% for step in (1..ident) %} {% print "&nbsp;" %} {% endfor %}
+              {{ 'categories.' | append: category | t }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <input name="wishlist" type="hidden" form="search_form" value="{{ filters.query.wishlist }}">
+
+      <div class="w-full mb-5">
+        <label for="sort_by" class="block mb-1 capitalize">{{ 'app.search.sort_by' | t }}</label>
+        <select class="w-full form-select" id="sort_by" name="sort_by" form="search_form" autocomplete="off"
+          x-on:change="submitSearch()"
+        >
+          {% assign sort = filters.query.sort_by | default: 'relevance' %}
+          {% for s in filters.sort_options %}
+            <option value="{{ s[0] }}" {% if sort == s[0] %}selected{% endif %}>{{ s[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-5">
+        <label for="price_min" class="block mb-1 capitalize">{{ 'app.search.price' | t }}</label>
+
+        <div class="flex items-center">
+          <input id="price_min" class="w-auto me-1 min-w-0 flex-shrink" name="price_min" min="0" form="search_form" type="number" step="10" size="5" placeholder="{{ 'app.search.price_min' | t }}"
+            value="{{ filters.price_min }}"
+            x-on:input.debounce.1000ms="submitSearch()"
+          >
+          –
+          <input id="price_max" class="w-auto ms-1 min-w-0 flex-shrink" name="price_max" min="0" form="search_form" type="number" step="10" size="5" placeholder="{{ 'app.search.price_max' | t }}"
+            value="{{ filters.price_max }}"
+            x-on:input.debounce.1000ms="submitSearch()"
+          >
+        </div>
+      </div>
+
+      <ul class="w-full" x-ref="filterSellers">
+        <label class="block capitalize">{{ 'app.search.organizations' | t }}</label>
+        {% for organization in filters.organizations %}
+          <li class="mt-1" x-show="{% if filters.query.organization_slugs contains organization.slug %}true || {% endif %} isSellersExpanded || {{ forloop.index }} <= 5" {% if forloop.index > 5 %} x-cloak {% endif %}>
+            <label for="organization_slug_{{ organization.slug }}" class="flex items-start break-words cursor-pointer hover:text-interaction">
+              <input type="checkbox"
+                id="organization_slug_{{ organization.slug }}"
+                form="search_form"
+                name="organization_slugs[]"
+                class="mt-1 me-2"
+                value="{{ organization.slug }}"
+                x-on:change="submitSearch()"
+                {% if filters.query.organization_slugs contains organization.slug %}checked{% endif %}
+              >
+              {{ organization.name }}
+            </label>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="!mt-2 text-center">
+        <button
+          class="inline-flex flex-col items-center text-center text-xs uppercase text-interaction hover:text-interaction-hover"
+          x-show="!isSellersExpanded && $refs.filterSellers.querySelectorAll('li[style]').length"
+          x-on:click="isSellersExpanded = true;"
+        >
+          More
+          {% render 'theme/simple/ui/icon', icon: 'dashDown', class: 'w-2' %}
+        </button>
+      </div>
+    </nav>
+  </div>
+</aside>

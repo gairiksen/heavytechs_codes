@@ -1,0 +1,11 @@
+{% liquid
+  if participant_ids == blank or participant_ids.size < 2
+    log 'Something went wrong. Not enough participants', type: 'ERROR'
+    return null
+  endif
+
+  graphql r = 'modules/chat/conversations/search', limit: 1, participant_ids: participant_ids, include_messages: include_messages
+  include 'lib/handle_graphql_response', r: r, name: 'modules/chat/conversations/find_by_participants'
+
+  return r.conversations.results.first
+%}

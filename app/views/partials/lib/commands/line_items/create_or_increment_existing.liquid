@@ -1,0 +1,13 @@
+{% liquid
+  assign item_ids = order.line_items | map: 'item_id'
+
+  if item_ids contains item.id
+    function line_item = 'lib/queries/line_items/find_by_item', order_id: order.id, item_id: item.id, buyer: current_profile
+    assign params = '{}' | parse_json
+    hash_assign params['quantity'] = line_item.quantity | plus: 1
+    function object = 'lib/commands/line_items/update', object: params, line_item: line_item
+  else
+    function object = 'lib/commands/line_items/create', item: item, params: params, current_profile: current_profile, order: order
+  endif
+  return object
+%}

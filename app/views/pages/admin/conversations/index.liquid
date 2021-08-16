@@ -1,0 +1,13 @@
+---
+layout: admin
+---
+{% liquid
+
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function conversations = 'modules/chat/lib/queries/conversations/search', message: context.params.message, limit: 20, page: 1
+
+  render 'theme/simple/admin/conversations/index', conversations: conversations, filters: context.params
+%}

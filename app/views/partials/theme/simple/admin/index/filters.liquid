@@ -1,0 +1,23 @@
+<aside class="w-72 -mt-6 ms-8 ps-8 pt-8 text-content-sidenote border-s border-frame">
+
+  <section class="border rounded p-4">
+    <h4 class="-mx-4 px-4 pb-2 border-b uppercase font-bold">{{ 'app.search.date_range.header' | t }}</h4>
+
+    <div class="mt-2">
+      <label for="from">{{ 'app.search.date_range.from' | t }}</label>
+      <input id="from" form="admin-form" type="date" name="from" value="{{ filters.from }}" class="w-full">
+      {% render 'theme/simple/field_error', errors: filters.errors.from %}
+    </div>
+
+    <div class="mt-2">
+      <label for="to">{{ 'app.search.date_range.to' | t }}</label>
+      <input id="to" form="admin-form" type="date" name="to" value="{{ filters.to }}" class="w-full">
+      {% render 'theme/simple/field_error', errors: filters.errors.to %}
+    </div>
+  </section>
+
+  <div class="text-center">
+    <button type="submit" class="mt-4 button button-small" form="admin-form">Apply</button>
+  </div>
+
+</aside>

@@ -1,0 +1,24 @@
+{% comment %}
+
+  a notification message that is floating
+
+  arguments:
+    error - shows an error message (string)
+    notice - shows a notice message (string)
+    autohide - overwrite default autohide behavior (bool)
+
+{% endcomment %}
+
+<script>
+  document.addEventListener('apiFlashReady', () => {
+
+    {% if error %}
+      new api.flash('error', {% print error | markdown | json %}, { delay: 1000 });
+    {% endif %}
+
+    {% if notice %}
+      new api.flash('success', {% print notice | markdown | json  %}, { delay: 1000 {% if autohide != null %}, autohide: {{ autohide }} {% endif %} });
+    {% endif %}
+
+  });
+</script>

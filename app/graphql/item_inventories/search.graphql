@@ -1,0 +1,137 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $page: Int = 1
+  $item_id: String
+  $owner: String
+  $sku: String
+  $quantity: String
+  $c__status: String
+  $statuses: [String!]
+  $lang: String!
+  $withAllLangs: Boolean = false
+) {
+  item_inventories: records(
+    per_page: $limit
+    page: $page
+    filter: {
+      id: { value: $id }
+      table: { value: "item_inventory" }
+      properties: [
+        { name: "item_id", value: $item_id }
+        { name: "owner", value: $owner }
+        { name: "sku", value: $sku }
+        { name: "quantity", value: $quantity }
+        { name: "c__status", value: $c__status, value_in: $statuses }
+      ]
+      # related_records: {
+      #   join: { join_on_property: "item_id", foreign_property: "id"}
+      #   filter: {
+      #     table: { value: "item" }
+      #   }
+      # }
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    total_pages
+    has_previous_page
+    has_next_page
+    results {
+      id
+      created_at
+      type: table
+
+      item_id: property(name: "item_id")
+      sku: property(name: "sku")
+      quantity: property_int(name: "quantity")
+      max_in_one_order: property_int(name: "max_in_one_order")
+
+      item: related_record(
+        table: "item"
+        join_on_property: "item_id"
+        foreign_property: "id"
+      ) {
+        id
+        type: table
+        uuid: property(name: "uuid")
+        category: property(name: "category")
+        price: property_int(name: "price")
+        return_days: property_int(name: "return_days")
+        currency: property(name: "currency")
+        item_inventory_id: property(name: "item_inventory_id")
+
+        item_detail: related_record(
+          table: "item_detail"
+          join_on_property: "id"
+          foreign_property: "item_id"
+          filter: { properties: { name: "lang", value: $lang } }
+        ) {
+          id
+          type: table
+          name: property(name: "name")
+          description: property(name: "description")
+          tags: property_array(name: "tags")
+          lang: property(name: "lang")
+        }
+
+        item_details: related_records(
+          table: "item_detail"
+          join_on_property: "id"
+          foreign_property: "item_id"
+
+        ) @include(if: $withAllLangs) {
+          id
+          type: table
+          name: property(name: "name")
+          description: property(name: "description")
+          tags: property_array(name: "tags")
+          lang: property(name: "lang")
+        }
+
+        photos: related_records(
+          table: "photo"
+          join_on_property: "photo_ids"
+          foreign_property: "id"
+        ) {
+          id
+          photo: property_upload(name: "photo") {
+            file_name
+            url
+            versions
+          }
+        }
+      }
+
+      owner: related_record(
+        table: "organization"
+        join_on_property: "owner"
+        foreign_property: "id"
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+        first_name: property(name: "first_name")
+        last_name: property(name: "last_name")
+        logo: property_upload(name: "logo") {
+          url
+          file_name
+          extension
+        }
+        shipping_types: property_array(name: "shipping_types")
+        delivery_fee: property_int(name: "delivery_fee")
+      }
+
+      status: related_record(
+        join_on_property: "id"
+        foreign_property: "object_id"
+        table: "status"
+        sort: { created_at: { order: ASC } }
+      ) {
+        id
+        created_at
+        name: property(name: "name")
+      }
+    }
+  }
+}

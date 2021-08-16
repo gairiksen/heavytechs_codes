@@ -1,0 +1,30 @@
+{% liquid
+  function default_currency = 'lib/queries/constants/find' name: "CURRENCY"
+
+  assign orders = object.results
+  for oo in orders
+    assign order = oo
+
+    for ll in order.line_items
+      assign line = ll
+
+      hash_assign line['total_price_cents'] = line.quantity | times: line.item.price
+      hash_assign line['price_cents'] = line.item.price
+    endfor
+
+    function shipping_cost_cents = 'lib/commands/orders/recalculate/shipping_cost', order: order
+    hash_assign order['currency'] = order['currency'] | default: order.line_items[0].currency | default: default_currency
+    hash_assign order['products_price_cents'] = order.line_items | map: 'total_price_cents' | sum_array
+    hash_assign order['total_price_cents'] = order['products_price_cents'] | plus: shipping_cost_cents
+    hash_assign order['total_shipping_cost_cents'] = shipping_cost_cents
+    hash_assign order['total_quantity'] = order.line_items | map: 'quantity' | sum_array
+  endfor
+
+  hash_assign object['total_price_cents'] = orders | map: 'total_price_cents' | sum_array
+  hash_assign object['total_shipping_cost_cents'] = orders | map: 'total_shipping_cost_cents' | sum_array
+  hash_assign object['products_price_cents'] = orders | map: 'products_price_cents' | sum_array
+  hash_assign object['currency'] = orders[0].currency | default: default_currency
+  hash_assign object['total_quantity'] = orders | map: 'total_quantity' | sum_array
+
+  return object
+%}

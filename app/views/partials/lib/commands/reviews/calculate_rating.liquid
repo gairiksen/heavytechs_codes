@@ -1,0 +1,19 @@
+{% liquid
+  assign count = reviews.total_entries
+  if count > 0
+    assign score = reviews.results | map: 'score' | sum_array | plus: 0.0 | divided_by: count
+  else
+    assign score = 0
+  endif
+
+  assign object = '{}' | parse_json
+  hash_assign object['id'] = record_id
+  hash_assign object['c__rating_count'] = count
+  hash_assign object['c__rating_score'] = score | round: 1
+  function object = 'lib/commands/reviews/update_rating', object: object
+  if object.valid != true
+    log object, type: 'ERROR: reviews/update_rating'
+  endif
+
+  return object
+%}

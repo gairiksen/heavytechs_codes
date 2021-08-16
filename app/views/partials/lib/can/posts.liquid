@@ -1,0 +1,23 @@
+{% liquid
+  assign can = false
+  if post == blank
+    return false
+  endif
+
+  if post.creator_id == actor.id
+    assign owner = true
+  else
+    assign owner = false
+  endif
+
+  case do
+  when 'edit'
+    return owner
+  when 'delete'
+    return owner
+  when 'reply'
+    return true
+  endcase
+
+  return can
+%}

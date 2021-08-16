@@ -1,0 +1,484 @@
+<div class="innerBanner relative"><!--innerBanner-->
+    <figure>
+        <img src="{{ 'images/mechanic-banner.jpg' | asset_url }}" alt="" class="w-full">
+    </figure>
+    <div class="container mx-auto px-3.5">
+        <div class="absolute pt-12 top-0">
+            <a href="#" onclick="window.history.go(-1); return false;" class="flex items-center text-indigo-400 hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Project listing
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="bg-gray-50">
+<div class="container mx-auto px-3.5">
+
+<div class="profileEdit flex justify-between flex-col pb-28 md:flex-row relative z-0 mt-0 md:-mt-24">
+
+<div class="profileEdit_right w-full">
+
+<div class="bg-white p-5 shadow-sm rounded-md mb-6">
+    
+    <div class="flex justify-between flex-col md:flex-row">
+        <div>
+            <figure>
+                {% if project_details.photo.photo.url %}
+                <img src="{{ project_details.photo.photo.url }}" alt="" class="w-36 h-36 rounded-full m-auto mb-5 md:m-0">
+                {% else %}
+                <img src="{{ 'images/signup-img3.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full m-auto mb-5 md:m-0">
+                {% endif %}
+            </figure>
+        </div>
+        <div class="w-full md:w-4/5">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="text-gray-700 font-bold text-xl mb-2">{{project_details.profile.name}}</h2>
+                    <span class="block heavytechs-text-dark-orange text-base mb-3">{{project_details.profile_bio.short_description}}</span>
+                </div>
+            </div>
+            
+            <p class="text-base text-gray-700 mb-5">{{project_details.longer_description}}</p>
+            <ul class="mb-8">
+                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                    <span class="block text-gray-500 text-base mr-7 w-28 mb-3 md:mb-0">Location:</span>
+                    <strong class="block text-base text-gray-800 font-medium">{{project_details.location_of_project}}</strong>
+                </li>
+                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                    <span class="block text-gray-500 text-base mr-7 w-28 mb-3 md:mb-0">Duration:</span>
+                    <strong class="block text-base text-gray-800 font-medium">{{project_details.duration_type}}</strong>
+                </li>
+
+                {%comment%}
+                {% if user_favourite != null %}
+                <li class="flex items-center mb-1.5">
+                    <span class="block text-gray-500 text-base mr-7 w-28">
+                    <a onclick="return showConfirm()" href="/remove-favourite?id={{user_favourite.id}}&fav_id={{project_id}}&fav_for=project">Remove from favourite</a></span>
+                </li>
+                {% else %}
+                <li class="flex items-center mb-1.5">
+                    <span class="block text-gray-500 text-base mr-7 w-28"><a href="/set-favourite?fav_id={{project_id}}&fav_for=project&contractor_id={{project_details.user_id}}">Set as favourite</a></span>
+                </li>
+                {% endif %}
+                {%endcomment%}
+
+                {% if user_favourite != null %}
+                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                    <span class="block text-gray-500 text-base mr-7 w-28 mb-3 md:mb-0">Remove from favourite:</span>
+                    <a onclick="return showConfirm()" href="/remove-favourite?id={{user_favourite.id}}&fav_id={{project_id}}&fav_for=project"><img src="{{ 'images/heart-full.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% else %}
+                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                    <span class="block text-gray-500 text-base mr-7 w-28 mb-3 md:mb-0">Set as favourite:</span>
+                    <a href="/set-favourite?fav_id={{project_id}}&fav_for=project&contractor_id={{project_details.user_id}}"><img src="{{ 'images/heart-normal.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+function showConfirm(){
+    var ans = confirm("Do you really want to remove this user from your favourite list?");
+    if(!ans){
+        return false;
+    } 
+}
+</script>
+
+<div x-data="{ 
+        openTab: 1, 
+        activeClasses:'font-medium heavytechs-text-dark-orange border-b-2 heavytechs-border-color-orange',
+        inactiveClasses:'text-gray-800 font-normal'
+    }">
+
+    {%comment%}
+    <div class="mb-8 bg-white shadow-sm border border-gray-100">
+        <ul class="flex items-center flex-col md:flex-row">
+            <li class="w-full md:w-auto" @click="openTab = 1">
+                <a href="javascript:void(0)" :class="openTab === 1 ? activeClasses : inactiveClasses" class="text-base w-full text-center h-12 flex items-center justify-center md:w-36 text-gray-800 font-normal">Bio</a>
+            </li>
+            <li class="w-full md:w-auto" @click="openTab = 2">
+                <a href="javascript:void(0)" :class="openTab === 2 ? activeClasses : inactiveClasses" class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Skills/Services</a>
+            </li>
+            <li class="w-full md:w-auto" @click="openTab = 3">
+                <a href="javascript:void(0)" :class="openTab === 3 ? activeClasses : inactiveClasses" class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Education/Certs</a>
+            </li>
+            <li class="w-full md:w-auto" @click="openTab = 4">
+                <a href="javascript:void(0)" :class="openTab === 4 ? activeClasses : inactiveClasses" class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3 font-medium">Truck</a>
+            </li>
+        </ul>
+    </div>
+    {%endcomment%}
+
+    <div>
+
+        <div class="bg-white rounded-md pt-5 px-7 pb-10 md:pb-24 shadow-sm">
+            <div class="mb-3.5">
+                <strong class="block text-base font-bold text-gray-800 mb-2">Project name:</strong>
+                <span class="block text-base text-gray-500">{{project_details.project_name}}</span>
+            </div>
+
+            <div class="mb-3.5">
+                <strong class="block text-base font-bold text-gray-800 mb-2">Longer Description</strong>
+                <span class="block text-base text-gray-500">{{project_details.longer_description}}</span>
+            </div>
+
+            <div class="mb-8">
+                <strong class="block text-base font-bold text-gray-800 mb-2">Schedule:</strong>
+                <span class="block text-base text-gray-500">{{ project_details.expected_start_date | date: "%M %Y" }}-{{ project_details.expected_end_date | date: "%M %Y" }}</span>
+            </div>
+
+            {% if project_details.special_pay == 'Yes' %}
+            <div class="mb-8">
+                <strong class="block text-base font-bold text-gray-800 mb-2">Special Pay </strong>
+                <p class="block text-base text-gray-500">{{project_details.special_pay}}</p>
+                <p class="block text-base text-gray-500">{{project_details.short_description}}</p>
+            </div>
+            {% endif %}
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Specialized Training</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.osha == '1' %}
+                    <li>
+                        <input id="osha" type="checkbox" checked disabled>
+                        <label for="osha" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>OSHA</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.msha == '1' %}
+                    <li>
+                        <input id="msha" type="checkbox" checked disabled>
+                        <label for="msha" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>MSHA</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Insurance</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.additionally_insured == '1' %}
+                    <li>
+                        <input id="additionally_insured" type="checkbox" checked disabled>
+                        <label for="additionally_insured" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Additionally Insured</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.insurance_cert_holder == '1' %}
+                    <li>
+                        <input id="insurance_cert_holder" type="checkbox" checked disabled>
+                        <label for="insurance_cert_holder" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Insurance Cert Holder</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.liability_limits == '1' %}
+                    <li>
+                        <input id="liability_limits" type="checkbox" checked disabled>
+                        <label for="liability_limits" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Liability Limits</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Crane Required</h4>
+                <ul class="customRadio flex flex-col gap-4 md:flex-row md:gap-x-14">                    
+                    <li>
+                        <input id="crane_required" type="radio" checked disabled>
+                        <label for="crane_required" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>{{project_details.crane_required}}</label>
+                    </li>                    
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Drivers License Required</h4>
+                <ul class="customRadio flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    <li>
+                        <input id="driver_license_required" type="radio" checked disabled>
+                        <label for="driver_license_required" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>{{project_details.driver_license_required}}</label>
+                    </li>
+                </ul>
+            </div>
+
+            {%if project_details.driver_license_required == 'Yes' %}
+            <div class="mb-8">
+                <ul class="customRadio flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    <li>
+                        <input id="driver_license_required" type="radio" checked disabled>
+                        <label for="driver_license_required" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>{{project_details.driver_license_class}}</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Endorsement Type</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.tanker == '1' %}
+                    <li>
+                        <input id="tanker" type="checkbox" checked disabled>
+                        <label for="tanker" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Tanker</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.air_brakes == '1' %}
+                    <li>
+                        <input id="air_brakes" type="checkbox" checked disabled>
+                        <label for="air_brakes" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Air Brakes</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.passenger == '1' %}
+                    <li>
+                        <input id="passenger" type="checkbox" checked disabled>
+                        <label for="passenger" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Passenger</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.doubles_triples == '1' %}
+                    <li>
+                        <input id="doubles_triples" type="checkbox" checked disabled>
+                        <label for="doubles_triples" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Doubles/Triples</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+            {%endif%}
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Industries Serviced</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.earthworks == '1' %}
+                    <li>
+                        <input id="earthworks" type="checkbox" checked disabled>
+                        <label for="earthworks" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Earthworks</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.mining == '1' %}
+                    <li>
+                        <input id="mining" type="checkbox" checked disabled>
+                        <label for="mining" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Mining</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.fleet == '1' %}
+                    <li>
+                        <input id="fleet" type="checkbox" checked disabled>
+                        <label for="fleet" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Fleet</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.pipeline == '1' %}
+                    <li>
+                        <input id="pipeline" type="checkbox" checked disabled>
+                        <label for="pipeline" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Pipeline</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.paving == '1' %}
+                    <li>
+                        <input id="paving" type="checkbox" checked disabled>
+                        <label for="paving" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Paving</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.energy_production == '1' %}
+                    <li>
+                        <input id="energy_production" type="checkbox" checked disabled>
+                        <label for="energy_production" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Energy Production</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Service Skills and Specialize Training</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.heavy_equipment_training == '1' %}
+                    <li>
+                        <input id="heavy_equipment_training" type="checkbox" checked disabled>
+                        <label for="heavy_equipment_training" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Heavy Equipment Mechanic</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.welder_fabricator == '1' %}
+                    <li>
+                        <input id="welder_fabricator" type="checkbox" checked disabled>
+                        <label for="welder_fabricator" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Welder/Fabricator</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.truck_mechanic == '1' %}
+                    <li>
+                        <input id="truck_mechanic" type="checkbox" checked disabled>
+                        <label for="truck_mechanic" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Truck Mechanic</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.oilers_pm_tech == '1' %}
+                    <li>
+                        <input id="oilers_pm_tech" type="checkbox" checked disabled>
+                        <label for="oilers_pm_tech" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Oilers/PM Tech</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Qualification/Area of Expertise</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.welding == '1' %}
+                    <li>
+                        <input id="welding" type="checkbox" checked disabled>
+                        <label for="welding" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Welding</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.electrical_troubleshooting == '1' %}
+                    <li>
+                        <input id="electrical_troubleshooting" type="checkbox" checked disabled>
+                        <label for="electrical_troubleshooting" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Electrical Troubleshooting</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.computer_diagnostics == '1' %}
+                    <li>
+                        <input id="computer_diagnostics" type="checkbox" checked disabled>
+                        <label for="computer_diagnostics" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Computer Diagnostic</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Travel/Living Expenses</h4>
+                <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    {%if project_details.welding == '1' %}
+                    <li>
+                        <input id="company_supplied" type="checkbox" checked disabled>
+                        <label for="company_supplied" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Company Supplied</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.not_offered == '1' %}
+                    <li>
+                        <input id="not_offered" type="checkbox" checked disabled>
+                        <label for="not_offered" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Not Offered</label>
+                    </li>
+                    {%endif%}
+
+                    {%if project_details.per_diem == '1' %}
+                    <li>
+                        <input id="per_diem" type="checkbox" checked disabled>
+                        <label for="per_diem" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Per Diem</label>
+                    </li>
+                    {%endif%}
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h4 class="mb-4 text-base text-gray-700 font-bold">Paid/Not Paid</h4>
+                <ul class="customRadio flex flex-col gap-4 md:flex-row md:gap-x-14">
+                    <li>
+                        <input id="paid_not_paid" type="radio" checked disabled>
+                        <label for="paid_not_paid" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>{{project_details.paid_not_paid}}</label>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+    
+</div>
+    
+
+</div>
+
+<div class="w-full md:mb-0 md:w-60 mt-5 md:mt-0">
+    <div class="bg-white py-6 rounded-md shadow-sm">
+        <ul>
+            {%if current_profile.id %}
+                <li class="px-5 pb-5 mb-5 border-b border-gray-200 flex items-center">
+                    <img src="{{ 'images/mail-gray.svg' | asset_url }}" alt="" class="mr-2.5">
+                    {{ user_details.email }}
+                </li>
+                <li class="px-5 pb-5 mb-5 border-b border-gray-200 flex items-center">
+                    <img src="{{ 'images/call-gray.svg' | asset_url }}" alt="" class="mr-2.5">
+                    {{ project_details.profile.mobile_number }}
+                </li>
+            {%else%}
+                <li class="px-5 pb-5 mb-5 border-b border-gray-200 flex items-center">
+                    <img src="{{ 'images/mail-gray.svg' | asset_url }}" alt="" class="mr-2.5">
+                    Email Address
+                </li>
+                <li class="px-5 pb-5 mb-5 border-b border-gray-200 flex items-center">
+                    <img src="{{ 'images/call-gray.svg' | asset_url }}" alt="" class="mr-2.5">
+                    Phone Number
+                </li>
+            {%endif%}
+
+            {%if current_profile.id != project_details.profile.id%}
+                {%if current_profile.id %}
+                    <li class="px-5 flex items-center">
+                        <a href="/inbox/?to_id={{ project_details.profile.id }}">
+                        <button class="signup heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border px-5 h-11 rounded-3xl text-base w-full">Connect</button>
+                        </a>
+                    </li>
+                {%else%}
+                    {%
+                        assign return_page = '/inbox/?to_id=' | append: project_details.profile.id
+                    %}
+                    <li class="px-5 flex items-center">
+                        <a href="/sessions/new?return_page={{return_page}}">
+                        <button class="signup heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border px-5 h-11 rounded-3xl text-base w-full">Get contacts</button>
+                        </a>
+                    </li>
+                {%endif%}
+            {%endif%}
+        </ul>
+    </div>
+
+</div>
+
+</div>
+
+</div>
+</div>

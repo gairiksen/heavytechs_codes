@@ -1,0 +1,33 @@
+{% liquid
+  function object = 'lib/commands/orders/save_multiple/build', object: object, orders: orders
+  function object = 'lib/commands/orders/save_multiple/check', object: object, orders: orders
+
+  if object.valid
+    for order in orders
+      assign order_object = object.orders[order.id]
+
+      if order_object.shipping_type == 'delivery'
+        function address = 'lib/commands/addresses/create', object: order_object.shipping_address, profile: order.buyer
+        hash_assign order_object['shipping_address_id'] = address.id
+
+        if order_object.shipping_address.save_as_default == 'on'
+          function buyer = 'lib/queries/profiles/find', id: order.buyer.id
+          hash_assign buyer['default_address_id'] = address.id
+          function updated_profile = 'lib/commands/profiles/update', object: buyer, profile: buyer
+          unless updated_profile.valid
+            log updated_profile, type: 'error when saving the default address'
+          endunless
+        endif
+      endif
+
+      function order_result = 'lib/commands/orders/update', object: order_object, order: order
+      unless order_result.valid
+        hash_assign object[order.id] = order_result
+        hash_assign object['valid'] = false
+        break
+      endunless
+    endfor
+  endif
+
+  return object
+%}

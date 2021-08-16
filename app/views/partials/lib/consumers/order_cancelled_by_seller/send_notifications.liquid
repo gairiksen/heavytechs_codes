@@ -1,0 +1,7 @@
+{% liquid
+  function order = 'lib/queries/orders/find', id: event.target.id
+  function buyer = 'lib/queries/profiles/find', id: order.buyer.id
+
+  function object = 'lib/commands/emails/order_cancelled_by_seller_notify_buyer', order: order, buyer: buyer
+  function object = 'lib/commands/emails/order_cancelled_by_seller_notify_seller', order: order, buyer: buyer
+%}

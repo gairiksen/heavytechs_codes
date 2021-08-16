@@ -1,0 +1,60 @@
+<h2 class="bigtitle mb-8">
+  {{ 'app.orders.confirm.title' | t }}
+</h2>
+
+{% if orders.total_entries == 0 %}
+
+  {% render 'theme/simple/dashboard/orders/empty' %}
+
+{% else %}
+
+  <form action="/dashboard/buy/confirm_multiple" method="post">
+
+    {% include 'authenticity_token' %}
+    {% for order in orders.results %}
+      <input type="hidden" name="cart[order_ids][]" value="{{ order.id }}">
+    {% endfor %}
+
+    <div class="flex flex-col lg:flex-row gap-5">
+
+      <div class="lg:ms-16 lg:w-1/2 relative order-2 lg:order-1">
+        <div class="relative">
+          <div class="absolute top-0 -bottom-10 -start-10.5 -z-10 border-s-2"></div>
+          {% render 'theme/simple/dashboard/orders/section_header', number: 1, title: 'app.orders.checkout.contact_title', subtitle: 'app.orders.checkout.contact_subtitle'  %}
+          {% render 'theme/simple/dashboard/orders/confirm/shipping_contact_show', object: orders.results[0] %}
+          {% render 'theme/simple/dashboard/orders/section_header', number: 2, title: 'app.orders.checkout.shipping_title', subtitle: 'app.orders.checkout.shipping_subtitle'  %}
+          {% render 'theme/simple/dashboard/orders/confirm/shipping_method_show', orders: orders.results, object: object %}
+        </div>
+        {% render 'theme/simple/dashboard/orders/section_header', number: 3, title: 'app.orders.checkout.payment_title', subtitle: 'app.orders.checkout.payment_subtitle'  %}
+        {% render 'theme/simple/dashboard/orders/confirm/payment_method_show', object: orders.results[0] %}
+
+        <div class="mt-6 gap-5 flex justify-between">
+          <a href="/dashboard/buy/cart" class="button button-secondary">
+            {{ 'app.back' | t }}
+          </a>
+          <button type="submit" class="button button-icon-right">
+            {{ 'app.orders.confirm.cta_button' | t }}
+          </button>
+        </div>
+      </div>
+
+      <div class="lg:w-1/2 order-1 lg:order-2">
+        <div class="mb-3 sidenote uppercase">
+          {{ 'app.orders.checkout.in_your_cart' | t }}
+        </div>
+        <div class="p-6 border-2">
+          {% liquid
+            for order in orders.results
+              render 'theme/simple/dashboard/orders/order_short', order: order, first_item: forloop.first
+            endfor
+          %}
+        </div>
+
+        {% render 'theme/simple/dashboard/orders/summary', object: orders %}
+      </div>
+
+    </div>
+
+  </form>
+
+{% endif %}

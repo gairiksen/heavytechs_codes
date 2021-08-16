@@ -1,0 +1,17 @@
+name: profile_contractor_bio
+properties:
+  - name: uuid
+  - name: user_id
+  - name: office_location
+  - name: short_description
+  - name: mining
+  - name: heavy_civil
+  - name: transportation_fleet
+  - name: aeronautical
+  - name: government
+  - name: total_employees
+  - name: annual_sales
+  - name: latitude
+  - name: longitude
+  - name: geo_location
+    type: geojson

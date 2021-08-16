@@ -1,0 +1,38 @@
+<% if(!autoDetectProject) {%>
+    <div class="build-errs-container">
+        <% if(errMsgs) { %>
+        <div id="build-errs" class="err collapsible">
+            <p class="title">
+                    <span class="expand-collapse-button-wrapper">
+                    <span class="expand-collapse-button"></span>
+                    </span>
+                <span class="text">Build errors (<%= errMsgs.length %>)</span>
+            </p>
+
+            <ol class="list">
+                <% for(var i = 0; i < errMsgs.length; i++) { %>
+                <li>
+                    <div class="err-num"><%= i + 1 %></div>
+                    <% if(typeof errMsgs[i] !== "string") { %>
+                        <% var fileNameType = /\.test\.js$/.test(errMsgs[i].filename) ? 'fixture-filename' : 'wrapper-filename';%>
+                        <div class="err-text"><span class="<%= fileNameType%>" data-fixture-file='<%= errMsgs[i].filename.replace(/\//g,"\\") %>'><%= errMsgs[i].filename %></span>&nbsp;&nbsp;<%= errMsgs[i].errText %></div>
+                    <% } else { %>
+                        <div class="err-text"><%= errMsgs[i] %></div>
+                    <% } %>
+                </li>
+                <% } %>
+            </ol>
+        </div>
+        <% } %>
+    </div>
+    <div id="msg-container" class="project-msg-container"></div>
+
+    <div class="project-browser-container">
+        <% include project_browser.ejs %>
+    </div>
+<% } else { %>
+    <div class="build-errs-container">
+    </div>
+    <div id="msg-container" class="project-msg-container hidden"></div>
+    <% include project_start_page %>
+<% } %>

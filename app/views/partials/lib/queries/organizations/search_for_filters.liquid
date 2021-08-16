@@ -1,0 +1,6 @@
+{% liquid
+  graphql r = 'organizations/search_for_filters', limit: limit
+  include 'lib/handle_graphql_response', r: r, name: 'queries/organizations/search_for_filters'
+
+  return r.records
+%}

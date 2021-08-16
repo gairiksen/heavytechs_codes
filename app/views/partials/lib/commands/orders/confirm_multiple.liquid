@@ -1,0 +1,17 @@
+{% liquid
+  function object = 'lib/commands/orders/confirm_multiple/build', orders: orders
+  function object = 'lib/commands/orders/confirm_multiple/check', object: object
+
+  if object.valid
+    for order in orders
+      function order_object = 'lib/commands/orders/confirm', order: order
+      if order_object.valid == false
+        log: order_object, type: 'orders#confirm error'
+        hash_assign object['valid'] = false
+        break
+      endif
+    endfor
+  endif
+
+  return object
+%}

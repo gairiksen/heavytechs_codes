@@ -1,0 +1,17 @@
+{% liquid
+  if return_to
+    session return_to = return_to
+  endif
+
+  case profile.type
+  when 'organization'
+    return true
+  when blank
+    unless return_to
+      session return_to = context.location.href
+    endunless
+    include 'redirect_to', url: '/sessions/new', error: 'app.errors.unauthenticated'
+  else
+    include 'redirect_to', url: '/dashboard/sell/organizations/new', error: 'app.errors.organization_required'
+  endcase
+%}

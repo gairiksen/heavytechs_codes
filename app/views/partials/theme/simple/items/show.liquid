@@ -1,0 +1,213 @@
+{% content_for metatags %}
+  {% render 'theme/simple/items/metatags', item: item %}
+{% endcontent_for %}
+
+
+{% if item.id != item.item_inventory.item_id %}
+  <section class="container mb-8">
+    <div class="p-4 flex items-center justify-center gap-8 rounded border border-warning bg-warning-disabled">
+      <div class="max-w-sm">
+        <h3 class="subtitle">{{ 'app.items.old_version' | t }}</h3>
+        <p>{{ 'app.items.see_new_version' | t }}</p>
+        {% liquid
+          assign current_item = item.item_inventory.item
+        %}
+        <a href="{% render 'link_to', item: current_item %}" class="mt-4 button button-small button-secondary button-icon-right">
+          {{ 'app.items.go_to_new_version' | t }}
+          {% render 'theme/simple/ui/icon', icon: 'dashRight' %}
+        </a>
+      </div>
+      <div class="ps-8 hidden md:block border-l border-warning">
+        {% render 'theme/simple/ui/icon', icon: 'archive', class: 'w-20 text-warning' %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<article class="container lg:flex lg:items-start">
+
+  <div class="lg:w-1/2 lg:flex-shrink-0 relative overflow-hidden" x-data="{loading: false, coverImg: '{{ item.photos[0].photo.versions.uncropped }}', coverImgWebp: '{{ item.photos[0].photo.versions.uncropped_webp }}'}">
+
+    {% if item.item_inventory.status.name == 'app.statuses.items.unavailable' %}
+      {% render 'theme/simple/ui/badge', class: 'bg-danger', label_key: 'app.items.sold-out' %}
+    {% endif %}
+
+    {% render 'theme/simple/wishlists/button', profile_id: current_profile.id, item_id: item.id  %}
+
+    {% if item.photos.size > 0 %}
+      <div class="relative bg-white">
+        <div x-show="loading" x-cloak class="flex items-center justify-center absolute inset-0 bg-panel bg-opacity-80">
+          {% render 'theme/simple/ui/spinner', size: 10 %}
+        </div>
+        <picture class="block -me-1">
+          <source :srcset="coverImgWebp" srcset="{{ item.photos[0].photo.versions.uncropped_webp }}" type="image/webp">
+          <source :srcset="coverImg" srcset="{{ item.photos[0].photo.versions.uncropped }}" type="image/jpeg">
+          <img x-on:load="loading = false" :src="coverImg" src="{{ item.photos[0].photo.versions.uncropped }}" alt="{{ item.item_detail.name }}" class="w-full {% if item.photos.size > 1 %} max-h-[50vh] md:max-h-[60vh] {% endif %} block object-contain">
+        </picture>
+      </div>
+    {% else %}
+      {% render 'theme/simple/ui/picture-placeholder' %}
+    {% endif %}
+
+    {% if item.photos.size > 1 %}
+
+      <div class="mt-4 flex me-4" {% if item.photos.size > 4 %} data-slider {% endif %}>
+
+        {% if item.photos.size > 4 %}
+          <button
+            disabled
+            class="pe-6 hidden lg:block text-interaction disabled:text-interaction-disabled hover:text-interaction-hover transition-colors"
+            data-slider-prev
+          >
+            {% if dir == 'rtl' %}
+              {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'fill-current w-4 h-4' %}
+            {% else %}
+              {% render 'theme/simple/ui/icon', icon: 'dashLeft', class: 'fill-current w-4 h-4' %}
+            {% endif %}
+          </button>
+        {% endif %}
+
+        <ul class="w-full relative flex whitespace-nowrap overflow-x-auto lg:overflow-hidden">
+          {% for p in item.photos limit: 8 %}
+            <li
+              class="w-1/4 h-0 mx-2 first:ms-0 last:me-0 pb-[25%] relative flex-shrink"
+              x-on:click="if(coverImg !== '{{ p.photo.versions.uncropped }}'){ loading = true; coverImg = '{{ p.photo.versions.uncropped }}'; coverImgWebp = '{{ p.photo.versions.uncropped_webp }}'; }"
+            >
+              <a
+                href="{{ p.photo.versions.uncropped }}"
+                target="_blank"
+                class="w-full h-full block"
+                :class="{ 'cursor-default': coverImg === '{{ p.photo.versions.uncropped }}' }"
+                x-on:click.prevent
+              >
+                <picture>
+                  <source srcset="{{ p.photo.versions.small }}" type="image/jpeg">
+                  <img src="{{ p.photo.versions.small }}" alt="{{ item.item_detail.name }}" class="w-full h-full absolute inset-0 object-cover">
+                </picture>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% if item.photos.size > 4 %}
+          <button
+            class="ps-6 hidden lg:block text-interaction disabled:text-interaction-disabled hover:text-interaction-hover transition-colors"
+            data-slider-next
+          >
+            {% if dir == 'rtl' %}
+              {% render 'theme/simple/ui/icon', icon: 'dashLeft', class: 'fill-current w-4 h-4' %}
+            {% else %}
+              {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'fill-current w-4 h-4' %}
+            {% endif %}
+          </button>
+        {% endif %}
+
+      </div>
+
+    {% endif %}
+
+  </div>
+
+  <div class="card lg:w-1/2 mt-8 lg:mt-0 lg:rounded-tl-none relative z-10">
+    <h1 class="bigtitle break-words">
+      {{ item.item_detail.name }}
+    </h1>
+
+    <div class="md:flex flex-wrap items-center">
+      {% assign category = 'categories.' | append: item.category | t %}
+      {% function category_url = 'link_to', category: item.category %}
+      {% render 'theme/simple/ui/tags', tags: category, url: category_url, dontAppendToUrl: true %}
+
+      <form action="/orders/line_items" method="post" class="mt-5 md:mt-0 ms-auto flex items-center justify-between md:justify-start gap-3">
+        {% render 'authenticity_token', authenticity_token: authenticity_token %}
+        <input type="hidden" name="line_item[item_id]" value="{{ item.id }}">
+        <input type="hidden" name="line_item[quantity]" value="1">
+
+        <div class="flex flex-col items-end">
+          {% if item.original_price %}
+            <span class="sidenote">
+              {% liquid
+                assign divider = item.original_price | times: 1.0
+                assign part = item.price | divided_by: divider | times: 100
+                assign promo = 100 | minus: part | round
+              %}
+              ({{ 'app.items.discount' | t: promo: promo }}% )
+              <span class="line-through">
+                {% render 'theme/simple/price', amount_cents: item.original_price, currency: item.currency %}
+              </span>
+            </span>
+          {% endif %}
+
+          <strong data="item-price" class="subtitle font-bold !mb-0 {% if item.original_price %} text-danger {% endif %}">{% render 'theme/simple/price', context: context,  amount_cents: item.price, currency: item.currency %}</strong>
+        </div>
+
+        {% liquid
+          assign status = item.item_inventory.status.name
+        %}
+        <button
+          class="button"
+          {% if status != 'app.statuses.items.published' or item.id != item.item_inventory.item_id %} disabled {% endif %}
+        >
+          {% if item.item_inventory.status.name == 'app.statuses.items.unavailable' %}
+            {{ 'app.items.sold-out' | t }}
+          {% else %}
+            {{ 'app.items.add_to_cart' | t }}
+          {% endif %}
+        </button>
+      </form>
+    </div>
+
+    <p class="whitespace-pre-wrap mt-6 pt-4 border-t break-words">{{ item.item_detail.description }}</p>
+
+    <div class="mt-6 pt-4 flex items-start border-t sidenote">
+      <div class="w-1/2 flex items-start">
+        {% render 'theme/simple/ui/avatar', profile: item.item_inventory.owner, size: 7, class: 'w-5 h-5 me-2 text-2xs' %}
+        <span class="mt-0.5 flex items-start">
+          <span class="me-1">
+            {{ 'app.items.by' | t }}
+          </span>
+          <span>
+            <a href="{% render 'link_to', organization: item.item_inventory.owner %}" class="mb-1 inline-block">{{ item.item_inventory.owner.name }}</a><br>
+            {% liquid
+              if current_profile.id != item.item_inventory.owner.id and chat_enabled
+                render "modules/chat/theme/simple/message_button", to_id: item.item_inventory.owner.id, label_key: 'app.items.contact_seller'
+              endif
+            %}
+          </span>
+        </span>
+      </div>
+      {% if item.item_inventory.owner.shipping_types != empty %}
+        <div class="w-1/2 start-end">
+          <span>{{ 'app.items.shipping_types.available' | t }}:</span>
+          <ul>
+            {% if item.item_inventory.owner.shipping_types contains 'delivery' %}
+              {% function shipping_price = 'theme/simple/get_price', amount_cents: item.item_inventory.owner.delivery_fee, currency: item.currency %}
+              <li>{{ 'app.items.shipping_types.delivery' | t: shipping_cost: shipping_price }}</li>
+            {% endif %}
+            {% if item.item_inventory.owner.shipping_types contains 'personal_pickup' %}
+              <li>{{ 'app.items.shipping_types.personal_pickup' | t }}</li>
+            {% endif %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    {% comment %} TODO: refactor as cancan {% endcomment %}
+    {% assign orgs = current_profile.organizations | map: 'r_id' %}
+    {% if orgs contains item.item_inventory.owner.id and item.line_items.size < 1 %}
+    <footer class="w-full mt-4 flex md:justify-end">
+      <a href="/dashboard/items/edit?id={{ item.item_inventory.id }}" class="button">{{ 'app.items.edit' | t }}</a>
+
+      <form action="/dashboard/items/delete" method="post" class="ms-2" onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')){ return false; }">
+        {% render 'authenticity_token', authenticity_token: authenticity_token %}
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="id" value="{{ item.item_inventory.id }}">
+
+        <button class="button button-danger">{{ 'app.delete' | t }}</button>
+      </form>
+    </footer>
+    {% endif %}
+
+  </div>
+
+</article>

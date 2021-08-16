@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/orders/update/build', object: object, order: order
+  function object = 'lib/commands/orders/update/check', object: object, order: order
+
+  if object.valid
+    function object = 'lib/commands/execute', object: object, mutation_name: 'orders/update', selection: 'model_update'
+  endif
+
+  return object
+%}

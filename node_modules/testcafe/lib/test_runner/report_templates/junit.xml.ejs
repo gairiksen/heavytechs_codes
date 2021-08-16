@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+<%var screenshots = []; -%>
+    <testsuite name="<%= suite.name %>" errors="<%= suite.failed %>" failures="<%= suite.failed %>" tests="<%= suite.testCount %>" time="<%= suite.time %>">
+<%          if(Object.keys(suite.testErrReports).length) { -%>
+<%              for(var i in suite.testErrReports) { -%>
+<%                  if(suite.testErrReports.hasOwnProperty(i)) { -%>
+<%                      var testCase = suite.testErrReports[i]; -%>
+            <testcase name="'<%= testCase.fixturePath %>/<%= testCase.fixtureName %>' - <%= testCase.name %>" time="<%= testCase.time %>">
+                <error>
+<%                      for(var k = 0; k < testCase.errs.length; k++) { -%>
+<%                          var err = testCase.errs[k];                 -%>
+                        Worker: <%= err.workerName %> (version <%= suite.browserVersions[err.workerName] %>)
+                        Message: <%= err.msg.replace(/\n/g, '\n\t\t\t\t\t\t\t         ') %>
+
+<%                      } -%>
+<%                      if(testCase.screenshots && testCase.screenshots.length) { -%>
+                        Screenshots:
+<%                      for(var screenIndex = 0; screenIndex < testCase.screenshots.length; screenIndex++) { -%>
+                            <%= testCase.screenshots[screenIndex].filePath %>
+<%                      screenshots.push(testCase.screenshots[screenIndex].filePath) -%>
+<%                      } -%>
+
+<%                      } -%>
+                </error>
+            </testcase>
+<%                  } -%>
+<%              } -%>
+<%          } -%>
+<%          if(Object.keys(suite.passedTests).length) { -%>
+<%              for(var i in suite.passedTests) { -%>
+<%                  if(suite.passedTests.hasOwnProperty(i)) { -%>
+<%                      var testCase = suite.passedTests[i]; -%>
+            <testcase name="'<%= testCase.fixturePath %>/<%= testCase.fixtureName %>' - <%= testCase.name %>"  time="<%= testCase.time %>" />
+<%                      if(testCase.screenshots) { %>
+<%                      for(var screenIndex = 0; screenIndex < testCase.screenshots.length; screenIndex++) { -%>
+<%                          screenshots.push(testCase.screenshots[screenIndex].filePath); -%>
+<%                      } -%>
+<%                      } -%>
+<%                  } -%>
+<%              } -%>
+<%          } -%>
+    </testsuite>
+<% if(screenshots.length) { -%>
+    <system-out>
+        Screenshots:
+<% for(var index = 0; index < screenshots.length; index++) { -%>
+            <%= screenshots[index] -%>
+<% } -%>
+    </system-out>
+<%  } -%>
+</testsuites>

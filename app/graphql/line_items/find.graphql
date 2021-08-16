@@ -1,0 +1,88 @@
+query find($id: ID!, $buyer: String!, $lang: String) {
+  line_items: records(
+    per_page: 1
+    filter: {
+      table: { value: "line_item" }
+      id: { value: $id }
+      related_records: {
+        join: { join_on_property: "order_id", foreign_property: "id" }
+        filter: {
+          table: { value: "order" }
+          properties: [{ name: "buyer", value: $buyer }]
+        }
+      }
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+      item_id: property(name: "item_id")
+      order_id: property(name: "order_id")
+      name: property(name: "name")
+      description: property(name: "description")
+      price_cents: property(name: "price_cents")
+      currency: property(name: "currency")
+      quantity: property_int(name: "quantity")
+      total_price_cents: property(name: "total_price_cents")
+      order: related_record(
+        join_on_property: "order_id"
+        foreign_property: "id"
+        table: "order"
+      ) {
+        id
+      }
+      item: related_record(
+        join_on_property: "item_id"
+        foreign_property: "id"
+        table: "item"
+      ) {
+        id
+        quantity: property_int(name: "quantity")
+        price: property_int(name: "price")
+        return_days: property_int(name: "return_days")
+        cover_photo_url: property(name: "cover_photo_url")
+        item_detail: related_record(
+          table: "item_detail"
+          join_on_property: "id"
+          foreign_property: "item_id"
+          filter: { properties: { name: "lang", value: $lang } }
+        ) {
+          id
+          type: table
+          name: property(name: "name")
+          description: property(name: "description")
+          lang: property(name: "lang")
+        }
+
+        item_inventory: related_record(
+          table: "item_inventory"
+          join_on_property: "item_inventory_id"
+          foreign_property: "id"
+        ) {
+          id
+          type: table
+          item_id: property(name: "item_id")
+          quantity: property_int(name: "quantity")
+          sku: property(name: "sku")
+          c__status: property(name: "c__status")
+        }
+
+        photos: related_records(
+          table: "photo"
+          join_on_property: "uuid"
+          foreign_property: "object_uuid"
+        ) {
+          id
+          photo: property_upload(name: "photo") {
+            file_name
+            url
+            versions
+          }
+        }
+      }
+    }
+  }
+}

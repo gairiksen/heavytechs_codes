@@ -1,0 +1,60 @@
+en:
+  app:
+    groups:
+      content:
+        form:
+          subtitle: Original post
+      no_members_found: This group has no members
+      no_invitations_found: This group has no pending invitations
+      no_groups_found: You have no groups
+      list: Groups
+      group: Group
+      owner: ', Owner'
+      description: Description
+      members: Members
+      view_all: View all
+      name: Name
+      picture: Picture
+      summary: Summary
+      actions: Actions
+      add: Add group
+      deleted: Group has been deleted
+      new: New
+      new_group: New Group
+      edit: 'Edit Group: '
+      empty_state: You haven’t added any groups yet. <br> Create your first one now!
+      join: Ask to join
+      already_joined: Already joined
+      leave: Leave group
+      permissions_explanation:
+        intro: Choose what and which users will able to see and do in regards to this group.
+        ask_to_join: Non-members <b>%{can}</b> ask to join this group
+        meta_visible: can see groups's metadata
+        content_visible: can see group's content
+        approve_request: can approve new members
+        post_content: can post content to this group
+        invite_member: can invite new members
+      content_types_explanation:
+        intro: Choose what kind of content will be posted on your group.
+        commentable: Users <b>%{can}</b> comment posts
+        replyable: Users <b>%{can}</b> reply to posts
+        votable: Users <b>%{can}</b> vote on posts
+        followable: Users <b>%{can}</b> follow posts
+        featurable: Users <b>%{can}</b> mark posts as featured
+      nav:
+        activity: Activity
+        about: About
+        members: Members
+      form:
+        name: Name
+        content_type: Content type
+        content_types:
+          question: Question
+          post: Post
+          announcement: Announcement
+        summary: Summary (displayed on list)
+        photo: Main Photo
+        description: Description
+        submit: Submit
+      errors:
+        description_too_short: 'Description is too short, it has to be longer than %{size} chars'

@@ -1,0 +1,148 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $tag: String
+  $keyword: String
+  $category: String
+  $sort: RecordsSortInput = { created_at: { order: DESC } }
+  
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "profile" }
+      deleted_at: { exists: false }
+      properties: [
+        { name: "tags", contains: $tag }
+        { name: "category", starts_with: $category }
+        { name: "profile_for", value: "contractor" }
+        { name: "name", not_value_in: "" }
+        { name: "is_blocked", value: "1" }
+      ]        
+      or: [
+        { properties: { name: "description", contains: $keyword } }
+        { properties: { name: "name", contains: $keyword } }
+        { properties: { name: "tags", contains: $keyword } }
+        { properties: { name: "category", contains: $keyword } }
+        { properties: { name: "body", contains: $keyword } }
+        { properties: { name: "title", contains: $keyword } }     
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      name: property(name: "name")
+      category: property(name: "category")
+      description: property(name: "description")
+      profile_for: property(name: "profile_for")
+      user_id: property(name: "user_id")
+      slug: property(name: "slug")
+      title: property(name: "title")
+      group_id: property(name: "group_id")
+      tags: property_array(name: "tags")
+      first_name: property(name: "first_name")
+      last_name: property(name: "last_name")
+      last_login: property(name: "last_login")
+      mobile_number: property(name: "mobile_number")
+      is_blocked: property(name: "is_blocked")
+
+      owner: related_user(join_on_property: "owner", foreign_property: "id") {
+        id
+        email
+      }
+
+      photo: related_record(
+        table: "photo"
+        join_on_property: "uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      profile_contractor_bio: related_record(
+        table: "profile_contractor_bio"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        aeronautical: property(name: "aeronautical")
+        annual_sales: property(name: "annual_sales")
+        government: property(name: "government")
+        heavy_civil: property(name: "heavy_civil")
+        office_location: property(name: "office_location")
+        short_description: property(name: "short_description")
+        total_employees: property(name: "total_employees")
+        transportation_fleet: property(name: "transportation_fleet")
+        total_employees: property(name: "total_employees")
+        mining: property(name: "mining")
+        transportation_fleet: property(name: "transportation_fleet")
+        
+      }
+
+      projects: related_records(
+        table: "projects"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        additionally_insured: property(name: "additionally_insured")
+        air_brakes: property(name: "air_brakes")
+        company_supplied: property(name: "company_supplied")
+        computer_diagnostics: property(name: "computer_diagnostics")
+        crane_required: property(name: "crane_required")
+        doubles_triples: property(name: "doubles_triples")
+        driver_license_class: property(name: "driver_license_class")
+        driver_license_required: property(name: "driver_license_required")
+        duration_type: property(name: "duration_type")
+        earthworks: property(name: "earthworks")
+        electrical_troubleshooting: property(name: "electrical_troubleshooting")
+        end_time_stamp: property(name: "end_time_stamp")
+        energy_production: property(name: "energy_production")
+        expected_end_date: property(name: "expected_end_date")
+        expected_start_date: property(name: "expected_start_date")
+        fleet: property(name: "fleet")
+        geo_location: property(name: "geo_location")
+        hazmat: property(name: "hazmat")
+        heavy_equipment_training: property(name: "heavy_equipment_training")
+        insurance_cert_holder: property(name: "insurance_cert_holder")
+        latitude: property(name: "latitude")
+        liability_limits: property(name: "liability_limits")
+        location_of_project: property(name: "location_of_project")
+        longer_description: property(name: "longer_description")
+        longitude: property(name: "longitude")
+        mining: property(name: "mining")
+        msha: property(name: "msha")
+        not_offered: property(name: "not_offered")
+        oiler_pm_tech: property(name: "oiler_pm_tech")
+        osha: property(name: "osha")
+        paid_not_paid: property(name: "paid_not_paid")
+        passenger: property(name: "passenger")
+        paving: property(name: "paving")
+        per_diem: property(name: "per_diem")
+        pipeline: property(name: "pipeline")
+        project_name: property(name: "project_name")
+        short_description: property(name: "short_description")
+        special_pay: property(name: "special_pay")
+        start_time_stamp: property(name: "start_time_stamp")
+        status: property(name: "status")
+        truck_mechanic: property(name: "truck_mechanic")
+        welder_fabricator: property(name: "welder_fabricator")
+        welding: property(name: "welding")        
+        
+      }
+
+    }
+  }
+}

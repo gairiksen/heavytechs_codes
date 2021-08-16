@@ -1,0 +1,20 @@
+---
+slug: dashboard/profile/2fa
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function object = 'lib/commands/users/verify_otp', object: context.params.2fa, email: current_profile.user.email
+  if object.valid
+    function object = 'lib/commands/profiles/mark_otp', profile: current_profile
+    if object.valid != true
+      log object, 'ERROR: profiles/mark_otp'
+    endif
+    include 'redirect_to', url: '/dashboard', notice: 'app.2fa.create.success'
+  else
+    function user_otp = 'lib/queries/users/otp', email: current_profile.user.email
+    include 'theme/simple/dashboard/profile/2fa/setup', otp: user_otp.otp, current_profile: current_profile
+  endif
+%}

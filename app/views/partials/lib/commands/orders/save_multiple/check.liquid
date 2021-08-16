@@ -1,0 +1,34 @@
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'shipping_first_name'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'shipping_last_name'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'shipping_email'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'shipping_phone'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'payment_type'
+
+  for item in object.orders
+    assign index = forloop.index | minus: 1
+    assign order = item[1]
+    assign co = '{ "errors": {}, "valid": true }' | parse_json
+
+    function co = 'lib/validations/presence', c: co, object: order, field_name: 'payment_type'
+    assign shipping_types = orders[index].seller.shipping_types
+    if shipping_types == blank
+      function shipping_types = 'lib/queries/orders/default_shipping_types'
+    endif
+    function co = 'lib/validations/shipping_type', c: co, object: order, shipping_types: shipping_types
+
+    hash_assign order['errors'] = co.errors
+    if co.valid == false
+      hash_assign c['valid'] = false
+    endif
+
+  endfor
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}
+

@@ -1,0 +1,28 @@
+<p class="mb-2 mt-7 pt-4 border-t border-frame">
+  {{ 'app.search.total_entries' | t }}: {{ items.total_entries }}
+</p>
+
+{% if items.total_entries > 0 %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-5" >
+    {% for item in items.results %}
+      {% render 'theme/simple/items/card', item: item, current_profile: current_profile %}
+    {% endfor %}
+  </div>
+{% else %}
+  <section class="md:h-64 card flex flex-col md:flex-row justify-center items-center text-center md:text-start">
+    <div class="order-2 md:order-1">
+      <p class="subtitle">{{ 'app.search.no_items_found.title' | t }}</p>
+      <p class="text-left">{{ 'app.search.no_items_found.desc' | t }}:</p>
+      <ul class="mt-2 ms-5 list-disc leading-relaxed text-left">
+        <li>{{ 'app.search.no_items_found.refilter' | t }}</li>
+        <li>{{ 'app.search.no_items_found.rephrase' | t }}</li>
+        <li>{{ 'app.search.no_items_found.browse' | t }}</li>
+      </ul>
+    </div>
+    <div class="w-16 mb-6 md:mb-0 md:w-32 md:ms-10 md:ps-10 md:mt-1 order-1 md:order-last md:border-s">
+      {% render 'theme/simple/ui/icon', icon: 'searchQuestion', class: 'w-full text-interaction-disabled' %}
+    </div>
+  </section>
+{% endif %}
+
+{% render 'theme/simple/ui/pagination', collection: items, current_page: filters.query.page, button_attrs: 'form="search_form" x-on:click="spinner=true"'%}

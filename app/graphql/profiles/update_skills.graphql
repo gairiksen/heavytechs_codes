@@ -1,0 +1,96 @@
+mutation update( 
+    $id: ID!
+    $uuid: String
+    $user_id: String
+    $earthworks: String
+    $mining: String
+    $fleet: String
+    $pipeline: String
+    $paving: String
+    $energy_production: String
+    $heavy_equipment_mechanic: String
+    $welder_fabricator: String
+    $truck_mechanic: String
+    $oilers_pm_tech: String
+    $welding: String
+    $welding_cert: String
+    $electrical_troubleshooting: String
+    $electrical_troubleshooting_cert: String
+    $computer_diagnostics: String
+    $computer_diagnostics_cert: String
+    $drivers_license_class: String
+    $expiry_date: String
+    $tanker: String
+    $air_brakes: String
+    $passanger: String
+    $double_triples: String
+    $hazmat: String
+    $expiry_date_2: String
+    
+) {
+  model_update(
+    id: $id
+    model: {
+      model_schema_name: "profile_skills"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "earthworks" value: $earthworks }
+        { name: "mining" value: $mining }
+        { name: "fleet" value: $fleet }
+        { name: "pipeline" value: $pipeline }
+        { name: "paving" value: $paving }
+        { name: "energy_production" value: $energy_production }
+        { name: "heavy_equipment_mechanic" value: $heavy_equipment_mechanic }
+        { name: "welder_fabricator" value: $welder_fabricator }
+        { name: "truck_mechanic" value: $truck_mechanic }
+        { name: "oilers_pm_tech" value: $oilers_pm_tech }
+        { name: "welding" value: $welding }
+        { name: "welding_cert" value: $welding_cert }
+        { name: "electrical_troubleshooting" value: $electrical_troubleshooting }
+        { name: "electrical_troubleshooting_cert" value: $electrical_troubleshooting_cert }
+        { name: "computer_diagnostics" value: $computer_diagnostics }   
+        { name: "computer_diagnostics_cert" value: $computer_diagnostics_cert }   
+        { name: "drivers_license_class" value: $drivers_license_class }   
+        { name: "expiry_date" value: $expiry_date }   
+        { name: "tanker" value: $tanker }   
+        { name: "air_brakes" value: $air_brakes }   
+        { name: "passanger" value: $passanger }   
+        { name: "double_triples" value: $double_triples }   
+        { name: "hazmat" value: $hazmat }   
+        { name: "expiry_date_2" value: $expiry_date_2 }     
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    earthworks: property(name: "earthworks")
+    mining: property(name: "mining")
+    fleet: property(name: "fleet")
+    pipeline: property(name: "pipeline")
+    paving: property(name: "paving")
+    energy_production: property(name: "energy_production")
+    heavy_equipment_mechanic: property(name: "heavy_equipment_mechanic")
+    welder_fabricator: property(name: "welder_fabricator")
+    truck_mechanic: property(name: "truck_mechanic")
+    oilers_pm_tech: property(name: "oilers_pm_tech")
+    welding: property(name: "welding")
+    welding_cert: property(name: "welding_cert")
+    electrical_troubleshooting: property(name: "electrical_troubleshooting")
+    electrical_troubleshooting_cert: property(name: "electrical_troubleshooting_cert")
+    computer_diagnostics: property(name: "computer_diagnostics")  
+    computer_diagnostics_cert: property(name: "computer_diagnostics_cert")  
+    drivers_license_class: property(name: "drivers_license_class")  
+    expiry_date: property(name: "expiry_date")  
+    tanker: property(name: "tanker")  
+    air_brakes: property(name: "air_brakes")  
+    passanger: property(name: "passanger")  
+    double_triples: property(name: "double_triples")  
+    hazmat: property(name: "hazmat")  
+    expiry_date_2: property(name: "expiry_date_2")  
+
+  }
+}

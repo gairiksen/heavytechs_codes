@@ -1,0 +1,8 @@
+{{ process.status.name | t  }}
+{{ 'app.admin.processes.list.by' | t }}
+{% case process.status.profile.type %}
+{% when 'profile' %}
+  {{ process.status.profile.first_name }} {{ process.status.profile.last_name }}
+{% when 'organization' %}
+  {{ process.status.profile.name }}
+{% endcase %}

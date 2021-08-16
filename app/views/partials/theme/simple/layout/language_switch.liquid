@@ -1,0 +1,15 @@
+{% liquid
+  assign language_switch_url = '/language/update?return_to=' | append: context.location.pathname
+  assign language_text = 'DE'
+  if context.session.language == 'de'
+    assign language_switch_url = language_switch_url | append: '&language=en'
+    assign language_text = 'EN'
+  else
+    assign language_switch_url = language_switch_url | append: '&language=de'
+  endif
+
+%}
+{% comment %} lang switch {% endcomment %}
+<a href="{{ language_switch_url }}" class="{{ class }}">
+  {{ language_text }}
+</a>

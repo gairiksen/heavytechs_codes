@@ -1,0 +1,38 @@
+---
+method: post
+---
+{% liquid
+  include 'lib/anonymous_or_redirect', user: context.current_user
+
+  function object = 'lib/commands/users/verify_password', object: context.params.user
+  if object.valid
+    function profile = 'lib/queries/profiles/find', user_id: object.id, load_organizations: true    
+
+
+    function required_2fa = "lib/can", actor: profile, do: "required_2fa", object: profile
+    if required_2fa.valid
+      if profile.otp_configured
+        include 'theme/simple/sessions/2fa_verify', object: object
+      else
+        function user_otp = 'lib/queries/users/otp', email: profile.user.email
+        include 'theme/simple/sessions/2fa_setup', object: object, otp: user_otp.otp
+      endif
+    else
+
+      assign return_page = context.params.user.return_page | default: ''
+      function res = 'lib/commands/profiles_anonymous/convert_models', anonymous_session_id: context.session.anonymous_session_id, profile: profile
+      sign_in_rc user_id: profile.user.id
+
+      function last_login = 'lib/commands/profiles/last_login', profile_id: profile.id
+
+      if return_page == ''        
+        function url = 'lib/after_sign_in_url', user_id: profile.user.id
+        include 'redirect_to', default_url: url, notice: 'app.sessions.created'
+      else
+        include 'redirect_to', default_url: return_page, notice: 'app.sessions.created'
+      endif
+    endif
+  else
+    include 'theme/simple/sessions/new', object: object
+  endif
+%}

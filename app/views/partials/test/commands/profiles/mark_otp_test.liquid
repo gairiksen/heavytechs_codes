@@ -1,0 +1,8 @@
+{% liquid
+  function profile = 'test/fixtures/profile', user_id: "6999"
+
+  function object = 'lib/commands/profiles/mark_otp', profile: profile
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'otp_configured', given: object.otp_configured, expected: true
+%}

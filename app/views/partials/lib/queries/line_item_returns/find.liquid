@@ -1,0 +1,9 @@
+{% liquid
+  if id == blank
+    return null
+  endif
+
+  graphql r  = 'line_item_returns/search', id: id, limit: 1
+
+  return r.line_item_returns.results.first
+%}

@@ -1,0 +1,9 @@
+{% liquid
+  if id == blank and order_id == blank and item_id == blank
+    return null
+  endif
+
+  graphql r  = 'line_items/find_by_item', order_id: order_id, item_id: item_id, buyer: buyer.id
+
+  return r.line_items.results.first
+%}

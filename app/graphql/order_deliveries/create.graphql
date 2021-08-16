@@ -1,0 +1,21 @@
+mutation create_order_delivery(
+  $order_id: String!
+  $delivery_information: String!
+) {
+  record_create(
+    record: {
+      table: "order_delivery"
+      properties: [
+        { name: "order_id" value: $order_id }
+        { name: "delivery_information" value: $delivery_information }
+      ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+
+    order_id: property(name: "order_id")
+    delivery_information: property(name: "delivery_information")
+  }
+}

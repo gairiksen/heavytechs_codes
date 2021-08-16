@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'modules/chat/lib/commands/messages/create/build', object: object
+  function object = 'modules/chat/lib/commands/messages/create/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: 'modules/chat/messages/create' object: object, selection: 'record_create'
+  endif
+
+  return object
+%}

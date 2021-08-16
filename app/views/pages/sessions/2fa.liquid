@@ -1,0 +1,15 @@
+---
+method: post
+---
+{% liquid
+  include 'lib/anonymous_or_redirect', user: context.current_user
+
+  function object = 'lib/commands/users/verify_otp', object: context.params.2fa
+  if object.valid
+    sign_in_rc user_id: object.id
+    function url = 'lib/after_sign_in_url', user_id: object.id
+    include 'redirect_to', default_url: url, notice: 'app.sessions.created'
+  else
+    include 'theme/simple/sessions/2fa_verify', object: object
+  endif
+%}

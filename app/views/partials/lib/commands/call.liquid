@@ -1,0 +1,13 @@
+{% liquid
+  assign build_path = 'lib/commands/' | append: command | append: '/build'
+  function object = build_path, object: object
+
+  assign check_path = 'lib/commands/' | append: command | append: '/check'
+  function object = check_path, object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: command, object: object, selection: selection
+  endif
+
+  return object
+%}

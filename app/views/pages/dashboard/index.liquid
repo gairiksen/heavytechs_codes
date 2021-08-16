@@ -1,0 +1,34 @@
+---
+slug: dashboard(/:slug)(/:section)
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.feed.title
+---
+
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true, membership: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, followships: true, membership: true
+
+
+  assign section = context.params.section | default: 'activity'
+  assign profile_id = current_profile.id | default: 'there-should-be'
+
+  if section == 'activity'
+    function list = 'lib/queries/activities/search', feed: 'user-private', feed_id: current_profile.id, limit: 100
+    function presigned_url = 'lib/queries/presigned_url'
+  elsif section == 'groups'
+    function list = 'lib/queries/groups/search_for_member', limit: 20, name: 'membership', member_id: profile_id
+  elsif section == 'following'
+    function list = 'lib/queries/relationships/search', limit: 20, name: 'followship', l_id: profile_id
+  elsif section == 'followers'
+    function list = 'lib/queries/relationships/search', limit: 20, name: 'followship', r_id: profile_id
+  elsif section == 'products'
+    function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+    function list = 'lib/queries/items/search', query: context.params, limit: 20, owner: current_profile.id, lang: context.language
+  endif
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs
+  include 'theme/simple/profile/private_feed', section: section, user: profile, list: list, current_profile: current_profile, presigned_url: presigned_url
+%}

@@ -1,0 +1,55 @@
+mutation update( 
+    $id: ID!
+    $uuid: String,
+    $user_id: String, 
+    $long_description: String, 
+    $short_description: String, 
+    $company_name: String,
+    $position: String,
+    $location: String,
+    $ready_for_travel: String,
+    $total_experience: String,
+    $veteran: String,
+    $latitude: String,
+    $longitude: String,
+    $geo_location: JSONPayload
+    
+) {
+  model_update(
+    id: $id
+    model: {
+      model_schema_name: "profile_bio"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "long_description" value: $long_description }
+        { name: "short_description" value: $short_description }
+        { name: "company_name" value: $company_name }
+        { name: "position" value: $position }
+        { name: "location" value: $location }
+        { name: "ready_for_travel" value: $ready_for_travel }
+        { name: "total_experience" value: $total_experience }
+        { name: "veteran" value: $veteran }  
+        { name: "latitude" value: $latitude }   
+        { name: "longitude" value: $longitude }  
+        { name: "geo_location" value_json: $geo_location }     
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    long_description: property(name: "long_description")
+    short_description: property(name: "short_description")
+    company_name: property(name: "company_name")
+    position: property(name: "position")
+    location: property(name: "location")
+    ready_for_travel: property(name: "ready_for_travel")
+    total_experience: property(name: "total_experience")
+    veteran: property(name: "veteran")
+    latitude: property(name: "latitude")  
+    longitude: property(name: "longitude") 
+  }
+}

@@ -1,0 +1,13 @@
+.tags-allowlist .tagify__dropdown__wrapper{
+  @apply bg-interaction-disabled border-0;
+}
+
+.tags-allowlist .tagify__dropdown__item{
+  transition: 0s;
+
+  @apply uppercase m-1 py-1 px-1 text-content bg-panel border rounded border-panel inline-block
+}
+
+.tags-allowlist .tagify__dropdown__item:hover{
+  @apply bg-interaction-hover border-interaction;
+}

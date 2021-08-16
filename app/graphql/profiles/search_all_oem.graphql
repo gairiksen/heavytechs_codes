@@ -1,0 +1,39 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+  $oem_name: String
+  $expert_familiar: String
+  $cert_name: String
+  $is_custom: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "profile_oem" }
+      properties: [
+        { name: "user_id", value: $user_id }
+        { name: "oem_name", value: $oem_name }
+        { name: "expert_familiar", value: $expert_familiar }
+        { name: "cert_name", value: $cert_name }
+        { name: "is_custom", value: $is_custom }      
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+
+      oem_name: property(name: "oem_name")
+      expert_familiar: property(name: "expert_familiar")
+      cert_name: property(name: "cert_name")
+      is_custom: property(name: "is_custom")
+    }
+  }
+}

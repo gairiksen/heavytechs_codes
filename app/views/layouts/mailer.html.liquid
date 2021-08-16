@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+{% function direction = 'text_direction', lang: context.language %}
+
+<html dir="{{ direction }}" lang="{{ context.language }}">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <style>
+
+      /* utility classes */
+      .w-full {
+        width: 100%;
+      }
+
+      .w-20 {
+        width: 5rem;
+      }
+
+      .mt {
+        margin-top: 2rem;
+      }
+
+      .mt-2 {
+        margin-top: .5rem;
+      }
+
+      .border {
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .table-spacing {
+        width: .5rem;
+      }
+
+      .rounded {
+        border-radius: .25rem;
+      }
+
+      .text-right {
+        text-align: right;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      /* global styling */
+      .body {
+        color: rgba(243, 244, 246, var(--tw-bg-opacity));
+      }
+
+      .container {
+        max-width: 40rem;
+        margin: 0 auto;
+
+        line-height: 1.5;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        color: rgba(55, 65, 81, 1);
+      }
+
+      .footer {
+        margin-top: 2rem;
+        padding-top: .75rem;
+
+        border-top: 1px solid #e2e8f0;
+
+        font-size: .75rem;
+        color: #4a586d;
+      }
+
+      /* titles and typography */
+      .subtitle {
+        margin-bottom: .25rem;
+
+        line-height: 1.75rem;
+        font-size: 1.25rem;
+        font-weight: normal;
+      }
+
+      .title {
+        margin-bottom: 3rem;
+	      line-height: 1.75rem;
+        font-size: 1.25rem;
+        text-align: center;
+      }
+
+      .sidenote {
+        font-size: .75rem;
+        color: #4a586d
+      }
+
+      /* links and buttons */
+      a {
+        text-decoration: none;
+        color: rgba(29, 78, 216, 1);
+        transition-property: background-color, border-color, color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+
+      a:hover {
+        color: rgba(52, 102, 227, 1);
+      }
+
+      .button {
+        padding: 0.5rem 1.25rem;
+        display: inline-block;
+        border-radius: 0.25rem;
+        border-width: 2px;
+        border-color: transparent;
+        background-color: rgba(29, 78, 216, 1);
+
+        color: rgba(255, 255, 255, 1);
+
+        transition-property: background-color, border-color, color;
+	      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	      transition-duration: 150ms;
+      }
+
+      .button:hover {
+        background-color: rgba(52, 102, 227, 1);
+
+        color: rgba(255, 255, 255, 1);
+      }
+
+    </style>
+  </head>
+
+  <body class="body">
+    {% liquid
+      assign url = 'https://' | append: context.location.host
+    %}
+
+    {% include 'theme/simple/layout/mailer', url: url %}
+  </body>
+
+</html>

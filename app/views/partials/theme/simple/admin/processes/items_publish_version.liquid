@@ -1,0 +1,52 @@
+<!--
+     <a href="{% render 'link_to', item: old_item %}" target="_blank">
+     {{ 'app.admin.processes.show.old' | t }}
+     </a>
+     <a href="{% render 'link_to', item: new_item %}" target="_blank">
+     {{ 'app.admin.processes.show.new' | t }}
+     </a>
+-->
+<div class="table">
+  <header>
+    <div>
+      {{ 'app.admin.processes.show.property' | t }}
+    </div>
+    <div>
+      {{ 'app.admin.processes.show.old' | t }}
+    </div>
+    <div>
+      {{ 'app.admin.processes.show.new' | t }}
+    </div>
+  </header>
+  <div class="table-content">
+    {% liquid
+      assign new_item = process.new_item
+      assign old_item = process.old_item
+
+      for detail in new_item.item_details
+        render 'theme/simple/admin/processes/diff', new: detail, old: old_item.item_details[forloop.index0], name: 'name', key: 'app.items.form.name'
+        render 'theme/simple/admin/processes/diff', new: detail, old: old_item.item_details[forloop.index0], name: 'description', key: 'app.items.form.description'
+      endfor
+      render 'theme/simple/admin/processes/diff', new: new_item, old: old_item, name: 'category', key: 'app.items.form.category'
+      render 'theme/simple/admin/processes/diff', new: new_item, old: old_item, name: 'price', key: 'app.items.form.price'
+      render 'theme/simple/admin/processes/diff', new: new_item, old: old_item, name: 'return_days', key: 'app.items.form.return_days'
+    %}
+    {% if new_item.photo_ids != old_item.photo_ids %}
+      <ul>
+        <li>
+          {{ 'app.items.form.photos' | t }}
+        </li>
+        <li>
+          {% for photo in old_item.photos %}
+            <img src="{{ photo.photo.versions.uncropped }}" class="w-64 p-5">
+          {% endfor %}
+        </li>
+        <li>
+          {% for photo in new_item.photos %}
+            <img src="{{ photo.photo.versions.uncropped }}" class="w-64 p-5">
+          {% endfor %}
+        </li>
+      </ul>
+    {% endif %}
+  </div>
+</div>

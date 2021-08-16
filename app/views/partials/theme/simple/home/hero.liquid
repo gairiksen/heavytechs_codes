@@ -1,0 +1,17 @@
+<div class="-top-10 relative flex flex-wrap items-end text-content-inverted bg-cover flex-column"
+  style="background-image: url({{ 'images/home-hero.jpg' | asset_url }})">
+  <!-- Trick to speed up hero image loading -->
+  <img src="{{ 'images/home-hero.jpg' | asset_url }}" alt="Hero image" class="hidden">
+  <div class="container z-10 w-full py-16 md:py-32">
+    <h1 class="text-3xl mb-3 font-bold leading-none uppercase md:text-5xl">{{ 'app.hero.main-sentence' | t }}</h1>
+
+    <p class="text-xl font-normal">
+      {{ 'app.hero.secondary-sentence' | t }}
+    </p>
+
+    <p>
+      <a href="/search" class="mt-1 me-3 text-lg button">{{ 'app.hero.shop' | t }}</a>
+      <a href="/dashboard/items/new" class="mt-1 text-lg button button-secondary">{{ 'app.hero.sell' | t }}</a>
+    </p>
+  </div>
+</div>

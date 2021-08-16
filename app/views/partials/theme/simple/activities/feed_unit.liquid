@@ -1,0 +1,27 @@
+{% assign type = payload.type %}
+
+<div class="flex flex-col p-6 bg-panel rounded-lg shadow">
+  {% render 'theme/simple/activities/feed_unit/header', payload: payload %}
+
+  {% assign types = 'profile,group' | split: ',' %}
+
+  {% if types contains payload.target.type and payload.object.type == 'comment' %}
+    <div class="py-2 leading-snug break-all">
+      {% liquid
+        assign comment_body_formatted = payload.object.body | markdown: '{ "elements": ["b","strong","i","em","a","code", "pre"], "attributes":{ "a": ["href"] } }'
+        echo comment_body_formatted
+      %}
+    </div>
+  {% endif %}
+
+  <!-- Photo should be inserted only if event = create -->
+  {% if payload.object.photos.size > 0 %}
+    <div class="mt-2">
+      <img class="object-cover rounded-lg w-40" src="{{ payload.object.photos.first.url.versions.small }}" alt="{{ payload.object.name }}">
+    </div>
+  {% elsif payload.target.photos.size > 0 and payload.type != 'comment_created' %}
+    <div class="mt-2">
+      <img class="object-cover rounded-lg w-40 " src="{{ payload.target.photos.first.url.versions.small }}" alt="{{ payload.target.name }}">
+    </div>
+  {% endif %}
+</div>

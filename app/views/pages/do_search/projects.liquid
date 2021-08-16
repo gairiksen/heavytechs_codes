@@ -1,0 +1,17 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+  assign search_type = context.params.search_type | default: ''
+
+  if context.params.keyword == ''
+    assign records = ''
+  else
+    function records = 'lib/queries/search/all', keyword: context.params.keyword, limit: 15, lang: context.language, search_type: search_type
+  endif
+  
+%}
+{%
+  render 'theme/simple/search/projects', records: records, user_id: context.current_user.id, keyword: context.params.keyword, search_type: search_type
+
+  
+%}

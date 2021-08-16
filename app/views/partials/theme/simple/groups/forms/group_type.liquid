@@ -1,0 +1,12 @@
+<label for="group[group_type][{{ group_type }}]" class="flex flex-wrap items-center cursor-pointer">
+
+  <input type="radio"
+    id="group[group_type][{{ group_type }}]"
+    name="group[group_type]"
+    value="{{ group_type }}"
+    x-on:change="group_type = '{{ group_type }}'"
+    {% if group.group_type == blank or group.group_type == group_type %}checked{% endif %}
+  >
+
+  <p class="my-2 ms-2">{{ group_type | titleize }}</p>
+</label>

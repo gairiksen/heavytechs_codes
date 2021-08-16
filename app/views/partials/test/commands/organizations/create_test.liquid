@@ -1,0 +1,12 @@
+{% parse_json payload %}
+{
+  "name": "acme",
+  "offline_stores": "Nice store 27, Warsaw, Big store",
+  "delivery_fee": 11
+}
+{% endparse_json %}
+{% liquid
+  function object = 'lib/commands/organizations/create', object: payload
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: object, field_name: 'id'
+%}

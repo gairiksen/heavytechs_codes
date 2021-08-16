@@ -1,0 +1,25 @@
+query report(
+  $limit: Int = 999
+  $from: String!
+  $to: String!
+  $status: [String!]
+  $category: String
+  $organizations: [String!]
+) {
+  items: records(
+    page: 1
+    per_page: $limit
+    filter: {
+      created_at: { lte: $to, gte: $from }
+      table: { value: "item" }
+      deleted_at: { exists: false }
+      properties: [
+        { name: "category", starts_with: $category }
+        { name: "c__status", value_in: $status }
+        { name: "owner", value_in: $organizations }
+      ]
+    }
+  ) {
+    total_entries
+  }
+}

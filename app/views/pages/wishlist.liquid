@@ -1,0 +1,11 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+  function ids = 'lib/queries/wishlist/item_ids', profile_id: current_profile.id
+
+  assign query = '{}' | parse_json | add_hash_key: "ids", ids
+  function items = 'lib/queries/items/search', params: query, limit: 50, lang: context.language
+
+  render 'theme/simple/wishlists/show', items: items, current_profile: current_profile, authenticity_token: context.authenticity_token
+%}
+

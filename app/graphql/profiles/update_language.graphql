@@ -1,0 +1,16 @@
+mutation update(
+  $id: ID!
+  $language: String!
+) {
+  record_update(
+    id: $id
+    record: {
+      properties: [
+        { name: "language", value: $language }
+      ]
+    }
+  ) {
+    id
+    language: property(name: "language")
+  }
+}

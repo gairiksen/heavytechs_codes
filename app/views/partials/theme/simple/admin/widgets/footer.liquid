@@ -1,0 +1,4 @@
+<footer class="mt-4 -mx-4 p-4 pb-0 flex justify-end border-t">
+  {% function report_path = 'theme/simple/admin/widgets/report_path', path: path, filters: filters %}
+  <a href="{% print report_path %}" class="button button-secondary button-small">{{ 'admin.view_report' | t }}</a>
+</footer>

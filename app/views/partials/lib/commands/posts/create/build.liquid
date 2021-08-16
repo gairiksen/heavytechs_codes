@@ -1,0 +1,28 @@
+{% liquid
+  assign tags = object.tags | downcase | split: ',' | uniq
+  assign slugged_tags = '' | split: ','
+
+  for tag in tags
+    assign slugged_tag = tag | slugify
+    assign slugged_tags = slugged_tags | add_to_array: slugged_tag
+  endfor
+
+  assign slugged_tags = slugged_tags | uniq
+%}
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "parent_id": {{ object.parent_id | json }},
+    "group_id": {{ object.group_id | json }},
+    "creator_id": {{ current_profile.id | json }},
+    "title": {{ object.title | json }},
+    "body": {{ object.body | json }},
+    "tags": {{ slugged_tags | json }},
+    "uuid": {{ '' | uuid | json }},
+    "c__score": 0
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

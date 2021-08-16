@@ -1,0 +1,78 @@
+<aside class="w-72 -mt-6 ms-8 ps-8 pt-8 text-content-sidenote border-s border-frame">
+
+  <section class="border rounded p-4">
+    <h4 class="-mx-4 px-4 pb-2 border-b uppercase font-bold">{{ 'app.search.date_range.header' | t }}</h4>
+    <div class="mt-2">
+      <label for="from">{{ 'app.search.date_range.from' | t }}</label>
+      <input id="from" form="admin-form" type="date" name="from" value="{{ filters.from }}" class="w-full">
+      {% render 'theme/simple/field_error', errors: filters.errors.from %}
+    </div>
+    <div class="mt-2">
+      <label for="to">{{ 'app.search.date_range.to' | t }}</label>
+      <input id="to" form="admin-form" type="date" name="to" value="{{ filters.to }}" class="w-full">
+      {% render 'theme/simple/field_error', errors: filters.errors.to %}
+    </div>
+  </section>
+
+  <section class="mt-4 border rounded p-4" x-data="{ allChecked: true }">
+    <header class="-mx-4 px-4 pb-2 flex justify-between border-b">
+      <h4 class="uppercase font-bold">{{ 'app.search.organizations' | t }}</h4>
+      <button x-on:click="allChecked = api.toggleList($el)" x-bind:title="allChecked ? '{{ 'admin.uncheck_all' | t }}' : '{{ 'admin.check_all' | t }}'" class="button-options">
+        <span x-cloak x-show="!allChecked">{% render 'theme/simple/ui/icon', icon: 'check', class: 'w-3' %}</span>
+        <span x-cloak x-show="allChecked">{% render 'theme/simple/ui/icon', icon: 'x', class: 'w-3' %}</span>
+      </button>
+    </header>
+    <ul>
+      {% for organization in organizations %}
+        <li class="mt-2 flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="organization_{{ organization.id }}"
+            name="organizations[]"
+            value="{{ organization.id }}"
+            form="admin-form"
+            class="mt-1"
+            {% if filters.organizations contains organization.id %} checked {% endif %}
+            {% if filters.organizations.size == 0 %} checked {% endif %}
+            {% unless filters.organizations %} checked {% endunless %}
+          >
+          <label for="organization_{{ organization.id }}" class="cursor-pointer">{{ organization.name }}</label>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="mt-4 border rounded p-4" x-data="{ allChecked: false }">
+    <header class="-mx-4 px-4 pb-2 flex justify-between border-b">
+      <h4 class="uppercase font-bold">{{ 'app.search.statuses' | t }}</h4>
+      <button x-on:click="allChecked = api.toggleList($el)" x-bind:title="allChecked ? '{{ 'admin.uncheck_all' | t }}' : '{{ 'admin.check_all' | t }}'" class="button-options">
+        <span x-cloak x-show="!allChecked">{% render 'theme/simple/ui/icon', icon: 'check', class: 'w-3' %}</span>
+        <span x-cloak x-show="allChecked">{% render 'theme/simple/ui/icon', icon: 'x', class: 'w-3' %}</span>
+      </button>
+    </header>
+    <ul>
+      {% for status in statuses %}
+        {% assign key = 'app.statuses.orders.' | append: status[0] %}
+        <li class="mt-2 flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="status_{{ status[0] }}"
+            name="status[]"
+            value="{{ key }}"
+            form="admin-form"
+            class="mt-1"
+            {% if filters.status contains key %} checked {% endif %}
+            {% if filters.status.size == 0 %} checked {% endif %}
+            {% unless filters.status %} checked {% endunless %}
+          >
+          <label for="status_{{ status[0] }}" class="cursor-pointer">{{ key | t }}</label>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div class="text-center">
+    <button type="submit" class="mt-4 button button-small" form="admin-form">Apply</button>
+  </div>
+
+</aside>

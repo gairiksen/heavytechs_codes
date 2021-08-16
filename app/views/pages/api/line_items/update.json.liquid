@@ -1,0 +1,24 @@
+---
+slug: api/line_items/update
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile, allow_anonymous: true
+
+  function line_item = 'lib/queries/line_items/find', id: context.params.id, buyer: current_profile
+  if context.params.line_item.quantity == "0"
+    function item = 'lib/commands/line_items/delete', object: line_item
+  else
+    function item = 'lib/commands/line_items/update', line_item: line_item, object: context.params.line_item
+    if item.valid
+      function total_price = 'theme/simple/get_price', amount_cents: item.total_price_cents, currency: item.currency
+      hash_assign item['total_price'] = total_price
+    else
+      log item, type: "api/line_items/update INVALID-RECORD"
+    endif
+  endif
+
+  render 'theme/json/shared/show', object: item
+%}
+

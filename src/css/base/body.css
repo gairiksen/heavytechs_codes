@@ -1,0 +1,116 @@
+/*
+  general styling
+  links
+  titles
+  content
+  grid extensions
+*/
+
+
+/* links
+============================================================================ */
+main a {
+  @apply
+    text-interaction
+    transition-colors;
+}
+
+main a:hover {
+  @apply
+    text-interaction-hover;
+}
+
+a:focus {
+  outline: none;
+}
+
+a:focus-visible {
+  @apply
+    ring-2;
+}
+
+
+
+/* titles
+============================================================================ */
+@layer utilities {
+  @variants responsive {
+
+    .bigtitle {
+      @apply
+        mt-10 text-3xl font-semibold first:mt-0;
+    }
+
+    .bigtitle:not(:last-child) {
+      @apply mb-4;
+    }
+
+    .title {
+      @apply
+        mb-2 text-2xl font-normal;
+    }
+
+    .subtitle {
+      @apply
+        mb-1 text-xl font-normal;
+    }
+
+  }
+}
+
+
+
+/* content
+============================================================================ */
+main p + p {
+  @apply
+    mt-4;
+}
+
+@layer utilities {
+  @variants responsive {
+
+    /* small annotations and sidenotes */
+    .sidenote {
+      @apply
+        text-xs;
+    }
+
+  }
+}
+
+
+
+/* grid extensions
+============================================================================ */
+@layer utilities {
+  @variants responsive {
+
+    .grid-masonry {
+      @apply
+        grid
+        gap-4;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-rows: masonry;
+    }
+
+  }
+}
+
+
+
+/* appearance reset
+============================================================================ */
+@layer utilities {
+
+  .appearance-reset {
+    -moz-appearance: textfield;
+  }
+
+  .appearance-reset::-webkit-outer-spin-button,
+  .appearance-reset::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+}

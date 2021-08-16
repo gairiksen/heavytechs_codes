@@ -1,0 +1,16 @@
+mutation update(
+  $id: ID!
+  $otp_configured: Boolean!
+) {
+  record_update(
+    id: $id
+    record: {
+      properties: [
+        { name: "otp_configured", value_boolean: $otp_configured }
+      ]
+    }
+  ) {
+    id
+    otp_configured: property_boolean(name: "otp_configured")
+  }
+}

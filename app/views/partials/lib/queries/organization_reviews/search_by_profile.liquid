@@ -1,0 +1,12 @@
+{% liquid
+  if profile_id == blank
+    log 'Something went wrong. Profile cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  assign page = page | to_positive_integer: 1
+  graphql r = 'organization_reviews/search', limit: limit, page: page, with_organization: with_organization, profile_id: profile_id
+  include 'lib/handle_graphql_response', r: r, name: 'queries/organization_reviews/search_by_profile'
+
+  return r.organization_reviews
+%}

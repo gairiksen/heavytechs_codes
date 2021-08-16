@@ -1,0 +1,17 @@
+---
+layout: admin
+---
+{% liquid
+
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function filters = 'lib/commands/report_filters/create', object: params
+  hash_assign filters['page'] = filters['page'] | to_positive_integer: 1
+  hash_assign filters['limit'] = 50
+  hash_assign filters['sort_order'] = 'DESC'
+  function users = 'lib/queries/users/search', filters: filters
+
+  render 'theme/simple/admin/users', users: users, filters: filters
+%}

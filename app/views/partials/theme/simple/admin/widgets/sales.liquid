@@ -1,0 +1,28 @@
+<section class="card mt-8 p-4">
+
+  <h3 class="sidenote w-full uppercase">{{ 'admin.sales.title' | t }}</h3>
+
+  <strong class="title text-confirmation">
+    {% render 'theme/simple/price', amount_cents: income.value, currency: orders.currency %}
+  </strong>
+
+  <div class="mt-4 flex justify-between">
+    <div class="w-1/2">
+      <h4 class="sidenote uppercase">{{ 'admin.sales.orders' | t }}</h4>
+      {% if income.value and income.value > 0 %}
+        <strong class="text-confirmation">
+          {{ orders.total_entries }}
+        </strong>
+      {% else %}
+        <p>N/A</p>
+      {% endif %}
+    </div>
+    <div class="w-1/2">
+      <h4 class="sidenote uppercase">{{ 'admin.sales.items' | t }}</h4>
+      <strong class="{% if orders.total_quantity > 0 %}text-confirmation{% endif %}">{{ orders.total_quantity }}</strong>
+    </div>
+  </div>
+
+  {% render 'theme/simple/admin/widgets/footer', path: '/admin/sales', filters: filters %}
+
+</section>

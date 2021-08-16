@@ -1,0 +1,15 @@
+{% liquid
+  assign now = 'now' | to_time
+  function relation = 'lib/queries/relationships/find', name: object.name, l_id: object.l_id, r_id: object.r_id
+  if relation == blank
+    function object = 'lib/commands/relationships/create', name: object.name, l_id: object.l_id, r_id: object.r_id, l_at: now, r_at: now
+    if object.valid
+      include 'lib/commands/events/create', type: 'relationship_created', actor_id: object.l_id, target_id: object.r_id
+      assign object = '{ "valid": true }' | parse_json
+    endif
+  else
+    assign object = '{ "valid": true }' | parse_json
+  endif
+
+  return object
+%}

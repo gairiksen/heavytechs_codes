@@ -1,0 +1,19 @@
+{% parse_json object %}
+  {
+    "id": {{ line_item_return.id | json }},
+    "action": {{ object.action | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  case object.action
+  when 'accept'
+    hash_assign object['status'] = 'app.statuses.line_item_returns.accepted'
+  when 'reject'
+    hash_assign object['status'] = 'app.statuses.line_item_returns.rejected'
+  when 'return'
+    hash_assign object['status'] = 'app.statuses.line_item_returns.returned'
+  endcase
+
+  return object
+%}

@@ -1,0 +1,8 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  function user_otp = 'lib/queries/users/otp', email: current_profile.user.email
+
+  include 'theme/simple/dashboard/profile/2fa/setup', otp: user_otp.otp
+%}

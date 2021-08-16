@@ -1,0 +1,33 @@
+<script>
+    ControlPanel.define('404View', function (require, exports) {
+        var $ = require('jQuery');
+
+        exports.init = function () {
+            var setError404MsgMargin = function () {
+                var $error404Msg = $('.error404-msg'),
+                        $error404Cont = $('.error404-wrap');
+
+                var topMargin = Math.ceil(($error404Cont.height() - $error404Msg.outerHeight(false)) / 2);
+
+                $error404Msg.css('margin-top', topMargin);
+            };
+
+            $(document).ready(function () {
+                setError404MsgMargin();
+            });
+
+            $(window).resize(function () {
+                setError404MsgMargin();
+            });
+        }
+    });
+
+    ControlPanel.get('404View').init();
+</script>
+<div class="error404-wrap">
+    <div class="error404-msg">
+        <img src='/assets/images/404error.png' alt='' />
+        <h2>Error 404</h2>
+        <p>There is nothing here. Sorry.</p>
+    </div>
+</div>

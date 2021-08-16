@@ -1,0 +1,31 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $name: String
+  $disabled_at: String
+) {
+  tags: records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "tag" }
+      properties: [
+        { name: "name" value: $name }
+        { name: "disabled_at" value: $disabled_at }
+      ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      name: property(name: "name")
+      disabled_at: property(name: "disabled_at")
+    }
+  }
+}

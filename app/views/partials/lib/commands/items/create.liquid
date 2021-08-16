@@ -1,0 +1,24 @@
+{%  liquid
+  assign detail_params = object
+  function object = 'lib/commands/items/create/build', object: object, owner: owner
+  function object = 'lib/commands/items/create/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/items/create/execute', object: object
+
+    if object.valid
+      assign detail_object = '{}' | parse_json
+      hash_assign detail_params['item_id'] = object.id
+      hash_assign detail_params['name'] = detail_params.name
+      hash_assign detail_params['description'] = detail_params.description
+      hash_assign detail_params['lang'] = detail_params.lang
+      function attributes = 'lib/commands/item_details/create', object: detail_params
+      if attributes.valid != true
+        log attributes, type: 'items#create attributes error'
+      endif
+
+    endif
+  endif
+
+  return object
+%}

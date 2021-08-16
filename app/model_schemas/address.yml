@@ -1,0 +1,11 @@
+name: address
+properties:
+  - name: profile_id
+  - name: full_name
+  - name: country
+  - name: city
+  - name: state
+  - name: street
+  - name: zip
+  - name: building_number
+  - name: flat_number

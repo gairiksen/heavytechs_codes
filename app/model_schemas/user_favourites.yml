@@ -1,0 +1,8 @@
+name: user_favourites
+properties:
+  - name: uuid
+  - name: user_id
+  - name: fav_id
+  - name: fav_for
+  - name: fav_uuid
+  - name: contractor_id

@@ -1,0 +1,1 @@
+(self.webpackChunkmarketplace_template_poc=self.webpackChunkmarketplace_template_poc||[]).push([[943],{436:function(){const a=e=>{const c=e.target.src;window.open(c,"_blank")};document.querySelectorAll(".markdown img").forEach(e=>{e.onclick=a})}}]);

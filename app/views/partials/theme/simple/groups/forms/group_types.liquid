@@ -1,0 +1,14 @@
+<select class="w-full" name="group[group_type]" x-ref="groupType" id="groupType" required x-on:change="group_type = $refs.groupType.value">
+  {% for gt in group_templates %}
+    {% liquid
+      assign group_type = gt[0]
+      assign template = gt[1]
+    %}
+    <option
+      id="group[group_type][{{ group_type }}]" value="{{ group_type }}"
+      {% if group.group_type == group_type %}selected{% endif %}
+    >
+      {{ group_type | titleize }}
+    </option>
+  {% endfor %}
+</select>

@@ -1,0 +1,20 @@
+---
+slug: comments.frame
+method: post
+layout: null
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  function object = 'lib/commands/comments/create', object: context.params.comment, current_profile: current_profile
+  if object.valid
+    include 'lib/commands/events/create', type: 'comment_created', actor_id: current_profile.id, object_id: object.id, target_id: context.params.comment.commentable_id, delay: 0
+
+    render 'theme/simple/activities/feed_unit/comment', comment: object
+  else
+    log object.errors, type: 'ERROR: comments/create.frame'
+    response_status 422
+    echo 'app.models.comments.create_failed' | t
+  endif
+%}

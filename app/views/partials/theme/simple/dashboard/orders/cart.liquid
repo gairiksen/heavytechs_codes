@@ -1,0 +1,64 @@
+<script>
+  api.strings = {
+    cantAddToWishlist: "{{ 'app.errors.cant_add' | t }}",
+    quantityExceeded: "{{ 'app.orders.line-items.errors.quantity-too-big' | t }}",
+    saving: "{{ 'app.wishlists.saving' | t }}",
+    addedToWishlist: "{{ 'app.success.added' | t }}"
+  };
+</script>
+
+<div class="text-center mb-7 sm:mb-0 sm:text-right">
+  <a href="/search" class="button button-secondary">
+    {{ 'app.orders.show.continue-shopping' | t }}
+  </a>
+</div>
+
+<h2 class="mt-0 bigtitle">
+  {{ 'app.orders.cart.title' | t }} (<span data-cart-counter>{{ orders.total_quantity }}</span>)
+</h2>
+
+{% if orders.total_entries != 0 %}<div class="hidden" data-cart-empty>{% endif %}
+  {% render 'theme/simple/dashboard/orders/empty' %}
+{% if orders.total_entries != 0 %}</div>{% endif %}
+
+{% if orders.total_entries != 0 %}
+  <section data-tc="cart-product" class="w-full lg:table" data-cart>
+
+    <header class="hidden uppercase lg:table-row sidenote">
+      <div class="lg:pb-2 lg:table-cell">{{ 'app.orders.show.item' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-right">{{ 'app.orders.show.unit_price' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-right">{{ 'app.orders.show.quantity' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.total_price' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell"></div>
+    </header>
+
+    <div class="card lg:table-row-group">
+
+      {% liquid
+        for order in orders.results
+          include 'theme/simple/dashboard/orders/cart/order_edit', order: order, role: 'buyer'
+        endfor
+      %}
+
+    </div>
+
+  </section>
+
+  <div class="relative mt-8 card lg:w-1/2 lg:ml-auto" data-cart-summary>
+    <div class="card-overlay hidden" data-cart-loading>
+      {% render 'theme/simple/ui/spinner', size: 10 %}
+    </div>
+    <ul class="text-lg font-bold lg:text-xl">
+      <li class="flex justify-between gap-4 py-3 text-xl border-b lg:text-2xl">
+        <div>
+          {{ 'app.orders.show.total' | t }}
+        </div>
+        <div id="data-order-totalprice" data-total>
+          {% render 'theme/simple/price', amount_cents: orders.total_price_cents, currency: orders.currency %}
+        </div>
+      </li>
+    </ul>
+
+    {% include 'theme/simple/dashboard/orders/cart/checkout_button', orders: orders.results %}
+  </div>
+{% endif %}

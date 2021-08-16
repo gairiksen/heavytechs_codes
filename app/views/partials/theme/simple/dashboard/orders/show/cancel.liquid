@@ -1,0 +1,23 @@
+<h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.cancel.form.card_title' | t }}</h3>
+<section class="card bg-danger-disabled border border-danger !shadow-none">
+  <p>{{ 'app.orders.checkout.cancel.form.card_info' | t }}</p>
+  <p>{{ 'app.orders.checkout.cancel.form.select_title' | t }}</p>
+  <div>
+    <form action="/dashboard/orders/cancel" method="post"  onSubmit="if(!confirm('{{ 'app.orders.checkout.cancel.form.confirm' | t }}')){ return false; }">
+      {% render 'authenticity_token', context: context %}
+      <ul>
+        {% for line_item in order.line_items %}
+          <li>
+            <input data-tc="sold-order-cancel-checkbox" type="checkbox" id="orders_cancel_restock_{{ line_item.id}}" name="orders_cancel[restock][{{ line_item.id}}]" />
+            <label for="orders_cancel_restock_{{ line_item.id}}">{{ line_item.item.item_detail.name }}</label>
+          </li>
+        {% endfor %}
+      </ul>
+      <input type="hidden" name="orders_cancel[order_id]" value="{{ order.id }}" />
+      <input type="hidden" name="orders_cancel[role]" value="seller" />
+      <button type="submit" class="button mt-2">
+        {{ 'app.orders.checkout.cancel.form.cancel_button' | t }}
+      </button>
+    </form>
+  </div>
+</section>

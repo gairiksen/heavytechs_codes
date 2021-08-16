@@ -1,0 +1,14 @@
+{% liquid
+  assign quantity = object.quantity | to_positive_integer: 1
+%}
+{% parse_json object %}
+  {
+    "id": {{ line_item.id | json }},
+    "quantity": {{ quantity | json }},
+    "total_price_cents": {{ line_item.price_cents | times: 1 | times: quantity | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

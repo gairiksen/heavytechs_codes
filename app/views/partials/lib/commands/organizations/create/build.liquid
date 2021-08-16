@@ -1,0 +1,14 @@
+{% assign uuid = '' | uuid %}
+{% parse_json object %}
+  {
+    "uuid":           {{ uuid | json }},
+    "contact_emails": {{ object.user.email | json }},
+    "name":           {{ object.name | default: uuid | json }},
+    "offline_stores": {{ object.offline_stores | json }},
+    "delivery_fee": {{ object.delivery_fee | default: 0 }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

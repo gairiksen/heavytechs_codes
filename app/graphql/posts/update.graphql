@@ -1,0 +1,73 @@
+mutation update_post(
+  $id: ID!
+  $uuid: String
+  $title: String
+  $body: String
+  $tags: [String]
+  $upvote_profile_id_append: String
+  $upvote_profile_id_remove: String
+  $downvote_profile_id_append: String
+  $downvote_profile_id_remove: String
+  $accepted_post_id: String
+  $c__score: Int
+  $c__answers: Int
+  $slug: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "post"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "title", value: $title }
+        { name: "body", value: $body }
+        { name: "tags", value_array: $tags }
+        { name: "upvote_profile_ids", array_append: $upvote_profile_id_append }
+        { name: "upvote_profile_ids", array_remove: $upvote_profile_id_remove }
+        {
+          name: "downvote_profile_ids"
+          array_append: $downvote_profile_id_append
+        }
+        {
+          name: "downvote_profile_ids"
+          array_remove: $downvote_profile_id_remove
+        }
+        { name: "accepted_post_id", value: $accepted_post_id }
+        { name: "c__score", value_int: $c__score }
+        { name: "c__answers", value_int: $c__answers }
+        { name: "slug", value: $slug }
+      ]
+    }
+  ) {
+    id
+    created_at
+    updated_at
+    type: table
+    parent_id: property(name: "parent_id")
+    creator_id: property(name: "creator_id")
+    title: property(name: "title")
+    body: property(name: "body")
+    tags: property_array(name: "tags")
+    upvote_profile_ids: property_array(name: "upvote_profile_ids")
+    downvote_profile_ids: property_array(name: "downvote_profile_ids")
+    accepted_post_id: property(name: "accepted_post_id")
+    c__score: property_int(name: "c__score")
+    c__answers: property_int(name: "c__answers")
+    slug: property(name: "slug")
+    parent: related_record(
+      table: "post"
+      join_on_property: "parent_id"
+      foreign_property: "id"
+    ) {
+      id
+
+      group: related_record(
+        table: "group"
+        join_on_property: "group_id"
+        foreign_property: "id"
+      ) {
+        id
+      }
+    }
+  }
+}

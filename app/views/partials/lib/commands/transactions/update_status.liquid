@@ -1,0 +1,15 @@
+{%  liquid
+  function object = 'lib/commands/transactions/update_status/build', object: object, transaction: transaction
+  function object = 'lib/commands/transactions/update_status/check', object: object
+
+  if object.valid
+    if object.name == 'app.statuses.transactions.success'
+      include 'lib/commands/events/create', type: 'transaction_succeeded', actor_id: current_profile.id, target_id: object.id, object_id: object.id
+    endif
+    function status = 'lib/commands/statuses/create', object_id: object.id, name: object.name, profile_id: transaction.profile_id
+    include 'lib/commands/events/create', type: 'status_created', actor_id: transaction.profile_id, object_id: status.id, target_id: status.object_id
+    hash_assign object['status'] = status
+  endif
+
+  return object
+%}

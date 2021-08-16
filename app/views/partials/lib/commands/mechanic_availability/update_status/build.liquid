@@ -1,0 +1,10 @@
+{% parse_json object %}
+  {
+    "id":           {{ id }},
+    "is_blocked":      {{ is_blocked | json }}    
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

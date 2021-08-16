@@ -1,0 +1,19 @@
+{% parse_json object %}
+  {
+    "item_inventory_id": {{ object.item_inventory_id | json }},
+    "uuid":        {{ object.uuid | json }},
+    "currency":    {{ object.currency | json }},
+    "price":       {{ object.price | plus: 0 | amount_to_fractional: object.currency | to_positive_integer: 1 }},
+    "return_days": {{ object.return_days | plus: 0 | json }},
+    "tax_rate":    {{ object.tax_rate | json }},
+    "category":    {{ object.category | default: "" | json }},
+    "lang":        {{ object.lang | default: "en" | json }},
+    "name":        {{ object.name | json }},
+    "description": {{ object.description | default: "" | json }},
+    "tags":        {{ object.tags | downcase | split: ',' | uniq }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

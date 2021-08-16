@@ -1,0 +1,9 @@
+{% liquid
+  if id == blank
+    return null
+  endif
+
+  graphql r  = 'organization_reviews/search', id: id, limit: 1, with_organization: true
+
+  return r.organization_reviews.results.first
+%}

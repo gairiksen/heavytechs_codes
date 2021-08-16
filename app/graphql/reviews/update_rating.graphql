@@ -1,0 +1,20 @@
+mutation update_item_inventory(
+  $id: ID!
+  $c__rating_count: Int
+  $c__rating_score: Float
+) {
+  record_update(
+    id: $id
+    record: {
+      properties: [
+        { name: "c__rating_count" value_int: $c__rating_count }
+        { name: "c__rating_score" value_float: $c__rating_score }
+      ]
+    }
+  ){
+    id
+    type: table
+    c__rating_count: property_int(name: "c__rating_count")
+    c__rating_score: property_float(name: "c__rating_score")
+  }
+}

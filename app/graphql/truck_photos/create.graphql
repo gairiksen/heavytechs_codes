@@ -1,0 +1,26 @@
+mutation model_create(
+$direct_url: String!, 
+$user_id: String!, 
+$object_uuid: String!, 
+$photo_path: String!,
+$photo_type: String!
+) {
+  model_create(model: {
+    model_schema_name: "truck_photos"
+    properties: [
+      { name: "photo" value: $direct_url }
+      { name: "user_id" value: $user_id }
+      { name: "photo_type" value: $photo_type }
+      { name: "photo_path" value: $photo_path }
+      { name: "object_uuid" value: $object_uuid }
+    ]
+  }) {
+    id
+    photo_type: property(name: "photo_type")
+    photo: property_upload(name: "photo") {
+      file_name
+      url
+      versions
+    }
+  }
+}

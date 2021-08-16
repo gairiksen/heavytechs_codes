@@ -1,0 +1,121 @@
+en:
+  time:
+    formats:
+      long: '%a, %b %e, %Y at %H:%M'
+      compact: '%b %d %Y at %H:%M'
+  languages:
+    en: english
+    de: german
+  app:
+    chat:
+      setup:
+        title: Chat
+        enable: enable
+        disable: disable
+      disabled: Denied. Chat is currently disabled, if you think you got this error by mistake contact our support.
+    home:
+      feeds:
+        comments: New comments
+        posts: New posts
+        groups: New groups
+        items: New items
+        profiles: New members
+        categories: Popular categories
+        promoted_items: Today's Deals
+    relationships:
+      type:
+        - followship
+        - membership
+        - collaboration
+        - owner
+        - ownership
+        - wishlist
+    title: HeavyTechs
+    support_email: support@platformos.com
+    page_not_found: Page not found.
+    page_server_error: Ooops! Server error. We are on it!
+    no_following_found: You are not following anyone
+    no_followers_found: No one is following you
+    no_activities_found: You have no activities yet
+    admin: Admin
+    self-list: You are now on <b class="font-semibold">your</b> list
+    user-list: 'You are now on <b class="font-semibold">%{name}''s</b> list'
+    filters: Filters
+    back: Back
+    save: Save
+    new: New
+    edit: Edit
+    apply: Apply
+    close: Close
+    continue: Continue
+    community: Community
+    created_at: Created at
+    status: Status
+    name: Name
+    cancel: Cancel
+    number: Number
+    authentication_links:
+      created: Please check your inbox. If the provided email was correct, you'll receive some instructions on how to reset your password.
+    confirm-delete: Are you sure you want to delete this item?
+    delete: Delete
+    models:
+      comments:
+        new: New comment
+        add: Add comment
+        edit: Edit comment
+        empty_state: You haven't added any comments yet. <br> Add your first one
+        read_more: Read more
+        send: Send
+        comment: Comment
+        create_failed: Creation failed
+        form:
+          creator_id: creator_id
+          body: Body
+          body_help: >-
+            You can use formatting: [link](https://example.com) _italic_
+            **bold** `code`
+          title: Title
+          uuid: uuid
+          commentable_id: commentable_id
+          commentable_type: commentable_type
+      contacts:
+        blank_reason: Select subject
+        reasons:
+          purchase: Purchase
+          delivery: Delivery
+          payments: Payments
+          account: Account
+          other: Other
+        contact-us: Contact Us
+        message_sent: Message sent. We will contact you shortly.
+        message-explain: >-
+          Please explain your inquiry in detail so that we may help
+          as possible in the shortest amount of time.
+        form:
+          email: Your e-mail
+          message: Message
+          message_tip: Please explain your inquiry in detail so that we may help you as best as possible in the shortest amount of time.
+          reason: Subject
+          submit: Send message
+      shared:
+        submit: Save
+        delete: Delete
+        delete_failed: Delete failed
+        deleted: Deleted
+        updated: Updated
+        edit: Edit
+      statuses:
+        new: New status
+        add: Add status
+        edit: Edit status
+        empty_state: You haven't added any statuses yet. <br> Create your first one now!
+        form:
+          name: name
+          fullname: fullname
+          scope: scope
+          timestamp: timestamp
+          object_id: object_id
+          payload: payload
+    style_guide:
+      title: Style guide
+  _version: pos_marketplaces-products-0.1

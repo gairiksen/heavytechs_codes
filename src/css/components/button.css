@@ -1,0 +1,192 @@
+/*
+  global button behavior
+  main
+    with icon
+  secondary
+  danger
+  small
+    with icon
+  small secondary
+  compact
+  admin buttons
+*/
+
+
+
+/* global button behavior
+============================================================================ */
+button > * {
+  pointer-events: none;
+}
+
+button:focus {
+  @apply
+    outline-none;
+}
+
+button:focus-visible {
+  @apply
+    ring-2;
+}
+
+
+/* main
+============================================================================ */
+.button {
+  @apply
+    px-5
+    py-2
+    inline-flex
+    items-center
+    justify-center
+    align-top
+    border-2
+    border-transparent
+    rounded
+    bg-interaction
+    whitespace-nowrap
+    leading-6
+    text-center
+    text-content-inverted
+    transition-colors;
+}
+
+.button:hover {
+  @apply
+    bg-interaction-hover
+    text-content-inverted;
+}
+
+.button:disabled,
+.button.button-disabled {
+  @apply
+    cursor-default
+    pointer-events-none
+    bg-interaction-disabled;
+}
+
+/* with icon */
+.button svg {
+  @apply
+    w-5
+    h-5
+    my-0.5
+    me-2
+    ms-2
+    inline-block;
+}
+
+.button-icon-right svg {
+  @apply
+    me-0;
+}
+
+.button-icon-left svg {
+  @apply
+    ms-0;
+}
+
+
+
+/* secondary
+============================================================================ */
+.button-secondary {
+  @apply
+    border-interaction
+    bg-panel
+    text-interaction;
+}
+
+.button-secondary:hover {
+  @apply
+    border-interaction-hover
+    bg-interaction-disabled
+    text-interaction-hover;
+}
+
+.button-secondary:disabled,
+.button-secondary.button-disabled {
+  @apply
+    pointer-events-none
+    bg-panel
+    border-interaction-disabled
+    text-interaction-disabled;
+}
+
+
+
+/* danger
+============================================================================ */
+.button-danger {
+  @apply
+    bg-danger
+    text-content-inverted;
+}
+
+.button-danger:hover {
+  @apply
+    bg-danger-hover
+    text-content-inverted;
+}
+
+.button-danger:disabled,
+.button-danger.button-disabled {
+  @apply
+    pointer-events-none
+    bg-danger-disabled;
+}
+
+
+
+/* small
+============================================================================ */
+.button-small {
+  @apply
+    px-3
+    py-1
+    border
+    text-sm;
+}
+
+/* with icon */
+.button-small svg {
+  @apply
+    w-4
+    h-4;
+}
+
+
+
+/* small secondary
+============================================================================ */
+.button-small.button-secondary {
+  @apply
+    border;
+}
+
+
+
+/* compact
+============================================================================ */
+.button-compact {
+  @apply
+    px-1;
+}
+
+
+
+/* admin buttons
+============================================================================ */
+.button-options {
+  @apply
+    px-2
+    flex
+    items-center
+    border
+    bg-panel
+    rounded
+    uppercase
+    font-bold
+    text-interaction
+    hover:text-interaction-hover;
+}

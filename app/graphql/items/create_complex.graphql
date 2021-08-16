@@ -1,0 +1,53 @@
+mutation create_item_complex(
+  $category: String
+  $currency: String!
+  $price: Int!
+  $return_days: Int!
+  $uuid: String!
+  $owner: String!
+  $photo_ids: [String!]
+
+  $sku: String
+  $quantity: Int!
+  $max_in_one_order: Int!
+  $c__status: String!
+  $details_input: [CustomizationImport!]!
+) {
+  item: record_create(
+    record: {
+      table: "item"
+      properties: [
+        { name: "category", value: $category }
+        { name: "currency", value: $currency }
+        { name: "price", value_int: $price }
+        { name: "return_days", value_int: $return_days }
+        { name: "uuid", value: $uuid }
+        { name: "owner", value: $owner }
+        { name: "photo_ids", value_array: $photo_ids }
+      ]
+    }
+  ) {
+    id
+  }
+
+  item_inventory: record_create(
+    record: {
+      table: "item_inventory"
+      properties: [
+        { name: "sku", value: $sku }
+        { name: "quantity", value_int: $quantity }
+        { name: "max_in_one_order", value_int: $max_in_one_order }
+        { name: "owner", value: $owner }
+        { name: "c__status", value: $c__status }
+      ]
+    }
+  ) {
+    id
+  }
+
+  item_details: import_models(
+    models: $details_input
+  ) {
+    ids
+  }
+}

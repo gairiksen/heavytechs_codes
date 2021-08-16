@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/profiles/update_language/build', object: object, profile: profile
+  function object = 'lib/commands/profiles/update_language/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', object: object, mutation_name: 'profiles/update_language', selection: 'record_update'
+  endif
+
+  return object
+%}

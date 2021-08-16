@@ -1,0 +1,13 @@
+{% liquid
+  if email == blank
+    log 'Something went wrong. Email cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  assign issuer = 'app.title' | t
+  graphql r = 'users/otp', email: email, issuer: issuer
+
+  include 'lib/handle_graphql_response', r: r, name: 'queries/users/otp'
+
+  return r.users.results.first
+%}

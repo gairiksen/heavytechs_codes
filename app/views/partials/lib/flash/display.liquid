@@ -1,0 +1,13 @@
+{% comment %}
+  display and reset flash msg
+{% endcomment %}
+{% liquid
+  if context.session.sflash
+    assign flash = context.session.sflash | parse_json
+    include 'theme/simple/ui/flash', error: flash.error, notice: flash.notice
+
+    if context.location.pathname != flash.from or flash.force_clear
+      session sflash = null
+    endif
+  endif
+%}

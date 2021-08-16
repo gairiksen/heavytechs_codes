@@ -1,0 +1,19 @@
+---
+slug: dashboard/sell/orders/mark_shipped
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile, allow_uncompleted: true, return_to: '/dashboard/buy/review'
+
+  function order = 'lib/queries/orders/find', seller: current_profile.id, id: context.params.id, withStatuses: true
+  include 'lib/present_or_404', property:  order.id
+
+  function object = 'lib/commands/orders/mark_shipped', object: context.params.order, order: order
+  function order_url = 'link_to', order: order, current_profile: current_profile
+  if object.valid
+    include 'redirect_to', url: order_url, notice: 'app.orders.status.updated'
+  else
+    include 'redirect_to', url: order_url, error: 'app.orders.status.not_updated'
+  endif
+%}

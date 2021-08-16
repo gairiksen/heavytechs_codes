@@ -1,0 +1,15 @@
+en:
+  processes:
+    types:
+      organizations_create_member: 'Invite %{email}(%{first_name} %{last_name}) as merchant admin to organization %{organization_name}'
+      items_publish_version: 'Publish new item version %{name}'
+      items_publish: 'Publish item %{name}'
+      items_unpublish: 'Unpublish item %{name}'
+      unknown: Unknown
+    attr:
+      requested_by_id: Requested By
+      approved_by_id: Approved By
+      rejected_by_id: Rejected By
+      payload: Payload
+      command: Command
+      description: Description

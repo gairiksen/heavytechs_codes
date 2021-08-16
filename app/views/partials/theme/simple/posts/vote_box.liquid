@@ -1,0 +1,61 @@
+{% liquid
+  if post.downvote_profile_ids contains current_profile.id
+    assign downvote = true
+    assign down_action_type = 'clear'
+    assign down_action_title = 'app.models.posts.clear' | t
+  else
+    assign down_action_type = 'down'
+    assign down_action_title = 'app.models.posts.downvote' | t
+  endif
+
+  if post.upvote_profile_ids contains current_profile.id
+    assign upvote = true
+    assign up_action_type = 'clear'
+    assign up_action_title = 'app.models.posts.clear' | t
+  else
+    assign up_action_type = 'up'
+    assign up_action_title = 'app.models.posts.upvote' | t
+  endif
+%}
+{% if downvote %}
+  <div class="text-interaction-disabled">
+    {% render 'theme/simple/ui/icon', icon: 'dashUp' %}
+  </div>
+{% else %}
+  <form action="{% render 'link_to', object: post, action: 'vote' %}" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="post[id]" value="{{ post.id }}"/>
+    <input type="hidden" name="post[type]" value="{{up_action_type}}"/>
+    <button class="{% if upvote %}text-yellow-600{% else %}text-interaction{% endif %}" data-tc="voteup" title="{{up_action_title}}">
+      {% render 'theme/simple/ui/icon', icon: 'dashUp' %}
+    </button>
+  </form>
+{% endif %}
+
+<span class="pb-2 text-3xl font-bold" data-tc="votes-count">{{ post.upvote_profile_ids.size | minus: post.downvote_profile_ids.size | default: 0 }}</span>
+
+{% if upvote %}
+  <div class="text-interaction-disabled">
+    {% render 'theme/simple/ui/icon', icon: 'dashDown' %}
+  </div>
+{% else %}
+  <form action="{% render 'link_to', object: post, action: 'vote' %}" method="post" data-tc="votedown">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="post[id]" value="{{ post.id }}"/>
+    <input type="hidden" name="post[type]" value="{{down_action_type}}"/>
+    <button class="{% if downvote %}text-yellow-600{% else %}text-interaction{% endif %}" title="{{down_action_title}}">
+      {% render 'theme/simple/ui/icon', icon: 'dashDown' %}
+    </button>
+  </form>
+{% endif %}
+
+{% if post.parent_id != null and root_post.creator.id == current_profile.id %}
+  <form action="{% render 'link_to', object: root_post, action: 'accept' %}" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="post[id]" value="{{ post.parent_id }}"/>
+    <input type="hidden" name="post[accepted_post_id]" value="{{ post.id }}"/>
+    <button class="mt-5 {% if root_post.accepted_post_id == post.id %}text-green-600{% endif %}">
+      <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /> </svg>
+    </button>
+  </form>
+{% endif %}

@@ -1,0 +1,14 @@
+{% liquid
+  if label_key
+    assign label = label_key | t
+  else
+    assign label = label
+  endif
+%}
+
+<a href="/inbox/?to_id={{ to_id }}" class="{% if button %} button whitespace-nowrap {% endif %} chat-sendMessage {{ class }}">
+  {{ label | default: defaultLabel }}
+  {% if button %}
+    {% render 'theme/simple/ui/icon', icon: 'commentText', class: 'w-4 ms-3' %}
+  {% endif %}
+</a>

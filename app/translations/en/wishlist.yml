@@ -1,0 +1,21 @@
+en:
+  app:
+    wishlists:
+      add: Add to wishlist
+      save_for_later: Save for later
+      remove: Remove from wishlist
+      saving: Saving…
+      show:
+        item: Item
+        unit_price: Unit price
+        title: Wishlist
+        continue-shopping: Continue shopping
+      empty:
+        title: There are no items in your wishlist
+        description: Browse our products and add them to the wishlist
+        button: Browse products
+    errors:
+      cant_add: Couldn’t add the item to the wishlist. Please try again after reloading the page.
+      cant_remove: Could not remove the item from wishlist, please try again after reloading the page.
+    success:
+      added: Added to the wishlist

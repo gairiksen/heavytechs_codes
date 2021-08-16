@@ -1,0 +1,77 @@
+{% liquid
+  if object.parent_id == blank
+    assign editing_root = true
+  endif
+
+  hash_assign object['type'] = 'post'
+  if object.id
+    assign method = 'put'
+    assign submit_label = 'app.models.posts.edit'
+    assign heading = 'app.models.posts.edit_heading'
+    function form_url = 'link_to', object: object
+  else
+    assign method = 'post'
+    assign submit_label = 'app.models.posts.add'
+    assign heading = 'app.models.posts.add_heading'
+    function form_url = 'link_to', object: group, action: 'content'
+  endif
+
+  unless object.uuid
+    hash_assign object['uuid'] = '' | uuid
+  endunless
+%}
+
+{% if editing_root != true %}
+  <h3 class="subtitle">{{ 'subtitle' | t: scope: 'app.groups.content.form' }}</h3>
+
+  <div class="card">
+    {{ object.parent.body | markdown }}
+  </div>
+{% endif %}
+
+<h2 class="bigtitle">{{ heading | t }}</h2>
+
+<div class="flex flex-wrap  groups-center">
+  <form action="{{ form_url }}" method="post" class="w-full md:w-2/3" novalidate>
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="_method" value="{{method}}">
+    <input type="hidden" name="post[group_id]" value="{{ group.id }}">
+
+    {% if object.id %}
+      <input type="hidden" name="post[id]" value="{{ object.id }}">
+    {% endif %}
+    <input type="hidden" name="post[uuid]" value="{{ object.uuid }}">
+
+    {% if editing_root %}
+      <div class="mt-5">
+        <label class="block" for="title">{{ 'app.models.posts.form.title' | t }}</label>
+        <input class="w-2/3 form-input" type="text" id="title" name="post[title]" value="{{ object.title }}" />
+        {% render 'theme/simple/field_error', errors: object.errors.title %}
+        {% render 'theme/simple/ui/form-tip', content_key: 'app.models.posts.form.title_help' %}
+      </div>
+    {% endif %}
+
+    <div class="mt-5">
+      <label class="block" for="body">{{ 'app.models.posts.form.body' | t }}</label>
+      <textarea class="w-2/3 form-input" id="body" name="post[body]" data-markdown-editor>{{ object.body }}</textarea>
+      {% render 'theme/simple/field_error', errors: object.errors.body %}
+      {% render 'theme/simple/ui/form-tip', content_key: 'app.models.posts.form.body_help' %}
+    </div>
+
+    {% if editing_root %}
+      <div class="mt-3">
+        <label class="block" for="tags">{{ 'app.models.posts.form.tags' | t }}</label>
+        <input class="w-2/3 form-input" type="text" id="tags" name="post[tags]" value="{{ object.tags | join: ',' }}" pattern="^[A-Za-z0-9-]*$" data-tags-input />
+        {% render 'theme/simple/field_error', errors: object.errors.tags %}
+        {% render 'theme/simple/ui/form-tip', content_key: 'app.models.posts.form.tags_help' %}
+      </div>
+    {% endif %}
+
+    <button class="mt-8 button">{{ submit_label | t }}</button>
+  </form>
+</div>
+{% render 'theme/simple/photos/s3_form',
+  object_uuid: object.uuid,
+  presigned_url: presigned_url,
+  photo_type: 'screenshot'
+%}

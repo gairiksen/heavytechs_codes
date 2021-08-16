@@ -1,0 +1,32 @@
+{% if profile_id %}
+  <form
+    class="absolute top-5 right-5 z-10"
+    x-data="wishItem()"
+    x-on:submit.prevent
+    data-id="{{ item_id }}"
+  >
+    <input type="hidden" name="l_id" value="{{ profile_id }}">
+    <input type="hidden" name="r_id" value="{{ item_id }}">
+    <input type="hidden" name="name" value="wishlist">
+
+    <button
+      class="text-interaction hover:text-interaction-hover transform hover:scale-125 transition"
+      data-tc="wishlist-item"
+      x-on:wishlist-ready.window="init()"
+      x-on:click="toggle($el)"
+      x-bind:title="exists ? '{{ 'app.wishlists.remove' | t }}' : '{{ 'app.wishlists.add' | t }}'"
+    >
+      <span
+        x-cloak
+        x-show="exists"
+        class="transition"
+      >
+        {% render 'theme/simple/ui/icon', icon: 'heartFull', class: 'w-6 h-6' %}
+      </span>
+
+      <span x-cloak x-show="!exists">
+        {% render 'theme/simple/ui/icon', icon: 'heart', class: 'w-6 h-6' %}
+      </span>
+    </button>
+  </form>
+{% endif %}

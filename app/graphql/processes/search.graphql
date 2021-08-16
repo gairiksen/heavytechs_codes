@@ -1,0 +1,62 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $payload: String
+  $command: String
+) {
+  processes: records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "process" }
+      properties: [
+        { name: "payload" contains: $payload }
+        { name: "command" value: $command }
+      ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      payload: property(name: "payload")
+      command: property(name: "command")
+      profile_id: property(name: "profile_id")
+      profile: related_record(
+        table: ["profile", "organization"]
+        join_on_property: "profile_id"
+        foreign_property: "id"
+      ) { ...profile }
+      status: related_record(
+        join_on_property: "id"
+        foreign_property: "object_id"
+        table: "status"
+        sort: { created_at: { order: ASC } }
+      ) {
+        id
+        created_at
+        name: property(name: "name")
+        timestamp: property(name: "timestamp")
+
+        profile: related_record(
+          join_on_property: "profile_id"
+          foreign_property: "id"
+          table: ["profile", "organization"]
+        ) {...profile }
+      }
+    }
+  }
+}
+
+fragment profile on Record {
+  id
+  type: table
+  first_name: property(name: "first_name")
+  last_name: property(name: "last_name")
+  name: property(name: "name")
+}

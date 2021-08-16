@@ -1,0 +1,28 @@
+---
+slug: admin/organizations/:id/members
+method: post
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_maker', return_url: '/admin/organizations'
+
+  function organization = 'lib/queries/organizations/find', id: context.params.member.organization_id, with_members: true
+  include 'lib/present_or_404', property: organization.id
+
+  function object = 'lib/commands/organizations/create_member', object: context.params.member, skip_execution: true
+  if object.valid
+    function object = 'lib/commands/processes/create', payload: context.params.member, command: 'organizations/create_member', profile: current_profile
+    if object.valid
+      assign url = '/admin/organizations/' | append: organization.id
+      include 'redirect_to', url: url, notice: 'app.admin.organizations.members.new.created'
+    else
+      log object, type: 'ERROR: organizations/member/create processes/create'
+    endif
+
+  else
+    render 'theme/simple/admin/organizations/members/new', organization: organization, object: object, context: context
+  endif
+%}

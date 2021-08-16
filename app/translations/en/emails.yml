@@ -1,0 +1,95 @@
+en:
+  app:
+    emails:
+      passwords:
+        reset:
+          subject: Reset password
+          title: Password reset request
+          content: It seems that you requested a password reset. To proceed use the following button.
+          ignore: If it wasn’t you who requested this just ignore this message.
+      contact-us:
+        subject: 'New message from Contact-Us form on %{host}'
+      orders:
+        order_id: Order ID
+        return:
+          seller:
+            subject: 'New return request from %{buyer_name}'
+            greeting: Hi %{name},
+            info: '%{buyer_name} has just requested a <b>product return</b> on %{site_name}. Please inform your client about the return possibilities as soon as possible.'
+            return_link: Go to Return details
+            details: Return details
+            reason: Reason for return
+            reason_details: Detailed information
+        confirmed:
+          buyer:
+            subject: '[%{site_name}] Order Confirmation %{transaction_id}'
+            greeting: '%{first_name}, thank you for your order!'
+            info: 'We’ve received your order and we are waiting for your payment. The process usually takes a few minutes. Once we confirm the payment, the merchants will contact you as soon as they have information about the delivery of your package. Please find your purchase information below.'
+            order_summary: Order summary
+            delivery: Delivery
+            contact_link: Order details
+            order_total: Order total
+            subtotal: Subtotal price
+            total_price: Total price
+            payment_method: Payment method
+            transaction_id: Transaction ID
+            order_id: Order ID
+            order_date: Order date
+          seller:
+            subject: 'New order on %{site_name} from %{buyer_name}'
+            greeting: Great news %{name},
+            info: '%{buyer_name} has just purchased your product on %{site_name}. Please inform your client about delivery/pickup date as soon as possible.'
+            order_link: Go to delivery details
+            details: Order details
+            delivery: Delivery
+            order_total: Order total
+            subtotal: Subtotal price
+            total_price: Total price
+        delivered:
+          buyer:
+            subject:
+              personal_pickup: '%{site_name} Order %{order_id} in the store'
+              delivery: '%{site_name} Order %{order_id} shipped'
+            greeting: 'Great news %{first_name}!'
+            info_delivery: 'Your order has been shipped on %{shipped_at}. Delivery takes approximately %{delivery_time}.'
+            info_personal_pickup: 'Your order <b>is available in our store</b> %{pickup_address}! You can pick it up until %{pickup_until} in opening hours %{opening_hours}'
+            merchant_provided_info: The merchant provided following information
+            delivery: Delivery
+            contact_link: Order details
+            contact_info: Feel free to contact us if you have any questions.
+            order_total: Order total
+            subtotal: Subtotal price
+            total_price: Total price
+            payment_method: Payment method
+            order_summary: Order summary
+        cancelled_buyer:
+          buyer:
+            subject: '%{site_name} You have cancelled your Order %{order_id}'
+            greeting: 'Hi %{first_name}!'
+            info_cancel: 'The following Order has been successfully cancelled:'
+            order_link: 'Order details'
+        cancelled_seller:
+          buyer:
+            subject: '%{site_name} Your Order %{order_id} has been cancelled by %{name}'
+            greeting: 'Hi %{first_name}!'
+            info_cancel: 'Unfortunately, the following Order could not be processed and has been <strong>cancelled</strong> by %{name}:'
+            contact_info: Feel free to contact us if you have any questions.
+            order_link: 'Order details'
+          seller:
+            subject: '%{site_name} You have cancelled Order %{order_id}'
+            greeting: 'Hi %{name}!'
+            info_cancel: 'The following Order from %{first_name} has been successfully cancelled:'
+            order_link: 'Order details'
+      organizations:
+        member_set_password:
+          title: Claim your Merchant Admin Account
+          subject: "%{site_name} Invited you to become a Merchant Admin for %{name}"
+          content: You have been invited as a Merchant Admin, to set password and login please
+            use the following button.
+          claim: Claim Account
+          ignore: If you don't know this merchant just ignore this message.
+        member_added_existing_profile:
+          title: You have been invited to become the Merchant Admin
+          subject: "%{site_name} You have been invited to become the Merchant Admin for %{name}"
+          content: You have been added as a Merchant Admin, now you can manage orders.
+          visit_organization: Visit organization site

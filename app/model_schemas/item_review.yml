@@ -1,0 +1,13 @@
+name: item_review
+properties:
+  - name: profile_id
+  - name: order_id
+  - name: item_inventory_id
+  - name: order_id
+  - name: score
+    type: integer
+  - name: body
+  - name: pros
+    type: array
+  - name: cons
+    type: array

@@ -1,0 +1,19 @@
+<div class="container">
+  <h1 class="text-4xl font-medium text-center">
+    tag - {{ tag.id }}
+  </h1>
+
+  <span class="font-medium">
+    {{ 'app.tags.attr.name' | t }}
+  </span>
+  <p class="mb-10">
+    {{ tag.name }}
+  </p>
+
+  <span class="font-medium">
+    {{ 'app.tags.attr.disabled_at' | t }}
+  </span>
+  <p class="mb-10">
+    {{ tag.disabled_at }}
+  </p>
+</div>

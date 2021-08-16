@@ -1,0 +1,41 @@
+---
+slug: dashboard/profile/update_email
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  assign email = context.params.update_email | default: ''
+  assign user_id = context.current_user.id | plus: 0
+  assign user_password = context.params.update_password | default: ''
+
+  graphql r = 'users/search_this_email', limit:20, user_id: user_id, email: email
+
+  if r.users.total_entries > 0
+    include 'redirect_to', url: '/dashboard/profile/edit', error: 'Error! This email id is already booked by someone else.'
+  endif
+
+  function user_object = 'lib/commands/users/update_email', user_id: user_id, email: email
+
+  
+%}
+
+    {% parse_json object %}
+      {
+        "user_id":      {{ context.current_user.id | json }},
+        "password":   {{ user_password | json }},
+        "password_confirmation":    {{ user_password | json }}
+      }
+    {% endparse_json %}
+
+{%liquid
+
+  if user_password != ''
+    function object = 'lib/commands/passwords/create', object: object
+  endif
+%}
+
+{%
+  include 'redirect_to', url: '/dashboard/profile/edit', notice: 'Email/Password has been updated successfully.'
+%}

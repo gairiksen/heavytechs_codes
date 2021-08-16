@@ -1,0 +1,30 @@
+{% parse_json item_data %}
+  {
+    "name":        "item-name",
+    "description": "item-description",
+    "lang":        "en",
+    "price":       10,
+    "tax_rate":    23.0,
+    "currency":    "usd",
+    "category":    "jewellery",
+    "quantity":    {{ quantity | default: 2 }},
+    "max_in_one_order":    {{ max_in_one_order | default: 2 }},
+    "sku":         "SKU-001",
+    "uuid":        "item.uuid"
+  }
+{% endparse_json %}
+
+{% liquid
+  assign offline_stores = 'Blue store,Red store' | split: ','
+  if seller == blank
+    function seller = 'test/fixtures/organization', name: "organization 5888", offline_stores: offline_stores
+  endif
+  function complex = 'lib/commands/items/create_complex', object: item_data, owner: seller.id
+  include 'test/assertions/valid_object', contract: contract, object: complex, field_name: 'complex'
+
+  function status = 'lib/commands/statuses/create', object_id: complex.item_inventory.id, name: 'app.statuses.items.published', profile_id: seller.id
+
+  function item = 'lib/queries/items/find', id: complex.item.id
+
+  return item
+%}

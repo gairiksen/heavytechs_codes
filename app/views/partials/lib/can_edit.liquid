@@ -1,0 +1,12 @@
+{% liquid
+  assign owner_id = user_id | default: profile_id
+
+  unless owner_id == item_inventory.owner.id
+    include 'redirect_to', url: '/', error: 'app.errors.denied'
+  endunless
+
+  if item_inventory.item.line_items.size > 0
+    function url = 'link_to', path: '/items/', item: item_inventory.item
+    include 'redirect_to', url: url, error: 'app.errors.cannot_edit_coz_has_active_orders'
+  endif
+%}

@@ -1,0 +1,14 @@
+---
+layout: null
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  assign statuses = context.params.status
+  function item_inventories = 'lib/queries/item_inventories/search_by_owner', limit: 20, owner: current_profile.id, params: context.params, statuses: statuses
+
+  assign statuses = statuses | split: ','
+
+  include 'theme/simple/dashboard/items/list/table', item_inventories: item_inventories, page: context.params.page
+%}

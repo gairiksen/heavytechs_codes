@@ -1,0 +1,16 @@
+---
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_superadmin'
+
+  function config = 'lib/commands/marketplace_setup/current_config'
+  function chat_enabled = 'lib/queries/constants/find' name: "USE_WEBSOCKET_CHAT", type: "boolean", context: context
+  function slack_alerts_enabled = 'lib/queries/constants/find' name: "SLACK_WEBHOOK_URL", type: "boolean", context: context
+  function verify_hcaptcha = 'lib/queries/constants/find' name: "VERIFY_HCAPTCHA", type: "boolean", context: context
+  function use_complex_password = 'lib/queries/constants/find' name: "USE_COMPLEX_PASSWORD", type: "boolean", context: context
+  function currency = 'lib/queries/constants/find' name: "CURRENCY", context: context
+
+  include 'theme/simple/admin/setup/index', object: config, chat_enabled: chat_enabled, slack_alerts_enabled: slack_alerts_enabled, currency: currency, verify_hcaptcha: verify_hcaptcha, use_complex_password: use_complex_password
+%}

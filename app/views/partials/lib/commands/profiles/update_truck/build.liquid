@@ -1,0 +1,158 @@
+{%liquid
+
+    assign is_truck = object.is_truck | default: ''
+
+    if is_truck == 'Yes'
+
+        assign short_description_service_skills = object.short_description_service_skills | default: ''
+        assign truck_type = object.truck_type | default: ''
+
+        if truck_type == 'Service Truck (with crane)'
+            assign crane_certification = object.crane_certification | default: ''
+            assign crane_cert_expiry_date = object.crane_cert_expiry_date | default: ''
+            assign capacity = object.capacity | default: ''
+        else 
+            assign crane_certification = '' | default: ''
+            assign crane_cert_expiry_date = '' | default: ''
+            assign capacity = '' | default: ''
+        endif
+
+        if truck_type == 'Lube Truck'
+            assign no_of_products_tank = object.no_of_products_tank | default: ''
+            assign fuel_tank_size = object.fuel_tank_size | default: ''
+        else 
+            assign no_of_products_tank = '' | default: ''
+            assign fuel_tank_size = '' | default: ''
+        endif
+        
+        assign truck_class = object.truck_class | default: ''
+        assign air_compressor = object.air_compressor | default: ''
+        assign tooling_basic = object.tooling_basic | default: ''
+        assign tooling_basic_1_drive = object.tooling_basic_1_drive | default: ''
+        assign tooling_generic_diagnostics = object.tooling_generic_diagnostics | default: ''
+        assign master_set = object.master_set | default: ''
+        assign tooling_speciality_tool = object.tooling_speciality_tool | default: ''
+
+        if tooling_speciality_tool == '1'
+            assign line_boring = object.line_boring | default: ''
+            assign nitrogen_charge_kit = object.nitrogen_charge_kit | default: ''
+            assign mag_drill = object.mag_drill | default: ''
+            assign fifty_t_hydraulic_jacks = object.fifty_t_hydraulic_jacks | default: ''
+            assign track_pin_press = object.track_pin_press | default: ''
+            assign field_hose_press = object.field_hose_press | default: ''
+            assign hydraulic_pulling_rams = object.hydraulic_pulling_rams | default: ''
+            assign hydraulic_torque_wrench = object.hydraulic_torque_wrench | default: ''
+            assign generic_diagnostic_pc = object.generic_diagnostic_pc | default: ''
+            assign oem_diagnostic_software = object.oem_diagnostic_software | default: ''
+            assign lube_skid = object.lube_skid | default: ''
+        else
+            assign line_boring = '' | default: ''
+            assign nitrogen_charge_kit = '' | default: ''
+            assign mag_drill = '' | default: ''
+            assign fifty_t_hydraulic_jacks = '' | default: ''
+            assign track_pin_press = '' | default: ''
+            assign field_hose_press = '' | default: ''
+            assign hydraulic_pulling_rams = '' | default: ''
+            assign hydraulic_torque_wrench = '' | default: ''
+            assign generic_diagnostic_pc = '' | default: ''
+            assign oem_diagnostic_software = '' | default: ''
+            assign lube_skid = '' | default: ''
+        endif  
+    
+    else
+
+        assign short_description_service_skills = '' | default: ''
+        assign truck_type = '' | default: ''
+
+        if truck_type == 'Service Truck (with crane)'
+            assign crane_certification = object.crane_certification | default: ''
+            assign crane_cert_expiry_date = object.crane_cert_expiry_date | default: ''
+            assign capacity = object.capacity | default: ''
+        else 
+            assign crane_certification = '' | default: ''
+            assign crane_cert_expiry_date = '' | default: ''
+            assign capacity = '' | default: ''
+        endif
+
+        if truck_type == 'Lube Truck'
+            assign no_of_products_tank = object.no_of_products_tank | default: ''
+            assign fuel_tank_size = object.fuel_tank_size | default: ''
+        else 
+            assign no_of_products_tank = '' | default: ''
+            assign fuel_tank_size = '' | default: ''
+        endif
+        
+        assign truck_class = '' | default: ''
+        assign air_compressor = '' | default: ''
+        assign tooling_basic = '' | default: ''
+        assign tooling_basic_1_drive = '' | default: ''
+        assign tooling_generic_diagnostics = '' | default: ''
+        assign master_set = '' | default: ''
+        assign tooling_speciality_tool = '' | default: ''
+
+        if tooling_speciality_tool == '1'
+            assign line_boring = object.line_boring | default: ''
+            assign nitrogen_charge_kit = object.nitrogen_charge_kit | default: ''
+            assign mag_drill = object.mag_drill | default: ''
+            assign fifty_t_hydraulic_jacks = object.fifty_t_hydraulic_jacks | default: ''
+            assign track_pin_press = object.track_pin_press | default: ''
+            assign field_hose_press = object.field_hose_press | default: ''
+            assign hydraulic_pulling_rams = object.hydraulic_pulling_rams | default: ''
+            assign hydraulic_torque_wrench = object.hydraulic_torque_wrench | default: ''
+            assign generic_diagnostic_pc = object.generic_diagnostic_pc | default: ''
+            assign oem_diagnostic_software = object.oem_diagnostic_software | default: ''
+            assign lube_skid = object.lube_skid | default: ''
+        else
+            assign line_boring = '' | default: ''
+            assign nitrogen_charge_kit = '' | default: ''
+            assign mag_drill = '' | default: ''
+            assign fifty_t_hydraulic_jacks = '' | default: ''
+            assign track_pin_press = '' | default: ''
+            assign field_hose_press = '' | default: ''
+            assign hydraulic_pulling_rams = '' | default: ''
+            assign hydraulic_torque_wrench = '' | default: ''
+            assign generic_diagnostic_pc = '' | default: ''
+            assign oem_diagnostic_software = '' | default: ''
+            assign lube_skid = '' | default: ''
+        endif  
+
+    endif
+  
+%}
+{% parse_json object %}
+  {
+    "id":                 {{ object.id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "is_truck":      {{ is_truck | json }},
+    "short_description_service_skills":   {{ short_description_service_skills | json }},
+    "truck_type":    {{ truck_type | json }},
+    "crane_certification":    {{ crane_certification | json }},
+    "crane_cert_expiry_date":    {{ crane_cert_expiry_date | json }},
+    "capacity":    {{ capacity | json }},
+    "no_of_products_tank":    {{ no_of_products_tank | json }},
+    "fuel_tank_size":    {{ fuel_tank_size | json }},
+    "truck_class":    {{ truck_class | json }},
+    "air_compressor":    {{ air_compressor | json }},
+    "tooling_basic":    {{ tooling_basic | json }},
+    "tooling_basic_1_drive":    {{ tooling_basic_1_drive | json }},
+    "tooling_generic_diagnostics":    {{ tooling_generic_diagnostics | json }},
+    "master_set":    {{ master_set | json }},
+    "tooling_speciality_tool":    {{ tooling_speciality_tool | json }},
+    "line_boring":    {{ line_boring | json }},
+    "nitrogen_charge_kit":    {{ nitrogen_charge_kit | json }},
+    "mag_drill":    {{ mag_drill | json }},
+    "fifty_t_hydraulic_jacks":    {{ fifty_t_hydraulic_jacks | json }},
+    "track_pin_press":    {{ track_pin_press | json }},
+    "field_hose_press":    {{ field_hose_press | json }},
+    "hydraulic_pulling_rams":    {{ hydraulic_pulling_rams | json }},
+    "hydraulic_torque_wrench":    {{ hydraulic_torque_wrench | json }},
+    "generic_diagnostic_pc":    {{ generic_diagnostic_pc | json }},
+    "oem_diagnostic_software":    {{ oem_diagnostic_software | json }},
+    "lube_skid":    {{ lube_skid | json }} 
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

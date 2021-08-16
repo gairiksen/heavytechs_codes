@@ -1,0 +1,9 @@
+{% liquid
+  function buyer = 'lib/queries/profiles/find', id: actor_id
+  function order = 'lib/queries/orders/find', id: event.target.id
+
+  function order_url = 'link_to_url', object: order, type: 'buyer_order'
+  hash_assign order['order_url'] = order_url
+
+  function object = 'lib/commands/emails/order_cancelled_by_buyer', order: order, buyer: buyer
+%}

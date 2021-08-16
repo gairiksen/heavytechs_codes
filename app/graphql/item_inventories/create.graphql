@@ -1,0 +1,30 @@
+mutation create_item_inventory(
+  $item_id: String!
+  $owner: String!
+  $sku: String!
+  $quantity: Int!
+  $c__status: String!
+) {
+  record_create(
+    record: {
+      table: "item_inventory"
+      properties: [
+              { name: "item_id" value: $item_id }
+              { name: "owner" value: $owner }
+              { name: "sku" value: $sku }
+              { name: "quantity" value_int: $quantity }
+              { name: "c__status" value: $c__status }
+            ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+
+    item_id: property(name: "item_id")
+    owner: property(name: "owner")
+    sku: property(name: "sku")
+    quantity: property_int(name: "quantity")
+    c__status: property(name: "c__status")
+     }
+}

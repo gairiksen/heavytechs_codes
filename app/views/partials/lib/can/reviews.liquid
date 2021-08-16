@@ -1,0 +1,22 @@
+{% liquid
+  assign can = false
+
+  if review == blank
+    return false
+  endif
+  if actor.id == review.profile_id
+    assign owner = true
+  endif
+
+  case do
+  when 'fill'
+    if owner and review.status.name == 'app.statuses.reviews.new'
+      return true
+    endif
+
+  when 'see'
+    return owner
+  endcase
+
+  return can
+%}

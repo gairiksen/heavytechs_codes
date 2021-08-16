@@ -1,0 +1,5 @@
+{% liquid
+  if user
+    include 'redirect_to', url: '/', error: 'app.errors.already_logged_in'
+  endif
+%}

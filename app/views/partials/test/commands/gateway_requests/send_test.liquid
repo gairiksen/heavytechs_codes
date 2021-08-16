@@ -1,0 +1,18 @@
+{% parse_json input %}
+{
+  "data": {
+    "to": "https://{{ context.location.host }}/not_exists",
+    "request_type": "GET",
+    "payload": "bar"
+  },
+  "template": "generic"
+}
+{% endparse_json %}
+{% liquid
+  function object = 'lib/commands/gateway_requests/send', object: input, gateway: 'example', external_id: "5"
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'base'
+  assign payload = object.payload | parse_json
+  include 'test/assertions/equal', contract: contract, given: payload, field_name: 'object', expected: input.data
+  include 'test/assertions/equal', contract: contract, given: object.response_status, field_name: 'object', expected: "404"
+%}

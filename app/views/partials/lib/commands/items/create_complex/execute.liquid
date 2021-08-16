@@ -1,0 +1,19 @@
+{% liquid
+  assign name = object.details.en.name
+  graphql r = 'items/create_complex', args: object
+
+  if r.errors
+    log r.errors, type: 'errors.graphql.invalid'
+
+    hash_assign object['valid'] = false
+    hash_assign object['errors'] = r.errors
+  else
+    graphql relations = 'items/create_complex_fill_relations', item_id: r.item.id, item_inventory_id: r.item_inventory.id, item_detail_ids: r.item_details.ids
+    function status = 'lib/commands/statuses/create', object_id: r.item_inventory.id, name: 'app.statuses.items.unpublished', profile_id: object.owner
+    assign object = r
+    hash_assign object['name'] = name
+    hash_assign object['valid'] = true
+  endif
+
+  return object
+%}

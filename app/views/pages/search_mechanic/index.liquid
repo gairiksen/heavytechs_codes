@@ -1,0 +1,18 @@
+{% parse_json input %}
+{
+  "data": {
+    "to": "http://maps.google.com/maps/api/js?sensor=false&address=700109&key=",
+    "request_type": "GET",
+    "payload": "timezones"
+  },
+  "template": "generic"
+}
+{% endparse_json %}
+{% liquid
+  
+  function object = 'lib/commands/gateway_requests/send', object: input, gateway: 'example', external_id: "5"
+
+  assign a = object.response | strip
+%}
+{{a}}
+<br />

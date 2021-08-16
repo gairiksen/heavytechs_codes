@@ -1,0 +1,46 @@
+mutation update(
+  $id: ID!
+  $item_id: String
+  $buyer: String
+  $total_price_cents: Int
+  $currency: String
+  $total_shipping_cost_cents: Int
+  $products_price_cents: Int
+  $seller: String
+  $shipping_first_name: String
+  $shipping_last_name: String
+  $shipping_email: String
+  $shipping_phone: String
+  $shipping_type: String
+  $shipping_address_id: String
+  $shipping_pickup_point: String
+  $payment_type: String
+  $c__status: String
+) {
+  model_update(
+    id: $id
+    model: {
+      properties: [
+        { name: "item_id", value: $item_id }
+        { name: "buyer", value: $buyer }
+        { name: "seller", value: $seller }
+        { name: "total_price_cents", value_int: $total_price_cents }
+        { name: "currency", value: $currency }
+        { name: "total_shipping_cost_cents" value_int: $total_shipping_cost_cents }
+        { name: "products_price_cents", value_int: $products_price_cents }
+        { name: "shipping_first_name", value: $shipping_first_name }
+        { name: "shipping_last_name", value: $shipping_last_name }
+        { name: "shipping_email", value: $shipping_email }
+        { name: "shipping_phone", value: $shipping_phone }
+        { name: "shipping_type", value: $shipping_type }
+        { name: "shipping_pickup_point", value: $shipping_pickup_point }
+        { name: "shipping_address_id", value: $shipping_address_id }
+        { name: "payment_type", value: $payment_type }
+        # cache
+        { name: "c__status", value: $c__status }
+      ]
+    }
+  ) {
+    id
+  }
+}

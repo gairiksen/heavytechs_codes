@@ -1,0 +1,354 @@
+<div class="flex flex-col md:flex-row">
+    {% render 'theme/simple/admin/new_menu', this_page: this_page %}
+
+    <div class="bg-gray-50 py-10 w-full md:w-4/5">
+        <div class="mx-auto px-3 md:px-10">
+            <div class="flex items-center justify-between mb-6">
+                <a href="javascript:history.go(-1)" class="flex items-center text-indigo-400 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Contractors listing</a>
+            </div>
+            
+
+            <div class="overflow-auto py-6">
+                <table class="border-collapse w-full">
+                    <thead>
+                        <tr>
+                            <th class="uppercase text-sm font-bold text-gray-600 h-10 text-center">Photo</th>
+                            <th class="uppercase text-sm text-gray-600 h-10 font-bold text-center">Name</th>
+                            <th class="uppercase text-sm text-gray-600 h-10 font-bold text-center">sign up date</th>
+                            <th class="uppercase text-sm text-gray-600 h-10 font-bold text-center">Location</th>
+                            <th class="uppercase text-sm text-gray-600 h-10 font-bold text-center">Last login</th>
+                            <th class="uppercase text-sm text-gray-600 h-10 font-bold text-center">projects posted</th>
+                            {%comment%}
+                            <th class="uppercase text-sm font-normal text-gray-600 h-10">&nbsp;</th>
+                            {%endcomment%}
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for c in records.results %}
+                        <tr class="bg-white rounded-lg shadow">
+                            <td class="border-b border-gray-200 text-center h-20">
+                                {% if c.photo.photo.url %}
+                                <img src="{{c.photo.photo.url}}" alt="" class="w-10 h-10 rounded-full m-auto">
+                                {% else %}
+                                <img src="{{ 'images/signup-img3.png' | asset_url }}" alt="" class="w-10 h-10 rounded-full m-auto">
+                                {% endif %}
+                            </td>
+                            <td class="border-b border-gray-200 text-center h-20 text-base text-gray-600">{{c.name}}</td>
+                            <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{ c.created_at | date: "%b %y" }}</td>
+                            <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{c.profile_contractor_bio.office_location}}</td>
+                            <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{ c.last_login | date: "%b %d, %Y %H:%M" }}</td>
+                            <td class="border-b border-gray-200 text-center h-20 text-base font-normal text-gray-600">{{c.projects.size}}</td>
+                        </tr>
+                        {%endfor%}      
+
+                        <tr class="bg-white rounded-lg shadow">
+                        
+                        
+                        
+                        <td colspan="7" class="border-b border-gray-200 text-center h-20 text-sm font-medium text-gray-600 whitespace-nowrap">
+                            <div class="flex items-center justify-between pr-10">
+
+                                <div class="flex items-center w-52"><img src="{{ 'images/mail-icon.svg' | asset_url }}" alt="" class="mr-3">
+                                    <a href="mailto:{{user_details.email}}">
+                                        {{contractor_details.email}}
+                                    </a>
+                                </div>
+
+                                <div class="flex items-center w-40"><img src="{{ 'images/call-icon.svg' | asset_url }}" alt="" class="mr-3">
+                                    <a href="callto:{{mechanic_details.profile.mobile_number}}">{{records.results[0].mobile_number}}</a>
+                                </div>
+
+                                <div class="flex items-center w-48"> 
+                                    <img src="{{ 'images/message-orng.svg' | asset_url }}" alt="" class="mr-3">
+                                    <a href="/inbox/?to_id={{ records.results[0].id }}">Instant message</a>
+                                </div>
+
+                                {%liquid
+                                    if records.results[0].is_blocked == '1'
+                                        assign toggle = '0'
+                                    else 
+                                        assign toggle = '1'
+                                    endif
+                                %}
+
+                                <div class="flex justify-center items-center" x-data="{ toggle: '{{toggle}}' }">
+                                    <a href="javascript:void(0)" onclick="change_status()">
+                                        <div class="relative rounded-full w-15 h-3 transition duration-200 ease-linear"
+                                                :class="[toggle === '1' ? 'bg-purple-400' : 'bg-gray-400']">
+                                            <label for="toggle" 
+                                                    class="absolute -top-1 left-0 bg-white border-2 w-5 h-5 rounded-full transition transform duration-100 ease-linear cursor-pointer"
+                                                    :class="[toggle === '1' ? 'translate-x-full border-purple-500 bg-purple-500' : 'translate-x-0 border-gray-400']">
+                                                    
+                                                </label>
+                                            <input type="checkbox" id="toggle" name="toggle" 
+                                                    class="appearance-none w-full h-full active:outline-none focus:outline-none"
+                                                    @click="toggle === '0' ? toggle = '1' : toggle = '0'">
+                                        </div>
+                                    </a>
+                                    {% if records.results[0].is_blocked == '1' %}
+                                        <span class="text-xs font-normal text-gray-500 ml-3.5">Unblock</span>                                        
+                                    {% else %}
+                                        <span class="text-xs font-normal text-gray-500 ml-3.5">Block</span>
+                                    {%endif%}
+
+                                    <input type="hidden" name="is_blocked" id="is_blocked" value="{{records.results[0].is_blocked}}">
+                                </div>  
+
+                            </div>
+                        </td>
+                        
+                      
+                        </tr>                
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <script type="text/javascript">
+                function change_status(){
+                    //alert("aaaaa");
+                    var is_blocked = document.getElementById('is_blocked').value;
+                    if (is_blocked == '1') {
+                        var conf_text = "Do you really want to unblock this user?";
+                        var required_is_block = '0';
+                    } else {
+                        var conf_text = "Do you really want to block this user?";
+                        var required_is_block = '1';
+                    }
+                    var ans = confirm(conf_text);
+                    if (!ans) {
+                        return false;
+                    } else {
+
+                        var url = "/admin/user_change_status?profile_id={{records.results[0].id}}&user_id={{records.results[0].id}}&is_blocked="+required_is_block+"&profile_for=contractor";
+                        window.location.href = url;
+                    }
+
+                    
+                }
+            </script>
+
+
+            <div  
+            x-data="{ 
+                openTab: 1, 
+                activeClasses:'font-medium heavytechs-text-dark-orange border-b-2 heavytechs-border-color-orange',
+                inactiveClasses:'text-gray-800 font-normal'
+            }">
+                <div class="mb-8 bg-white shadow-sm border border-gray-100">
+                    <ul class="flex items-center flex-col md:flex-row">
+                        <li class="w-full md:w-auto" @click="openTab = 1">
+                            <a href="javascript:void(0)" 
+                            :class="openTab === 1 ? activeClasses : inactiveClasses"
+                            class="text-base w-full text-center h-12 flex items-center justify-center md:w-36">Company bio</a>
+                        </li>
+
+                        {%comment%}
+                        <li class="w-full md:w-auto" @click="openTab = 2">
+                            <a href="javascript:void(0)" 
+                            :class="openTab === 2 ? activeClasses : inactiveClasses"
+                            class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Projects</a>
+                        </li>
+                        {%endcomment%}
+                        
+                    </ul>
+                </div>
+            
+                <div x-show="openTab === 1">
+
+                    <div class="bg-white rounded-md pt-5 px-7 pb-24 shadow-sm">
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Office  location</strong>
+                            <span class="block text-base text-gray-500">{{records.results[0].profile_contractor_bio.office_location}}</span>
+                        </div>
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Longer Description</strong>
+                            <span class="block text-base text-gray-500">{{records.results[0].profile_contractor_bio.short_description}}</span>
+                        </div>
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Industry Category</strong>
+                            <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+
+                                {% if records.results[0].profile_contractor_bio.aeronautical == '1' %}
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked="" disbled>
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>Aeronautical</label>
+                                </li>
+                                {% endif %}
+
+                                {% if records.results[0].profile_contractor_bio.government == '1' %}
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked="" disbled>
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>Government</label>
+                                </li>
+                                {% endif %}
+
+                                {% if records.results[0].profile_contractor_bio.transportation_fleet == '1' %}
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked="" disbled>
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>Transportaion Fleet</label>
+                                </li>
+                                {% endif %}
+
+                                {% if records.results[0].profile_contractor_bio.mining == '1' %}
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked="" disbled>
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>Mining</label>
+                                </li>
+                                {% endif %}
+
+                            </ul>
+                        </div>
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Number of employees</strong>
+                            <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked="">
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>{{records.results[0].profile_contractor_bio.total_employees}}</label>
+                                </li>
+                                
+                            </ul>
+                        </div>                            
+
+                        <div class="mb-8">
+                            <strong class="block text-base font-bold text-gray-600 mb-2">Annual Sales</strong>
+                            <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked="">
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>{{records.results[0].profile_contractor_bio.annual_sales}}</label>
+                                </li>                                
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div x-show="openTab === 2">
+
+                    <div class="bg-white rounded-md pt-5 px-7 pb-24 shadow-sm">
+                        <div class="mb-14">
+                            <h4 class="mb-4 text-base text-gray-600 font-bold">Industries Serviced (project type)*</h4>
+                            <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                                <li>
+                                    <input id="projecttype1" type="checkbox" checked>
+                                    <label for="projecttype1" class="text-base font-medium text-gray-800"><span><span></span></span>Earth work</label>
+                                </li>
+                                <li>
+                                    <input id="projecttype2" type="checkbox" checked>
+                                    <label for="projecttype2" class="text-base font-medium text-gray-800"><span><span></span></span>Pipeline</label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-14">
+                            <h4 class="mb-4 text-base text-gray-600 font-bold">Skills/ Service Offering</h4>
+                            <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                                <li>
+                                    <input id="skills1" type="checkbox" checked>
+                                    <label for="skills1" class="text-base font-medium text-gray-800"><span><span></span></span>Heavy Equipment Mechanic</label>
+                                </li>
+                                <li>
+                                    <input id="skills2" type="checkbox" checked>
+                                    <label for="skills2" class="text-base font-medium text-gray-800"><span><span></span></span>Welder/Fabricator</label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-9">
+                            <h4 class="mb-4 text-base text-gray-600 font-bold">OEM</h4>
+                            <ul class="customCheck flex flex-col gap-4 md:flex-row md:gap-x-14">
+                                <li>
+                                    <input id="OEM1" type="checkbox" checked>
+                                    <label for="OEM1" class="text-base font-medium text-gray-800"><span><span></span></span>Caterpillar</label>
+                                </li>
+                                <li>
+                                    <input id="OEM2" type="checkbox" checked>
+                                    <label for="OEM2" class="text-base font-medium text-gray-800"><span><span></span></span>Expert</label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-11">
+                            <ul class="mb-7">
+                                <li class="flex items-center mb-3">
+                                    <span class="block text-base text-gray-600 w-1/4">
+                                        Certificate OEM
+                                    </span>
+                                    <a href="#" class="text-base text-blue-500 hover:underline">View certificate</a>
+                                </li>
+                                
+                            </ul>
+                            <span class="block text-base text-gray-500 mb-4">Expiration date: <strong>04.25.2029</strong></span>
+                        </div>
+
+                        <div class="mb-9">
+                            <h4 class="mb-4 text-base text-gray-600 font-bold">Drivers Licence</h4>
+                            <ul class="customCheck flex flex-col gap-4 mb-9 md:flex-row md:gap-x-14">
+                                <li>
+                                    <input id="Licence1" type="checkbox" checked>
+                                    <label for="Licence1" class="text-base font-medium text-gray-800"><span><span></span></span>Class D</label>
+                                </li>
+                                
+                            </ul>
+
+                            <ul>
+                                <li class="flex items-center mb-3">
+                                    <span class="block text-base text-gray-600 w-1/4">
+                                        Licence
+                                    </span>
+                                    <a href="#" class="text-base text-blue-500 hover:underline">View Licence</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+
+                        <div class="mb-10">
+                            <ul class="customCheck flex flex-col gap-4">
+                                <li>
+                                    <input id="Tanker1" type="checkbox" checked>
+                                    <label for="Tanker1" class="text-base font-medium text-gray-800"><span><span></span></span>Tanker</label>
+                                </li>
+                                <li>
+                                    <input id="Hazmat1" type="checkbox" checked>
+                                    <label for="Hazmat1" class="text-base font-medium text-gray-800"><span><span></span></span>Hazmat</label>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-14">
+                            <span class="block text-base text-gray-500 mb-4">Expiration date of hazmat endorsement: <strong>04.25.2029</strong></span>
+                        </div>
+
+                        <div>
+                            <h4 class="mb-3.5 text-base text-gray-600 font-bold">Insurance Coverage</h4>
+                            <span class="block text-base text-gray-500 mb-2">Expiration date: <strong>04.25.2029</strong></span>
+                            <ul>
+                                <li class="flex items-center mb-3">
+                                    <span class="block text-base text-gray-600 w-1/4">
+                                        Insurance
+                                    </span>
+                                    <a href="#" class="text-base text-blue-500 hover:underline">View insurance coverage</a>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                
+            </div>
+
+
+        </div>
+    </div>
+</div>

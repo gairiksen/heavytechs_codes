@@ -1,0 +1,10 @@
+name: item_inventory
+properties:
+  - name: item_id
+  - name: owner
+  - name: sku
+  - name: quantity
+    type: integer
+  - name: max_in_one_order
+    type: integer
+  - name: c__status

@@ -1,0 +1,9 @@
+{% background 'auto-unlock-account', delay: event.object.lock_time, user_id: event.actor.id, default_login_attempts: event.object.default_login_attempts %}
+{% liquid
+  assign user = '{}' | parse_json
+  hash_assign user['id'] = user_id
+  function reset = 'lib/commands/users/reset_login_attempts', object: user, default_login_attempts: default_login_attempts
+
+  function evt = 'lib/commands/events/create', type: 'account_unlocked', actor: reset, object: reset, delay: 0
+%}
+{% endbackground %}

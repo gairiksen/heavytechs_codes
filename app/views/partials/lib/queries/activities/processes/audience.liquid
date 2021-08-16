@@ -1,0 +1,25 @@
+{% liquid
+  if id == blank
+    log '(processes) ID cannot be blank when searching for audience'
+    return null
+  endif
+
+  graphql r = 'activities/processes/audience', id: id, limit: 10
+  assign process = r.processes.results.first
+
+  case process.name
+
+  when 'organizations/update'
+    function audience = 'lib/queries/activities/organizations/audience', id: process.payload.id
+
+  when 'items/publish_version', 'items/publish'
+    assign item = process.payload.item | default: process.payload.new_item
+    function audience = 'lib/queries/activities/items/audience', id: item.id
+  else
+    assign audience = '{"profile": []}' | parse_json
+  endcase
+
+  hash_assign audience['profile'] = audience['profile'] | add_to_array: process.status.profile.id
+
+  return audience
+%}

@@ -1,0 +1,62 @@
+{% parse_json sort_options %}
+{
+   "price_desc": { "properties": { "name": "price", "order": "DESC" }},
+   "price_asc": { "properties": { "name": "price", "order": "ASC" }},
+   "name_desc": { "properties": { "name": "name", "order": "DESC" }},
+   "name_asc": { "properties": { "name": "name", "order": "ASC" }},
+   "created_at_desc": { "created_at": { "order": "DESC" }},
+   "created_at_asc": { "created_at": { "order": "ASC" }}
+}
+{% endparse_json %}
+
+{% parse_json query %}
+{
+  "limit":        {{ limit | default: 20 }},
+  "keyword":      {{ params.keyword | json }},
+  "sort_by":      {{ params.sort_by | json }},
+  "sort":         {{ sort_options[params.sort_by] | json }},
+  "page":         {{ params.page | to_positive_integer: 1 }},
+  "owner":        {{ owner | json }},
+  "category":     {{ params.category | json }},
+  "organizations": {{ params.organizations | json }},
+  "organization_slugs": {{ params.organization_slugs | json }},
+  "lang":         {{ lang | json }},
+  "withOrders":   {{ withOrders | default: false }},
+  "withStatuses": {{ withStatuses | default: false }},
+  "only_public":  {{ only_public | default: false }},
+  "promoted":     {{ promoted | json }},
+  "ids":          {{ params.ids | json }}
+}
+{% endparse_json %}
+
+{% liquid
+ if query.organization_slugs
+   function organizations = 'lib/queries/organizations/search', limit: 99, slugs: query.organization_slugs
+   hash_assign query['organizations'] = organizations.results | map: 'id'
+ endif
+%}
+
+{% liquid
+  if params.price_min != blank
+    hash_assign query['price_min'] = params.price_min | to_positive_integer: 0 | amount_to_fractional: context.constants.CURRENCY | append: ''
+  endif
+  if params.price_max != blank
+    hash_assign query['price_max'] = params.price_max | to_positive_integer: 0 | amount_to_fractional: context.constants.CURRENCY | append: ''
+  endif
+
+  assign status = params.status | default: status
+  if status
+    hash_assign query['status'] = 'app.statuses.items.' | append: status
+  endif
+  if statuses
+    assign full_statuses = '[]' | parse_json
+    for name in statuses
+      assign full_name = 'app.statuses.items.' | append: name
+      assign full_statuses =  full_statuses | add_to_array: full_name
+    endfor
+    hash_assign query['status'] = full_statuses
+    hash_assign query['statuses'] = full_statuses
+  endif
+%}
+
+{% return query %}

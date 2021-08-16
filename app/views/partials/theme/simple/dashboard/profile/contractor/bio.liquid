@@ -1,0 +1,192 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+    <div class="w-full mb-6 md:mb-0 md:w-60">
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md mb-4">
+            <div class="flex flex-col w-77 mb-0 text-center">
+            <figure>
+            {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-32 h-32 m-auto rounded-full' %}
+            </figure>
+            <div class="px-0 mt-5 mechanic_logo">
+            {% render 'theme/simple/photos/uppy_area' %}
+            </div>
+            </div>
+        </div>
+        {%endcomment%}
+
+        {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+        {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object %}
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+            <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+            <p class="text-sm font-normal text-gray-400 mb-5">
+                To make your profile visible to other users, fill in the required fields
+            </p>
+
+            <div>
+                <span class="block text-right text-sm text-gray-400 mb-2">30%</span>
+                <ul class="flex justify-between items-center">
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                </ul>
+            </div>
+        </div>
+        {%endcomment%}
+
+        <div class="text-center mt-3">
+            <a href="/dashboard/profile/contractor/post_project" class="hover:text-white heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block w-11/12 m-auto">Post a project</a>
+        </div>
+
+        <!--<div class="pt-14 pb-14 md:pb-0">
+            <ul class="customRadio">
+                <li class="mb-5">
+                    <input id="available" type="radio" name="available" value="1" checked="checked">
+                    <label for="available" class="text-base font-medium text-gray-800"><span><span></span></span>Available</label>
+                </li>
+                <li>
+                    <input id="unavailable" type="radio" name="available" value="1">
+                    <label for="unavailable" class="text-base font-medium text-gray-800"><span><span></span></span>Unavailable</label>
+                </li>
+            </ul>
+        </div>-->
+
+    </div>
+
+    <div class="profileEdit_right w-full">
+        <div class="mb-8 bg-white">
+            <ul class="flex items-center flex-col md:flex-row">
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/bio?edit=1" 
+                    class="text-base w-full text-center h-12 flex items-center justify-center md:w-36 heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Company Bio</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/projects"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Projects</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/post_project"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Post a project</a>
+                </li>
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            function initialize() {
+                var input = document.getElementById('location');
+                const options = {
+                    componentRestrictions: { country: "us" },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                new google.maps.places.Autocomplete(input, options);
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+    
+        <div class="bg-white rounded-md">
+        <div class="pb-10 px-7 pt-7 shadow-sm">
+            <form action="/dashboard/profile/contractor" method="post" enctype='multipart/form-data'>
+                {% render 'authenticity_token', context: context %}
+                <input type="hidden" name="_method" value="put" />
+
+                <input type="hidden" name="profile_type" value="bio" />
+                <input type="hidden" name="bio[id]" value="{{profile_bio.id}}" id="id" />
+                <input type="hidden" name="bio[user_id]" value="{{profile_bio.user_id}}" id="user_id" />
+        
+
+                <div class="mb-8">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Office  location</h4>
+                    <input type="text" name="bio[office_location]" id="location" value="{{profile_bio.office_location}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Short description of business</h4>
+                    <textarea name="bio[short_description]" id="short_description" class="bg-gray-100 border border-gray-200 h-24 rounded-lg resize-none p-2 outline-none text-base text-gray-700 w-full md:w-2/4" placeholder="Type">{{profile_bio.short_description}}</textarea>
+                    <div class="flex items-center justify-end text-right text-xs text-gray-400 w-full md:w-2/4 pt-4">
+                        <img src="{{ 'images/warning.svg' | asset_url }}" alt="" class="mr-2"> Max 50 characters
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Industry Category</h4>
+                    <ul class="customCheck gap-4 flex flex-col flex-wrap w-full md:w-2/4 md:flex-row md:gap-y-6">
+                        <li>
+                            <input {%if profile_bio.mining == '1'%}checked{%endif%} id="mining" name="bio[mining]" type="checkbox" name="category" value="1">
+                            <label class="text-base font-medium text-gray-800" for="mining"><span></span>Mining</label>
+                        </li>
+                        <li>
+                            <input {%if profile_bio.heavy_civil == '1'%}checked{%endif%} id="heavy_civil" name="bio[heavy_civil]" type="checkbox" name="category" value="1">
+                            <label class="text-base font-medium text-gray-800" for="heavy_civil"><span></span>Heavy Civil</label>
+                        </li>
+                        <li>
+                            <input {%if profile_bio.transportation_fleet == '1'%}checked{%endif%} id="transportation_fleet" name="bio[transportation_fleet]" type="checkbox" name="category" value="1">
+                            <label class="text-base font-medium text-gray-800" for="transportation_fleet"><span></span>Transportation Fleet</label>
+                        </li>
+                        <li>
+                            <input {%if profile_bio.aeronautical == '1'%}checked{%endif%} id="aeronautical" name="bio[aeronautical]" type="checkbox" name="category" value="1">
+                            <label class="text-base font-medium text-gray-800" for="aeronautical"><span></span>Aeronautical</label>
+                        </li>
+                        <li>
+                            <input {%if profile_bio.government == '1'%}checked{%endif%} id="government" name="bio[government]" type="checkbox" name="category" value="1">
+                            <label class="text-base font-medium text-gray-800" for="government"><span></span>Government</label>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="mb-10">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Number of employees</h4>
+                    <ul class="customCheck flex gap-4 flex-col md:flex-row md:gap-10">
+                        <li>
+                            <input {%if profile_bio.total_employees == '1-50'%}checked{%endif%} id="employees1" type="radio" name="bio[total_employees]" value="1-50">
+                            <label for="employees1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>1-50</label>
+                        </li>
+                        <li>
+                            <input {%if profile_bio.total_employees == '51-300'%}checked{%endif%} id="employees2" type="radio" name="bio[total_employees]" value="51-300">
+                            <label for="employees2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>51-300</label>
+                        </li>
+                        <li>
+                            <input {%if profile_bio.total_employees == '300 +'%}checked{%endif%} id="employees3" type="radio" name="bio[total_employees]" value="300 +">
+                            <label for="employees3" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>300 +</label>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="mb-10">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Annual sales (optional)</h4>
+                    <input type="text" value="{{profile_bio.annual_sales}}" name="bio[annual_sales]" id="annual_sales" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                    
+                </div>
+
+
+                <div>
+                    <button class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block cursor-pointer">Save</button>
+                </div>
+
+            </form>
+        </div>
+        </div>
+
+    </div>
+    </div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+
+

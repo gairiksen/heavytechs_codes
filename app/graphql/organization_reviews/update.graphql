@@ -1,0 +1,36 @@
+mutation update_organization_review(
+  $id: ID!
+  $score: Float
+  $description_score: Int
+  $delivery_score: Int
+  $service_score: Int
+  $body: String
+  $recommend: Boolean
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "organization_review"
+      properties: [
+        { name: "score" value_float: $score }
+        { name: "description_score" value_int: $description_score }
+        { name: "delivery_score" value_int: $delivery_score }
+        { name: "service_score" value_int: $service_score }
+        { name: "body" value: $body }
+        { name: "recommend" value_boolean: $recommend }
+      ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+    profile_id: property(name: "profile_id")
+    order_id: property(name: "order_id")
+    organization_id: property(name: "organization_id")
+    description_score: property_int(name: "description_score")
+    delivery_score: property_int(name: "delivery_score")
+    service_score: property_int(name: "service_score")
+    body: property(name: "body")
+    recommend: property_boolean(name: "recommend")
+  }
+}

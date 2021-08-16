@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/pdf/create/build', object: object, current_profile: current_profile
+  
+
+  
+   graphql r = 'pdf/create', args: object 
+ 
+
+  return object
+%}

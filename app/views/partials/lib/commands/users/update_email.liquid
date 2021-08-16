@@ -1,0 +1,7 @@
+{% liquid
+function object = 'lib/commands/users/update_email/build', user_id: user_id, email: email
+
+function object = 'lib/commands/execute', object: object, mutation_name: 'users/update', selection: 'user_update'
+
+return object
+%}

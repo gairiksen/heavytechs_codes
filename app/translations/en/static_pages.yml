@@ -1,0 +1,231 @@
+en:
+  static-pages:
+    about-us:
+      our-story: Our mission
+      our-story-subtitle: is to help people bring digital projects to life
+      our-story-paragraph: 'PlatformOS was founded in 2014 by Adam Broadway in San Francisco,'
+      our-story-paragraph2: >-
+        I’ve been fortunate enough to be surrounded by truly breathtaking tech
+        talent living in San Francisco. This place is a melting pot full of
+        diverse, intelligent, and entrepreneurial innovators who continue to
+        push how we engage with the world we live in. The ideas,
+        problem-solving, disruption and execution of these ideas into real
+        products, services and ecosystems has made Silicon Valley the tech hub
+        of the modern world.
+      our-team: Our team
+      our-team-subtitle: >-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+        ullamcorper risus ullamcorper, condimentum felis sed, vulputate nunc.
+        Nulla in tempor lectus, tempus ultricies magna.
+      person1-name: Person one
+      person2-name: Person two
+      person3-name: Person three
+      person1-position: Position one
+      person2-position: Position two
+      person3-position: Position three
+      person1-description: >-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+        ullamcorper risus ullamcorper, condimentum felis sed, vulputate nunc.
+        Nulla in tempor lectus, tempus ultricies magna.
+      person2-description: >-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+        ullamcorper risus ullamcorper, condimentum felis sed, vulputate nunc.
+        Nulla in tempor lectus, tempus ultricies magna.
+      person3-description: >-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+        ullamcorper risus ullamcorper, condimentum felis sed, vulputate nunc.
+        Nulla in tempor lectus, tempus ultricies magna.
+    terms:
+      terms-of-service: TERMS OF SERVICE
+      last-updated: 'These Terms of Service were last updated on September 1, 2020.'
+      content: >-
+        PlatformOS ("platformOS," "we," "us," and/or "our") provides its
+        services (described below) to you through its mobile applications and
+        other software made available by platformOS ("Software") and its website
+        located at http://www.platformOS.com (the "Site") (collectively, such
+        services, Software and the Site, collectively, the "Service(s)"),
+        subject to the following Terms of Service (as amended from time to time,
+        these "Terms of Service"). We reserve the right, at our sole discretion,
+        to change or modify portions of these Terms of Service at any time
+        without further notice. You should periodically visit this page to
+        review the current Terms of Service so you are aware of any revision to
+        which you are bound. If we do this, we will post the changes to these
+        Terms of Service on this page and will indicate at the top of this page
+        the date these terms were last revised. We will also notify you, either
+        through the Services user interface, in an email notification or through
+        other reasonable means. Any such changes will become effective for
+        existing users no earlier than ten (10) days after they are posted,
+        except that changes addressing new functions of the Services or changes
+        made for legal reasons will be effective immediately. Your continued use
+        of the Service after the date any such changes become effective
+        constitutes your acceptance of the new Terms of Service. If you do not
+        agree to abide by these or any future Terms of Service, do not use or
+        access (or continue to use or access) the Service.
+
+
+        PLEASE READ THESE TERMS OF SERVICE CAREFULLY AS THEY CONTAIN AN
+        AGREEMENT TO ARBITRATE AND OTHER IMPORTANT INFORMATION REGARDING YOUR
+        LEGAL RIGHTS, REMEDIES AND OBLIGATIONS. THE AGREEMENT TO ARBITRATE
+        REQUIRES (WITH LIMITED EXCEPTION) THAT YOU SUBMIT CLAIMS YOU HAVE
+        AGAINST US TO BINDING AND FINAL ARBITRATION, AND FURTHER (1) YOU WILL
+        ONLY BE PERMITTED TO PURSUE CLAIMS AGAINST COMPANY ON AN INDIVIDUAL
+        BASIS, NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY CLASS OR REPRESENTATIVE
+        ACTION OR PROCEEDING, AND (2) YOU WILL ONLY BE PERMITTED TO SEEK RELIEF
+        (INCLUDING MONETARY, INJUNCTIVE, AND DECLARATORY RELIEF) ON AN
+        INDIVIDUAL BASIS. PLEASE INDICATE YOUR ACCEPTANCE TO THESE TERMS OF
+        SERVICE IN ACCORDANCE WITH THE INSTRUCTIONS PROVIDED BY platformOS.
+        INDICATING ACCEPTANCE ESTABLISHES A BINDING AND EXECUTED WRITTEN
+        AGREEMENT BETWEEN YOU AND platformOS. IF YOU DO NOT ACCEPT THESE TERMS
+        OF SERVICE, YOU CANNOT USE THE SERVICE.
+
+
+        In addition, when using certain services, you shall be subject to any
+        additional terms, policies or guidelines applicable to such services
+        that may be posted on the Service from time to time, including, without
+        limitation,
+
+
+        You agree that platformOS, in its sole discretion, may suspend or
+        terminate your account (or any part thereof) or use of the Service and
+        remove and discard any items or content within the Service, for any
+        reason, including, without limitation, for lack of use or if pOS
+        MARKETPLACE believes that you have violated or acted inconsistently with
+        the letter or spirit of these Terms of Service. Any suspected
+        fraudulent, abusive or illegal activity that may be grounds for
+        termination of your use of Service, may be referred to appropriate law
+        enforcement authorities. platformOS may also in its sole discretion and
+        at any time discontinue providing the Service, or any part thereof, with
+        or without notice. You agree that any termination of your access to the
+        Service under any provision of these Terms of Service may be effected
+        without prior notice, and acknowledge and agree that pOS MARKETPLACE may
+        immediately deactivate or delete your account and all related
+        information and files in your account and/or bar any further access to
+        such files or the Service. Further, you agree that pOS MARKETPLACE shall
+        not be liable to you or any third-party for any termination of your
+        access to the Service.
+
+
+        ### User Disputes
+
+        You agree that you are solely responsible for your interactions
+        (including any purchase and sale transactions) with any other user in
+        connection with the Service and platformOS will have no liability or
+        responsibility with respect thereto. platformOS reserves the right, but
+        has no obligation, to become involved in any way with disputes between
+        you and any other user of the Service.
+    privacy:
+      privacy-policy: PRIVACY POLICY
+      last-updated: 'This Privacy Policy was last updated on October 21, 2020.'
+      content: >-
+        Welcome to the service provided by platformOS. ("pOS","we", "us" and/or
+        "our"). This privacy policy has been created to provide information
+        about our company, our website and the services we provide (including
+        through our mobile applications) (collectively, the "Services") to our
+        users ("you" and/or "your"). This Privacy Policy sets forth pOS's policy
+        with respect to information, including personally identifiable data
+        ("Personal Data"), that is collected from users of the Services.
+
+
+        When you interact with us through the Services, we may collect Personal
+        Data and other information from you, as further described below:
+
+
+        We collect Personal Data from you when you voluntarily provide such
+        information, such as when you register for access to our Services and/or
+        third party services (for example, username and email address provided
+        by services such as Facebook), provide us with credit card and other
+        payment information, use certain Services including withdrawal of funds,
+        contact us with inquiries or respond to one of our surveys. Wherever pOS
+        collects Personal Data we make an effort to provide a link to this
+        Privacy Policy.
+    faq:
+      title: Frequently Asked Questions
+      subtitle: >-
+        The most common questions about how our business works and what can do
+        for you.
+      questions:
+        section1:
+          title: Title 12
+          questions:
+            q1:
+              question: How to post questions?
+              answer: >-
+                Anyone can see the questions and answers posted by community
+                members, but for posting a question or answering one, you need to
+                register first. All we want from you is a valid email address, a
+                password, and a username.
+            q2:
+              question: What is upvote and how to use it
+              answer: >-
+                If you find a question or answer interesting and you think that it
+                adds value to the conversation, you can signal your interest or
+                approval by upvoting it. You can upvote questions and answers
+                separately. Answers that get the most votes appear first. Upvote
+                is always a somewhat subjective category, but here are our
+                recommendations - Upvote a question if you feel it is particularly
+                useful, for example because you have also encountered a similar
+                issue. You can also praise a question for identifying a problem
+                very clearly. Upvote an answer if you think it provides a useful
+                explanation for the question. We suggest upvoting answers that
+                have one or more of the following qualities Precise Detailed
+                Educative Well-written
+            q3:
+              question: How to post stupid questions?
+              answer: >-
+                Anyone can see the questions and answers posted by community
+                members, but for posting a question or answering one, you need to
+                register first. All we want from you is a valid email address, a
+                password, and a username.
+        section2:
+          title: Title 2
+          questions:
+            q1:
+              question: How to ask a good question?
+              answer: >-
+                Search first - it is possible that someone else has already
+                encountered the same or similar problem Summarize your issue in
+                one sentence in the title. Include keywords that differentiate
+                your question from similar ones on the site. Use the Description
+                for details Give context to your question: it might be useful if
+                you explain how you encountered the problem you’re trying to solve
+                and what prevented you from solving it Include code if necessary
+                Include all relevant tags Proofread before posting Respond to
+                comments: if you missed an important piece of information edit
+                your question to make sure you get useful answers Try out the
+                suggestions and share the outcome
+            q2:
+              question: How to use the editor?
+              answer: >-
+                With the editor you can format content by selecting it then
+                clicking the appropriate formatting options in the toolbar. Here’s
+                a summary of what you can do.
+        section3:
+          title: Title 3
+          questions:
+            q1:
+              question: What to do if I didn't get an answer to an urgent question?
+              answer: >-
+                We have community members all over the timezones; someone might be
+                busy typing you an answer while you are asleep. But if you are
+                really tight with time send an email to support@platformos.com.
+            q2:
+              question: Found a bug. How do I report it?
+              answer: Send email to support@platformos.com
+        section4:
+          title: Title 4
+          questions:
+            q1:
+              question: Found a security vulnerability. How do I report it?
+              answer: Send email to support@platformos.com
+            q2:
+              question: How to report spam?
+              answer: Send email to support@platformos.com
+        section5:
+          title: Title 5
+          questions:
+            q1:
+              question: How to delete my account?
+              answer: Send email to support@platformos.com
+            q2:
+              question: Is there a suggested style guide
+              answer: Send email to support@platformos.com

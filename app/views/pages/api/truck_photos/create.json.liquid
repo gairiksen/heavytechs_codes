@@ -1,0 +1,12 @@
+---
+slug: api/truck_photos
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile
+
+  function object = 'lib/commands/truck_photos/create', object: context.params.photo, current_profile: current_profile
+
+  return object
+%}

@@ -1,0 +1,33 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+  $object_uuid: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "truck_photos" }
+      properties: [
+        { name: "user_id", value: $user_id }  
+        { name: "object_uuid" value: $object_uuid } 
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+
+      object_uuid: property(name: "object_uuid")
+      photo: property(name: "photo")
+      photo_type: property(name: "photo_type")
+      photo_path: property(name: "photo_path")
+    }
+  }
+}

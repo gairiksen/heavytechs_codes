@@ -1,0 +1,25 @@
+{% for line_item in order.line_items %}
+  {% function item_url = 'link_to', item: line_item.item %}
+  <div class="mb-5 last:mb-0 md:flex items-center">
+    <a href="{{ item_url }}">
+      {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+
+      {% if cover_url %}
+        <img src="{{ cover_url }}" class="md:w-20 mb-2 md:mb-0 me-5 rounded">
+      {% else %}
+        {% render 'theme/simple/ui/picture-placeholder', class:"md:w-20 mb-2 md:mb-0 me-5 rounded" %}
+      {% endif %}
+    </a>
+    <div>
+      <a href="{{ item_url }}">
+        {{ line_item.item.item_detail.name }}
+      </a>
+
+      {% if line_item.quantity > 1 %}
+        <small class="sidenote block">
+          ({{ line_item.quantity }} {{ 'app.orders.checkout.pieces' | t }})
+        </small>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}

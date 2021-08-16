@@ -1,0 +1,116 @@
+{% if line_item_returns.total_entries > 0 %}
+
+  <section class="w-full lg:table leading-loose lg:leading-normal relative">
+
+    <div
+      x-show="loading"
+      class="mt-6 card-overlay"
+      x-transition:enter="transition ease-in-out duration-100"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-80"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+    >
+    {% render 'theme/simple/ui/spinner', size: 10 %}
+    </div>
+
+    <header class="hidden uppercase lg:table-row sidenote">
+      <div class="lg:pb-2 lg:table-cell">{{ 'app.line_item_returns.list.number' | t }}</div>
+      {% if role == 'buyer' %}
+        <div class="lg:ps-3 lg:pb-2 lg:table-cell">{{ 'app.orders.seller' | t }}</div>
+      {% endif %}
+      {% if role == 'seller' %}
+        <div class="lg:ps-3 lg:pb-2 lg:table-cell">{{ 'app.orders.buyer' | t }}</div>
+      {% endif %}
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell">{{ 'app.created_at' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell">{{ 'app.line_item_returns.list.item' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.total' | t }}</div>
+      <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.status' | t }}</div>
+    </header>
+
+    <div class="card lg:table-row-group">
+
+      <form id="line-items-returns"></form>
+
+      {% for line_item_return in line_item_returns.results %}
+        {% function order_url = 'link_to', line_item_return: line_item_return, current_profile: current_profile %}
+        <ul class="{% if forloop.first == false %} mt-4 lg:mt-0 pt-4 lg:pt-0 border-t {% endif %} lg:table-row">
+
+          <li class="lg:py-4 lg:ps-4 {% if forloop.first == true %} rounded-ts {% endif %} {% if forloop.last == true %} rounded-bs {% endif %} align-middle lg:table-cell {% if forloop.first != true %} lg:border-t {% endif %}">
+            <span class="lg:hidden">{{ 'app.models.orders.form.id' | t }}: </span>
+            <a href="{% render 'link_to', line_item_return: line_item_return, current_profile: current_profile %}" class="font-bold lg:font-normal">
+              {{ line_item_return.id }}
+            </a>
+          </li>
+
+          {% if role == 'buyer' %}
+            <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell {% if forloop.first != true %} lg:border-t {% endif %}">
+              <span class="lg:hidden">{{ 'app.orders.seller' | t }}: </span>
+              {% liquid
+                if line_item_return.order.seller.first_name
+                  assign name = line_item_return.order.seller.first_name | append: ' ' | append: line_item_return.order.seller.last_name
+                else
+                  assign name = line_item_return.order.seller.name
+                endif
+              %}
+              {{ name }}
+            </li>
+          {% endif %}
+
+          {% if role == 'seller' %}
+            <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell {% if forloop.first != true %} lg:border-t {% endif %}">
+              <span class="lg:hidden">{{ 'app.orders.buyer' | t }}: </span>
+              {{ line_item_return.order.buyer.first_name }} {{ line_item_return.order.buyer.last_name }}
+            </li>
+          {% endif %}
+
+          <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell {% if forloop.first != true %} lg:border-t {% endif %}">
+            <span class="lg:hidden">{{ 'app.created_at' | t }}: </span>
+            <time datetime="{{ line_item_return.created_at }}">{{ line_item_return.created_at | l: 'compact' }}</time>
+          </li>
+
+          <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell {% if forloop.first != true %} lg:border-t {% endif %}">
+            <span class="lg:hidden">{{ 'app.line_item_returns.list.item' | t }}: </span>
+            {{ line_item_return.line_item.item.item_detail.name }}
+          </li>
+
+          <div class="align-middle lg:ps-4 lg:py-4 lg:table-cell {% if forloop.first != true %} lg:border-t {% endif %} lg:text-end">
+            <span class="lg:hidden">{{ 'app.orders.total' | t }}: </span>
+            {% assign amount_cents = line_item_return.line_item.price_cents | times: line_item_return.quantity %}
+            {% render 'theme/simple/price', amount_cents: amount_cents, currency: line_item_return.order.currency %}
+          </div>
+
+          <div class="align-middle lg:ps-4 lg:pe-4 lg:py-4 lg:table-cell {% if forloop.first == true %} rounded-te {% endif %} {% if forloop.last == true %} rounded-be {% endif %} {% if forloop.first != true %} lg:border-t {% endif %} lg:text-end">
+            {% if line_item_return.status.timestamp %}
+              <span class="lg:hidden">{{ 'app.status' | t }}: </span>
+
+              {% liquid
+                assign status = line_item_return.status.name
+
+                case status
+                  when 'app.statuses.line_item_returns.requested'
+                    assign status_class = 'bg-warning-disabled border-warning'
+                  when 'app.statuses.line_item_returns.accepted'
+                    assign status_class = 'bg-confirmation-disabled border-confirmation'
+                  when 'app.statuses.line_item_returns.returned'
+                    assign status_class = 'bg-confirmation-disabled border-confirmation'
+                  when 'app.statuses.line_item_returns.rejected'
+                    assign status_class = 'bg-confirmation-disabled border-danger'
+                endcase
+              %}
+              <span class="px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status | t }}</span>
+            {% endif %}
+          </div>
+        </ul>
+      {% endfor %}
+
+    </div>
+
+  </section>
+
+  {% render 'theme/simple/ui/pagination', collection: line_item_returns, current_page: page, form: 'line-items-returns' %}
+
+{% else %}
+  {% render 'theme/simple/dashboard/line_item_returns/list/empty' %}
+{% endif %}

@@ -1,0 +1,85 @@
+{% comment %}
+  Required params:
+    title: translation to be displayed
+    pickup_title: translation key for pickup
+    pickup_subtitle: translation key for pickup
+    delivery_title: translation key for delivery
+    delivery_subtitle: translation key for delivery
+    object: object with pre-filled values
+    errors: object with errors
+    name: prefix for inputs' name attribute
+  Optional params:
+    wrapper_classes: adds css to the most outer div
+    save_default_address:
+    default_address
+{% endcomment %}
+<div class="{{ wrapper_classes }}" x-data="{shippingType: {{ object.shipping_type | json }}}">
+  {{ title | t }}
+  {% render 'theme/simple/field_error', errors: object.errors.shipping_type %}
+
+  {% if seller.shipping_types contains 'personal_pickup' %}
+    <div class="mt-2 flex items-center gap-2">
+      <input
+        type="radio"
+        name="{{ name }}[shipping_type]"
+        id="shipping_type_personal_pickup_{{object.id}}"
+        value="personal_pickup"
+        {% if object.shipping_type == 'personal_pickup' %}checked{% endif %}
+        x-on:click="shippingType='personal_pickup'"
+        required
+      >
+      <label for="shipping_type_personal_pickup_{{object.id}}" class="font-semibold">{{ pickup_title | t }}</label>
+    </div>
+
+    <div class="mt-3" x-show="shippingType=='personal_pickup'">
+      <label for="shipping_pickup_point_{{object.id}}">{{ pickup_subtitle | t }}:</label>
+      <select id="shipping_pickup_point_{{object.id}}" name="{{ name }}[shipping_pickup_point]">
+        {% for store in seller.offline_stores %}
+          <option value="{{ store }}" {% if object.shipping_pickup_point == store %}selected{% endif %}>{{ store }}</option>
+        {% endfor %}
+      </select>
+      {% render 'theme/simple/field_error', errors: object.errors.shipping_pickup_point %}
+    </div>
+  {% endif %}
+
+  {% if seller.shipping_types contains 'delivery' %}
+    <div class="mt-2 flex items-center gap-2">
+      <input
+        type="radio"
+        name="{{ name }}[shipping_type]"
+        id="shipping_type_delivery_{{object.id}}"
+        value="delivery"
+        {% if object.shipping_type == 'delivery' %}checked{% endif %}
+        x-on:click="shippingType='delivery'"
+        required
+      >
+      <label for="shipping_type_delivery_{{object.id}}" class="font-semibold">{{ delivery_title }}</label>
+    </div>
+
+    <div class="mt-3" x-show="shippingType=='delivery'">
+      {% if delivery_subtitle != blank %}
+        <p class="mt-5 mb-5">{{ delivery_subtitle | t }}</p>
+      {% endif %}
+
+      {% liquid
+        assign address = object.shipping_address
+        if address == blank and default_address != blank
+          assign address = default_address
+        endif
+      %}
+      <fieldset x-bind:disabled="shippingType!='delivery'">
+        {% assign address_name_prefix = name | append: '[shipping_address]' %}
+        {% assign address_errors = object.shipping_address.errors %}
+
+        {% render 'theme/simple/addresses/form', address: address, name: address_name_prefix, errors: address_errors %}
+
+        {% if save_default_address %}
+          <label for="address_default_{{ object.id }}" class="flex gap-1 items-center">
+            <input data-tc="save-default-address" type="checkbox" id="address_default_{{object.id}}" name="{{ address_name_prefix }}[save_as_default]" x-on:change="document.querySelectorAll('[data-save-address]:not([id=address_default_{{object.id}}])').forEach((element) => element.checked = false)" {% if address.save_as_default == 'on' %}checked{% endif %} data-save-address>
+            {{ 'app.orders.checkout.save_as_default' | t }}
+          </label>
+        {% endif %}
+      </fieldset>
+    </div>
+  {% endif %}
+</div>

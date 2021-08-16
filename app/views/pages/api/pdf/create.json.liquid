@@ -1,0 +1,18 @@
+---
+slug: api/pdf
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile
+
+  function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: context.params.pdfDetails.page_category, item_category: context.params.pdfDetails.item_category, user_id: context.current_user.id, current_profile: current_profile
+  for iPdf in inactivePdf
+    function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: iPdf.id, user_id: context.current_user.id 
+  endfor
+
+  function object = 'lib/commands/pdf/create', object: context.params.pdfDetails, current_profile: current_profile
+  
+
+  include 'theme/json/shared/show', object: object
+%}

@@ -1,0 +1,12 @@
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ context.current_user.id | json }},
+    "availability":   {{ availability | json }},   
+    "availability_status":   {{ '1' | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

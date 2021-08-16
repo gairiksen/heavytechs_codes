@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% function direction = 'text_direction', lang: context.language %}
+
+<html dir="{{ direction }}" lang="{{ context.language }}">
+  <head>
+    {% include 'theme/simple/layout/head' %}
+    {% yield 'custom_styles' %}
+    {% include 'theme/simple/layout/js_global_variables', current_profile: context.exports.current_profile %}
+  </head>
+
+  <body class="font-sans leading-normal text-content bg-page">
+    {% include 'theme/simple/layout/admin', current_profile: context.exports.current_profile, page: context.page.slug %}
+  </body>
+</html>
+

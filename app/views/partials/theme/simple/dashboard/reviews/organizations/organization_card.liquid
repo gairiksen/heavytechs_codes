@@ -1,0 +1,10 @@
+<a href="{% render 'link_to', object: organization %}" class="flex items-center">
+  {% if organization.logo.photo.versions.tiny %}
+  <img width="80" src="{{ organization.logo.photo.versions.tiny }}" alt="" class="w-20 me-5 rounded">
+  {% else %}
+    {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+  {% endif %}
+  <span class="">
+    {{ organization.name }}
+  </span>
+</a>

@@ -1,0 +1,17 @@
+{% liquid
+  assign can = false
+
+  case do
+  when 'return_line_items'
+    if actor.id != order.buyer.id
+      return false
+    endif
+
+    assign status = order.status.name
+    if status == 'app.statuses.orders.delivered'
+      return true
+    endif
+  endcase
+
+  return can
+%}

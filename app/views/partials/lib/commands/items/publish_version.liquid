@@ -1,0 +1,12 @@
+{%  liquid
+  function object = 'lib/commands/items/publish_version/build', object: object
+  function object = 'lib/commands/items/publish_version/check', object: object
+
+  if object.valid and skip_execution != true
+    function status = 'lib/commands/statuses/create', object_id: object.item_inventory_id, name: 'app.statuses.items.published', profile_id: current_profile.id
+    include 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: status.id, target_id: status.object_id
+    function object = 'lib/commands/execute', mutation_name: 'items/publish_version' object: object, selection: 'new_item'
+  endif
+
+  return object
+%}

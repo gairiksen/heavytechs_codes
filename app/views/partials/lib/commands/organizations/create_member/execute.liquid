@@ -1,0 +1,18 @@
+{% liquid
+  function user = 'lib/commands/execute', mutation_name: 'users/create' object: object, selection: 'user_create'
+  if user.valid
+    hash_assign object['user_id'] = user.id
+    function profile = 'lib/commands/execute', mutation_name: 'profiles/create' object: object, selection: 'model_create'
+    if profile.valid
+      hash_assign object['profile'] = profile
+      assign now = 'now' | to_time
+      function rel = 'lib/commands/relationships/create', name: 'membership', l_id: profile.id, r_id: object.organization_id, l_at: now, r_at: now
+    endif
+  endif
+  if user.valid != true or profile.valid != true or rel.valid != true
+    log object, type: 'ERROR: create member'
+    hash_assign object['valid'] = false
+  endif
+
+  return object
+%}

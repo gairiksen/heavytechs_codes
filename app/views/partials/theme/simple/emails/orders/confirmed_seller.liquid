@@ -1,0 +1,62 @@
+<p>
+  {{ 'app.emails.orders.confirmed.seller.greeting' | t: name: data.order.seller.name }}<br>
+  {{ 'app.emails.orders.confirmed.seller.info' | t: buyer_name: data.buyer.first_name, site_name: data.site_name }}
+</p>
+
+<div class="mt text-center">
+  <a href="{{ data.order.order_url }}" class="button">{{ 'app.emails.orders.confirmed.seller.order_link' | t }}</a>
+</div>
+
+
+<div class="mt border"></div>
+
+
+<h2 class="mt subtitle">{{ 'app.emails.orders.confirmed.seller.details' | t }}</h2>
+
+<table cellspacing="0" class="w-full mt-2">
+  {% for item in data.order.line_items %}
+    <tr>
+      <td>
+        {% function cover_url = 'theme/simple/items/cover_url', item: item.item %}
+        {% if cover_url %}
+            <img src="{{ cover_url }}" width="80" class="w-20 rounded">
+        {% endif %}
+      </td>
+      <td class="table-spacing"></td>
+      <td>{{ item.item.item_detail.name }}</td>
+      <td class="table-spacing"></td>
+      <td class="text-right">{{ item.quantity }}</td>
+      <td class="table-spacing"></td>
+      <td class="text-right">{% render 'theme/simple/price', amount_cents: item.total_price_cents, currency: item.currency %}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<div class="mt-2">
+  <i>{{ 'app.emails.orders.confirmed.seller.delivery' | t }}</i>:<br>
+  {{ data.order.shipping_type | t: scope: 'app.orders.checkout.delivery_type' }} – {% render 'theme/simple/price', amount_cents: data.order.total_shipping_cost_cents, currency: data.order.currency %}<br>
+  {% render 'theme/simple/emails/delivery', shipping_address: data.order.shipping_address, pickup_point: data.order.shipping_pickup_point %}
+</div>
+
+
+<div class="mt border"></div>
+
+
+<h2 class="mt subtitle">{{ 'app.emails.orders.confirmed.buyer.order_total' | t }}</h2>
+<table cellspacing="0">
+  <tr>
+    <td>{{ 'app.emails.orders.confirmed.seller.subtotal' | t }}:</td>
+    <td class="table-spacing"></td>
+    <td>{% render 'theme/simple/price', amount_cents: data.order.products_price_cents, currency: data.order.currency %}</td>
+  </tr>
+  <tr>
+    <td>{{ 'app.emails.orders.confirmed.seller.delivery' | t }}:</td>
+    <td class="table-spacing"></td>
+    <td>{% render 'theme/simple/price', amount_cents: data.order.total_shipping_cost_cents, currency: data.order.currency %}</td>
+  </tr>
+  <tr>
+    <td><b>{{ 'app.emails.orders.confirmed.seller.total_price' | t }}:</b></td>
+    <td class="table-spacing"></td>
+    <td><b>{% render 'theme/simple/price', amount_cents: data.order.total_price_cents, currency: data.order.currency %}</b></td>
+  </tr>
+</table>

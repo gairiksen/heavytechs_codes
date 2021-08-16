@@ -1,0 +1,17 @@
+{% comment %}
+  params: @item
+          @current_user_id
+{% endcomment %}
+
+{% parse_json object %}
+{
+  "buyer":   "{% print current_user_id %}",
+  "seller":  "{% print item.item_inventory.owner.id %}",
+  "currency": {{ item.currency | json }},
+  "c__status": "app.statuses.orders.placed"
+}
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

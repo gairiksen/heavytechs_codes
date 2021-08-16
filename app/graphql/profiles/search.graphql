@@ -1,0 +1,131 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $uuid: String
+  $user_id: String
+  $slug: String
+  $name: String
+  $profile_for: String
+  $anonymous_session_id: String
+  $default_address_id: String
+  $followships: Boolean = false
+  $membership: Boolean = false
+  $load_organizations: Boolean = false
+  $load_default_address: Boolean = false
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "profile" }
+      properties: [
+        { name: "uuid", value: $uuid }
+        { name: "user_id", value: $user_id }
+        { name: "anonymous_session_id", value: $anonymous_session_id }
+        { name: "slug", value: $slug }
+        { name: "name", value: $name }
+        { name: "profile_for", value: $profile_for }
+        { name: "default_address_id", value: $default_address_id }
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+      uuid: property(name: "uuid")
+      slug: property(name: "slug")
+
+      name: property(name: "name")
+      first_name: property(name: "first_name")
+      last_name: property(name: "last_name")
+      profile_for: property(name: "profile_for")
+      bio: property(name: "bio")
+
+      mobile_number: property(name: "mobile_number")
+      company_name: property(name: "company_name")
+      short_description: property(name: "short_description")
+      position: property(name: "position")
+      ready_for_travel: property(name: "ready_for_travel")
+      drivers_license_class_a: property(name: "drivers_license_class_a")
+      drivers_license_class_b: property(name: "drivers_license_class_b")
+      drivers_license_class_c: property(name: "drivers_license_class_c")
+      drivers_license_tanker: property(name: "drivers_license_tanker")
+      total_experience: property(name: "total_experience")
+      last_login: property(name: "last_login")
+      is_blocked: property(name: "is_blocked")
+
+      language: property(name: "language")
+      default_address_id: property(name: "default_address_id")
+      otp_configured: property_boolean(name: "otp_configured")
+      permissions: property_json(name: "permissions")
+
+      default_address: related_record(
+        table: "address"
+        join_on_property: "default_address_id"
+        foreign_property: "id"
+      ) @include(if: $load_default_address) {
+        id
+        created_at
+        type: table
+
+        full_name: property(name: "full_name")
+        country: property(name: "country")
+        city: property(name: "city")
+        state: property(name: "state")
+        street: property(name: "street")
+        zip: property(name: "zip")
+        building_number: property(name: "building_number")
+        flat_number: property(name: "flat_number")
+      }
+
+      followed_ids: related_records(
+        table: "relationship"
+        join_on_property: "id"
+        foreign_property: "l_id"
+        filter: { properties: { name: "name", value: "followship" } }
+      ) @include(if: $followships) {
+        id: property(name: "r_id")
+      }
+
+      joined_group_ids: related_records(
+        table: "relationship"
+        join_on_property: "id"
+        foreign_property: "l_id"
+        filter: { properties: { name: "name", value: "membership" } }
+      ) @include(if: $membership) {
+        id: property(name: "r_id")
+      }
+
+      organizations: related_records(
+        table: "relationship"
+        join_on_property: "id"
+        foreign_property: "l_id"
+        filter: { properties: { name: "name", value: "membership" } }
+      ) @include(if: $load_organizations) {
+        r_id: property(name: "r_id")
+      }
+
+      avatar: related_record(
+        table: "photo"
+        join_on_property: "uuid"
+        foreign_property: "object_uuid"
+        filter: { properties: { name: "photo_type", value: "avatar" } }
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      user: related_user(join_on_property: "user_id", foreign_property: "id") {
+        id
+        email
+      }
+    }
+  }
+}

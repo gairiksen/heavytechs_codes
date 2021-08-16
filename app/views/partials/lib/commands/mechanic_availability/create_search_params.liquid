@@ -1,0 +1,5 @@
+{% liquid
+  function object = 'lib/commands/mechanic_availability/create_search_params/build', user_id: user_id
+  graphql r = 'profiles/create_mechanic_search_params', args: object 
+  return object
+%}

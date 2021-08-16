@@ -1,0 +1,9 @@
+{% render 'theme/simple/ui/avatar', profile: user, size: 128, class: 'w-32 h-32 mb-5 inline-flex text-3xl' %}
+
+{% liquid
+	assign name = user.first_name | append: ' ' | append: user.last_name
+	unless name
+		assign name = user.name
+	endunless
+	%}
+<h2 class="mb-10 text-xl">{{ name }}</h2>

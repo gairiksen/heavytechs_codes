@@ -1,0 +1,24 @@
+---
+slug: dashboard/sell/orders/:id
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.orders.seller
+    - label: app.orders.list
+---
+
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  assign statuses = 'app.statuses.orders.paid,app.statuses.orders.delivered,app.statuses.orders.cancelled_seller,app.statuses.orders.returned' | split: ','
+  function order = 'lib/queries/orders/find', seller: current_profile.id, id: context.params.id, status: statuses, withStatuses: true
+  include 'lib/present_or_404', property:  order.id
+
+  function transactions = 'lib/queries/transactions/search_by_order_ids', order_ids: order.id, limit: 20
+  function chat_enabled = 'lib/queries/constants/find' name: "USE_WEBSOCKET_CHAT", type: "boolean", context: context
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs
+  include 'theme/simple/dashboard/orders/show', order: order, role: 'seller', chat_enabled: chat_enabled, transactions: transactions.results
+%}

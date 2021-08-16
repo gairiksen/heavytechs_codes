@@ -1,0 +1,35 @@
+---
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_uncompleted: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true, return_to: '/dashboard/buy/review'
+
+  function orders = 'lib/queries/orders/search', buyer: current_profile.id, ids: context.params.cart.order_ids, limit: 200
+  function orders = 'lib/commands/orders/recalculate/build', object: orders
+  function object = 'lib/commands/orders/check_multiple', orders: orders
+
+  if object.valid
+    function object = 'lib/commands/orders/confirm_multiple', orders: orders.results
+    if object.valid
+      function transaction = 'lib/commands/transactions/create', order_results: orders, profile: current_profile
+      if transaction.valid
+
+        assign event_object = '{}' | parse_json
+        hash_assign event_object['transaction'] = transaction
+        hash_assign event_object['orders'] = object.orders
+        include 'lib/commands/events/create', type: 'orders_confirmed', actor_id: current_profile.id, object: event_object
+
+        function url = 'lib/commands/orders/pay_url', transaction: transaction
+        redirect_to url
+      else
+        log transaction, 'transaction#create error'
+      endif
+    else
+      include 'redirect_to', url: '/dashboard/buy/review', error: 'app.orders.confirm.errors.order_changed'
+    endif
+  else
+    include 'lib/flash/publish', error: 'app.orders.confirm.errors.order_changed', force_clear: true
+    include 'theme/simple/dashboard/orders/cart', orders: object.orders
+  endif
+%}

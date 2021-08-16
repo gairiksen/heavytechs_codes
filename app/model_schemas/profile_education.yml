@@ -1,0 +1,16 @@
+name: profile_education
+properties:
+  - name: uuid
+  - name: user_id
+  - name: automotive_service_excellence
+  - name: osha
+  - name: osha_expiry
+  - name: msha
+  - name: msha_expiry
+  - name: military_training
+  - name: most_advanced_training
+  - name: date_of_completion
+  - name: other_military_training
+  - name: college_degree
+  - name: highest_degree
+  - name: highest_degree_d_o_completion

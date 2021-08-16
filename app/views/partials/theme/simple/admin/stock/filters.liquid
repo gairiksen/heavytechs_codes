@@ -1,0 +1,35 @@
+<aside class="w-72 flex-shrink-0 -mt-6 ms-8 ps-8 pt-8 text-content-sidenote border-s border-frame">
+
+  <section class="border rounded p-4" x-data="{ allChecked: true }">
+    <header class="-mx-4 px-4 pb-2 flex justify-between border-b">
+      <h4 class="uppercase font-bold">{{ 'app.search.organizations' | t }}</h4>
+      <button x-on:click="allChecked = api.toggleList($el)" x-bind:title="allChecked ? '{{ 'admin.uncheck_all' | t }}' : '{{ 'admin.check_all' | t }}'" class="button-options">
+        <span x-cloak x-show="!allChecked">{% render 'theme/simple/ui/icon', icon: 'check', class: 'w-3' %}</span>
+        <span x-cloak x-show="allChecked">{% render 'theme/simple/ui/icon', icon: 'x', class: 'w-3' %}</span>
+      </button>
+    </header>
+    <ul>
+      {% for organization in filters.organizations %}
+        <li class="mt-2 flex items-start gap-2">
+          <input
+            type="checkbox"
+            id="organization_{{ organization.id }}"
+            name="organizations[]"
+            value="{{ organization.id }}"
+            form="admin-form"
+            class="mt-1"
+            {% if params.organizations contains organization.id %} checked {% endif %}
+            {% if params.organizations.size == 0 %} checked {% endif %}
+            {% unless params.organizations %} checked {% endunless %}
+          >
+          <label for="organization_{{ organization.id }}" class="cursor-pointer">{{ organization.name }}</label>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div class="text-center">
+    <button type="submit" class="mt-4 button button-small" form="admin-form">Apply</button>
+  </div>
+
+</aside>

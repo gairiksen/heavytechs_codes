@@ -1,0 +1,112 @@
+{%liquid
+  assign project_name = object.project_name | default: ''
+  assign longer_description = object.longer_description | default: ''
+  assign location_of_project = object.location_of_project | default: ''
+  assign expected_start_date = object.expected_start_date | default: ''
+  assign expected_end_date = object.expected_end_date | default: ''
+  assign start_time_stamp = object.start_time_stamp | plus: 0
+  assign end_time_stamp = object.end_time_stamp | plus: 0
+  assign duration_type = object.duration_type | default: ''
+  assign special_pay = object.special_pay | default: ''
+  assign short_description = object.short_description | default: ''
+  assign osha = object.osha | default: ''
+  assign msha = object.msha | default: ''
+  assign additionally_insured = object.additionally_insured | default: ''
+  assign insurance_cert_holder = object.insurance_cert_holder | default: ''
+  assign liability_limits = object.liability_limits | default: ''
+  assign crane_required = object.crane_required | default: ''
+  assign driver_license_required = object.driver_license_required | default: ''
+  assign driver_license_class = object.driver_license_class | default: ''
+  assign tanker = object.tanker | default: ''
+  assign air_brakes = object.air_brakes | default: ''
+  assign passenger = object.passenger | default: ''
+  assign doubles_triples = object.doubles_triples | default: ''
+  assign hazmat = object.hazmat | default: ''
+  assign earthworks = object.earthworks | default: ''
+  assign mining = object.mining | default: ''
+  assign fleet = object.fleet | default: ''
+  assign pipeline = object.pipeline | default: ''
+  assign paving = object.paving | default: ''
+  assign energy_production = object.energy_production | default: ''
+  assign heavy_equipment_training = object.heavy_equipment_training | default: ''
+  assign welder_fabricator = object.welder_fabricator | default: ''
+  assign truck_mechanic = object.truck_mechanic | default: ''
+  assign oiler_pm_tech = object.oiler_pm_tech | default: ''
+  assign welding = object.welding | default: ''
+  assign electrical_troubleshooting = object.electrical_troubleshooting | default: ''
+  assign computer_diagnostics = object.computer_diagnostics | default: ''
+  assign company_supplied = object.company_supplied | default: ''
+  assign not_offered = object.not_offered | default: ''
+  assign per_diem = object.per_diem | default: ''
+  assign paid_not_paid = object.paid_not_paid | default: ''
+  assign status = object.status | default: ''
+  assign latitude = object.latitude | default: ''
+  assign longitude = object.longitude | default: ''
+  
+%}
+{% parse_json geo_location %}
+{
+  "type": "Point",
+  "coordinates": [
+    {{longitude}},
+    {{latitude}}    
+  ]
+}
+{% endparse_json %}
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "project_name":   {{ project_name | json }},
+    "longer_description":    {{ longer_description | json }},
+    "location_of_project":    {{ location_of_project | json }},
+    "expected_start_date":    {{ expected_start_date | json }},
+    "expected_end_date":    {{ expected_end_date | json }},
+    "start_time_stamp":    {{ start_time_stamp | json }},
+    "end_time_stamp":    {{ end_time_stamp | json }},
+    "duration_type":    {{ duration_type | json }},
+    "special_pay":    {{ special_pay | json }},
+    "short_description":    {{ short_description | json }},
+    "osha":    {{ osha | json }},
+    "msha":    {{ msha | json }},
+    "additionally_insured":    {{ additionally_insured | json }},
+    "insurance_cert_holder":    {{ insurance_cert_holder | json }},
+    "liability_limits":    {{ liability_limits | json }},
+    "crane_required":    {{ crane_required | json }},
+    "driver_license_required":    {{ driver_license_required | json }},
+    "driver_license_class":    {{ driver_license_class | json }},
+    "tanker":    {{ tanker | json }},
+    "air_brakes":    {{ air_brakes | json }},
+    "passenger":    {{ passenger | json }},
+    "doubles_triples":    {{ doubles_triples | json }},
+    "hazmat":    {{ hazmat | json }},
+    "earthworks":    {{ earthworks | json }},
+    "mining":    {{ mining | json }},
+    "fleet":    {{ fleet | json }},
+    "pipeline":    {{ pipeline | json }},
+    "paving":    {{ paving | json }},
+    "energy_production":    {{ energy_production | json }},
+    "heavy_equipment_training":    {{ heavy_equipment_training | json }},
+    "welder_fabricator":    {{ welder_fabricator | json }},
+    "truck_mechanic":    {{ truck_mechanic | json }},
+    "oiler_pm_tech":    {{ oiler_pm_tech | json }},
+    "welding":    {{ welding | json }},
+    "electrical_troubleshooting":    {{ electrical_troubleshooting | json }},
+    "computer_diagnostics":    {{ computer_diagnostics | json }},
+    "company_supplied":    {{ company_supplied | json }},
+    "company_supplied":    {{ company_supplied | json }},
+    "not_offered":    {{ not_offered | json }},
+    "per_diem":    {{ per_diem | json }},
+    "paid_not_paid":    {{ paid_not_paid | json }},
+    "status":    {{ status | json }},
+    "object_uuid":    {{ object_uuid | json }},
+    "latitude":    {{ latitude | json }},
+    "longitude":    {{ longitude | json }},
+    "geo_location": {{geo_location}}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}
+

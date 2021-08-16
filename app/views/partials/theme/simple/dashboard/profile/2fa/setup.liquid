@@ -1,0 +1,122 @@
+{% liquid
+
+  if object.errors.password
+    assign page = 'login'
+  elsif object.errors.otp_code
+    assign page = 'code'
+  else
+    assign page = 'login'
+  endif
+
+%}
+
+
+<h2 class="bigtitle">
+  {{ 'app.2fa.new.two_factor_authentication' | t }}
+</h2>
+
+<div x-data="{page: '{{ page }}', code: '{{ otp.secret }}'.match(/.{1,4}/g).join(' ')}">
+
+  <form
+    action="/dashboard/profile/2fa"
+    method="post"
+    class="mt-8"
+    x-ref="otpForm"
+    x-on:submit.prevent="$refs.fullCode.value = $refs.no1.value + $refs.no2.value + $refs.no3.value + $refs.no4.value + $refs.no5.value + $refs.no6.value; $refs.otpForm.submit()"
+    x-on:keydown.enter.prevent="$refs[page].querySelector('button').click()"
+    >
+
+    <div class="card items-center">
+
+      <section class="md:max-w-lg mx-auto" x-show="page === 'login'" x-ref="login">
+
+        <div class="markdown mb-4">
+          {{ 'app.2fa.new.enter_password' | t }}
+        </div>
+
+        Your password: <input name="2fa[password]" type="password" id="password" x-ref="password" value="{% if object.errors.password == nil %}{{ object.password }}{% endif %}"
+          class="w-full" autofocus required>
+        {% render 'theme/simple/field_error', errors: object.errors.password %}
+
+        <footer class="mt-8 pt-8 text-right border-t">
+          <button type="button" x-on:click.prevent="($refs.password.reportValidity()) ? page = 'scan' : ''"
+            class="button button-icon-right">Next {% render 'theme/simple/ui/icon', icon: 'dashRight' %}</button>
+        </footer>
+
+      </section>
+
+
+      <section class="md:max-w-lg mx-auto" x-cloak x-show="page === 'scan'" x-ref="scan">
+
+        <div class="markdown pb-4 mb-4 border-b">
+          {{ 'app.2fa.new.2fa_info' | t | markdown }}
+        </div>
+
+        <h3 class="title text-center">
+          {{ 'app.2fa.new.scan_qr_code' | t }}
+        </h3>
+
+        <div class="mb-8 flex justify-center">
+          {{ otp.secret_as_svg_qr_code }}
+        </div>
+
+        <div class="text-center">
+          {{ 'app.2fa.new.if_you_cannot_scan' | t }}<br>
+          <span class="font-mono text-xl" x-text="code">{{ otp.secret }}</span>
+        </div>
+
+        <footer class="mt-8 pt-8 flex justify-between border-t">
+          <button type="button" x-on:click="page = 'login'" class="button button-secondary button-icon-left">{% render
+            'theme/simple/ui/icon', icon: 'dashLeft' %} Back</button>
+          <button type="button" x-on:click="page = 'code'; $nextTick(() => $refs.no1.focus())"
+            class="button button-icon-right">Next {% render 'theme/simple/ui/icon', icon: 'dashRight' %}</button>
+        </footer>
+
+      </section>
+
+
+      <section class="md:max-w-lg mx-auto" x-cloak x-show="page === 'code'" x-ref="code">
+
+        <div class="pb-4 mb-4 border-b">
+          {{ 'app.2fa.new.please_confirm' | t }}
+        </div>
+
+        <h3 class="title text-center">
+          {{ 'app.2fa.new.confirm_otp_code' | t }}
+        </h3>
+
+        {% render 'authenticity_token', context: context %}
+        <input type="hidden" name="2fa[email]" value="{{ object.email }}">
+        <input name="2fa[otp_code]" type="hidden" x-ref="fullCode">
+
+        <fieldset class="mt-4 flex justify-center gap-4">
+          <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no1"
+            x-on:input="$refs.no2.focus()" required>
+          <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no2"
+            x-on:input="$refs.no3.focus()" required>
+          <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no3"
+            x-on:input="$refs.no4.focus()" required>
+          <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no4"
+            x-on:input="$refs.no5.focus()" required>
+          <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no5"
+            x-on:input="$refs.no6.focus()" required>
+          <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no6"
+            x-on:input="$refs.submit.click()" required>
+        </fieldset>
+
+        {% render 'theme/simple/field_error', errors: object.errors.otp_code %}
+
+        <fieldset class="mt-8 pt-8 flex justify-between border-t">
+          <button type="button" x-on:click="page = 'scan'" class="button button-secondary button-icon-left">{% render
+            'theme/simple/ui/icon', icon: 'dashLeft' %} Back</button>
+          <button type="submit" class="button button-icon-right" x-ref="submit">{{ 'app.models.shared.submit' | t }} {%
+            render 'theme/simple/ui/icon', icon: 'dashRight' %}</button>
+        </fieldset>
+
+      </section>
+
+    </div>
+
+  </form>
+
+</div>

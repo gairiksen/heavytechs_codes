@@ -1,0 +1,22 @@
+---
+slug: dashboard/posts/reply
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  function object = 'lib/commands/posts/reply', object: context.params.post, current_profile: current_profile
+
+  if object.valid
+    include 'lib/commands/events/create', type: 'post_answered', actor_id: current_profile.id, object_id: object.id, target_id: object.parent_id
+
+    assign now = 'now' | to_date
+    function relation = 'lib/commands/relationships/create', name: 'followship', l_id: current_profile.id, r_id: object.parent_id, l_at: now, r_at: now
+
+    redirect_to context.params.return_to
+  else
+    function post = 'lib/queries/posts/find', id: object.parent_id
+    include 'theme/simple/posts/show', root_post: post, object: object
+  endif
+%}

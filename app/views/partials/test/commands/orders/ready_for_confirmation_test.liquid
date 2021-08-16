@@ -1,0 +1,32 @@
+{% liquid
+  function profile = 'test/fixtures/profile', user_id: "6999"
+  function item = 'test/fixtures/item', quantity: 1
+  function order = 'test/fixtures/order', item: item, current_profile: profile
+
+  function orders = 'lib/queries/orders/search', buyer: profile.id, limit: 100
+
+  function object = 'lib/commands/orders/ready_for_confirmation', orders: orders.results
+
+  include 'test/assertions/not_valid_object', contract: contract, object: object, field_name: 'base'
+%}
+
+
+{% parse_json object %}
+  {
+    "shipping_first_name": "foo",
+    "shipping_last_name": "bar",
+    "shipping_email": "foo@example.com",
+    "shipping_phone": "123445",
+    "shipping_type": "personal_pickup",
+    "shipping_pickup_point": "red store",
+    "payment_type": "example"
+  }
+{% endparse_json %}
+{% liquid
+  function object = 'lib/commands/orders/update', object: object, order: order
+  function orders = 'lib/queries/orders/search', buyer: profile.id, limit: 100
+
+  function object = 'lib/commands/orders/ready_for_confirmation', orders: orders.results
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'base'
+%}

@@ -1,0 +1,12 @@
+---
+slug: categories/edit/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function object = 'lib/queries/categories/find', id: context.params.id
+
+  include 'theme/simple/categories/edit', object: object
+%}

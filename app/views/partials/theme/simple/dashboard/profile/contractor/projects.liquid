@@ -1,0 +1,155 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+    <div class="w-full mb-6 md:mb-0 md:w-60">
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md mb-4">
+            <div class="flex flex-col w-77 mb-0 text-center">
+            <figure>
+            {% render 'theme/simple/ui/avatar', profile: object, size: 200, class: 'w-32 h-32 m-auto rounded-full' %}
+            </figure>
+            <div class="px-0 mt-5 mechanic_logo">
+            {% render 'theme/simple/photos/uppy_area' %}
+            </div>
+            </div>
+        </div>
+        {%endcomment%}
+
+        {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+        {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object %}
+
+        {%comment%}
+        <div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+            <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+            <p class="text-sm font-normal text-gray-400 mb-5">
+                To make your profile visible to other users, fill in the required fields
+            </p>
+
+            <div>
+                <span class="block text-right text-sm text-gray-400 mb-2">30%</span>
+                <ul class="flex justify-between items-center">
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                    <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                </ul>
+            </div>
+        </div>
+        {%endcomment%}
+
+        <div class="text-center mt-3">
+            <a href="/dashboard/profile/contractor/post_project" class="hover:text-white heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block w-11/12 m-auto">Post a project</a>
+        </div>
+
+        <!--<div class="pt-14 pb-14 md:pb-0">
+            <ul class="customRadio">
+                <li class="mb-5">
+                    <input id="available" type="radio" name="available" value="1" checked="checked">
+                    <label for="available" class="text-base font-medium text-gray-800"><span><span></span></span>Available</label>
+                </li>
+                <li>
+                    <input id="unavailable" type="radio" name="available" value="1">
+                    <label for="unavailable" class="text-base font-medium text-gray-800"><span><span></span></span>Unavailable</label>
+                </li>
+            </ul>
+        </div>-->
+
+    </div>
+
+    <div class="profileEdit_right w-full">
+        <div class="mb-8 bg-white">
+            <ul class="flex items-center flex-col md:flex-row">
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/bio" class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Company Bio</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/projects" class="text-base w-full text-center h-12 flex items-center justify-center md:w-36 heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Projects</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/post_project"
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Post a project</a>
+                </li>
+            </ul>
+        </div>
+        
+
+        
+
+        {% if user_projects.size == 0 %}
+            <div class="mb-12">
+                <div class="bg-white p-5 shadow-sm rounded-md">
+                    <div class="text-center mt-3">
+                        <a href="/dashboard/profile/contractor/post_project" class="hover:text-white heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block w-11/12 m-auto">Post a project</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div>          
+                {% for p in user_projects %}
+                <div class="mb-12">
+                    <div class="bg-white p-5 shadow-sm rounded-md">
+                        <div class="text-right text-gray-500 text-base">Posted - {{ p.created_at | date: "%b %d, %Y" }}</div>
+
+                        <div class="lg:flex">
+                            <div class="flex-shrink-0 pb-5 lg:p-0 lg:pr-5">
+                                <figure>
+                                    {%if c.photo.photo %}
+                                    <img src="{{object.avatar.photo.versions.tiny}}" alt="" class="w-24 h-24 rounded-full">
+                                    {%else%}
+                                    <img src="{{ 'images/signup-img3.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                                    {%endif%}
+                                </figure>
+                            </div>
+
+                            <div class="w-full md:w-4/5">
+                                <h2 class="text-gray-700 font-bold text-xl mb-2">{{p.project_name}}</h2>
+                                <span class="block text-gray-500 text-base mb-3">Company - {{object.name}}</span>
+                                <p class="text-base text-gray-700 mb-5">{{p.longer_description}}</p>
+                                <ul class="mb-4">
+                                    <li class="sm:flex items-center mb-1.5">
+                                        <span class="block text-gray-500 text-base mr-7">Location:</span>
+                                        <strong class="block text-base text-gray-800 font-medium">{{p.location_of_project}}</strong>
+                                    </li>
+                                    <li class="sm:flex items-center mb-1.5">
+                                        <span class="block text-gray-500 text-base mr-7">Duration:</span>
+                                        <strong class="block text-base text-gray-800 font-medium">{{p.duration_type}}</strong>
+                                    </li>
+                                    <li class="sm:flex items-center mb-1.5">
+                                        <span class="block text-gray-500 text-base mr-7">Status:</span>
+                                        <strong class="block text-base text-gray-800 font-medium">{{p.status}}ed</strong>
+                                    </li>
+                                </ul>
+
+                                <a href="/dashboard/profile/contractor/project_details?project_id={{p.id}}" class="heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                                <a onclick="return delConfirm();" href="/dashboard/profile/contractor/delete_project?project_id={{p.id}}" class="heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">Delete</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}         
+            </div>
+        {%endif%}
+
+    </div>
+    </div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+
+<script type="text/javascript">
+function delConfirm(){
+    var ans = confirm("Do you really want to delete this project?");
+    if(!ans) {
+        return false;
+    } else {
+        return true;
+    }
+}
+</script>
+

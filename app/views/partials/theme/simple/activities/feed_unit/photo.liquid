@@ -1,0 +1,13 @@
+{% if photos.size > 0 %}
+  <div class="mt-2 flex flex-col text-center lg:grid lg:grid-cols-{{ photos.size }} gap-2 justify-center">
+    {% for photo in photos %}
+      {% if photo.url.versions.uncropped %}
+        <a href="{{ photo.url.versions.uncropped }}" target="_blank">
+      {% endif %}
+          <img class="rounded" src="{{ photo.url.versions.small }}" alt="{{ name }}">
+      {% if photo.url.versions.uncropped %}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}

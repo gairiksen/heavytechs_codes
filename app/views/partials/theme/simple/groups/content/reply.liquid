@@ -1,0 +1,30 @@
+{% liquid
+  unless object
+    assign object = '{}' | parse_json
+  endunless
+  unless object.uuid
+    hash_assign object['uuid'] = '' | uuid
+  endunless
+%}
+<div id="reply-form">
+  <form action="{% render 'link_to', object: post, action: 'reply' %}#reply-form" method="post" class="w-full">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="post[parent_id]" value="{{ post.id }}" />
+    <input type="hidden" name="post[group_id]" value="{{ post.group_id }}" />
+    <input type="hidden" name="return_to" value="{% render 'link_to', post: post %}" />
+
+    {% if object.id %}
+      <input type="hidden" name="post[id]" value="{{ object.id }}" />
+    {% endif %}
+    <input type="hidden" name="post[uuid]" value="{{ object.uuid }}" />
+
+    <div class="my-5">
+      <label class="block" for="body">{{ 'app.models.posts.your_answer' | t }}</label>
+      <textarea class="w-2/3 form-input" id="body" name="post[body]" data-markdown-editor>{{ object.body }}</textarea>
+      {% render 'theme/simple/field_error', errors: object.errors.body %}
+    </div>
+    <button class="button">{{ 'app.models.posts.post_answer' | t }}</button>
+  </form>
+</div>
+
+{% render 'theme/simple/photos/s3_form', object_uuid: object.uuid, presigned_url: presigned_url, photo_type: 'screenshot' %}

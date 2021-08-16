@@ -1,0 +1,12 @@
+{% parse_json object %}
+  {
+    "id":           {{ profile_id }},
+    "uuid":         {{ '' | uuid | json }},
+    "last_login":      {{ "now" | date: "%Y-%m-%d %H:%M" | json }},
+    "is_blocked":      {{ "0" | json }}  
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

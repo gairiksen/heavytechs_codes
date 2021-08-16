@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <title>TestCafé: Web Testing Framework | DevExpress</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/control_panel.js"></script>
+    <script>
+        window.WORKER = '<%= currentWorker %>';
+        window.HOSTNAME = 'http://<%= hostname %>'
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<script>
+    ControlPanel.get('WorkersView').init();
+</script>
+<div class="wrapper">
+    <% var selected = 'WORKERS'; %>
+    <% include partial/header.ejs %>
+    <div class="workers-buttons-push"></div>
+    <div class="add-worker-form-wrap">
+        <div class="worker-qr-code-wrap">
+            <div id="worker-qr-code"></div>
+        </div>
+        <div class="add-worker-form-cont">
+            <form class="add-worker-form" action="/worker/add" method="post">
+                <span class="connected-icon"></span>This browser window name is &nbsp;<input id="worker-name" type="text" name="workerName" value="<%= connectedWorkerSuggestionName %>" />&nbsp;and you can&nbsp;
+                <button id="add-worker-btn" type="submit" class="button">connect it as a worker</button>
+                <span>or just use this QR code</span>
+            </form>
+            <div id="add-worker-err" class="err hidden">
+                <p class="title"></p>
+            </div>
+        </div>
+        <div class="header-line"></div>
+    </div>
+
+    <div class="content workers-cont">
+        <% include partial/workers_container.ejs %>
+    </div>
+    <div class="footer-push"></div>
+</div>
+
+<% include partial/footer.ejs %>
+
+</body>
+</html>

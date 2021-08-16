@@ -1,0 +1,22 @@
+{% liquid
+  context_rc language: buyer.language | default: 'en'
+
+  function order_url = 'link_to_url', object: order, type: 'buyer_order'
+  hash_assign order['order_url'] = order_url
+
+  assign object = '{}' | parse_json
+  hash_assign object['to'] = buyer.user.email
+  hash_assign object['from'] = 'app.support_email' | t
+  hash_assign object['order'] = order
+  hash_assign object['buyer'] = buyer
+  assign site_name = 'app.title' | t
+  hash_assign object['subject'] = 'app.emails.orders.cancelled_seller.buyer.subject' | t: order_id: object.order.id, site_name: site_name, name: object.order.seller.name
+
+  function object = 'lib/commands/emails/send', template: 'orders/cancelled_by_seller_notify_buyer', object: object
+  if object.valid != true
+    log object, type: 'order_cancelled_by_seller_notify_buyer'
+  endif
+
+  return object
+%}
+

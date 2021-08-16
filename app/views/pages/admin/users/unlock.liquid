@@ -1,0 +1,19 @@
+---
+slug: admin/users/:id/unlock
+method: put
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_superadmin', return_url: '/admin/users'
+
+  function default_login_attempts = 'lib/queries/constants/find', name: "LOGIN_ATTEMPTS_COUNTER", type: "integer"
+  function object = 'lib/commands/users/reset_login_attempts', user_id: context.params.id, default_login_attempts: default_login_attempts
+
+  if object.valid
+    include 'redirect_to', url: '/admin/users', notice: 'app.admin.users.unlocking.success'
+  else
+    include 'redirect_to', url: '/admin/users', notice: 'app.admin.users.unlocking.failure'
+  endif
+%}

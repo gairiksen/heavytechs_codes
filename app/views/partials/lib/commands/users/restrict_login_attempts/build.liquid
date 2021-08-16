@@ -1,0 +1,16 @@
+{% parse_json object %}
+  {
+    "id":        {{ object.id | json }},
+    "attempts":  {{ object.attempts | default: default_login_attempts }},
+    "locked_at": {{ object.locked_at | json }},
+    "email": {{ object.email | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  if object.locked_at
+    hash_assign object["locked_until"] = object.locked_at | to_time | add_to_time: lock_time, 'minutes'
+  endif
+
+  return object
+%}

@@ -1,0 +1,31 @@
+---
+slug: admin/processes
+method: put
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_checker'
+
+  function process = 'lib/queries/processes/find', id: context.params.process.id
+  include 'lib/present_or_404', property: process.id
+
+  function object = 'lib/commands/processes/update', object: context.params.process, profile: current_profile
+  if object.valid
+    if object.action == 'accept'
+      function object = 'lib/commands/processes/run', object: process
+      if object.valid
+        include 'redirect_to', url: '/admin/processes', notice: 'app.admin.processes.update.run_succeeded'
+      else
+        include 'redirect_to', url: '/admin/processes', error: 'app.admin.processes.update.run_failed'
+      endif
+    else
+      include 'redirect_to', url: '/admin/processes', notice: 'app.admin.processes.update.rejected'
+    endif
+  else
+    log object, type: 'ERROR: processes/run'
+    include 'redirect_to', url: '/admin/processes', error: 'app.admin.processes.update.failed'
+  endif
+%}

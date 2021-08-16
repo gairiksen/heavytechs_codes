@@ -1,0 +1,201 @@
+en:
+  app:
+    marketplace_setup:
+      mpo_fee_percent: Marketplace Owner Fee (percent)
+      stripe_pk_key: Stripe Publishable Key
+      stripe_sk_key: Stripe Secret Key
+      stripe_client_id: Stripe Owner Connect Account client ID
+    admin:
+      organizations:
+        title: Registered Merchants
+        organization: Merchant
+        items: Items
+        search: Search
+        merchant_admins: Merchant Admins
+        invite_merchant_admin: Invite merchant admin
+        list:
+          properties: Properties
+          name: Merchant name
+          apply: Apply
+        show:
+          invited_at: Invited At
+          accepted_at: Accepted At
+          not_accepted_yet: Not accepted yet
+        members:
+          new:
+            invite_member_for: Invite member for
+            email: Member email
+            first_name: First Name
+            last_name: Last Name
+            save: Send invitation
+            created: Invitation request made. Now it must be accepted.
+      processes:
+        title: Approval Processes
+        attr:
+          description: Description
+          name: Name
+          status: Status
+          changed_at: changed at
+        show:
+          title: Approval Process
+          accept: Accept
+          reject: Reject
+          approve_or_reject: Approve or reject request
+          old: Old
+          new: New
+          property: Property
+          items_unpublish: 'Unpublish Item: <a href="%{item_url}" target="_blank">%{item_name}</a>'
+        list:
+          by: by
+        update:
+          run_succeeded: Request accepted and executed
+          run_failed: Request accepted but can't execute, please contact support.
+          rejected: Request was rejected
+          failed: Can't update request
+      users:
+        list:
+          permissions: Permissions
+        permissions:
+          actions:
+            admin: Admin - can access reports
+            superadmin: Superadmin - can access everything
+            maker: Maker
+            checker: Checker
+          update:
+            changed: Permissions changed
+      setup:
+        enable: Enable
+        disable: Disable
+        save: Save
+        saved: Saved
+      auth:
+        title: Authentication
+        required_2fa: Two Factor Authentication on login for merchants and admins
+        enabled: Required
+        disabled: Not required
+        checker_users: Users that can accept processes
+      hcaptcha:
+        title: Require hCaptcha
+      password_policy:
+        title: Require complex password (lowercase, uppercase, number)
+      inventory_acceptance:
+        title: Require acceptance for item inventory changes
+
+
+  admin:
+    check_all: Check all
+    uncheck_all: Uncheck all
+    navigation:
+      dashboard: Dashboard
+      sales: Sales
+      stock: Stock
+      users: Users
+      organizations: Merchants
+      close_admin: Back to homepage
+      activities: Activities
+      conversations: Conversations
+      processes: Approval Processes
+      settings: Settings
+    sales:
+      title: Income
+      orders: Orders
+      items: Items
+    items:
+      title: Created items
+    stock:
+      title: Items
+    users:
+      title: Registered users
+    conversations:
+      title: Threads
+      filter: Filter
+      message: Message
+      participants: Participants
+      last_message_at: Last message At
+      view: View
+    since_yesterday: Since yesterday
+    view_report: View report
+    activities:
+      filters:
+        header: Feed
+  admin_old:
+    saved: Saved
+    stripe:
+      setup_stripe: Setup Stripe
+      header: Stripe
+      register: >-
+        Please visit <a href="https://stripe.com" target="_blank" rel="extrnal
+        noopener">https://stripe.com</a> and register your <span
+        class="font-semibold">Stripe Connect</span> account.
+      copy_and_add: Copy and add this redirect URL in your
+      public_key: 'Enter your Stripe public key, secret key, and connect account client ID'
+      settings: 'stripe settings: '
+      save: Save
+    menu:
+      items: Items
+      users:
+        slug: 'slug: '
+        id: 'id: '
+        uuid: 'uuid: '
+        missing_profile: missing profile
+      posts:
+        author: Author
+        name: Posts
+        empty_state: There are no results.
+      activities:
+        name: Activities
+        following: 'following:'
+        list:
+          public: public
+          audit: audit all events
+          all: all
+          comments: comments
+          user: 'user: '
+          user_id: 'id: '
+          group: 'group: '
+          group_id: 'id: '
+          apply: Apply
+          questions: questions
+          answers: answers
+          item_inventory_updates: Item inventory updates
+      setup: Setup
+      categories: Categories
+      orders: Orders
+      users_title: Users
+      home: Home
+      support-tickets: Support tickets
+    slack:
+      setup:
+        title: Slack Notifications
+        webhook: 'Currently your slack-webhook is set as:'
+        none: none
+    order:
+      title: Orders settings
+      cancel_unpaid_after_x_hours: Cancel unpaid order after x hours
+    auth:
+      title: Authentication
+      required_2fa: Two Factor Authentication on login for merchants and admins
+      enabled: Required
+      disabled: Not required
+      checker_users: Users that can accept processes
+    metric:
+      period:
+        montly: Montly
+        daily: Daily
+        total: Total
+      income:
+        name: Income
+        description: Marketplace Owner fee is set to 10%
+        delta: Since yesterday
+      users:
+        name: Users
+        description: User account registration counter
+        delta: Since yesterday
+      orders:
+        name: Orders
+        description: New order counter
+        delta: Since yesterday
+      items:
+        name: Items
+        description: Listings counter
+        delta: Since yesterday

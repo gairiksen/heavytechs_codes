@@ -1,0 +1,10 @@
+{% parse_json object %}
+  {
+    "id": {{ user_id | json }},
+    "email": {{ email | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

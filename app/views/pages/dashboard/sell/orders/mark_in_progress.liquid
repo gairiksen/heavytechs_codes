@@ -1,0 +1,19 @@
+---
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile, allow_uncompleted: true, return_to: '/dashboard/buy/review'
+
+  function order = 'lib/queries/orders/find', seller: current_profile.id, id: context.params.order.id
+  include 'lib/present_or_404', property:  order.id
+
+  function object = 'lib/commands/orders/mark_in_progress', object: order, current_profile: current_profile
+  function order_url = 'link_to', order: order, current_profile: current_profile
+  if object.valid
+    include 'redirect_to', url: order_url, notice: 'app.orders.status.updated'
+  else
+    function message = 'theme/simple/full_error', errors: object.errors, model: 'order'
+    include 'redirect_to', url: order_url, error: message
+  endif
+%}

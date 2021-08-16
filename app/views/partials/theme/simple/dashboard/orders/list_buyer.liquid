@@ -1,0 +1,91 @@
+{% if orders.total_entries > 0 %}
+  <h2 class="bigtitle">{{ 'app.orders.history.title' | t }}</h2>
+
+  <form id="orders-list"></form>
+
+  {% for order in orders.results %}
+    <article class="card mb-7 last:md-0">
+      <header class="md:flex md:justify-between">
+        <div>
+          <h3>
+            <span class="font-semibold">
+              {% function order_url = 'link_to', order: order, current_profile: current_profile %}
+              {{ 'app.orders.history.number' | t }} <a href="{{ order_url }}">{{ order.id }}</a>
+            </span>
+            {{ 'app.orders.history.from' | t }} {{ order.seller.name }}
+          </h3>
+          <time class="sidenote" datetime="{{ order.created_at }}">{{ order.created_at | l: 'compact' }}</time>
+        </div>
+        <a href="{{ order_url }}" class="mt-1 md:mt-0 button button-secondary button-small button-icon-right">
+          {{ 'app.orders.history.view_details' | t }}
+          {% render 'theme/simple/ui/icon', icon: 'dashRight' %}
+        </a>
+      </header>
+
+      <ul class="mt-3 pt-4 my-4 border-t">
+        {% for line_item in order.line_items %}
+          <li class="mb-6 last:mb-0 flex items-center">
+            {% if line_item.item.photos[0].photo.versions.tiny %}
+            <img width="80" src="{{ line_item.item.photos[0].photo.versions.tiny }}" alt="" class="w-20 me-5 rounded">
+            {% else %}
+              {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+            {% endif %}
+
+            {% function line_item_url = 'link_to', item: line_item.item %}
+            <a href="{{ line_item_url }}">{{ line_item.item.item_detail.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <ul class="pt-4 md:flex md:justify-evenly md:items-center border-t leading-loose md:leading-normal">
+        <li class="flex justify-between md:block md:text-center">
+          <span class="md:sidenote md:block">{{ 'app.orders.history.order_summary' | t }}</span>
+          <span class="md:title">{% render 'theme/simple/price', amount_cents: order.products_price_cents, currency: order.currency %}</span>
+        </li>
+        <li class="self-stretch hidden md:block md:border-l"></li>
+        <li class="flex justify-between md:block md:text-center">
+          <span class="md:sidenote md:block">{{ 'app.orders.history.delivery_price' | t }}</span>
+          <span class="md:title">{% render 'theme/simple/price', amount_cents: order.total_shipping_cost_cents, currency: order.currency %}</span>
+        </li>
+        <li class="self-stretch hidden md:block md:border-l"></li>
+        <li class="flex justify-between md:block md:text-center">
+          <span class="md:sidenote md:block">{{ 'app.orders.history.total' | t }}</span>
+          <span class="md:title font-bold">{% render 'theme/simple/price', amount_cents: order.total_price_cents, currency: order.currency %}</span>
+        </li>
+        <li class="self-stretch hidden md:block md:border-l"></li>
+        <li class="flex justify-between md:block md:text-center">
+          <span class="md:sidenote mb-1 md:block leading-normal">{{ 'app.orders.history.status' | t }}</span>
+          {% if order.status.timestamp %}
+            {% liquid
+              assign status = order.status.name
+              assign status_for_role = status | split: '.' | last | t: scope: 'app.statuses.orders_for_role.buyer'
+
+              case status
+                when 'app.statuses.orders.confirmed'
+                  assign status_class = 'bg-warning-disabled border-warning'
+                when 'app.statuses.orders.paid'
+                  assign status_class = 'bg-confirmation-disabled border-confirmation'
+                when 'app.statuses.orders.delivered'
+                  assign status_class = 'bg-confirmation-disabled border-confirmation'
+                  assign status_for_role = order.shipping_type | t: scope: 'app.statuses.order_deliveries.shipping_types'
+                when 'app.statuses.orders.cancelled_buyer'
+                  assign status_class = 'bg-warning-disabled border-warning'
+                when 'app.statuses.orders.cancelled_seller'
+                  assign status_class = 'bg-warning-disabled border-warning'
+                when 'app.statuses.orders.returned'
+                  assign status_class = 'bg-warning-disabled border-warning'
+              endcase
+            %}
+            <span class="px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status_for_role }}</span>
+          {% endif %}
+        </li>
+      </ul>
+    </article>
+
+  {% endfor %}
+
+
+  {% render 'theme/simple/ui/pagination', collection: orders, current_page: page, form: 'orders-list' %}
+{% else %}
+  {% render 'theme/simple/dashboard/orders/list/empty' %}
+{% endif %}

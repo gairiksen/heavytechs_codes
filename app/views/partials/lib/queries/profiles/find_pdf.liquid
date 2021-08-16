@@ -1,0 +1,13 @@
+{% liquid
+  if uuid == blank and slug == blank and id == blank and user_id == blank and anonymous_session_id == blank
+    return null
+  endif
+%}
+
+{% graphql r = 'profiles/search_pdf', limit: 30, id: id, user_id: user_id, is_active: is_active %}
+
+{% liquid
+  include 'lib/handle_graphql_response', r: r, name: 'queries/profiles/find_pdf'
+
+  return r.records
+%}

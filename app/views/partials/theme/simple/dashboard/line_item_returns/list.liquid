@@ -1,0 +1,47 @@
+<div
+  x-data="listFiltered"
+  x-init="status = {{ statuses | replace: "'", '"' }}; url='/dashboard/sell/line_item_returns/list.frame'"
+  x-on:list-filters-changed="filter()"
+>
+
+    <div class="flex justify-between items-center">
+      <h2 class="bigtitle">{{ 'app.line_item_returns.list.returns' | t }}</h2>
+
+      {% capture 'filters' %}
+        <div class="px-7 py-4">
+          <ul class="flex flex-col gap-3 whitespace-nowrap">
+            {% assign statuses = 'app.statuses.line_item_returns' | t %}
+            {% for item in statuses %}
+              <li class="flex items-center capitalize">
+                <input
+                  x-model="listFiltered.status"
+                  type="checkbox"
+                  value="app.statuses.line_item_returns.{{item[0]}}"
+                  class="me-1"
+                  id="list-filter-status-{{ item[0] }}"
+                >
+                <label for="list-filter-status-{{ item[0] }}">{{item[1]}}</label>
+              </li>
+            {% endfor %}
+          </ul>
+          <button x-on:click="$dispatch('list-filters-changed'); open = false;" class="button mt-4">
+            {{ 'app.apply' | t }}
+          </button>
+        </div>
+      {% endcapture %}
+
+      {% capture 'filters_label' %}
+        {{ 'app.filters' | t }}
+        {% render 'theme/simple/ui/icon', icon: 'settings' %}
+      {% endcapture %}
+
+      {% render 'theme/simple/ui/dropdown', toggle_class: 'button button-secondary button-small button-icon-right' label: filters_label, content: filters %}
+    </div>
+
+    <div data-list-filtered-frame>
+      {% liquid
+        render 'theme/simple/dashboard/line_item_returns/list/table', line_item_returns: line_item_returns, role: role, current_profile: current_profile, page: page
+      %}
+    </div>
+
+</div>

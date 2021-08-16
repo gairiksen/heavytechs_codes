@@ -1,0 +1,19 @@
+---
+slug: dashboard/sell/processes
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function process = 'lib/queries/processes/find_by_profile', id: context.params.process.id, profile_id: current_profile.id
+  include 'lib/can_do_or_unauthorized', object: process, do: "update", actor: current_profile
+
+  function object = 'lib/commands/processes/update', object: context.params.process, profile: current_profile, process: process
+  if object.valid
+    include 'redirect_to', url: '/dashboard/sell/processes', notice: 'app.processes.sell.update.cancelled'
+  else
+    log object, type: 'ERROR: processes/run'
+    include 'redirect_to', url: '/dashboard/sell/processes', error: 'app.admin.processes.update.failed'
+  endif
+%}

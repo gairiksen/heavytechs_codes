@@ -1,0 +1,7 @@
+{% liquid
+  function order = 'lib/queries/orders/find', id: event.target.id
+
+  if order.line_items.size == 0
+    function command = 'lib/commands/orders/delete', object: order
+  endif
+%}

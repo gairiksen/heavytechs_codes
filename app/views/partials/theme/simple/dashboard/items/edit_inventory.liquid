@@ -1,0 +1,34 @@
+<form action="/dashboard/items/inventory" method="post" class="card md:pt-12">
+
+  {% include 'authenticity_token' %}
+  <input type="hidden" name="_method" value="put">
+  <input type="hidden" name="item[item_inventory_id]" value="{{ item.item_inventory_id }}">
+
+  <div class="md:flex items-center justify-center">
+    <div class="w-32 py-4 me-10 pe-10 border-e hidden lg:block">
+      {% render 'theme/simple/ui/icon', icon: 'taskListSettings', class: 'w-full text-frame' %}
+    </div>
+
+    <div>
+      <fieldset class="w-64">
+        <label class="block" for="quantity">{{ 'app.items.form.quantity' | t }}:</label>
+        <input class="w-40 form-input" type="number" id="quantity" name="item[quantity]" value="{{ item.quantity | default: 1 }}">
+        {% include 'theme/simple/field_error', errors: item.errors.quantity %}
+      </fieldset>
+
+      <fieldset class="w-64 mt-6">
+        <label class="block" for="max_in_one_order">{{ 'app.items.form.max_quantity' | t }}:</label>
+        <input class="w-40 form-input" type="number" id="quantity" name="item[max_in_one_order]" value="{{ item.max_in_one_order | default: 5 }}">
+        {% include 'theme/simple/field_error', errors: item.errors.max_in_one_order %}
+      </fieldset>
+    </div>
+  </div>
+
+  <fieldset class="mt-6 text-end">
+    <button class="button button-icon-left" value="{{ path }}">
+      {% render 'theme/simple/ui/icon', icon: 'check' %}
+      {{ 'app.items.form.submit' | t }}
+    </button>
+  </fieldset>
+
+</form>

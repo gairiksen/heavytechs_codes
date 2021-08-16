@@ -1,0 +1,42 @@
+---
+slug: my(/:section)
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true, membership: true
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  assign section = context.params.section | default: 'feed'
+  assign profile_id = current_profile.id | default: 'there-should-be'
+
+  if section == 'feed'
+    function list = 'lib/queries/activities/search_with_records', feed: 'user-private', feed_id: current_profile.id, limit: 20
+
+  elsif section == 'groups'
+    function list = 'lib/queries/groups/search_for_member', limit: 20, name: 'membership', member_id: profile_id
+    assign joined_group_ids = current_profile.joined_group_ids | map: 'id'
+    function suggested = 'lib/queries/groups/search', limit: 6, not_ids: joined_group_ids, meta_visible: 'anonymous', ask_to_join: 'yes'
+    hash_assign list['suggested'] = suggested
+
+  elsif section == 'following'
+    if context.params.show == 'all'
+      assign following_limit = 100
+    else
+      assign following_limit = 3
+    endif
+
+    function list = 'lib/queries/relationships/search_by_left', limit: following_limit, name: 'followship:profile', l_id: profile_id, model: 'profile', include_related: true
+
+    assign followed_ids = current_profile.followed_ids | map: 'id' | add_to_array: current_profile.id
+    function suggested = 'lib/queries/profiles/search', limit: 9, not_ids: followed_ids
+
+  elsif section == 'followers'
+    function list = 'lib/queries/relationships/search_by_right', limit: 20, name: 'followship:profile', r_id: profile_id, model: 'profile', include_related: true
+
+  elsif section == 'products'
+    function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+    function list = 'lib/queries/items/search', query: context.params, limit: 20, owner: current_profile.id, lang: context.language
+  endif
+
+  function _ = 'lib/extend_context', tags: true
+  render 'theme/simple/profile/private_feed', section: section, user: profile, list: list, suggested: suggested, current_profile: current_profile, context: context, show: context.params.show
+%}

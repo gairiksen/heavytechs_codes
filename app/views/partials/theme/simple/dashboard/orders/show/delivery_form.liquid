@@ -1,0 +1,48 @@
+{% liquid
+  if object.id
+    assign method = 'put'
+  else
+    assign method = 'post'
+  endif
+%}
+
+<form action="/dashboard/sell/order_deliveries" method="POST" class="flex flex-wrap items-start" x-data="{ deliveryNotice: false }">
+  {% include 'authenticity_token' %}
+  <input  type="hidden" name="_method" value="{{method}}">
+  {% if object.id %}
+    <input type="hidden" name="order_delivery[id]" value="{{ object.id }}">
+  {% endif %}
+  <input type="hidden" name="order_delivery[order_id]" value="{{ order.id }}">
+
+  <input type="text" class="w-full mb-2" name="order_delivery[delivery_information]" value="{{object.delivery_information}}" {% if cancelled %} disabled {% endif %}>
+  {% unless cancelled %}
+    <div>
+      <div class="sidenote">{{ 'app.orders.checkout.delivery_link' | t }}</div>
+
+      <div class="mt-2 flex items-center gap-1">
+        {% if object.status.name == 'app.statuses.order_deliveries.delivered' %}
+          <input type="checkbox" id="order_delivered" checked disabled>
+        {% else %}
+          <input type="checkbox" id="order_delivered" name="order_delivery[delivered]" x-model="deliveryNotice">
+        {% endif %}
+        <label for="order_delivered" class="cursor-pointer">{{ 'app.orders.show.mark_as_delivered' | t }}</label>
+      </div>
+    </div>
+
+    <button type="submit" class="button ms-auto">{{ 'app.save' | t }}</button>
+
+    <div
+      class="mt-4 pt-2 border-t overflow-hidden transition-all"
+      x-show="deliveryNotice"
+      x-cloak
+      x-transition:enter="ease-out duration-300"
+      x-transition:enter-start="max-h-1 border-transparent"
+      x-transition:enter-end="max-h-20 border-frame"
+      x-transition:leave="ease-in duration-300"
+      x-transition:leave-start="max-h-20 border-frame"
+      x-transition:leave-end="max-h-1 border-transparent"
+    >
+      {% render 'theme/simple/ui/form-tip', content_key: 'app.orders.checkout.delivery_notice' %}
+    </div>
+  {% endunless %}
+</form>

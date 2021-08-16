@@ -1,0 +1,18 @@
+---
+en:
+  app:
+    categories:
+      list: Categories
+      new: new category
+      attr:
+        name: Category Name
+        key: Key
+    models:
+      categories:
+        new: New category
+        add: Add category
+        edit: Edit category
+        empty_state: You haven't added any categories yet. <br> Create your first one now!
+        form:
+          key: key
+          uuid: uuid

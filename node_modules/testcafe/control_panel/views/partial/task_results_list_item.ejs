@@ -1,0 +1,127 @@
+<table class="task-results task-results-item <%= (r.status == 'failed')?'failed-view':((r.status == 'succeeded')?'succeeded-view':'')%>" data-taskID="<%= r.uid%>" data-run-options="<%= JSON.stringify(r._runOptions) %>">
+    <tbody>
+        <tr>
+            <td class="status-marker <%= r.status %>">
+            </td>
+            <td class="task-info">
+                <a class="task-name detail-link" title="<%= r.name %>" data-taskID="<%= r.uid%>"><%= r.name %></a>
+                <p class="gray">Workers:</p>
+                <ul class="worker-list">
+                   <% for(var i = 0; i < r.workerNames.length; i++) { %>
+                   <li>
+                       <span class="bullet"></span>
+                       <a href="/workers/?worker=<%= r.workerNames[i] %>"><%= r.workerNames[i] %></a>
+                   </li>
+                   <% } %>
+                </ul>
+
+                <%var taskTime = r.time;
+                if(taskTime > 0) {%>
+                    <%var duration = '';
+
+                    if(taskTime >= 3600) {
+                        duration += Math.floor(taskTime / 3600) + 'h ';
+                        taskTime = taskTime % 3600;
+                    }
+
+                    if(taskTime >= 60) {
+                        duration += Math.floor(taskTime / 60) + 'm ';
+                        taskTime = taskTime % 60;
+                    }
+
+                    if(taskTime > 0)
+                        duration += taskTime + 's';
+                    %>
+                <%}%>
+
+                <div class="info-col">
+                    <%if(r.startedAt){%>
+                        <p class="gray">Started at</p>
+                        <p>
+                            <span class="task-time"><%= r.startedAt[1] + ' ' + r.startedAt[2]%></span><br />
+                            <span class="task-date"><%= r.startedAt[0]%></span>
+                        </p>
+                    <%}%>
+                </div>
+                <div class="info-col task-duration-cont">
+                    <%if(r.startedAt && duration){%>
+                        <p class="gray">Duration</p>
+                        <p>
+                            <span class="task-duration"><%= duration %></span>
+                        </p>
+                    <%} else {%>
+                        <p class="gray"></p>
+                    <%}%>
+                </div>
+                <div class="info-col">
+                    <%if(r.completedAt){%>
+                        <p class="gray">Completed at</p>
+                        <p>
+                            <span class="task-time"><%=r.completedAt[1] + ' ' + r.completedAt[2]%></span><br />
+                            <span class="task-date"><%=r.completedAt[0]%></span>
+                        </p>
+                    <%}else if(r.status == 'running'){%>
+                        <p class="gray">Completed at</p>
+                        <p>
+                            <span class="progress">in progress</span>
+                        </p>
+                    <%}%>
+
+                </div>
+            </td>
+            <td  class="task-separator">
+            </td>
+            <td class="task-stat detail-link" data-taskID="<%= r.uid%>" data-task-name="<%= r.name %>">
+                <ul>
+                    <%if(r.status != 'pending'){%>
+                    <li>
+                       <p><%= r.passed %></p>
+                       <p>Passed</p>
+                   </li>
+                   <li <%if(r.failed > 0) {%> class="red" <%}%>>
+                       <p><%= r.failed %></p>
+                       <p>Failed</p>
+                   </li>
+                   <li>
+                       <p><%= r.testCount %></p>
+                       <p>Total</p>
+                   </li>
+                    <%}else{%>
+                        <li class="pending">
+                            Pending
+                        </li>
+                    <%}%>
+                </ul>
+                <% if(r.status === 'failed' || r.status === 'succeeded') { %>
+                    <div class="report-btns-container">
+                        <% if(r._runOptions) { %>
+                            <div class="restart-task">
+                                <span></span>
+                                <div class="separator"></div>
+                                <ul class="restart-options">
+                                    <li>Restart all tests</li>
+                                    <% if(r.status === 'failed') {%>
+                                        <li data-run-failed-tests="true">Restart failed tests</li>
+                                    <% } %>
+                                </ul>
+                            </div>
+                        <% } %>
+                        <div class="export-report-btn">
+                            <span></span>
+                            <div class="separator"></div>
+                            <ul class="export-options">
+                                <li data-taskid="<%= r.uid%>" data-format="json">Export to JSON</li>
+                                <li data-taskid="<%= r.uid%>" data-format="junit">Export to JUnit</li>
+                                <li data-taskid="<%= r.uid%>" data-format="nunit">Export to NUnit</li>
+                            </ul>
+                        </div>
+                        <div class="remove-report-btn" title="Remove report"><span></span></div>
+                    </div>
+                <% } %>
+            </td>
+            <td class="detail-link detail-view-wrap" data-taskID="<%= r.uid%>">
+                <a class="detail-view"></a>
+            </td>
+        </tr>
+    </tbody>
+</table>

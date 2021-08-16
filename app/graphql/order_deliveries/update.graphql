@@ -1,0 +1,20 @@
+mutation update_order_delivery(
+  $id: ID!
+  $delivery_information: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "order_delivery"
+      properties: [
+        { name: "delivery_information" value: $delivery_information }
+      ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+    order_id: property(name: "order_id")
+    delivery_information: property(name: "delivery_information")
+  }
+}

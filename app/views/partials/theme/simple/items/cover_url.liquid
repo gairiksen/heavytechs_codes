@@ -1,0 +1,9 @@
+{% liquid
+  if item.photos.size > 0
+    assign cover_url = item.photos | first | dig: 'photo', 'versions', 'small'
+  else
+    assign cover_url = item.cover_photo_url
+  endif
+
+  return cover_url
+%}

@@ -1,0 +1,21 @@
+mutation create_tag(
+  $name: String!
+  $disabled_at: String
+) {
+  record_create(
+    record: {
+      table: "tag"
+      properties: [
+        { name: "name" value: $name }
+        { name: "disabled_at" value: $disabled_at }
+      ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+
+    name: property(name: "name")
+    disabled_at: property(name: "disabled_at")
+  }
+}

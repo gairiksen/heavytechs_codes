@@ -1,0 +1,31 @@
+---
+slug: dashboard/profile_skills
+method: post
+---
+
+{{context.params.skills}}
+{% comment %}
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function object = 'lib/commands/profiles/update', object: context.params.profile, profile: current_profile
+
+  if object.valid
+    include 'lib/commands/events/create', type: 'profile_updated', actor_id: object.id
+
+    function profile = 'lib/queries/profiles/find', user_id: context.current_user.id
+
+    function user_object = 'lib/commands/users/update', object: context.params.profile, current_user: context.current_user
+    if user_object.valid == false
+      log user_object, type: 'users/update error'
+    endif
+
+    include 'redirect_to', url: '/dashboard'
+  else
+  log object, type: 'showme'
+    graphql presigned_url = 'photos/presign' | dig: 'presigned'
+    render 'theme/simple/dashboard/profile/edit', object: object, context: context, presigned_url: presigned_url
+  endif
+%}
+{% endcomment %}

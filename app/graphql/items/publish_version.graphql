@@ -1,0 +1,31 @@
+mutation create_item_complex(
+  $new_item_id: ID!
+  $new_item_status: String!
+  $old_item_id: ID!
+  $old_item_status: String!
+  $item_inventory_id: ID!
+) {
+  new_item: record_update(
+    id: $new_item_id
+    record: {
+      table: "item"
+      properties: { name: "c__status", value: $new_item_status }
+    }
+  ) { id }
+
+  old_item: record_update(
+    id: $old_item_id
+    record: {
+      table: "item"
+      properties: { name: "c__status", value: $old_item_status }
+    }
+  ) { id }
+
+  item_inventory: record_update(
+    id: $item_inventory_id
+    record: {
+      table: "item_inventory"
+      properties: { name: "item_id", value: $new_item_id }
+    }
+  ) { id }
+}

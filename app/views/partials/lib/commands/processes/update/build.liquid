@@ -1,0 +1,16 @@
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "action": {{ object.action | json }},
+    "profile_id": {{ profile.id | json }}
+  }
+{% endparse_json %}
+{% liquid
+  case object.action
+  when 'accept'
+    hash_assign object['status'] = 'app.statuses.processes.accepted'
+  when 'reject'
+    hash_assign object['status'] = 'app.statuses.processes.rejected'
+  endcase
+  return object
+%}

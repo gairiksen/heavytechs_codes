@@ -1,0 +1,17 @@
+{% liquid
+
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function filters = 'lib/commands/report_filters/create', object: context.params
+  function report = 'lib/commands/reports/create', filters: filters
+
+  assign this_page = 'blocked_contractor' | default: ''
+
+  function records = 'lib/queries/contractor/search_blocked', keyword: context.params.qkeyword, limit: 15, lang: context.language
+%}
+{%
+
+  render 'theme/simple/admin/admin_dashboard', report: report, filters: filters, records: records, this_page: this_page
+%}

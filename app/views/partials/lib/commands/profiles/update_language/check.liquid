@@ -1,0 +1,13 @@
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+  function available_languages = 'lib/queries/constants/find', name: "AVAILABLE_LANGUAGES", type: "array"
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'id'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'language'
+  function c = 'lib/validations/included', c: c, object: object, field_name: 'language', array: available_languages
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}

@@ -1,0 +1,13 @@
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "item_id": {{ object.item_id | json }},
+    "lang": {{ object.lang | default: "en" | json }},
+    "name": {{ object.name | json }},
+    "description": {{ object.description | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

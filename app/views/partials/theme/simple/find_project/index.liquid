@@ -1,0 +1,671 @@
+<div class="innerBanner relative bg-gray-50"><!--innerBanner-->
+    <figure>
+        <img src="{{ 'images/project-banner.jpg' | asset_url }}" alt="" class="w-full">
+    </figure>
+    <div class="container mx-auto px-3.5">
+        <script type="text/javascript">
+            function initialize() {
+                var input = document.getElementById('location');
+                const options = {
+                    componentRestrictions: { country: "us" },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                new google.maps.places.Autocomplete(input, options);
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+
+            
+            /*function initMap() {
+            
+                
+                const input = document.getElementById("pac-input");
+                const options = {
+                    componentRestrictions: { country: "us" },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                const autocomplete = new google.maps.places.Autocomplete(input, options);          
+                     
+            }
+
+            google.maps.event.addDomListener(window, 'load', initMap);*/
+
+
+        </script>
+        <form action="/find_project/search" method="POST" id="frm_saerch_by_location">
+
+        
+        <input type="hidden" name="authenticity_token" value="{{ token }}">
+        <input type="hidden" name="user_id" id="filter_user_id" value="{{user_id}}" />
+        <input type="hidden" name="c_user_id" id="c_user_id" value="{{c_user_id}}" />
+
+        <div class="relative md:absolute md:pt-12 top-0 md:bg-transparent bg-white p-5">
+        <h2 class="text-gray-700 md:text-white text-4xl md:text-5xl font-bold mb-3.5">Find a Project</h2>
+        <span class="text-gray-700 md:text-white text-xl">Subtitle or description lorem ispum dolor sit amet</span>
+        <ul class="pt-4 md:pt-11 flex flex-col gap-4 md:flex-row md:gap-6">
+            <!--<li>
+                <input type="text" name="zip_code" id="zip_code" placeholder="Enter your zip code ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+            </li>
+            <li>
+                
+            </li>
+
+            <li>
+                
+            </li>-->
+
+
+            <li>
+                <input type="text" value="{{location}}" name="location" id="location" placeholder="Enter your search location ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                <p class="text-red-700" id="err_zip_code" ></p>
+
+                <input type="hidden" value="{{latitude}}" name="latitude" id="latitude" placeholder="Enter latitude ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{longitude}}" name="longitude" id="longitude" placeholder="Enter longitude ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+            </li>
+
+            <li>
+                {%liquid
+                    assign distance = distance | strip
+                %}
+                <select name="distance" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                    <option value="" disabled hidden>Distance</option>
+                    <option value="161" {%if distance == "161" %}selected{%endif%}>100 + Mi</option>
+                    <option value="322" {%if distance == "322" %}selected{%endif%}>200 + Mi</option>
+                    <option value="483" {%if distance == "483" %}selected{%endif%}>300 + Mi</option>
+                    <option value="644" {%if distance == "644" %}selected{%endif%}>400 + Mi</option>
+                    <option value="805" {%if distance == "805" %}selected{%endif%}>500 + Mi</option>
+                </select>
+            </li>
+
+            <li>
+                <select name="industry_category" placeholder="Type of job" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                    <option value="">Any Industry</option>
+                    <option value="ew" {%if area_of_expertise == "ew"%}selected{%endif%}>Earthworks</option>
+                    <option value="mn" {%if area_of_expertise == "mn"%}selected{%endif%}>Mining</option>
+                    <option value="fo" {%if area_of_expertise == "fo"%}selected{%endif%}>Fleet Operations</option>
+                    <option value="pv" {%if area_of_expertise == "pv"%}selected{%endif%}>Paving</option>
+                    <option value="ep" {%if area_of_expertise == "ep"%}selected{%endif%}>Energy Production</option>
+                    <option value="pl" {%if area_of_expertise == "pl"%}selected{%endif%}>Pipeline</option>
+                </select>
+            </li>
+
+            <li>
+                <!--<button class="heavytechs-bg-dark-orange text-white mr-2 px-8 leading-10 rounded-3xl text-base inline-block">Search</button>-->
+                <input type="button" onclick="search_location()" class="heavytechs-bg-dark-orange text-white mr-2 px-8 leading-10 rounded-3xl text-base inline-block cursor-pointer" name="searchLocation" id="searchLocation" value="Search" >
+            </li>
+        </ul>
+        </div>
+        </form>
+
+        
+        <script type="text/javascript">
+        function search_location(){
+
+            document.getElementById("err_zip_code").innerHTML = '';
+            var location = document.getElementById('location').value;
+
+            if(location.includes("USA") == false){
+                location = location + ", USA";
+            }
+
+            var zip_code_url = 'https://app.zipcodebase.com/landing_demo/?codes='+location+'&country=';
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                var response = JSON.parse(this.responseText);
+                /*console.log(response);
+                if (response.results.length == '0') {
+                    document.getElementById("err_zip_code").innerHTML = "Invalid zip code!";
+                    return false;
+                } else {*/
+                    var geocoder = new google.maps.Geocoder();
+
+                    geocoder.geocode( { 'address': location}, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            var latitude = results[0].geometry.location.lat();
+                            var longitude = results[0].geometry.location.lng();
+                            
+                            document.getElementById('latitude').value = latitude;
+                            document.getElementById('longitude').value = longitude;
+
+                            document.getElementById('frm_saerch_by_location').submit();
+                        } 
+                    });
+                //}
+            }
+            xhttp.open("GET", zip_code_url, true);
+            xhttp.send();            
+        }
+        </script>
+
+    </div>
+</div><!--innerBanner-->
+
+<div class="bg-gray-50">
+    <div class="container mx-auto px-3.5">
+        <div class="py-6">
+            <ul class="flex flex-wrap gap-4 items-center">
+                <li class="text-base text-gray-800 font-semibold">
+                    Filter
+                </li>
+                <!-- <li>
+                    <a href="#" class="text-white block bg-gray-500 px-4 leading-7 rounded-3xl text-sm">
+                        Clear all
+                    </a>
+                    
+                </li> -->
+                {% if duration_type != null %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">{{duration_type}}</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if distance == '161' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">100 + Mi</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if distance == '322' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">200 + Mi</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if distance == '483' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">300 + Mi</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if distance == '644' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">400 + Mi</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if distance == '805' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">500 + Mi</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if earthworks == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Earthworks</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if mining == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Mining</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if fleet == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Fleet</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if pipeline == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Pipeline</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if paving == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Paving</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if energy_production == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Energy Production</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if heavy_equipment_mechanic == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Heavy Equipment Mechanic</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if truck_mechanic == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Truck Mechanic</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if welder_fabricator == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Welder/Fabricator</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if oilers_pm_tech == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Oilers/PM Tech</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if mechanist == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Mechanist</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if start_date == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">< 7 days</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if start_date == '2' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">8 - 30 Days</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if start_date == '3' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">30+ Days</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+                
+            </ul>
+        </div>
+
+        <div class="profileEdit flex justify-between flex-col pb-28 md:flex-row">
+
+            <form action="/find_project/search" method="POST">
+
+                <input type="hidden" name="authenticity_token" value="{{ token }}">
+                <input type="hidden" name="user_id" id="filter_user_id" value="{{user_id}}" />
+                <input type="hidden" name="c_user_id" id="c_user_id" value="{{c_user_id}}" />
+
+                <input type="hidden" value="{{latitude}}" name="latitude" id="filter_latitude" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{longitude}}" name="longitude" id="filter_latitude" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{location}}" name="location" id="filter_location" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                {%comment%}
+                <input type="hidden" value="{{distance}}" name="distance" id="filter_distance" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                {%endcomment%}
+
+                <input type="hidden" value="{{industry_category}}" name="industry_category" id="filter_industry_category" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                <div class="w-full mb-6 md:mb-0 md:w-60">
+
+                    <div class="bg-white py-6 rounded-md">
+
+                    <div class="mb-7 mx-3.5 flex items-center bg-gray-50 border border-gray-100 rounded-3xl">                     
+                        <input type="text" name="keyword_search" value="{{keyword_search}}" placeholder="Search ..." class="bg-gray-50 w-full rounded-3xl focus:outline-none ht-border-0 h-9 text-gray-600">
+                    </div> 
+
+                    {%liquid
+                        if distance == '161' or distance == '322' or distance == '483' or distance == '644' or distance == '805'
+                            assign zipOpen = true
+                        else
+                            assign zipOpen = false
+                        endif 
+                    %}
+                    
+                    <div x-data="{zipOpen: {{zipOpen}}}" class="border-b border-gray-200 pb-4 px-3.5">
+                        <div @click="zipOpen = !zipOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Distance from your zip</h3>
+                            <figure>
+                                <img src="{{ 'images/down-arrow.svg' | asset_url }}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="zipOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if distance == '161'%}checked{%endif%} id="distance1" type="radio" name="distance" value="161">
+                                <label for="distance1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>100 + Mi</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if distance == '322'%}checked{%endif%} id="distance2" type="radio" name="distance" value="322">
+                                <label for="distance2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>200 + Mi</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if distance == '483'%}checked{%endif%} id="distance3" type="radio" name="distance" value="483">
+                                <label for="distance3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>300 + Mi</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if distance == '644'%}checked{%endif%} id="distance4" type="radio" name="distance" value="644">
+                                <label for="distance4" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>400 + Mi</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if distance == '805'%}checked{%endif%} id="distance5" type="radio" name="distance" value="805">
+                                <label for="distance5" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>500 + Mi</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if start_date == '1' or start_date == '2' or start_date == '3'
+                            assign startDateOpen = true
+                        else
+                            assign startDateOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{startDateOpen: {{startDateOpen}}}" class="border-b border-gray-200 pb-4 px-3.5">
+                        <div @click="startDateOpen = !startDateOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Start Date</h3>
+                            <figure>
+                                <img src="{{ 'images/down-arrow.svg' | asset_url }}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="startDateOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if start_date == '1'%}checked{%endif%} id="start_date1" type="radio" name="start_date" value="1">
+                                <label for="start_date1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>< 7 Days</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if start_date == '2'%}checked{%endif%} id="start_date2" type="radio" name="start_date" value="2">
+                                <label for="start_date2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>8 - 30 Days</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if start_date == '3'%}checked{%endif%} id="start_date3" type="radio" name="start_date" value="3">
+                                <label for="start_date3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>30 + Days</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if duration_type contains 'Short term' or duration_type contains 'Recurring Project' or duration_type contains 'Long term'
+                            assign durationTypeOpen = true
+                        else
+                            assign durationTypeOpen = false
+                        endif 
+                    %}
+
+                    <div  x-data="{durationTypeOpen: {{durationTypeOpen}}}" class="border-b border-gray-200 pb-4 px-3.5">
+                        <div @click="durationTypeOpen = !durationTypeOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Duration Type</h3>
+                            <figure>
+                                <img src="{{ 'images/down-arrow.svg' | asset_url }}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="durationTypeOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if duration_type == 'Short term - less than a week (specific repair)'%}checked{%endif%} id="duration_type1" type="radio" name="duration_type" value="Short term - less than a week (specific repair)">
+                                <label for="duration_type1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Short Term(sp.repair)</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if duration_type == 'Short term - less than a week (fill in for employee)'%}checked{%endif%} id="duration_type2" type="radio" name="duration_type" value="Short term - less than a week (fill in for employee)">
+                                <label for="duration_type2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Short Term(fill in)</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if duration_type == 'Recurring Project'%}checked{%endif%} id="duration_type3" type="radio" name="duration_type" value="Recurring Project">
+                                <label for="duration_type3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Recurring Project</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if duration_type == 'Long term - longer than one month'%}checked{%endif%} id="duration_type4" type="radio" name="duration_type" value="Long term - longer than one month">
+                                <label for="duration_type4" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Long Term 1month+</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if earthworks == '1' or mining == '1' or fleet == '1' or pipeline == '1' or paving == '1' or energy_production == '1'
+                            assign industryOpen = true
+                        else
+                            assign industryOpen = false
+                        endif 
+                    %}
+                    
+
+                    <div x-data="{industryOpen: {{industryOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="industryOpen = !industryOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Industry Category</h3>
+                            <figure>
+                                <img src="{{ 'images/down-arrow.svg' | asset_url }}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="industryOpen" class="customCheck">
+                            <li class="mb-3">
+                                <input {%if earthworks == '1'%}checked{%endif%} id="industry_category1" type="checkbox" name="earthworks" value="1">
+                                <label for="industry_category1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Earthworks</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if mining == '1'%}checked{%endif%} id="industry_category2" type="checkbox" name="mining" value="1">
+                                <label for="industry_category2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Mining</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if fleet == '1'%}checked{%endif%} id="industry_category3" type="checkbox" name="fleet" value="1">
+                                <label for="industry_category3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Fleet</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if pipeline == '1'%}checked{%endif%} id="industry_category4" type="checkbox" name="pipeline" value="1">
+                                <label for="industry_category4" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Pipeline</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if paving == '1'%}checked{%endif%} id="industry_category5" type="checkbox" name="paving" value="1">
+                                <label for="industry_category5" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Paving</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if energy_production == '1'%}checked{%endif%} id="industry_category6" type="checkbox" name="energy_production" value="1">
+                                <label for="industry_category6" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Energy Production</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if heavy_equipment_mechanic == '1' or truck_mechanic == '1' or welder_fabricator == '1' or oilers_pm_tech == '1' or mechanist == '1'
+                            assign techTypeOpen = true
+                        else
+                            assign techTypeOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{techTypeOpen: {{techTypeOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="techTypeOpen = !techTypeOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Tech Type</h3>
+                            <figure>
+                                <img src="{{ 'images/down-arrow.svg' | asset_url }}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="techTypeOpen" class="customCheck">
+                            <li class="mb-3">
+                                <input {%if heavy_equipment_mechanic == '1'%}checked{%endif%} id="tech_type1" type="checkbox" name="heavy_equipment_mechanic" value="1">
+                                <label for="tech_type1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Heavy Eq Mechanic</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if truck_mechanic == '1'%}checked{%endif%} id="tech_type2" type="checkbox" name="truck_mechanic" value="1">
+                                <label for="tech_type2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Truck Mechanic</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if welder_fabricator == '1'%}checked{%endif%} id="tech_type3" type="checkbox" name="welder_fabricator" value="1">
+                                <label for="tech_type3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Welder/Fabricator</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if oilers_pm_tech == '1'%}checked{%endif%} id="tech_type4" type="checkbox" name="oilers_pm_tech" value="1">
+                                <label for="tech_type4" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Oilers / PM Tech</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if mechanist == '1'%}checked{%endif%} id="tech_type5" type="checkbox" name="mechanist" value="1">
+                                <label for="tech_type5" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Mechanist</label>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+            <div class="pt-5 text-center">
+            <input type="submit" name="subSearch" value="Filter" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block cursor-pointer">
+            <a href="/find_project?c_user_id={{c_user_id}}" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">Reset</a>
+            </div>
+
+            </form>
+
+            <div class="profileEdit_right w-full pt-10 md:pt-0">
+
+                {% if records.results.size == 0 %}
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    <div class="flex justify-between">
+                    No records found.
+                    </div>
+                </div>
+                {%else%}
+                {% for c in records.results %}
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between flex-col md:flex-row">
+                        <div>
+                            <figure>
+                                {%if c.photo.photo.url %}
+                                <img src="{{c.photo.photo.url}}" alt="" class="w-36 h-36 rounded-full m-auto mb-5 md:m-0">
+                                {%else%}
+                                <img src="{{ 'images/signup-img3.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full m-auto mb-5 md:m-0">
+                                {%endif%}
+                            </figure>
+                        </div>
+
+                        <div class="w-full md:w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div class="w-full">
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Contractors name</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">{{c.profile.name}}</span>
+                                </div>
+                                    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">{{c.longer_description}}</p>
+                            <ul class="mb-8">
+                                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                                    <span class="block text-gray-500 text-base w-28 mb-3 md:mb-0">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">{{c.location_of_project}}</strong>
+                                </li>
+                                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                                    <span class="block text-gray-500 text-base w-28 mb-3 md:mb-0">Duration:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">{{c.duration_type}}</strong>
+                                </li>
+                                
+                            </ul>
+
+                            <div class="flex items-center justify-between">
+
+                                <div>
+                                    {%if current_profile.id != c.profile.id %}
+                                        {%if current_profile.id %}
+                                            
+                                            <a href="/inbox/?to_id={{ c.profile.id }}" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block mb-6 md:mb-0 md:mr-4">Contact Contractor</a>
+                                            
+                                        {%else%}
+                                            {%
+                                                assign return_page = '/inbox/?to_id=' | append: c.profile.id
+                                            %}
+                                            <a href="/sessions/new?return_page={{return_page}}" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block md:mb-0 md:mr-4 mb-3">Contact Contractor</a>
+                                        {%endif%}
+                                    {%endif%}
+                                    <a href="/find_project/details?p_id={{c.id}}" class="heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border-2 mr-2 px-6 leading-7 rounded-3xl text-base inline-block">View more</a>
+
+                                </div>
+
+                                <div>
+
+                                    {%liquid 
+                                        assign is_favorite = '0'
+                                        for fv in favorites.results
+                                            if fv.fav_id == c.id and fv.fav_for == 'project'
+                                                assign is_favorite = '1'
+                                                assign favorite_id = fv.id
+                                            endif
+                                        endfor
+                                    %}
+
+                                    {% if user_id %}
+                                        {% if is_favorite == '1' %}
+                                            <a href="/remove-favourite?id={{favorite_id}}&fav_id={{c.id}}&fav_for=project">
+                                                <img src="{{ 'images/heart-full.svg' | asset_url }}" alt="">
+                                            </a>
+                                        {% else %}
+                                            <a href="/set-favourite?fav_id={{c.id}}&fav_for=project&contractor_id={{c.user_id}}">
+                                                <img src="{{ 'images/heart-normal.svg' | asset_url }}" alt="">
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+                {% endif %}
+                
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+function toTimestamp(strDate){
+ var datum = Date.parse(strDate);
+ return datum/1000;
+}
+
+function showtime(date){
+    var timestamp = toTimestamp(date);
+    alert(timestamp);
+}
+</script>

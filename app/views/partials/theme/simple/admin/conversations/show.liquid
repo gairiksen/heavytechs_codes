@@ -1,0 +1,54 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'user', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.conversations' | t }}
+  </h2>
+
+</header>
+
+<div class="flex min-h-screen">
+  <div class="w-full">
+    <div class="flex flex-col relative">
+      <div class="hidden absolute left-0 right-0 text-center" id="chat-loadingIndicator" data-more="true">
+        <span class="inline-block mt-2 py-2 px-4 bg-blue-600 rounded shadow-md text-white">{{ 'modules/chat/loading_previous' | t }}</span>
+      </div>
+      <div class="flex-1 overflow-auto" id="chat-messagesList-container">
+        <ul class="max-w-full" id="chat-messagesList">
+          {% liquid
+            assign list = conversation.messages | reverse
+            for message in list
+              if message["autor_id"] != conversation.participants.first.id
+                render "modules/chat/theme/simple/inbox/message", message: message, justify: 'justify-start', bg_color: 'bg-gray-300'
+              else
+                render "modules/chat/theme/simple/inbox/message", message: message, justify: 'justify-end', bg_color: 'bg-indigo-200'
+              endif
+            endfor
+          %}
+          </ul>
+      </div>
+    </div>
+
+    {% liquid
+      assign page = page | to_positive_integer: 1
+    %}
+    {% render 'theme/simple/ui/pagination', form: 'admin-form' collection: conversations, current_page: filters.page %}
+  </div>
+
+  <aside class="w-72 -mt-6 ms-8 ps-8 pt-8 text-content-sidenote border-s border-frame flex-shrink-0">
+
+    <section class="border rounded p-4">
+      <h4 class="-mx-4 px-4 pb-2 border-b uppercase font-bold">Participants</h4>
+      <ul>
+      {% for participant in conversation.participants %}
+        {% assign name = participant.name %}
+        {% if name == blank %}{% assign name = participant.first_name | append: ' ' | append: participant.last_name %}{% endif %}
+        <li class="p-2 mt-2 rounded {% if forloop.first == false %}bg-gray-300{% else %}bg-indigo-200{% endif %}">
+          <a href="{% include 'link_to', profile: participant %}">{{name}}</a>
+        </li>
+      {% endfor %}
+    </section>
+
+  </aside>
+
+</div>

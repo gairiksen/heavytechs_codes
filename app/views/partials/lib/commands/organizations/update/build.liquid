@@ -1,0 +1,17 @@
+{% liquid
+  function default_currency = 'lib/queries/constants/find' name: "CURRENCY"
+%}
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "name":           {{ object.name | default: uuid | json }},
+    "shipping_types": {{ object.shipping_types | json }},
+    "offline_stores": {{ object.offline_stores | default: '' | split: ';' | json }},
+    "contact_emails": {{ object.contact_emails | json }},
+    "delivery_fee":   {{ object.delivery_fee | plus: 0 | amount_to_fractional: default_currency | default: 0 }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

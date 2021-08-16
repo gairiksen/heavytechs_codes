@@ -1,0 +1,39 @@
+mutation create_organization_review(
+  $profile_id: String!
+  $order_id: String!
+  $organization_id: String!
+  $description_score: Int
+  $delivery_score: Int
+  $service_score: Int
+  $body: String
+  $recommend: Boolean
+) {
+  record_create(
+    record: {
+      table: "organization_review"
+      properties: [
+        { name: "profile_id" value: $profile_id }
+        { name: "order_id" value: $order_id }
+        { name: "organization_id" value: $organization_id }
+        { name: "description_score" value_int: $description_score }
+        { name: "delivery_score" value_int: $delivery_score }
+        { name: "service_score" value_int: $service_score }
+        { name: "body" value: $body }
+        { name: "recommend" value_boolean: $recommend }
+      ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+
+    profile_id: property(name: "profile_id")
+    order_id: property(name: "order_id")
+    organization_id: property(name: "organization_id")
+    description_score: property_int(name: "description_score")
+    delivery_score: property_int(name: "delivery_score")
+    service_score: property_int(name: "service_score")
+    body: property(name: "body")
+    recommend: property_boolean(name: "recommend")
+  }
+}

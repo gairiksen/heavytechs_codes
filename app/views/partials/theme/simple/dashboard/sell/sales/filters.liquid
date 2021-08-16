@@ -1,0 +1,17 @@
+<aside class="w-60 ms-8 pt-4 text-content-sidenote">
+
+  <h4 class="subtitle pb-2 border-b">{{ 'app.search.date_range.header' | t }}</h4>
+  <div class="mt-2 flex items-start">
+    <label for="from">{{ 'app.search.date_range.from' | t }}
+      <input id="from" form="dashboard-form" type="date" name="from" value="{{ filters.from }}">
+    </label>
+  </div>
+  <div class="mt-2 flex items-start">
+    <label for="to">{{ 'app.search.date_range.to' | t }}
+      <input id="to" form="dashboard-form" type="date" name="to" value="{{ filters.to }}">
+    </label>
+  </div>
+
+  <button type="submit" class="mt-4 button button-small" form="dashboard-form">Apply</button>
+
+</aside>

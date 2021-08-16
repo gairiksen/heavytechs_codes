@@ -1,0 +1,23 @@
+name: order
+properties:
+  - name: buyer
+  - name: seller
+  - name: total_shipping_cost_cents
+    type: integer
+  - name: products_price_cents
+    type: integer
+  - name: total_price_cents
+    type: integer
+  - name: currency
+  - name: shipping_first_name
+  - name: shipping_last_name
+  - name: shipping_email
+  - name: shipping_phone
+  - name: shipping_type
+  - name: shipping_address_id
+  - name: shipping_pickup_point
+  - name: shipping_information
+  - name: payment_type
+
+  - name: c__status
+    type: string

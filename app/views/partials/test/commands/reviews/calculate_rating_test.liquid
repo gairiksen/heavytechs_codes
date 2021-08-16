@@ -1,0 +1,21 @@
+{% liquid
+  function item = 'test/fixtures/item', contract: contract
+
+  function reviews = 'lib/queries/item_reviews/search', limit: 10, score_gte: 1, item_inventory_id: item.item_inventory.id
+  function object = 'lib/commands/reviews/calculate_rating', record_id: item.item_inventory.id, reviews: reviews
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+  include 'test/assertions/equal', contract: contract, given: object.c__rating_count, field_name: 'c__rating_count', expected: 0
+  include 'test/assertions/equal', contract: contract, given: object.c__rating_score, field_name: 'c__rating_score', expected: 0.0
+%}
+
+{% liquid
+  function review = 'test/fixtures/item_review', item_inventory_id: item.item_inventory.id, score: 2, contract: contract
+  function review = 'test/fixtures/item_review', item_inventory_id: item.item_inventory.id, score: 3, contract: contract
+  function reviews = 'lib/queries/item_reviews/search', limit: 10, score_gte: 1, item_inventory_id: item.item_inventory.id
+  function object = 'lib/commands/reviews/calculate_rating', record_id: item.item_inventory.id, reviews: reviews
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+  include 'test/assertions/equal', contract: contract, given: object.c__rating_count, field_name: 'c__rating_count', expected: 2
+  include 'test/assertions/equal', contract: contract, given: object.c__rating_score, field_name: 'c__rating_score', expected: 2.5
+%}

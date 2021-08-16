@@ -1,0 +1,15 @@
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  if current_profile == blank
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  endif
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile
+
+  function cart_quantity = 'lib/queries/orders/number_of_items_in_cart', buyer: current_profile.id
+  function inbox_unread = 'modules/chat/lib/queries/conversations/number_of_unread_by_participant', participant_id: current_profile.id
+  assign object = '{"valid": true}' | parse_json
+  hash_assign object['cart_quantity'] = cart_quantity
+  hash_assign object['inbox_unread'] = inbox_unread
+
+  include 'theme/json/shared/show', object: object
+%}

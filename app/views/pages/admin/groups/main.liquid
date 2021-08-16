@@ -1,0 +1,15 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_superadmin'
+
+  function group = 'lib/queries/groups/main'
+
+  if group.owner == blank
+    assign now = 'now' | to_time
+    function relation = 'lib/commands/relationships/create', name: 'owner', l_id: current_profile.id, r_id: group.id, l_at: now, r_at: now
+
+    echo relationship
+  endif
+
+  echo group
+%}

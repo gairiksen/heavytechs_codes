@@ -1,0 +1,21 @@
+{% liquid
+  assign active_tab_class = 'bg-panel font-bold'
+  assign inactive_tab_class = 'bg-frame hover:bg-opacity-80 text-content hover:text-interaction-hover transition-colors'
+%}
+
+<h1 class="pagetitle">{{ 'app.reviews.header.title' | t }}</h1>
+
+<nav>
+  <ul class="flex">
+    <li>
+      <a class="block me-2 py-2 px-6 cursor-pointer rounded-t-lg {% if tab == 'items' %}{{active_tab_class}}{% else %}{{inactive_tab_class}}{% endif %}" href="/dashboard/reviews/items">
+        {{ 'app.reviews.header.products' | t }}
+      </a>
+    </li>
+    <li>
+      <a class="block py-2 px-6 cursor-pointer rounded-t-lg {% if tab == 'organizations' %}{{active_tab_class}}{% else %}{{inactive_tab_class}}{% endif %}" href="/dashboard/reviews/organizations">
+        {{ 'app.reviews.header.merchants' | t }}
+      </a>
+    </li>
+  </ul>
+</nav>

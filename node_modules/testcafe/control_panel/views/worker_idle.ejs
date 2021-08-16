@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <title>TestCafé: Web Testing Framework | DevExpress</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/control_panel.js"></script>
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<script>
+    ControlPanel.get('WorkerIdle').init();
+    window.startWorkerIdleHeartbeat('<%= workerName %>');
+</script>
+    <div class="idle-msg-wrap">
+        <div class="idle-msg">
+            <img src='/assets/images/wait-animation.gif' alt='' />
+            <h2>I'm waiting for a job</h2>
+            <p><%= workerName %></p>
+            <p><span class="<%= (workerType === 'Connected worker') ? 'connected' : 'auto-created' %>"></span><span><%= workerType %></span></p>
+        </div>
+    </div>
+</body>
+</html>

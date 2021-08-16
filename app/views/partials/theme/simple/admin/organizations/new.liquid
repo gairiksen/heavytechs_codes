@@ -1,0 +1,53 @@
+{% liquid
+  assign uuid_new = '' | uuid
+  assign uuid = object.uuid | default: uuid_new
+%}
+<header class="mt-2.5 mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'users', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'app.admin.organizations.new.new_organization' | t }}
+  </h2>
+</header>
+
+<div class="flex flex-wrap items-center mx-auto">
+  <form action="/admin/organizations" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input name="_method" type="hidden" value="post">
+    <input type="hidden" name="organization[uuid]" value="{{ uuid }}" />
+    <fieldset class="mt-5">
+      <label class="block" for="name">{{ 'app.organizations.attr.name' | t }}:</label>
+      <input class="w-full" type="text" id="name" name="organization[name]" value="{{ object.name }}" required >
+      {% render 'theme/simple/field_error', errors: object.errors.name %}
+    </fieldset>
+
+    <div class="mt-5" data-photo-upload-base>
+      <label class="block">{{ 'app.organizations.attr.logo' | t }}:</label>
+      {% render 'theme/simple/photos/uppy_area' %}
+    </div>
+
+    {% render 'theme/simple/dashboard/organizations/shipping_types', object: object, currency: currency %}
+
+    <div class="mt-5">
+      {{ 'app.admin.organizations.new.promote' | t }}:
+      <fieldset>
+        <input type="checkbox" id="promoted" name="organization[promoted]" value="promoted">
+        <label for="promoted">{{ 'app.organizations.attr.promoted' | t }}</label>
+
+        {% render 'theme/simple/field_error', errors: object.errors.promoted %}
+      </fieldset>
+    </div>
+
+    <fieldset class="mt-8 text-end">
+      <button class="button">{{ 'app.admin.organizations.new.save' | t }}</button>
+    </fieldset>
+
+  </form>
+</div>
+
+{% render 'theme/simple/photos/uppy_form',
+  object_uuid: uuid,
+  presigned_url: presigned_url,
+  photo_type: 'logo',
+  note: 'Image up to 2MB',
+  max_number_of_files: 1
+%}

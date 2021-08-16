@@ -1,0 +1,9 @@
+name: item_detail
+properties:
+  - name: item_id
+  - name: lang
+  - name: slug
+  - name: name
+  - name: description
+  - name: tags
+    type: array

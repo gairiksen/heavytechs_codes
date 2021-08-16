@@ -1,0 +1,110 @@
+{% if item_inventories.results.size > 0 %}
+
+  <form id="inventory-list">
+    <input type="hidden" name="status" value="{{ statuses | join: ',' }}">
+  </form>
+
+  <section class="table relative">
+
+    <div
+      x-show="loading"
+      class="mt-6 card-overlay"
+      x-transition:enter="transition ease-in-out duration-100"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-80"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      x-cloak
+    >
+    {% render 'theme/simple/ui/spinner', size: 10 %}
+    </div>
+
+    <header>
+      <div>{{ "app.item" | t }}</div>
+      <div>{{ 'app.items.attr.category' | t }}</div>
+      <div>{{ 'app.status' | t }}</div>
+      <div class="lg:text-right">{{ 'app.items.attr.quantity' | t }}</div>
+      <div>{{ 'app.created_at' | t }}</div>
+    </header>
+
+    <div class="table-content">
+
+      {% for item_inventory in item_inventories.results %}
+        <ul data-tc="inventory-product">
+
+          <li class="align-center">
+            {% function item_url = 'link_to', path: '/items/', item: item_inventory.item %}
+
+            <a href="{{ item_url }}" class="flex items-center justify-start gap-4">
+              {% function cover_url = 'theme/simple/items/cover_url', item: item_inventory.item %}
+              {% if cover_url %}
+                  <img src="{{ cover_url }}" class="w-20 rounded">
+              {% else %}
+                {% render 'theme/simple/ui/picture-placeholder', class: 'w-20 rounded' %}
+              {% endif %}
+              {{ item_inventory.item.item_detail.name }}
+            </a>
+          </li>
+
+          <li>
+            <span class="lg:hidden">{{ 'app.items.attr.category' | t }}: </span>
+            <a href="{% render 'link_to', category: item_inventory.item.category %}">{{ item_inventory.item.category | t: scope: 'categories'  }}</a>
+          </li>
+
+          <li>
+            <span class="lg:hidden">{{ 'app.status' | t }}: </span>
+            {{ item_inventory.status.name | t }}
+          </li>
+
+          <li class="lg:text-right" data-tc="inventory-product-quantity">
+            <span class="lg:hidden">{{ 'app.items.attr.quantity' | t }}: </span>
+            {{ item_inventory.quantity }}
+          </li>
+
+          <li>
+            <span class="lg:hidden">{{ 'app.created_at' | t }}: </span>
+            <time datetime="{{ item_inventory.created_at }}">{{ item_inventory.created_at | l: 'compact' }}</time>
+          </li>
+
+          <li class="whitespace-nowrap">
+            <a href="/dashboard/items/edit?id={{ item_inventory.id }}" class="button button-compact" title="{{ 'app.edit' | t }}">
+              {% render 'theme/simple/ui/icon', icon: 'pencil' %}
+            </a>
+
+            {% if item_inventory.status.name == 'app.statuses.items.unpublished' %}
+              <form action="/dashboard/sell/items/publish" method="post" class="ms-1 inline-block" onSubmit="if(!confirm('{{ 'app.items.confirm-publish' | t }}')){ return false; }" >
+                {% include 'authenticity_token' %}
+                <input type="hidden" name="_method" value="put">
+                <input type="hidden" name="id" value="{{ item_inventory.id }}">
+
+                <button class="button button-compact button-confirmation buton-icon-right" title="{{ 'app.items.publish' | t }}">
+                  {{ 'app.items.publish' | t }}
+                  {% render 'theme/simple/ui/icon', icon: 'check' %}
+                </button>
+              </form>
+            {% else %}
+              <form action="/dashboard/items/delete" method="post" class="ms-1 inline-block" onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')){ return false; }" >
+                {% include 'authenticity_token' %}
+                <input type="hidden" name="_method" value="delete">
+                <input type="hidden" name="id" value="{{ item_inventory.id }}">
+
+                <button class="button button-compact button-danger" title="{{ 'app.models.shared.delete' | t }}">
+                  {% render 'theme/simple/ui/icon', icon: 'trash' %}
+                </button>
+              </form>
+            {% endif %}
+          </li>
+        </ul>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% liquid
+    assign page = page | default: 1 | plus: 0
+  %}
+  {% render 'theme/simple/ui/pagination', form: 'inventory-list', collection: item_inventories, current_page: page %}
+
+{% else %}
+  {% render 'theme/simple/dashboard/items/list/empty' %}
+{% endif %}

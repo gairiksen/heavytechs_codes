@@ -1,0 +1,16 @@
+{% liquid
+  if l_id == blank
+    log 'Something went wrong. Left-ID cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  if name == blank
+    log 'Something went wrong. Name cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  graphql r = 'relationships/search', limit: 100, name: name, l_id: l_id, r_id: r_id, include_related: include_related, model: model
+  include 'lib/handle_graphql_response', r: r, name: 'queries/relationships/search_by_left'
+
+  return r.records
+%}

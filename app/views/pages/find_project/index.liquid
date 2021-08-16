@@ -1,0 +1,20 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  assign c_user_id = context.params.c_user_id
+  function records = 'lib/queries/project/search_initial', keyword: context.params.qkeyword, limit: 15, lang: context.language, user_id: c_user_id
+
+  function favorites = 'lib/queries/profiles/find_my_favourites', limit: 15, lang: context.language, user_id: context.current_user.id
+%}
+{%
+
+  render 'theme/simple/find_project/index', records: records, user_id: context.current_user.id, current_profile: current_profile, c_user_id: c_user_id, favorites: favorites
+
+  
+%}
+
+{%comment%}
+assign response = curl https://restcountries.eu/rest/v2/alpha/IN
+  -H "Authorization: Token token=J3f18ufc2QD58YEO06-XCxIVEDS5Ndng9JB-IPs8-aY"
+  -H 'Content-Type: application/json'
+  --data '{"form": { "properties_attributes: {"name": "Red flowers", "creator_id":"1" }}, "form_name": "import_flowers", "parent_object_class":"CustomModelType","parent_object_id":"flower"}'
+{%endcomment%}

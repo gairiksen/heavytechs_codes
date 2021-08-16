@@ -1,0 +1,148 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $keyword: String
+  $sort: RecordsSortInput = { created_at: { order: DESC } }
+  $lang: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value_in: ["search_mechanic_params", "projects"] }
+      deleted_at: { exists: false }
+      properties: [
+        { name: "name", not_value_in: null }
+      ]
+      or: [
+        { properties: { name: "short_description", contains: $keyword } }
+        { properties: { name: "longer_description", contains: $keyword } }
+        { properties: { name: "location", contains: $keyword } }
+        { properties: { name: "location_of_project", contains: $keyword } }
+        { properties: { name: "position", contains: $keyword } }
+        { properties: { name: "name", contains: $keyword } }
+        { properties: { name: "company_name", contains: $keyword } }
+        { properties: { name: "project_name", contains: $keyword } }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      name: property(name: "name")
+      first_name: property(name: "first_name")
+      last_name: property(name: "last_name")
+      category: property(name: "category")
+      description: property(name: "short_description")
+      longer_description: property(name: "longer_description")
+      slug: property(name: "slug")
+      title: property(name: "title")
+      group_id: property(name: "group_id")
+      tags: property_array(name: "tags")
+      location_of_project: property(name: "location_of_project")
+      location: property(name: "location")
+      project_name: property(name: "project_name")
+      duration_type: property(name: "duration_type")
+      availability: property(name: "availability")
+
+
+      owner: related_user(join_on_property: "owner", foreign_property: "id") {
+        id
+        email
+      }
+
+      photo: related_record(
+        table: "photo"
+        join_on_property: "object_uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      mechanic_photo: related_record(
+        table: "photo"
+        join_on_property: "uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      item_detail: related_record(
+        table: "item_detail"
+        join_on_property: "id"
+        foreign_property: "item_id"
+        filter: { properties: { name: "lang", value: $lang } }
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+        description: property(name: "description")
+        lang: property(name: "lang")
+      }
+
+      profile_bio: related_record(
+        table: "profile_bio"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+        description: property(name: "description")
+        short_description: property(name: "short_description")
+        lang: property(name: "lang")
+        company_name: property(name: "company_name")
+        ready_for_travel: property(name: "ready_for_travel")
+        total_experience: property(name: "total_experience")
+        position: property(name: "position")
+        location: property(name: "location")
+        user_id: property(name: "user_id")
+      }
+
+      profile_skills: related_record(
+        table: "profile_skills"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        drivers_license_class: property(name: "drivers_license_class")
+      }
+
+      profile_contractor_bio: related_record(
+        table: "profile_contractor_bio"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        office_location: property(name: "office_location")
+        short_description: property(name: "short_description")
+      }
+
+      profile: related_record(
+        table: "profile"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        first_name: property(name: "first_name")
+        last_name: property(name: "last_name")
+        company_name: property(name: "company_name")
+        name: property(name: "name")
+      }
+    }
+  }
+}

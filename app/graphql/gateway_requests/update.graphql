@@ -1,0 +1,26 @@
+mutation update_gateway_request(
+  $id: ID!
+  $response: String
+  $response_status: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "gateway_request"
+      properties: [
+        { name: "response" value: $response }
+        { name: "response_status" value: $response_status }
+      ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+      gateway: property(name: "gateway")
+      external_id: property(name: "external_id")
+      payload: property(name: "payload")
+      response: property(name: "response")
+      response_status: property(name: "response_status")
+      api_call_name: property(name: "api_call_name")
+    }
+}

@@ -1,0 +1,35 @@
+{% parse_json seller_user %} {"id": "6999"} {% endparse_json %}
+{% parse_json inventory_data %}
+{
+  "item_id": "1",
+  "sku": "KSU-1234",
+  "quantity": 2,
+  "c__status": "app.statuses.items.published"
+}
+{% endparse_json %}
+{% parse_json item_data %}
+  {
+    "name":        "item-name",
+    "description": "item-description",
+    "lang":        "en",
+    "price":       10,
+    "return_days": 30,
+    "currency":    "usd",
+    "uuid":        "item.uuid",
+    "category":    "jewellery"
+  }
+{% endparse_json %}
+
+{% liquid
+  function seller = 'test/fixtures/profile', user_id: "6999"
+  function inventory = 'lib/commands/item_inventories/create', object: inventory_data, owner: seller.id
+  hash_assign item_data['item_inventory_id'] = inventory.id
+  function item = 'lib/commands/items/create', object: item_data, owner: seller.id
+
+  include 'test/assertions/valid_object', contract: contract, object: item, field_name: 'item'
+
+  function item = 'lib/queries/items/find', id: item.id
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_detail, field_name: 'name'
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_detail, field_name: 'description'
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_detail, field_name: 'lang'
+%}

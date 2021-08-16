@@ -1,0 +1,10 @@
+{% liquid
+  if id == blank
+    return null
+  endif
+
+  assign lang = lang | default: context.language
+  graphql r  = 'line_items/find', id: id, buyer: buyer.id, lang: lang
+
+  return r.line_items.results.first
+%}

@@ -1,0 +1,11 @@
+{% liquid
+  if id == blank or profile_id == blank
+    log 'Something went wrong. Profile cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  graphql r  = 'transactions/search', id: id, limit: 1
+  include 'lib/handle_graphql_response', r: r, name: 'queries/transactions/find_by_profile'
+
+  return r.transactions.results.first
+%}

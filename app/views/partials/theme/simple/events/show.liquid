@@ -1,0 +1,44 @@
+<div class="w-full mx-auto container text-xs">
+
+  <div class="my-6 py-5">
+    <a href="/admin/activities/events/{{ event.uuid }}/trigger?trigger=true" class="w-full button button-small button-secondary">broadcast event</a>
+  </div>
+
+  {% assign display_nodes = "type,uuid,date,consumers" | split: "," %}
+  <table>
+    {%  for node in event %}
+      {% if display_nodes contains node[0]  %}
+        <tr>
+          <td class="p-2 uppercase">{{ node[0] }}</td>
+          <td class="p-2">{{ node[1] }}</td>
+          </div>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </table>
+
+  <div class="flex w-full">
+    <div class="w-1/4">
+      <header>actor</header>
+      <pre class="full json text-xs shadow p-2 overflow-auto" >{{ event.actor }}</pre>
+    </div>
+    <div class="w-1/4">
+      <header>object</header>
+      <pre class="full json text-xs shadow p-2 overflow-auto" >{{ event.object }}</pre>
+    </div>
+    <div class="w-1/4">
+      <header>target</header>
+      <pre class="full json text-xs shadow p-2 overflow-auto" >{{ event.target }}</pre>
+    </div>
+    <div class="w-1/4">
+      <header>attributed_to</header>
+      <pre class="full json text-xs shadow p-2 overflow-auto" >{{ event.attributed_to }}</pre>
+    </div>
+  </div>
+
+  <div class="my-6 py-5">
+    <a href="/admin/activities/events/{{ event.uuid }}/trigger?trigger=true" class="w-full button button-small button-secondary">broadcast event</a>
+  </div>
+
+  {% render 'theme/json/json_node'  %}
+</div>

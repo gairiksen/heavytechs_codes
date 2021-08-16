@@ -1,0 +1,23 @@
+{% comment %}
+  params: @object
+          @field_name
+          @c
+          @minimal_price
+          @maximal_price
+          @currency
+{% endcomment %}
+
+{% liquid
+  if object[field_name] < minimal_price
+    function min_price = 'theme/simple/price': amount_cents: minimal_price, currency: currency
+    assign msg = 'app.errors.too_little' | t: value: min_price
+    include 'lib/register_error', contract: c, field_name: field_name, message: msg
+  endif
+  if object[field_name] > maximal_price
+    function max_price = 'theme/simple/price': amount_cents: maximal_price, currency: currency
+    assign msg = 'app.errors.too_much' | t: value: max_price
+    include 'lib/register_error', contract: c, field_name: field_name, message: msg
+  endif
+
+  return c
+%}

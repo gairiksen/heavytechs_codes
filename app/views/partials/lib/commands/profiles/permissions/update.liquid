@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/profiles/permissions/update/build', object: object
+  function object = 'lib/commands/profiles/permissions/update/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: 'profiles/update_permissions' object: object, selection: 'record_update'
+  endif
+
+  return object
+%}

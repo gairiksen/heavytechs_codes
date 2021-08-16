@@ -1,0 +1,48 @@
+{% comment %}before{% endcomment %}
+{% liquid
+  assign actor = '{"id":7888}' | parse_json
+  assign object = '{"id":7889, "type":"group"}' | parse_json
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: null, object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: null, do: 'edit', object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'edit', object: null
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'edit', object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+{% comment %}test{% endcomment %}
+{% liquid
+  assign actor = '{"id":7888}' | parse_json
+  assign object = '{"id":7889, "type":"item"}' | parse_json
+%}
+{% liquid
+  function result = 'lib/can', actor: actor, do: 'edit', object: object
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'result'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+
+  function result = 'lib/can', actor: actor, do: 'follow', object: object
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'result'
+  include 'test/assertions/blank', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}

@@ -1,0 +1,23 @@
+<button class="button" id="add-browser-btn"><span></span>Add new browser</button>
+<button class="button" id="detect-browsers-btn"><span class="browser-icon unknown"></span>Find installed browsers</button>
+<table class="items">
+    <tbody>
+        <%var browserNames = Object.keys(browsers);%>
+        <%if(browserNames.length) {%>
+            <%for(var i = 0, length = browserNames.length; i < length; i++) {%>
+                <%var browser = browsers[browserNames[i]]%>
+                <tr class="browser-row" data-browser-name="<%=browserNames[i]%>" data-browser-path="<%=browser.path%>"
+                        data-browser-cmd="<%=browser.cmd%>" data-browser-icon="<%=browser.icon || 'unknown' %>">
+                    <td class="browser-cell"><span class="browser-icon <%=browser.icon || 'unknown' %>" data-browser-icon="<%=browser.icon  || 'unknown'%>"></span></td>
+                    <td class="browser-cell"><%=browserNames[i]%></td>
+                    <td class="browser-cell button-cont">
+                        <a class="edit-browser-btn  button" title="Modify browser settings"><div><span></span></div></a>
+                    </td>
+                    <td class="browser-cell button-cont">
+                        <a class="delete-browser-btn  button" title="Remove browser"><div><span></span></div></a>
+                    </td>
+                </tr>
+            <%}%>
+        <%}%>
+    </tbody>
+</table>

@@ -1,0 +1,17 @@
+{% parse_json object %}
+{
+  "id": "{{ order.id }}",
+  "shipping_first_name":   "{{ object.shipping_first_name }}",
+  "shipping_last_name":   "{{ object.shipping_last_name }}",
+  "shipping_email":   "{{ object.shipping_email }}",
+  "shipping_phone":   "{{ object.shipping_phone }}",
+  "shipping_type":   "{{ object.shipping_type }}",
+  "shipping_address_id":   "{{ object.shipping_address_id }}",
+  "shipping_pickup_point":   "{{ object.shipping_pickup_point }}",
+  "payment_type":   "{{ object.payment_type }}"
+}
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

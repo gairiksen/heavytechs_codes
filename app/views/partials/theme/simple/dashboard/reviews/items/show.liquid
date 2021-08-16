@@ -1,0 +1,44 @@
+<a class="flex items-center underline gap-1" href="/dashboard/reviews/items">
+  {% render 'theme/simple/ui/icon', icon: 'dashLeft' %}
+  {{'app.reviews.header.title' | t }}
+</a>
+
+<div class="mt-12 mb-8 pb-8 flex items-center border-b-2">
+  {% function cover_url = 'theme/simple/items/cover_url', item: item_inventory.item %}
+  {% if cover_url %}
+    <img width="80" src="{{ cover_url }}" alt="" class="w-20 me-5 rounded">
+  {% else %}
+    {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+  {% endif %}
+  <h2 class="bigtitle !mt-0">
+    {{ item_inventory.item.item_detail.name }}
+  </h2>
+</div>
+
+<h3 class="subtitle !font-bold">
+  {{'app.reviews.items.rating' | t }}:
+</h3>
+<div class="card mb-5">
+  <fieldset>
+    {% render 'theme/simple/ui/rating_stars', rating: object.score %}
+  </fieldset>
+
+  <fieldset class="mt-6">
+    <textarea class="w-full p-2 outline-none" rows="3" disabled>{{object.body}}</textarea>
+  </fieldset>
+
+  <div class="mt-6 flex flex-wrap gap-6 lg:gap-12">
+    <div class="w-full md:w-auto flex-grow">
+      <fieldset>
+        <label class="mb-1 block cursor-pointer" for="item_pros">{{ 'app.reviews.items.new.pros' | t }}</label>
+        <input class="w-full" type="text" id="item_pros" value="{{ object.pros | join: ', ' }}" disabled>
+      </fieldset>
+    </div>
+    <div class="lg:w-1/2">
+      <fieldset>
+        <label class="mb-1 block cursor-pointer" for="item_cons">{{ 'app.reviews.items.new.cons' | t }}</label>
+        <input class="w-full" type="text" id="item_cons" value="{{ object.cons | join: ', ' }}" disabled>
+      </fieldset>
+    </div>
+  </div>
+</div>

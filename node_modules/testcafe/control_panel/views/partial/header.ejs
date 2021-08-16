@@ -1,0 +1,29 @@
+<div class="header">
+    <div class="header-push"></div>
+    <div class="back">
+        <div class="content">
+            <h1>
+                <img src='/assets/images/testcafe-logo.png' class="logo" alt='TestCafé' /><span class="subtitle">Control Panel</span>
+            </h1>
+            <ul class="tabs">
+                <% var tabs = {
+                'PROJECT' : '/project/',
+                'RESULTS' : '/results/',
+                'WORKERS' : '/workers/'
+                }; %>
+
+                <% for(var tabName in tabs) { %>
+                <li>
+                    <% if(selected === tabName) {%>
+                    <a href="<%= tabs[tabName] %>" class="selected"><%= tabName %></a>
+                    <% } else { %>
+                    <a href="<%= tabs[tabName] %>"><%= tabName %></a>
+                    <% } %>
+                </li>
+                <% } %>
+            </ul>
+            <div class="clear"></div>
+        </div>
+        <div class="separator"></div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+name: profile_bio
+properties:
+  - name: uuid
+  - name: user_id
+  - name: company_name
+  - name: position
+  - name: location
+  - name: ready_for_travel
+  - name: short_description
+  - name: long_description
+  - name: total_experience
+  - name: veteran
+  - name: latitude
+  - name: longitude
+  - name: geo_location
+    type: geojson

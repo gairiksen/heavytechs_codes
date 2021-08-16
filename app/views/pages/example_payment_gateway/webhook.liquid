@@ -1,0 +1,20 @@
+---
+method: post
+---
+{% liquid
+  function transaction = 'lib/queries/transactions/find', id: context.params.transaction_id
+  include 'lib/present_or_404', property:  transaction.id
+
+  function object = 'lib/commands/transactions/update_status', object: context.params, transaction: transaction
+  if object.valid
+    if object.status.name == 'app.statuses.transactions.success'
+      assign url = '/orders/success/' | append: transaction.id
+      include 'redirect_to', url: url, notice:  'app.orders.checkout.success'
+    else
+      assign url = '/orders/failed/' | append: transaction.id
+      include 'redirect_to', url: url, error: 'app.orders.checkout.failed'
+    endif
+  else
+    log object, type: 'example_payment_gateway webhook'
+  endif
+%}

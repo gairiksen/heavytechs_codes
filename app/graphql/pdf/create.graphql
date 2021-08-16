@@ -1,0 +1,31 @@
+mutation model_create(
+    $direct_url: String!, 
+    $user_id: String!, 
+    $uuid: String!, 
+    $file_type: String!,
+    $page_category: String!,
+    $item_category: String!,
+    $is_active: String!
+) {
+  model_create(model: {
+    model_schema_name: "user_pdf"
+    properties: [
+      { name: "uuid" value: $uuid }
+      { name: "user_id" value: $user_id }
+      { name: "direct_url" value: $direct_url }
+      { name: "file_type" value: $file_type }
+      { name: "page_category" value: $page_category }
+      { name: "item_category" value: $item_category }
+      { name: "is_active" value: $is_active }
+      
+    ]
+  }) {
+    id
+    file_type: property(name: "file_type")
+    photo: property_upload(name: "photo") {
+      file_name
+      url
+      versions
+    }
+  }
+}

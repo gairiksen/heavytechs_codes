@@ -1,0 +1,25 @@
+---
+slug: groups/:group_id/content/:post_id/edit
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+%}
+
+{% liquid
+  assign post_id = context.params.post_id | split: '-' | last
+  function post = 'lib/queries/posts/find', id: post_id, group_id: group_id
+  include 'lib/present_or_404', property:  post.id
+
+  function presigned_url = 'lib/queries/presigned_url'
+%}
+
+{% render 'theme/simple/groups/header', group: group, tab: 'content', current_profile: current_profile %}
+{% render 'theme/simple/groups/content/edit',
+  group: group,
+  object: post,
+  tab: 'content',
+  current_profile: current_profile,
+  context: context,
+  presigned_url: presigned_url
+%}

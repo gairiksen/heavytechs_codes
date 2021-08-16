@@ -1,0 +1,10 @@
+name: mechanic_specialized_training
+properties:
+  - name: uuid
+    type: string
+  - name: certificate_document
+    type: string
+  - name: expiry_date
+    type: string
+  - name: profile_id
+    type: integer

@@ -1,0 +1,35 @@
+<div x-data="{ temp: null, orig: null }" class="flex cursor-pointer" x-on:click="orig=temp">
+
+  <input type="number" class="hidden" name="{{input_name}}" :value="orig">
+
+  <div class="md:me-16 flex items-center gap-2"
+    data-tc="recommend-merchant"
+    x-on:mouseenter="temp=1"
+    x-on:mouseleave="temp=orig"
+    :class="{'text-confirmation': (temp === 1) }"
+  >
+    <span x-show="temp === 1" x-cloak>
+      {% render 'theme/simple/ui/icon', icon: 'thumbUpFull', class: "w-5" %}
+    </span>
+    <span x-show="temp !== 1">
+      {% render 'theme/simple/ui/icon', icon: 'thumbUp', class: "w-5" %}
+    </span>
+    {{'app.reviews.organizations.new.i_recommend' | t }}
+  </div>
+
+  <div class="flex items-center gap-2"
+    data-tc="dont-recommend-merchant"
+    x-on:mouseenter="temp=0"
+    x-on:mouseleave="temp=orig"
+    :class="{'text-danger': (temp === 0) }"
+  >
+    <span x-show="temp === 0" x-cloak>
+      {% render 'theme/simple/ui/icon', icon: 'thumbDownFull', class: "w-5" %}
+    </span>
+    <span x-show="temp !== 0">
+      {% render 'theme/simple/ui/icon', icon: 'thumbDown', class: "w-5" %}
+    </span>
+    {{'app.reviews.organizations.new.i_dont_recommend' | t }}
+  </div>
+
+</div>

@@ -1,0 +1,22 @@
+---
+slug: items/:slug
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true, load_organizations: true
+
+  assign id = context.params.slug | split: '-' | last
+  function item = 'lib/queries/items/find', id: id, withOrders: true, withInventoryItem: true, lang: context.language
+  assign redirect_path = '/items/' | append: item.slug
+  include 'lib/redirect_to_last_slug', redirect_to: redirect_path, last_slug: item.slug, current_slug: context.params.slug
+  include 'lib/present_or_404', property: item.id
+
+  function can_display = "lib/can", actor: current_profile, do: "display", object: item
+
+  if can_display.valid
+    function chat_enabled = 'lib/queries/constants/find' name: "USE_WEBSOCKET_CHAT", type: "boolean", context: context
+    render 'theme/simple/items/show', item: item, current_profile: current_profile, authenticity_token: context.authenticity_token, chat_enabled: chat_enabled
+    render 'theme/simple/wishlists/enable_event', current_profile_id: current_profile.id
+  else
+    render 'theme/simple/items/unpublished', item: item, current_profile: current_profile, authenticity_token: context.authenticity_token, chat_enabled: chat_enabled
+  endif
+%}

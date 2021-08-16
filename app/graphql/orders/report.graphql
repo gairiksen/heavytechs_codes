@@ -1,0 +1,80 @@
+query report(
+  $limit: Int = 999
+  $from: String!
+  $to: String!
+  $seller: String
+  $status: [String!] = ["app.statuses.orders.paid", "app.statuses.orders.delivered"]
+) {
+  orders: records(
+    per_page: $limit
+    filter: {
+      table: { value: "order" }
+      properties: [
+        { name: "seller", value: $seller }
+        { name: "c__status", value_in: $status }
+      ]
+      created_at: { lte: $to, gte: $from }
+    }
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+      currency: property(name: "currency")
+      line_items: related_records(
+        join_on_property: "id"
+        foreign_property: "order_id"
+        table: "line_item"
+        sort: { properties: { name: "name", order: ASC } }
+      ) {
+        id
+        created_at
+        quantity: property_int(name: "quantity")
+        currency: property(name: "currency")
+
+        status: related_record(
+          join_on_property: "id"
+          foreign_property: "object_id"
+          table: "status"
+          sort: { created_at: { order: ASC } }
+        ) {
+          id
+          created_at
+          name: property(name: "fullname")
+        }
+
+        item: related_record(
+          join_on_property: "item_id"
+          foreign_property: "id"
+          table: "item"
+        ) {
+          id
+          quantity: property_int(name: "quantity")
+          price: property_int(name: "price")
+        }
+
+        line_item_return: related_record(
+          join_on_property: "id"
+          foreign_property: "line_item_id"
+          table: "line_item_return"
+        ) {
+          id
+          quantity: property_int(name: "quantity")
+
+          status: related_record(
+            join_on_property: "id"
+            foreign_property: "object_id"
+            table: "status"
+            sort: { created_at: { order: ASC } }
+          ) {
+            id
+            created_at
+            name: property(name: "name")
+            timestamp: property(name: "timestamp")
+          }
+        }
+      }
+    }
+  }
+}

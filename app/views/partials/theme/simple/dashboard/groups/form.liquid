@@ -1,0 +1,225 @@
+{% liquid
+  if object.id
+    assign method = 'put'
+  else
+    assign method = 'post'
+  endif
+  assign uuid = '' | uuid
+  assign group_uuid = object.uuid | default: uuid
+%}
+<div class="container flex flex-wrap">
+  <form action="/dashboard/groups" method="post" class="w-full md:w-2/3">
+    {% include 'authenticity_token' %}
+    <input type="hidden" name="_method" value="{{ method }}" />
+
+    {% if object.id %}
+      <input type="hidden" name="id" value="{{ object.id }}" />
+      <input type="hidden" name="group[id]" value="{{ object.id }}" />
+    {% endif %}
+    <input type="hidden" name="group[uuid]" value="{{ group_uuid }}" />
+
+    <div class="mt-5">
+      <label class="block" for="name">{{ 'app.groups.form.name' | t }}</label>
+      <input class="w-2/3 form-input" type="text" id="name" name="group[name]" value="{{ object.name }}" autofocus required />
+      {% include 'theme/simple/field_error', errors: object.errors.name %}
+    </div>
+
+    <div class="mt-5">
+      <label class="block" for="summary">{{ 'app.groups.form.summary' | t }}</label>
+      <textarea class="w-2/3 form-input" id="summary" name="group[summary]" rows="3" required>{{ object.summary }}</textarea>
+      {% include 'theme/simple/field_error', errors: object.errors.summary %}
+    </div>
+
+    <div class="mt-5">
+      <label class="block">{{ 'app.groups.form.photo' | t }}</label>
+      {% include 'theme/simple/photos/uppy_area' %}
+    </div>
+
+    <div class="mt-5">
+      <label class="block" for="description">{{ 'app.groups.form.description' | t }}</label>
+      <textarea class="w-full form-input" id="description" name="group[description]" rows="3" required>{{ object.description }}</textarea>
+
+      {% include 'theme/simple/field_error', errors: object.errors.description %}
+    </div>
+
+    <hr class="mt-10 mb-5">
+
+    <h2 class="text-2xl">Content type</h2>
+
+    {% assign scope = 'app.groups.content_types_explanation' %}
+
+    <p class="mt-2">
+      {{ 'intro' | t: scope: scope }}
+    </p>
+
+    {% parse_json post_templates %}
+      {% render 'theme/simple/dashboard/posts/post_templates' %}
+    {% endparse_json %}
+
+    <div x-data="{ templates: {{ post_templates | json }}, content_type: '{{ group.content_type | default: 'question' }}' }">
+
+      <div class="grid grid-cols-3 my-5">
+        <div>
+          {% for content_type in post_templates %}
+            {% render 'theme/simple/dashboard/posts/content_type', group: group, content_type: content_type[0], template: content_type[1] %}
+          {% endfor %}
+        </div>
+
+        <div class="col-span-2">
+          <div class="card">
+            <ul class="space-y-3">
+              <li>
+                <span x-show="templates[content_type].commentable">
+                  {{ 'commentable' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[content_type].commentable">
+                  {{ 'commentable' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+              <li>
+                <span x-show="templates[content_type].replyable">
+                  {{ 'replyable' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[content_type].replyable">
+                  {{ 'replyable' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+              <li>
+                <span x-show="templates[content_type].votable">
+                  {{ 'votable' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[content_type].votable">
+                  {{ 'votable' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+              <li>
+                <span x-show="templates[content_type].followable">
+                  {{ 'followable' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[content_type].followable">
+                  {{ 'followable' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+              <li>
+                <span x-show="templates[content_type].featurable">
+                  {{ 'featurable' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[content_type].featurable">
+                  {{ 'featurable' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mt-10 mb-5">
+
+    <h2 class="text-2xl">Permissions</h2>
+
+    {% assign scope = 'app.groups.permissions_explanation' %}
+
+    <p class="mt-2">
+      {{ 'intro' | t: scope: scope }}
+    </p>
+
+    {% parse_json group_templates %}
+      {% render 'theme/simple/dashboard/groups/forms/group_templates', group: group %}
+    {% endparse_json %}
+
+    <div x-data="{ templates: {{ group_templates | json }}, group_type: '{{ group.group_type | default: 'public' }}' }">
+
+      <div class="grid grid-cols-3 my-5">
+        <div>
+          {% for group_type in group_templates %}
+            {% render 'theme/simple/dashboard/groups/forms/group_type', group: group, group_type: group_type[0], template: group_type[1] %}
+          {% endfor %}
+        </div>
+
+        <div class="col-span-2">
+          <div x-show="group_type != 'custom'" class="card">
+            <ul class="space-y-3">
+
+              <li>
+                <span x-show="templates[group_type].ask_to_join">
+                  {{ 'ask_to_join' | t: can: "can", scope: scope }}
+                </span>
+                <span x-show="!templates[group_type].ask_to_join">
+                  {{ 'ask_to_join' | t: can: "cannot", scope: scope }}
+                </span>
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].meta_visible"></span>
+                {{ 'meta_visible' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].content_visible"></span>
+                {{ 'content_visible' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].approve_request"></span>
+                {{ 'approve_request' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].post_content"></span>
+                {{ 'post_content' | t: scope: scope }}
+              </li>
+              <li>
+                <span class="font-semibold capitalize" x-text="templates[group_type].invite_member"></span>
+                {{ 'invite_member' | t: scope: scope }}
+              </li>
+            </ul>
+          </div>
+          <div x-show="group_type == 'custom'" class="grid grid-cols-1">
+
+            <label for="group[ask_to_join]" class="flex flex-wrap mb-3">
+              <span class="w-full">{{ "ask_to_join" | t: scope: 'app.groups.permissions_explanation' }}</span>
+
+              <select name="group[ask_to_join]" id="group[ask_to_join]" class="pt-1 pb-1 ps-1 text-sm">
+                <option
+                  value="yes"
+                  x-bind:selected="templates[group_type].ask_to_join == 'yes'"
+                  {% if group[ask_to_join] == "yes" %}selected{% endif %}
+                >
+                  Yes
+                </option>
+                <option
+                  value="no"
+                  x-bind:selected="templates[group_type].ask_to_join == 'no'"
+                  {% if group[ask_to_join] == "no" %}selected{% endif %}
+                >
+                  No
+                </option>
+              </select>
+            </label>
+
+            {% render 'theme/simple/dashboard/groups/forms/group_roles', name: "meta_visible", group: group %}
+            {% render 'theme/simple/dashboard/groups/forms/group_roles', name: "content_visible", group: group %}
+            {% render 'theme/simple/dashboard/groups/forms/group_roles', name: "approve_request", group: group %}
+            {% render 'theme/simple/dashboard/groups/forms/group_roles', name: "post_content", group: group %}
+            {% render 'theme/simple/dashboard/groups/forms/group_roles', name: "invite_member", group: group %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="mt-8 button">{{ 'app.groups.form.submit' | t }}</button>
+  </form>
+</div>
+
+{% liquid
+  assign photo = photos[0] | default: object.main_photo
+  assign photos = '[]' | parse_json
+  assign photos = photos | add_to_array: photo | compact
+%}
+{% include 'theme/simple/photos/uppy_form',
+  object_uuid: group_uuid,
+  presigned_url: presigned_url,
+  user_id: user.id,
+  photo_type: 'main',
+  note: 'Image up to 2MB',
+  max_number_of_files: 1,
+  existing_photos: photos
+%}

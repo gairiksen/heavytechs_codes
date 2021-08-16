@@ -1,0 +1,43 @@
+<script>
+  api.strings = {
+    cantRemoveFromWishlist: "{{ 'app.errors.cant_remove' | t }}"
+  };
+</script>
+
+<div class="container mb-4 flex justify-between items-center">
+  <h2 class="mt-0 mb-0 text-3xl font-semibold">
+    {{ 'app.wishlists.show.title' | t }} (<span data-wishlist-counter>{{ items.total_entries }}</span>)
+  </h2>
+
+  <a href="/search" class="button button-secondary">
+    {{ 'app.wishlists.show.continue-shopping' | t }}
+  </a>
+</div>
+
+
+<div class="container" x-data="wishlistContent">
+
+  {% if items.total_entries != 0 %}<div x-cloak x-show="blank">{% endif %}
+    {% render 'theme/simple/wishlists/empty' %}
+  {% if items.total_entries != 0 %}</div>{% endif %}
+
+  {% if items.total_entries != 0 %}
+    <div class="table" x-show="!blank">
+      <header>
+        <div>{{ 'app.wishlists.show.item' | t }}</div>
+        <div class="text-end">{{ 'app.wishlists.show.unit_price' | t }}</div>
+        <div></div>
+        <div></div>
+      </header>
+
+      <div class="table-content">
+        {% liquid
+          for item in items.results
+            render 'theme/simple/wishlists/row', item: item, current_profile: current_profile, authenticity_token: authenticity_token
+          endfor
+        %}
+      </div>
+    </div>
+  {% endif %}
+
+</div>

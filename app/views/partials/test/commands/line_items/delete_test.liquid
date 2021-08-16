@@ -1,0 +1,13 @@
+{% parse_json buyer %} {"id": "5666"} {% endparse_json %}
+{% liquid
+  function item = 'test/fixtures/item'
+  function order = 'test/fixtures/order', current_profile: buyer, item: item
+%}
+{% comment %} test {% endcomment %}
+{% liquid
+  function line_item = 'lib/commands/line_items/create', item: item, current_profile: buyer, order: order
+  include 'test/assertions/valid_object', contract: contract, object: line_item, field_name: 'line_item'
+
+  function line_item = 'lib/commands/line_items/delete', object: line_item
+  include 'test/assertions/valid_object', contract: contract, object: line_item, field_name: 'line_item'
+%}

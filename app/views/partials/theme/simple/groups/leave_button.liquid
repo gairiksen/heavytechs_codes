@@ -1,0 +1,16 @@
+{% function can = "lib/can", actor: current_profile, do: "leave", object: group %}
+{% if can.valid and member %}
+  <form action="/relationships" method="post" class="block">
+    {% render 'authenticity_token', token: context.authenticity_token %}
+    <input type="hidden" name="_method" value="delete" />
+    <input type="hidden" name="l_id" value="{{ current_profile.id }}">
+    <input type="hidden" name="r_id" value="{{ group.id }}">
+    <input type="hidden" name="name" value="membership">
+    <input type="hidden" name="return_to" value="{% render 'link_to', object: group %}">
+    <input type="hidden" name="notice_key" value="app.groups.left">
+
+    <button class="{{ button_class | default: 'button button-primary' }}">
+      {{ 'app.groups.leave' | t }}
+    </button>
+  </form>
+{% endif %}

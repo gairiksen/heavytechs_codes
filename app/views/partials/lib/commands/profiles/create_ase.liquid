@@ -1,0 +1,7 @@
+{% liquid
+    function object = 'lib/commands/profiles/create_ase/build', ase_name: ase_name, ase_code: ase_code, user_id:user_id
+
+    graphql r = 'profiles/create_ase', args: object 
+
+    return object
+%}

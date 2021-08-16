@@ -1,0 +1,15 @@
+---
+layout: admin
+slug: admin/tags/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  assign tag_id = context.params.id | split: '-' | last
+  function tag = 'lib/queries/tags/find', id: tag_id
+  include 'lib/present_or_404', property: tag.id
+
+  render 'theme/simple/admin/tags/show', tag: tag, context: context
+%}

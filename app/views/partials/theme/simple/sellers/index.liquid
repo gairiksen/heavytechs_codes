@@ -1,0 +1,18 @@
+<section class="container py-12 px-4 text-center">
+  <h1 class="bigtitle">{{ 'app.orders.sellers.title' | t }}</h1>
+  <h2 class="subtitle">{{ 'app.orders.sellers.subtitle' | t }}</h2>
+</section>
+<section class="container py-12 px-4 text-center">
+  <div class="flex flex-wrap -mx-8">
+  {% for seller in organizations %}
+    <div class="md:w-1/4">
+      <a href="#"><img class="my-2 mx-3 border-8 border-white hover:border-gray" src="{{ seller.logo.url }}" alt="{{ seller.name }}" /></a>
+    </div>
+  {% endfor %}
+  </div>
+</section>
+<section class="container py-12 px-4 text-center">
+  <h2 class="bigtitle">{{ 'app.orders.sellers.become.title' | t }}</h2>
+  <h3 class="subtitle">{{ 'app.orders.sellers.become.subtitle' | t }}</h3>
+  <a class="button" href="#">{{ 'app.orders.sellers.become.contact' | t }}<a>
+</section>

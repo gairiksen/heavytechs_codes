@@ -1,0 +1,34 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+  $is_active: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "user_pdf" }
+      properties: [
+        { name: "user_id", value: $user_id }   
+        { name: "is_active", value: $is_active }      
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      direct_url: property(name: "direct_url") 
+      file_type: property(name: "file_type") 
+      is_active: property(name: "is_active") 
+      item_category: property(name: "item_category") 
+      page_category: property(name: "page_category") 
+      user_id: property(name: "user_id")
+      uuid: property(name: "uuid")
+    }
+  }
+}

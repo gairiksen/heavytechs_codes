@@ -1,0 +1,80 @@
+en:
+  app:
+    currency:
+      setup:
+        title: The site's currency
+        save: Save
+    item: Item
+    list-your-item: List your item
+    your-items: Your items
+    item_id: Item ID
+    items:
+      errors:
+        item_with_orders: >-
+          The system has determined that <span class="font-semibold">your
+          item</span> has <span class="font-semibold">open orders</span>. Cowardly
+          refusing destroying.
+        cannot_edit_coz_has_active_orders: >-
+          The system has determined that <span class="font-semibold">your
+          item</span> has <span class="font-semibold">orders</span>. Editing is
+          not allowed.
+        publish_failed: Publishing item failed %{error}
+      all: All
+      by: By
+      shipping_types:
+        available: Available shipping methods
+        delivery: Home delivery (%{shipping_cost} shipping cost)
+        personal_pickup: Customer pickup (Free)
+      add_to_cart: Add to cart
+      adjust_filters: You might also try adjusting the filters to show more items
+      contact_seller: Contact seller
+      created: Item created
+      deleted: Item has been deleted successfully
+      edit: Edit Item
+      first_question: Do you want to add one?
+      items_404: 404 item not found
+      list: Inventory
+      new: New Item
+      none: You don't have any items in your Inventory yet.
+      old_version: This is an archived item that has been updated since
+      see_new_version: We have a new version of this item if you want to check it out
+      go_to_new_version: See the updated item
+      sold-out: Sold out
+      discount: '%{promo} off'
+      updated: Item updated
+      yours: My items
+      inventory: Inventory
+      manage_inventory: Manage Inventory
+      add: Add Item
+      need_to_be_accepted_before_publish: Item needs to be accepted before publish
+      need_to_be_accepted_before_create_publish: Item created but needs to be accepted before publish
+      need_to_be_accepted_before_unpublish: Item will be unpublished after confirmation
+      item_unpublished: This item was removed.
+      confirm-publish: Are you sure you want to publish item? It will be available to buy.
+      publish: Publish
+      published: Item Published
+      form:
+        name: Name
+        sku: SKU
+        photos: Photos
+        category: Category
+        description: Description
+        price: Price
+        quantity: Available quantity
+        max_quantity: Maximum quantity in a single order
+        submit_new_version: Submit New Version
+        submit: Save
+        return_days: Returns available for
+        days: days
+        invalid: Invalid
+      ordered_times:
+        other: 'Ordered %{count} times'
+        one: 'Ordered %{count} time'
+      attr:
+        id: ID
+        name: Name
+        category: Category
+        created_at: Created At
+        max_quantity: Max Qty
+        owner: Owner
+        quantity: Quantity

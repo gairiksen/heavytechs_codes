@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/mechanic_availability/create/build', availability: availability, current_profile: current_profile
+  
+
+  
+   graphql r = 'profiles/create_avalability', args: object 
+ 
+
+  return object
+%}

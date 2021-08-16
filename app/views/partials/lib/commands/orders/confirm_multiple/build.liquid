@@ -1,0 +1,6 @@
+{% liquid
+  assign object = '{}' | parse_json
+  hash_assign object['orders'] = orders
+
+  return object
+%}

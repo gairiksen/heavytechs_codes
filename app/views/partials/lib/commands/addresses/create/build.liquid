@@ -1,0 +1,17 @@
+{% parse_json object %}
+  {
+    "profile_id": {{ profile.id | json }},
+    "full_name": {{ object.full_name | json }},
+    "country": {{ object.country | json }},
+    "city": {{ object.city | json }},
+    "state": {{ object.state | json }},
+    "street": {{ object.street | json }},
+    "zip": {{ object.zip | json }},
+    "building_number": {{ object.building_number | json }},
+    "flat_number": {{ object.flat_number | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

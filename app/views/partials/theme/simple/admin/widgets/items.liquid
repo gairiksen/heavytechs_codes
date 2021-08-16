@@ -1,0 +1,17 @@
+<section class="card mt-8 p-4">
+
+  <h3 class="sidenote w-full uppercase">{{ 'admin.items.title' | t }}</h3>
+
+  <strong class="title">
+    {{ items.total_entries }}
+  </strong>
+
+  {% if since_yesterday > 0 %}
+    <div class="mt-4 text-confirmation">
+      <h4 class="sidenote uppercase">{{ 'admin.since_yesterday' | t }}</h4>
+      <strong>{{ since_yesterday }}</strong>
+    </div>
+  {% endif %}
+
+  {% render 'theme/simple/admin/widgets/footer', path: '/admin/stock', filters: filters %}
+</section>

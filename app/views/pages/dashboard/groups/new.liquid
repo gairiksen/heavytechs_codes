@@ -1,0 +1,18 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.groups.list
+      url: /dashboard/groups
+    - label: app.groups.new
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  function presigned_url = 'lib/queries/presigned_url'
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs
+  include 'theme/simple/dashboard/groups/new', presigned_url: presigned_url, user: context.current_user
+%}

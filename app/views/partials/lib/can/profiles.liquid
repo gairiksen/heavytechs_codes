@@ -1,0 +1,39 @@
+{% liquid
+  assign can = false
+
+  assign permissions = actor.permissions | default: '{}' | parse_json
+  assign superadmins = context.constants.superadmins | split: ','
+  if superadmins contains actor.user.email or permissions.superadmin
+    assign superadmin = true
+  endif
+
+  case do
+  when 'be_admin'
+    if permissions.admin or superadmin
+      return true
+    endif
+  when 'be_superadmin'
+    return superadmin
+  when 'be_checker'
+    if permissions.checker or superadmin
+      return true
+    endif
+  when 'be_maker'
+    if permissions.maker or superadmin
+      return true
+    endif
+  when 'required_2fa'
+    function required_2fa = 'lib/queries/constants/find' name: "REQUIRED_2FA", type: "boolean", context: context
+    function can_be_admin = "lib/can", actor: actor, do: "be_admin", object: actor
+    if profile.organizations.size > 0 or can_be_admin.valid
+      if required_2fa
+        assign required = true
+      endif
+    endif
+    if required or profile.otp_configured
+      return true
+    endif
+  endcase
+
+  return can
+%}

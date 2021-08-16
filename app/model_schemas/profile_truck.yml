@@ -1,0 +1,31 @@
+name: profile_truck
+properties:
+  - name: uuid
+  - name: user_id
+  - name: is_truck
+  - name: short_description_service_skills
+  - name: truck_type
+  - name: crane_certification
+  - name: crane_cert_expiry_date
+  - name: capacity
+  - name: no_of_products_tank
+  - name: fuel_tank_size
+  - name: truck_class
+  - name: air_compressor
+  - name: tooling_basic
+  - name: tooling_basic_1_drive
+  - name: tooling_generic_diagnostics
+  - name: master_set
+  - name: tooling_speciality_tool
+  - name: line_boring
+  - name: nitrogen_charge_kit
+  - name: mag_drill
+  - name: fifty_t_hydraulic_jacks
+  - name: track_pin_press
+  - name: field_hose_press
+  - name: hydraulic_pulling_rams
+  - name: hydraulic_torque_wrench
+  - name: generic_diagnostic_pc
+  - name: oem_diagnostic_software
+  - name: lube_skid
+  

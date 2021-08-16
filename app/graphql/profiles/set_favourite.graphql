@@ -1,0 +1,33 @@
+mutation create( 
+    $uuid: String!,
+    $user_id: String!, 
+    $fav_id: String!, 
+    $fav_for: String!,
+    $fav_uuid: String!,
+    $contractor_id: String
+    
+) {
+  model_create(
+    model: {
+      model_schema_name: "user_favourites"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "fav_id" value: $fav_id }
+        { name: "fav_for" value: $fav_for }     
+        { name: "fav_uuid" value: $fav_uuid } 
+        { name: "contractor_id" value: $contractor_id } 
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    fav_id: property(name: "fav_id")
+    fav_for: property(name: "fav_for")
+    fav_uuid: property(name: "fav_uuid")
+    contractor_id: property(name: "contractor_id")
+  }
+}

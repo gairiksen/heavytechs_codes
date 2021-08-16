@@ -1,0 +1,176 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'coins', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.sales' | t }}
+  </h2>
+  <div class="flex gap-4">
+    <div class="pe-4 border-r border-frame text-center">
+      <strong class="subtitle leading-tight">
+        {% if orders.total_price_cents and orders.total_price_cents.value > 0 %}
+          {% render 'theme/simple/price', amount_cents: orders.total_price_cents, currency: orders.currency %}
+        {% else %}
+          <p>N/A</p>
+        {% endif %}
+      </strong>
+      <div class="sidenote">{{ 'admin.sales.title' | t }}</div>
+    </div>
+    <div class="pe-4 border-r border-frame text-center">
+      <strong class="subtitle leading-tight">{{ orders.total_entries }}</strong>
+      <div class="sidenote">{{ 'admin.sales.orders' | t }}</div>
+    </div>
+    <div class="pe-4 border-frame text-center">
+      <strong class="subtitle leading-tight">{{ orders.total_quantity }}</strong>
+      <div class="sidenote">{{ 'admin.sales.items' | t }}</div>
+    </div>
+  </div>
+</header>
+
+<form action="" id="admin-form"></form>
+
+<div class="flex min-h-screen">
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>Item</div>
+        <div>{{ 'app.order' | t }}</div>
+        <div>{{ 'app.search.price' | t }}</div>
+        <div>{{ 'app.status' | t }}</div>
+        <div>{{ 'app.created_at' | t }}</div>
+      </header>
+
+      <div class="table-content">
+        {% for order in orders.results %}
+          {% for line_item in order.line_items %}
+            <ul>
+              <li>
+                <div class="flex justify-start items-center gap-4">
+                  {% function cover_url = 'theme/simple/items/cover_url', item: item %}
+                  {% function item_url = 'link_to', path: '/items/', item: line_item.item %}
+                  <a href="{{ item_url }}">
+                    {% if cover_url %}
+                      <img src="{{ cover_url }}" class="w-20 rounded">
+                    {% else %}
+                      {% render 'theme/simple/ui/picture-placeholder', class: 'w-20 rounded' %}
+                    {% endif %}
+                  </a>
+
+                  <div>
+                    <a href="{{ item_url }}">
+                      {{ line_item.item.item_detail.name }}<br>
+                    </a>
+                    <div class="mt-2 sidenote">
+                      {{ 'app.orders.show.category' | t }}:
+                      {% function category_url = 'link_to', category: line_item.item.category %}
+                      <a href="{{ category_url }}">{{ 'categories.' | append: line_item.item.category | t }}</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <ul>
+                  <li>
+                    {{ 'app.number' | t }}:
+                    <a data-tc="order-id" href="{% render 'link_to', object: order, namespace: 'admin' %}" class="font-bold lg:font-normal">
+                      {{ order.id }}
+                    </a>
+                  </li>
+                  <li class="mt-2">
+                    <a href="{% render 'link_to', object: order.buyer, namespace: 'admin' %}">
+                      {{ order.buyer.first_name }} {{ order.buyer.last_name }}
+                    </a>
+                  </li>
+
+                  <li class="mt-2">
+                    {% liquid
+                      if order.seller.first_name
+                        assign name = order.seller.first_name | append: ' ' | append: order.seller.last_name
+                      else
+                        assign name = order.seller.name
+                      endif
+                    %}
+
+                    {{ 'app.orders.seller' | t }}: {{ name }}
+                  </li>
+
+                  {% if order.shipping_type %}
+                    <li class="mt-4 sidenote">
+                      {{ 'app.orders.shipping_type' | t }}: {{ 'app.orders.shipping_types.' | append: order.shipping_type | t }}
+                    </li>
+                  {% endif %}
+                </ul>
+              </li>
+
+              <li>
+                <ul>
+                  <li>
+                    {{ 'app.orders.show.unit' | t }}: {% render 'theme/simple/price', amount_cents: line_item.item.price, currency: line_item.currency %}
+                  </li>
+                  <li class="mt-2">
+                    {{ 'app.orders.show.quantity' | t }}: {{ line_item.quantity }}
+                  </li>
+                  <li class="mt-2 font-semibold">
+                    {% liquid
+                      assign total = line_item.item.price | times: line_item.quantity
+                    %}
+                    {{ 'app.orders.total' | t }}: {% render 'theme/simple/price', amount_cents: total, currency: line_item.currency %}
+                  </li>
+                  <li class="mt-4 sidenote">
+                    {{ 'app.orders.payment_method' | t }}: {{ order.payment_type }}
+                  </li>
+                </ul>
+              </li>
+
+              <li>
+                {% if order.status.timestamp %}
+                  {% liquid
+                    assign status = order.status.name
+                    assign status_for_role = status | split: '.' | last | t: scope: 'app.statuses.orders_for_role.buyer'
+
+                    case status
+                      when 'app.statuses.orders.confirmed'
+                        assign status_class = 'bg-warning-disabled border-warning'
+                      when 'app.statuses.orders.paid'
+                        assign status_class = 'bg-warning-disabled border-warning'
+                      when 'app.statuses.orders.in_progress'
+                        assign status_class = 'bg-warning-disabled border-warning'
+                      when 'app.statuses.orders.delivered'
+                        assign status_class = 'bg-confirmation-disabled border-confirmation'
+                      when 'app.statuses.orders.completed'
+                        assign status_class = 'bg-confirmation-disabled border-confirmation'
+                      when 'app.statuses.orders.cancelled_buyer'
+                        assign status_class = 'bg-warning-disabled border-warning'
+                      when 'app.statuses.orders.cancelled_seller'
+                        assign status_class = 'bg-warning-disabled border-warning'
+                      when 'app.statuses.orders.returned'
+                        assign status_class = 'bg-warning-disabled border-warning'
+                    endcase
+                  %}
+                  <span class="lg:hidden">{{ 'app.status' | t }}: </span>
+                  <span class="px-2 py-1 inline-block rounded border leading-normal uppercase {{ status_class }}">{{ order.status.name | t }}</span>
+                {% endif %}
+              </li>
+
+              <li>
+                <span class="lg:hidden">{{ 'app.created_at' | t }}: </span>
+                <time datetime="{{ order.created_at }}">{{ order.created_at | l: 'compact' }}</time>
+              </li>
+            </ul>
+          {% endfor %}
+        {% endfor %}
+
+      </div>
+
+    </section>
+
+    {% liquid
+      assign page = page | default: 1 | plus: 0
+    %}
+
+    {% render 'theme/simple/ui/pagination', form: 'admin-form' collection: orders, current_page: filters.page %}
+  </div>
+
+  {% render 'theme/simple/admin/orders/filters', filters: filters, organizations: organizations, statuses: statuses %}
+
+</div>

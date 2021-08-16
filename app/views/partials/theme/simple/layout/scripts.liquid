@@ -1,0 +1,9 @@
+<script>window.cdnUrl = '{{ "" | asset_url }}';</script>
+
+<script src="{{ 'js/app.js' | asset_url }}"></script>
+{% if context.page.layout == 'admin' %}
+  <script src="{{ 'js/admin.js' | asset_url }}"></script>
+{% endif %}
+
+<script src="{{ 'modules/chat/js/notifications.js' | asset_url }}"></script>
+<script src="{{ 'modules/chat/js/chat.js' | asset_url }}"></script>

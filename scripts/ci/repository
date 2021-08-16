@@ -1,0 +1,27 @@
+#!/bin/sh
+
+CI_REPO_URL=https://ci-repository.staging.oregon.platform-os.com/api/instances
+
+GITHUB_REPOSITORY=${GITHUB_REPOSITORY:-octocat/Hello-World}
+GITHUB_RUN_ID=${GITHUB_RUN_ID:-run-888}
+
+CLIENT=${GITHUB_REPOSITORY}--${GITHUB_RUN_ID}
+CLIENT=${CLIENT/\//--}
+
+request() {
+  curl -Ssf -X$1 -H 'Content-type: application/json' ${CI_REPO_URL}$2 -d "{\"client\":\"$CLIENT\"}"
+}
+
+case $1 in
+  release)
+    request DELETE /release
+    ;;
+  reserve)
+    request POST /reserve
+    ;;
+  all)
+    request POST
+    ;;
+  *)
+    echo $1 command not found: Usage: ./scripts/ci/repository all | reserve | release
+esac

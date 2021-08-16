@@ -1,0 +1,13 @@
+{% liquid
+  if id == blank
+    log '(returns) ID cannot be blank when searching for audience'
+    return null
+  endif
+
+  graphql r = 'activities/returns/audience', id: id, limit: 10
+
+  assign order = r.line_item_returns.results.first.order
+  function audience = 'lib/queries/activities/orders/audience', id: order.id, skip_buyer: skip_buyer
+
+  return audience
+%}

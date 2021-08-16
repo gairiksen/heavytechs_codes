@@ -1,0 +1,5 @@
+{% liquid
+  assign item_inventory_id = event.target.id
+  function reviews = 'lib/queries/item_reviews/search', item_inventory_id: item_inventory_id, score_gte: 1, limit: 100, with_item_inventory: false
+  function item_inventory = 'lib/commands/reviews/calculate_rating', record_id: item_inventory_id, reviews: reviews
+%}

@@ -1,0 +1,20 @@
+<div class="absolute -top-10 bottom-0 -start-10.5 border-s-2 border-panel"></div>
+
+{% if role == 'seller' and order.status.name == 'app.statuses.orders.delivered' %}
+  <form action="/dashboard/sell/orders/mark_completed" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="order[id]" value="{{ order.id }}" />
+    <button type="submit" class="button">
+      {{ 'app.orders.show.complete' | t }}
+    </button>
+  </form>
+{% elsif order.status.name == 'app.statuses.orders.completed' %}
+  {% liquid
+    assign status_class = 'bg-confirmation-disabled border-confirmation'
+    assign status_label = 'app.statuses.orders.completed' | t
+  %}
+  <div class="lg:flex justify-between">
+    <span>{{ 'app.status' | t }}</span>
+    <span class="ms-4 px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status_label }}</span>
+  </div>
+{% endif %}

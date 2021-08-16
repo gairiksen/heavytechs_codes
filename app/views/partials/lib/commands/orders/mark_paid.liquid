@@ -1,0 +1,10 @@
+{% liquid
+  for order in orders
+    function status = 'lib/commands/statuses/create', profile_id: profile_id, object_id: order.id, name: 'app.statuses.orders.paid', scope: 'app.statuses.orders'
+    if status.valid
+      include 'lib/commands/events/create', type: 'status_created', actor_id: profile_id, object_id: status.id, target_id: status.object_id
+    endif
+  endfor
+
+  return true
+%}

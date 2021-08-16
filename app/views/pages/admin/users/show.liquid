@@ -1,0 +1,15 @@
+---
+slug: admin/profile/:id
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_superadmin', return_url: '/admin/users'
+
+  function profile = 'lib/queries/profiles/find', slug: context.params.id
+  include 'lib/present_or_404', property: profile.id
+  function orders = 'lib/queries/orders/search_by_buyer', buyer: profile.id, limit: 50
+
+  render 'theme/simple/admin/users/show', profile: profile, orders: orders
+%}

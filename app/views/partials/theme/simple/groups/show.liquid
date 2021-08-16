@@ -1,0 +1,9 @@
+
+  {% liquid
+    case tab
+    when 'invitations'
+      render 'theme/simple/groups/invitations', group: group, list: list, current_profile: current_profile
+    endcase
+  %}
+</div>
+

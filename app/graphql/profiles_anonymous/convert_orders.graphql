@@ -1,0 +1,14 @@
+mutation update($profile_anonymous_id: ID! $profile_id: String, $ids: [ID!]!){
+  records_update_all(
+    table: "order"
+    filter: {
+      id: { value_in: $ids }
+      properties: { name: "buyer", value: $profile_anonymous_id }
+    }
+    record: {
+      properties: { name: "buyer", value: $profile_id }
+    }
+  ){
+    count
+  }
+}

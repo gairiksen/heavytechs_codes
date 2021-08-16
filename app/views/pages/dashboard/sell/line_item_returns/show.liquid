@@ -1,0 +1,12 @@
+---
+slug: dashboard/sell/line_item_returns/:id
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function line_item_return = 'lib/queries/line_item_returns/find_for_seller', id: context.params.id, seller_id: current_profile.id
+  include 'lib/present_or_404', property: line_item_return.id
+
+  include 'theme/simple/dashboard/line_item_returns/show', line_item_return: line_item_return
+%}

@@ -1,0 +1,23 @@
+{% parse_json object %}
+{
+  "shipping_first_name":   "{{ object.shipping_first_name }}",
+  "shipping_last_name":   "{{ object.shipping_last_name }}",
+  "shipping_email":   "{{ object.shipping_email }}",
+  "shipping_phone":   "{{ object.shipping_phone }}",
+  "payment_type":   "{{ object.payment_type }}",
+  "orders":   {{ object.orders | json }},
+  "save_address_as_default_address": {{ object.save_address_as_default_address | json }}
+}
+{% endparse_json %}
+{% liquid
+  for item in object.orders
+    assign order = item[1]
+    hash_assign order['shipping_first_name'] = object.shipping_first_name
+    hash_assign order['shipping_last_name'] = object.shipping_last_name
+    hash_assign order['shipping_email'] = object.shipping_email
+    hash_assign order['shipping_phone'] = object.shipping_phone
+    hash_assign order['payment_type'] = object.payment_type
+  endfor
+
+  return object
+%}

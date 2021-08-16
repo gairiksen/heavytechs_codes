@@ -1,0 +1,12 @@
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "is_blocked":      {{ '0' | json }},
+    "availability":     {{ '0' | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

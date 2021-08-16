@@ -1,0 +1,5 @@
+<script>
+  api = {};
+  api.profile = {};
+  api.profile.id = {% if current_profile.id %} {{ current_profile.id }} {% else %} null {% endif %};
+</script>

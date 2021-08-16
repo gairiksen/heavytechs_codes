@@ -1,0 +1,27 @@
+{% liquid
+  function transaction = 'lib/queries/transactions/find', id: event.target.id
+  function buyer = 'lib/queries/profiles/find', id: transaction.profile_id
+  function orders = 'lib/queries/orders/search', ids: transaction.order_ids, limit: 100
+
+  assign site_name = 'app.title' | t
+  assign url_object = '{}' | parse_json
+  hash_assign url_object['host'] = context.location.host
+
+  for order in orders.results
+    if order.seller.contact_emails == blank or order.seller.contact_emails == ""
+      log order.seller, type: 'the seller has no contact email, skipping the email notification'
+      continue
+    endif
+    assign order_to_modify = order
+
+    function order_url = 'link_to_url', object: order, type: 'seller_order'
+    hash_assign order_to_modify['order_url'] = order_url
+
+    assign object = '{}' | parse_json
+    hash_assign object['buyer'] = buyer
+    hash_assign object['order'] = order_to_modify
+    hash_assign object['site_name'] = site_name
+
+    function email_seller = 'lib/commands/emails/order_confirmed_seller', object: object
+  endfor
+%}

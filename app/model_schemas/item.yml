@@ -1,0 +1,23 @@
+name: item
+properties:
+  - name: item_inventory_id
+  - name: owner
+  - name: uuid
+  - name: price
+    type: integer
+  - name: original_price
+    type: integer
+  - name: tax_rate
+    type: float
+  - name: currency
+  - name: category
+  - name: cover_photo_url
+  - name: slug
+  - name: return_days
+    type: integer
+  - name: promoted
+    type: boolean
+  - name: photo_ids
+    type: array
+
+  - name: c__status

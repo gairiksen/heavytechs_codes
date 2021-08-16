@@ -1,0 +1,69 @@
+{% if object.profile_for == 'mechanic' %}
+<div class="bg-white pt-3.5 px-5 pb-7 text-center rounded-md">
+    <h3 class="mb-2.5 text-base text-gray-800 font-bold">Fill in your account</h3>
+    <p class="text-sm font-normal text-gray-400 mb-5">
+        To make your profile visible to other users, fill in the required fields
+    </p>
+
+    <div>
+        {%if search_mechanic_deatils.percent_complete == null or search_mechanic_deatils.percent_complete == ''%}
+        <span class="block text-right text-sm text-gray-400 mb-2">0%</span>
+        {%else%}
+        <span class="block text-right text-sm text-gray-400 mb-2">{{search_mechanic_deatils.percent_complete}}%</span>
+        {%endif%}
+        <ul class="flex justify-between items-center">
+            {%if search_mechanic_deatils.percent_complete == '25' %}
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+            {%endif%}
+
+            {%if search_mechanic_deatils.percent_complete == '50' %}
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+            {%endif%}
+
+            {%if search_mechanic_deatils.percent_complete == '75' %}
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+            {%endif%}
+
+            {%if search_mechanic_deatils.percent_complete == '100' %}
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+                <li class="h-1.5 rounded-lg w-1/12 md:w-6 bg-green-600"></li>
+            {%endif%}
+
+            {%if search_mechanic_deatils.percent_complete == null or search_mechanic_deatils.percent_complete == '' %}
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+                <li class="h-1.5 bg-gray-300 rounded-lg w-1/12 md:w-6"></li>
+            {%endif%}
+
+
+        </ul>
+    </div>
+</div>
+{%endif%}

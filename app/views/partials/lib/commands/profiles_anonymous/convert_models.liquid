@@ -1,0 +1,14 @@
+{% liquid
+  if anonymous_session_id
+    function profile_anonymous = 'lib/queries/profiles/find', anonymous_session_id: anonymous_session_id
+    function object = 'lib/commands/profiles_anonymous/convert_orders', profile_anonymous: profile_anonymous, profile: profile
+    if object.valid != true
+      log object, 'ERROR convert_orders'
+    endif
+    function object = 'lib/commands/profiles_anonymous/convert_wishlist', profile_anonymous: profile_anonymous, profile: profile
+    if object.valid != true
+      log object, 'ERROR convert_wishlist'
+    endif
+  endif
+  return true
+%}

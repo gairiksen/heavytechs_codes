@@ -1,0 +1,10 @@
+{% liquid
+  unless user_id
+    return null
+  endunless
+
+  graphql r = "modules/stripe/accounts", external_id: user_id
+  include 'lib/handle_graphql_response', r: r, name: 'modules/stripe/payments/account'
+
+  return r.accounts.results.first
+%}

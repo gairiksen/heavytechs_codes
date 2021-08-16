@@ -1,0 +1,10 @@
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function organization = 'lib/queries/organizations/find', id: current_profile.id
+  function presigned_url = 'lib/queries/presigned_url'
+  function default_currency = 'lib/queries/constants/find' name: "CURRENCY"
+
+  render 'theme/simple/dashboard/organizations/edit', object: organization, presigned_url: presigned_url, currency: default_currency context: context
+%}

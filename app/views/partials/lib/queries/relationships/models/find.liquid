@@ -1,0 +1,6 @@
+{% liquid
+  graphql r = 'relationships/models/find', id: id
+  include 'lib/handle_graphql_response', r: r, name: 'queries/relationships/models/find'
+
+  return r.records
+%}

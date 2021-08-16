@@ -1,0 +1,5 @@
+escape_output_instead_of_sanitize: true
+liquid_raise_mode: true
+do_not_add_return_to_to_authorization_policies: true
+slug_exact_match: true
+skip_elasticsearch: true

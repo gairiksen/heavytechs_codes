@@ -1,0 +1,49 @@
+mutation create( 
+    $uuid: String!,
+    $user_id: String!, 
+    $office_location: String!,
+    $short_description: String!,
+    $mining: String!,
+    $heavy_civil: String!,
+    $transportation_fleet: String!,
+    $aeronautical: String!,
+    $government: String!,
+    $total_employees: String!,
+    $annual_sales: String!
+    
+) {
+  model_create(
+    model: {
+      model_schema_name: "profile_contractor_bio"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "office_location", value: $office_location }
+        { name: "short_description", value: $short_description }
+        { name: "mining", value: $mining }
+        { name: "heavy_civil", value: $heavy_civil }
+        { name: "transportation_fleet", value: $transportation_fleet }
+        { name: "aeronautical", value: $aeronautical }
+        { name: "government", value: $government}
+        { name: "total_employees", value: $total_employees }   
+        { name: "annual_sales", value: $annual_sales }       
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    office_location: property(name: "office_location")
+    short_description: property(name: "short_description")
+    mining: property(name: "mining")
+    heavy_civil: property(name: "heavy_civil")
+    transportation_fleet: property(name: "transportation_fleet")
+    aeronautical: property(name: "aeronautical")
+    government: property(name: "government")
+    total_employees: property(name: "total_employees")
+    annual_sales: property(name: "annual_sales") 
+
+  }
+}

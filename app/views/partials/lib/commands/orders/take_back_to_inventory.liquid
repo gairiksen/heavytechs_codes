@@ -1,0 +1,18 @@
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  for line in object
+    assign input = '{}' | parse_json
+    hash_assign input['id'] = line.inventory_id
+    hash_assign input['step'] = line.step
+
+    function result = 'lib/commands/call', command: 'item_inventories/increment_quantity', object: input, selection: 'record_update'
+
+    unless result.valid
+      hash_assign c['valid']  = false
+      hash_assign c['errors'][line.inventory_id] = result.errors
+    endunless
+  endfor
+
+  return c
+%}

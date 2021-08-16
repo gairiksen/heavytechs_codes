@@ -1,0 +1,41 @@
+---
+method: post
+slug: orders/line_items
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_anonymous: true
+
+  function item = 'lib/queries/items/find', id: context.params.line_item.item_id, lang: context.language
+  function order = 'lib/commands/line_items/find_or_create_order', item: item, current_profile: current_profile
+
+  if order.id
+    unless order.currency
+      hash_assign order['currency'] = item.currency
+    endunless
+
+    function object = 'lib/commands/line_items/create_or_increment_existing', item: item, params: context.params.line_item, current_profile: current_profile, order: order
+
+    if object.valid
+      include 'redirect_to', url: '/dashboard/buy/cart', notice: 'app.orders.line-items.created'
+    else
+      assign error_message = 'app.orders.line-items.errors.failed-to-create' | t | append: ': '
+      assign messages = '' | split: ','
+      for error in object.errors
+        assign messages = messages | add_to_array: error[1]
+      endfor
+      assign msg = messages | join: ', '
+      assign error_message = error_message | append: msg
+
+      function url = 'link_to', item: item
+      include 'redirect_to', url: url, error: error_message
+    endif
+
+  else
+    assign error_message = 'app.orders.line-items.errors.failed-to-create' | t
+    assign error_message = error_message | append: ', ' | append: order.status
+
+    function url = 'link_to', item: item
+    include 'redirect_to', url: url, error: error_message
+  endif
+%}

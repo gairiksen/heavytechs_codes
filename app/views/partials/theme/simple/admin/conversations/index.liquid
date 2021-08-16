@@ -1,0 +1,73 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'user', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.conversations' | t }}
+  </h2>
+  <div class="flex gap-4">
+    <div class="pe-4 border-frame text-center">
+      <strong class="subtitle leading-tight">{{ conversations.total_entries }}</strong>
+      <div class="sidenote">{{ 'admin.conversations.title' | t }}</div>
+    </div>
+  </div>
+
+</header>
+
+<form action="" id="admin-form"></form>
+
+<div class="flex min-h-screen">
+
+  <div class="w-full">
+    <section class="table">
+
+      <header>
+        <div>{{ 'admin.conversations.participants' | t }}</div>
+        <div>{{ 'admin.conversations.last_message_at' | t }}</div>
+        <div></div>
+      </header>
+
+      <div class="table-content">
+        {% for conversation in conversations.results %}
+          <ul>
+            <li>
+              <span class="lg:hidden">{{ 'app.conversations.attr.participants' | t }}</span>
+              <script>
+                console.log({{conversation}})
+              </script>
+              {% for participant in conversation.participants %}
+                {% assign name = participant.name %}
+                {% if name == blank %}{% assign name = participant.first_name | append: ' ' | append: participant.last_name %}{% endif %}
+                {% if participant.slug %}
+                  <a href="{% render 'link_to', profile: participant %}">{{ name }}</a>
+                {% else %}
+                  {{ name }}
+                {% endif %}{% unless forloop.last %}, {% endunless %}
+              {% endfor %}
+            </li>
+
+            <li>
+              <span class="lg:hidden">{{ 'app.conversations.attr.created_at' | t }}</span>
+              {{ conversation.last_message.created_at | l  }}
+            </li>
+
+            <li class="text-end">
+              <a href="/admin/conversations/{{conversation.id}}" class="button button-small button-secondary button-icon-right">
+                {{ 'admin.conversations.view' | t }}
+                {% render 'theme/simple/ui/icon', icon: 'dashRight' %}
+              </a>
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+
+    </section>
+
+    {% liquid
+      assign page = filters.page | to_positive_integer: 1
+    %}
+    {% render 'theme/simple/ui/pagination', form: 'admin-form' collection: conversations, current_page: page %}
+  </div>
+
+  {% render 'theme/simple/admin/conversations/filters', filters: filters %}
+
+</div>

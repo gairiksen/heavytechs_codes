@@ -1,0 +1,16 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.orders.buyer
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_anonymous: true
+
+  function orders = 'lib/queries/orders/search_by_buyer', limit: 100, buyer: current_profile.id, withStatuses: true, status: 'app.statuses.orders.placed', lang: context.language
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs
+  include 'theme/simple/dashboard/orders/cart', orders: orders
+%}

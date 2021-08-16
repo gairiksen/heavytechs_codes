@@ -1,0 +1,20 @@
+{% parse_json inventory_data %}
+{
+  "item_id": "1",
+  "sku": "KSU-1234",
+  "quantity": 5,
+  "c__status": "app.statuses.items.published"
+}
+{% endparse_json %}
+{% parse_json payload %} {"step": 2} {% endparse_json %}
+
+{% liquid
+  function seller = 'test/fixtures/profile', user_id: "6999"
+  function inventory = 'lib/commands/item_inventories/create', object: inventory_data, owner: seller.id
+  hash_assign payload['id'] = inventory.id
+
+  function object = 'lib/commands/call', command: 'item_inventories/decrement_quantity', object: payload, selection: 'record_update'
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'quantity', given: object.quantity, expected: 3
+%}

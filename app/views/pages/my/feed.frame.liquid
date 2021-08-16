@@ -1,0 +1,13 @@
+---
+slug: my/feed.frame
+layout: null
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true, membership: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, followships: true, membership: true
+
+  assign page = context.params.page | to_positive_integer: 1
+  function list = 'lib/queries/activities/search_with_records', feed: 'user-private', feed_id: current_profile.id, limit: 20, page: page
+
+  render 'theme/simple/profile/sections/activity', list: list, current_profile: current_profile, context: context, role: role, page: page, tags: tags
+%}

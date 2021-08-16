@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/processes/run/build', object: object
+  function object = 'lib/commands/processes/run/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/processes/run/execute', object: object
+  endif
+
+  return object
+%}

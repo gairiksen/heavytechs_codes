@@ -1,0 +1,15 @@
+{% liquid
+  assign object = '{}' | parse_json
+  hash_assign object['shipping_first_name'] = orders[0].shipping_first_name
+  hash_assign object['shipping_last_name'] = orders[0].shipping_last_name
+  hash_assign object['shipping_email'] = orders[0].shipping_email
+  hash_assign object['shipping_phone'] = orders[0].shipping_phone
+  hash_assign object['payment_type'] = orders[0].payment_type
+  hash_assign object['orders'] = '{}' | parse_json
+
+  for order in orders
+    hash_assign object['orders'][order.id] = order
+  endfor
+
+  return object
+%}

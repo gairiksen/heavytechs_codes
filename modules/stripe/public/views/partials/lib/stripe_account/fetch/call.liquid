@@ -1,0 +1,15 @@
+{% parse_json object %}
+  {
+    "code": {{params.code | json}},
+    "state": {{params.state | json}}
+  }
+{% endparse_json %}
+
+{% liquid
+  function object = 'modules/stripe/lib/stripe_account/fetch/validate', object: object
+  if object.valid
+    function object = 'modules/stripe/lib/stripe_account/fetch/execute', object: object
+  endif
+
+  return object
+%}

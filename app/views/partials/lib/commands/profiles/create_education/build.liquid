@@ -1,0 +1,38 @@
+{%liquid
+  assign automotive_service_excellence = object.automotive_service_excellence | default: ''
+  assign osha = object.osha | default: ''
+  assign osha_expiry = object.osha_expiry | default: ''
+  assign msha = object.msha | default: ''
+  assign msha_expiry = object.msha_expiry | default: ''
+  assign military_training = object.military_training | default: ''
+  assign most_advanced_training = object.most_advanced_training | default: ''
+  assign date_of_completion = object.date_of_completion | default: ''
+  assign other_military_training = object.other_military_training | default: ''
+  assign college_degree = object.college_degree | default: ''
+  assign highest_degree = object.highest_degree | default: ''
+  assign highest_degree_d_o_completion = object.highest_degree_d_o_completion | default: ''  
+  
+%}
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "automotive_service_excellence":   {{ automotive_service_excellence | json }},
+    "osha":   {{ osha | json }},
+    "osha_expiry":   {{ osha_expiry | json }},
+    "msha":    {{ msha | json }},
+    "msha_expiry":   {{ msha_expiry | json }},
+    "military_training":    {{ military_training | json }},
+    "most_advanced_training":    {{ most_advanced_training | json }},
+    "date_of_completion":    {{ date_of_completion | json }},
+    "other_military_training":    {{ other_military_training | json }},
+    "college_degree":    {{ college_degree | json }},
+    "highest_degree":    {{ highest_degree | json }},
+    "highest_degree_d_o_completion":    {{ highest_degree_d_o_completion | json }}
+    
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

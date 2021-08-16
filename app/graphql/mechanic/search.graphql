@@ -1,0 +1,142 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $tag: String
+  $keyword: String
+  $category: String
+  $sort: RecordsSortInput = { created_at: { order: DESC } }
+  $lang: String
+  $earthworks: String
+  $mining: String
+  $fleet: String
+  $pipeline: String
+  $paving: String
+  $energy_production: String
+  
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "profile" }
+      deleted_at: { exists: false }
+      properties: [
+        { name: "tags", contains: $tag }
+        { name: "category", starts_with: $category }
+        { name: "profile_for", value: "mechanic" }
+        { name: "name", not_value_in: "" }
+      ]
+      related_records: {
+        join: { join_on_property: "user_id", foreign_property: "user_id"}
+        filter: {
+          table: { value: "profile_skills" }
+          properties: [
+            { name: "earthworks", value: $earthworks }
+            { name: "mining", value: $mining }
+            { name: "fleet", value: $fleet }
+            { name: "pipeline", value: $pipeline }
+            { name: "paving", value: $paving }
+            { name: "energy_production", value: $energy_production }
+            
+          ]
+        }
+      }
+        
+      or: [
+        { properties: { name: "description", contains: $keyword } }
+        { properties: { name: "name", contains: $keyword } }
+        { properties: { name: "tags", contains: $keyword } }
+        { properties: { name: "category", contains: $keyword } }
+        { properties: { name: "body", contains: $keyword } }
+        { properties: { name: "title", contains: $keyword } }        
+        {
+          related_records: {
+            join: { join_on_property: "id", foreign_property: "item_id"}
+            filter: {
+              table: { value: "item_detail" },
+              or: [
+                { properties: { name: "name", contains: $keyword } }
+                { properties: { name: "description", contains: $keyword } }
+              ]
+            }
+          }
+        }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      name: property(name: "name")
+      category: property(name: "category")
+      description: property(name: "description")
+      profile_for: property(name: "profile_for")
+      user_id: property(name: "user_id")
+      slug: property(name: "slug")
+      title: property(name: "title")
+      group_id: property(name: "group_id")
+      tags: property_array(name: "tags")
+      last_login: property(name: "last_login")
+
+      owner: related_user(join_on_property: "owner", foreign_property: "id") {
+        id
+        email
+      }
+
+      photo: related_record(
+        table: "photo"
+        join_on_property: "uuid"
+        foreign_property: "object_uuid"
+      ) {
+        photo: property_upload(name: "photo") {
+          url
+          versions
+        }
+      }
+
+      profile_bio: related_record(
+        table: "profile_bio"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        short_description: property(name: "short_description")
+        long_description: property(name: "long_description")
+        position: property(name: "position")
+        location: property(name: "location")
+        total_experience: property(name: "total_experience")
+        ready_for_travel: property(name: "ready_for_travel")
+        company_name: property(name: "company_name")
+      }
+
+      profile_skills: related_record(
+        table: "profile_skills"
+        join_on_property: "user_id"
+        foreign_property: "user_id"
+      ) {
+        id
+        type: table
+        drivers_license_class: property(name: "drivers_license_class")
+      }
+
+      item_detail: related_record(
+        table: "item_detail"
+        join_on_property: "id"
+        foreign_property: "item_id"
+        filter: { properties: { name: "lang", value: $lang } }
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+        description: property(name: "description")
+        lang: property(name: "lang")
+      }
+    }
+  }
+}

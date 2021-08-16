@@ -1,0 +1,13 @@
+{% parse_json object %}
+  {
+    "id":           {{ pdf_id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "is_active":   {{ is_active | json }}
+    
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

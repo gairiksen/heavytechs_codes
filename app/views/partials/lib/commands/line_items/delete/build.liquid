@@ -1,0 +1,8 @@
+{% parse_json object %%}
+{
+  "id": {{ object.id }},
+  "order_id": {{ object.order_id }}
+}
+{% endparse_json %}
+
+{% return object %}

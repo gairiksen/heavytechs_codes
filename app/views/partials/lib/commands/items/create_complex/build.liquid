@@ -1,0 +1,33 @@
+{% parse_json data %}
+  {
+    "uuid":        {{ object.uuid | json }},
+    "currency":    {{ object.currency | json }},
+    "price":       {{ object.price | plus: 0 | amount_to_fractional: object.currency | to_positive_integer: 1 }},
+    "return_days": {{ object.return_days | plus: 0 | json }},
+    "tax_rate":    {{ object.tax_rate | json }},
+    "category":    {{ object.category | default: "" | json }},
+    "photo_ids":   {{ object.photo_ids | split: ',' | json }},
+
+    "owner":       {{ owner | json }},
+    "sku":         {{ object.sku | json }},
+    "quantity":    {{ object.quantity | plus: 0 | to_positive_integer: 0 }},
+    "max_in_one_order":    {{ object.max_in_one_order | plus: 0 | to_positive_integer: 0 }},
+    "c__status":   "app.statuses.items.unpublished"
+  }
+{% endparse_json %}
+
+{% liquid
+  hash_assign data['details'] = object.details
+  hash_assign data['details_input'] = '[]' | parse_json
+
+  for detail_lang in data.details
+    assign detail = detail_lang[1]
+    assign detail_object = '{"type_name": "item_detail", "properties": {}}' | parse_json
+    hash_assign detail_object['properties']['lang'] = detail.lang
+    hash_assign detail_object['properties']['name'] = detail.name
+    hash_assign detail_object['properties']['description'] = detail.description
+    hash_assign data['details_input'] = data.details_input| add_to_array: detail_object
+  endfor
+
+  return data
+%}

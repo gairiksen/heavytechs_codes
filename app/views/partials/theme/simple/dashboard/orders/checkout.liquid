@@ -1,0 +1,26 @@
+<div class="mt-10 mb-5">
+  <h1 class="text-3xl font-medium">
+    {{ 'app.orders.show.order' | t }} {{order.id}}
+  </h1>
+</div>
+
+<section class="p-8 shadow-lg bg-panel">
+  <ul class="text-lg font-bold lg:text-xl">
+    <li class="flex justify-between py-3 border-b gap-4">
+      <div>{{ 'app.status' | t }}:</div>
+      <div>{{ order.status.fullname | t }}</div>
+    </li>
+    <li class="flex justify-between py-3 border-b gap-4">
+      <div>{{ 'app.orders.checkout.order_total' | t }}</div>
+      {% render 'theme/simple/price', amount_cents: order.total_price_cents, currency: order.currency %}
+    </li>
+  </ul>
+
+  <div class="mt-10 text-xl font-semibold">
+    {{ 'app.orders.checkout.confirm' | t }}
+  </div>
+  <div class="flex mt-4">
+    {% assign orders_array = '[]' | parse_json | add_to_array: order %}
+    {% include 'theme/simple/dashboard/orders/actions/buyer', orders: orders_array, checkout_session: checkout_session %}
+  </div>
+</section>

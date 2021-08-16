@@ -1,0 +1,9 @@
+<h1 class="bigtitle">
+  {{ 'app.items.edit' | t }} - {{item.details.en.name}}
+</h1>
+
+{% include 'theme/simple/dashboard/items/form', item: item, default_currency %}
+
+
+<h1 class="bigtitle">{{ 'app.items.manage_inventory' | t }}</h1>
+{% include 'theme/simple/dashboard/items/edit_inventory', item: item %}

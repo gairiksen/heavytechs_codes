@@ -1,0 +1,16 @@
+---
+method: delete
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile, allow_anonymous: true
+
+  function line_item = 'lib/queries/line_items/find', id: context.params.id, buyer: current_profile
+  function object = 'lib/commands/line_items/delete', object: line_item
+
+  if object.valid
+    include 'lib/commands/events/create', type: 'line_item_deleted', actor_id: current_profile.id, object_id: line_item.id, target_id: line_item.order_id
+  endif
+
+  render 'theme/json/shared/show', object: object
+%}

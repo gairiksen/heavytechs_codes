@@ -1,0 +1,37 @@
+---
+slug: groups/:group_id/content/:post_id/accept
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+%}
+
+{% liquid
+  assign group_id = context.params.group_id | split: '-' | last
+  function group = 'lib/queries/groups/find', id: group_id, with_owner: true
+  include 'lib/present_or_404', property: group.id
+%}
+
+{% liquid
+  assign post_id = context.params.post_id | split: '-' | last
+  function post = 'lib/queries/posts/find', id: post_id, group_id: group_id
+  include 'lib/present_or_404', property:  post.id
+%}
+
+{% liquid
+  function object = 'lib/commands/posts/accept', object: context.params.post, current_profile: current_profile, post: post
+
+  if object.valid
+    if object.accepted_post_id
+      include 'lib/commands/events/create', type: 'post_anwser_accepted', actor_id: current_profile.id, object_id: object.id
+    else
+      include 'lib/commands/events/create', type: 'post_anwser_cleared', actor_id: current_profile.id, object_id: object.id
+    endif
+
+    function url = 'link_to', object: post, anchor: object.accepted_post_id
+    redirect_to url
+  else
+    include 'theme/simple/posts/show', root_post: post, object: object
+  endif
+%}

@@ -1,0 +1,32 @@
+{% liquid
+  assign c = '{}' | parse_json
+
+  if object and do
+    case object.type
+    when 'group'
+      function valid = 'lib/can/groups', actor: actor, group: object, do: do, context: context
+    when 'item'
+      function valid = 'lib/can/items', actor: actor, item: object, do: do, context: context
+    when 'profile'
+      function valid = 'lib/can/profiles', actor: actor, profile: object, do: do, context: context
+    else
+      assign valid = false
+    endcase
+  else
+    assign valid = false
+  endif
+%}
+
+{% capture msg -%}
+Profile#{{ actor.id | default: 'noID' }} cannot {{ do }} {{ object.type | default: 'type-unknown' }}#{{ object.id | defalt: 'noID'}}
+{%- endcapture %}
+
+{% liquid
+  unless valid
+    hash_assign c['errors'] = '{ "permission_denied": [] }' | parse_json
+    hash_assign c['errors']['permission_denied'][0] = msg
+  endunless
+  hash_assign c['valid'] = valid
+
+  return c
+%}

@@ -1,0 +1,25 @@
+<div class="container">
+<section class="text-gray-900 body-font">
+  <div class="mb-5 text-right">
+    <a href="{% render 'link_to', group: group, action: 'content/new' %}" class="button button-icon-right">
+      {{ 'app.groups.content.new' | t }} {{ group.content_type | t: scope: 'app.groups.form.content_types' }}
+      {% render 'theme/simple/ui/icon', icon: 'plus' %}
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 gapy-6 my-6 md:py-5">
+    {% for record in list.results %}
+      {% liquid
+        if context.params.tag
+          assign title = 'app.models.posts.questions-tagged-by' | t: tag: context.params.tag
+          render 'theme/simple/ui/title', label: title
+        endif
+
+        render 'theme/simple/groups/content/summary', post: record, content_type: group.content_type
+      %}
+    {% else %}
+      <p class="my-8 text-lg">{{ 'app.search.no_items_found.title' | t }}</p>
+    {% endfor %}
+  </div>
+</section>
+</div>

@@ -1,0 +1,37 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'user', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.users' | t }} - {{profile.id}} {{ profile.first_name }}
+  </h2>
+
+</header>
+
+<div>
+  <h3 class="subtitle">
+    {{'app.admin.users.list.permissions' | t}}
+  </h3>
+
+  <div class="flex flex-wrap items-center mx-auto">
+    <form action="/admin/users/{{profile.id}}/permissions" method="post">
+      {% include 'authenticity_token' %}
+      <input name="_method" type="hidden" value="put">
+      <input name="permissions[profile_id]" type="hidden" value="{{profile.id}}">
+
+      {% for action in actions %}
+        <fieldset>
+          <input type="checkbox" id="{{action}}" name="permissions[{{action}}]" value="1" {% if profile.permissions[action] %}checked{% endif %}>
+          <label for="{{ action }}">
+            {{ action | t: scope: 'app.admin.users.permissions.actions' }}
+          </label>
+        </fieldset>
+      {% endfor %}
+      {% render 'theme/simple/field_error', errors: object.errors.permissions %}
+
+      <fieldset class="mt-8 text-end">
+        <button class="button">{{ 'app.save' | t }}</button>
+      </fieldset>
+
+    </form>
+  </div>
+</div>

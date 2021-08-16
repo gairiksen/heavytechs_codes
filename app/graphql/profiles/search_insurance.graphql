@@ -1,0 +1,39 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+  $general_liability: String
+  $auto_truck_policy: String
+  $garage_keepers: String
+  $expiration_date: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "profile_insurance" }
+      properties: [
+        { name: "user_id", value: $user_id }
+        { name: "general_liability", value: $general_liability }
+        { name: "auto_truck_policy", value: $auto_truck_policy }
+        { name: "garage_keepers", value: $garage_keepers }
+        { name: "expiration_date", value: $expiration_date }       
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+
+      general_liability: property(name: "general_liability")
+      auto_truck_policy: property(name: "auto_truck_policy")
+      garage_keepers: property(name: "garage_keepers")
+      expiration_date: property(name: "expiration_date")
+    }
+  }
+}

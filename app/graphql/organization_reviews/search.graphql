@@ -1,0 +1,95 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $page: Int = 1
+  $profile_id: String
+  $order_id: String
+  $organization_id: String
+  $score_gte: Int
+  $description_score: String
+  $delivery_score: String
+  $service_score: String
+  $body: String
+  $recommend: String
+  $with_organization: Boolean = false
+) {
+  organization_reviews: records(
+    per_page: $limit
+    page: $page
+    filter: {
+      id: { value: $id }
+      table: { value: "organization_review" }
+      properties: [
+        { name: "profile_id" value: $profile_id }
+        { name: "order_id" value: $order_id }
+        { name: "organization_id" value: $organization_id }
+        { name: "score" range: { gte: $score_gte }  }
+        { name: "description_score" value: $description_score }
+        { name: "delivery_score" value: $delivery_score }
+        { name: "service_score" value: $service_score }
+        { name: "body" value: $body }
+        { name: "recommend" value: $recommend }
+      ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    total_pages
+    has_previous_page
+    has_next_page
+    results {
+      id
+      created_at
+      type: table
+
+      profile_id: property(name: "profile_id")
+      order_id: property(name: "order_id")
+      organization_id: property(name: "organization_id")
+      score: property_float(name: "score")
+      description_score: property_int(name: "description_score")
+      delivery_score: property_int(name: "delivery_score")
+      service_score: property_int(name: "service_score")
+      body: property(name: "body")
+      recommend: property_boolean(name: "recommend")
+      organization: related_record(
+        table: "organization"
+        join_on_property: "organization_id"
+        foreign_property: "id"
+      ) @include(if: $with_organization) {
+        id
+        type: table
+
+        name: property(name: "name")
+        slug: property(name: "slug")
+        logo: related_record(
+          table: "photo"
+          join_on_property: "uuid"
+          foreign_property: "object_uuid"
+          filter: { properties: { name: "photo_type", value: "logo" } }
+        ) {
+          id
+          photo: property_upload(name: "photo") {
+            url
+            versions
+          }
+        }
+      }
+
+
+      status: related_record(
+        join_on_property: "id"
+        foreign_property: "object_id"
+        table: "status"
+        sort: { created_at: { order: ASC } }
+      ) {
+        id
+        type: table
+        created_at
+        name: property(name: "name")
+        timestamp: property(name: "timestamp")
+      }
+    }
+  }
+}

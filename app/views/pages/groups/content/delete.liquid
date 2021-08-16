@@ -1,0 +1,30 @@
+---
+slug: groups/:group_id/content/:post_id
+method: delete
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+%}
+
+{% liquid
+  assign group_id = context.params.group_id | split: '-' | last
+  function group = 'lib/queries/groups/find', id: group_id, with_owner: true
+  include 'lib/present_or_404', property: group.id
+%}
+
+{% liquid
+  assign post_id = context.params.post_id | split: '-' | last
+  function post = 'lib/queries/posts/find', id: post_id, group_id: group_id
+  include 'lib/present_or_404', property:  post.id
+%}
+
+{% liquid
+  function object = 'lib/commands/posts/delete', object: post
+
+  if object.valid
+    include 'redirect_to', url: '/dashboard/posts', notice: 'app.models.shared.deleted'
+  else
+    include 'redirect_to', url: '/dashboard/posts', error: 'app.models.shared.delete_failed'
+  endif
+%}

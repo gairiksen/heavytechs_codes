@@ -1,0 +1,9 @@
+<div class="container">
+  <section class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3 md:gap-5">
+    {% for record in list.results %}
+      {% render 'theme/simple/profile/user_card', user: record.l, current_profile: current_profile %}
+    {% else %}
+      <p class="text-lg">{{ 'app.groups.no_members_found' | t }}</p>
+    {% endfor %}
+  </section>
+</div>

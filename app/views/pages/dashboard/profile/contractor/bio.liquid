@@ -1,0 +1,18 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  graphql presigned_url = 'photos/presign' | dig: 'presigned'
+
+  function profile_bio = 'lib/queries/profiles/contractor/find_bio', user_id: context.current_user.id
+
+  assign is_edit = context.params.edit | default: ''
+
+  if profile_bio != null and is_edit == ''
+     include 'redirect_to', url: '/dashboard/profile/contractor/view_information'
+  endif
+  
+%}
+{%
+  render 'theme/simple/dashboard/profile/contractor/bio', object: current_profile, presigned_url: presigned_url, context: context, profile_bio: profile_bio
+%}

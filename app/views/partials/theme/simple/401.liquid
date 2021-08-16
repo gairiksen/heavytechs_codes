@@ -1,0 +1,8 @@
+<div class="container flex-wrap items-center my-10 text-center">
+  {% render 'theme/simple/ui/icon', icon: 'warningCloud', class: 'w-32 mx-auto text-danger' %}
+
+  <h3 class="mt-5 title">{{ 'app.unauthorized_action' | t }}</h3>
+  <button class="button" onclick='javascript:history.back();return false;'>
+    {{ 'app.back' | t }}
+  </button>
+</div>

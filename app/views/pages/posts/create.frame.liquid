@@ -1,0 +1,35 @@
+---
+slug: posts.frame
+method: post
+layout: null
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, membership: true
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  assign object = context.params.post
+  if object.group_id == current_profile.id
+    function group = 'lib/commands/groups/find_or_create_for_profile', profile: current_profile
+  else
+    function group = 'lib/queries/groups/find', id: object.group_id, with_owner: true
+  endif
+  include 'lib/can_do_or_unauthorized', object: group, do: "post", actor: current_profile
+
+  hash_assign object['group_id'] = group.id
+  function object = 'lib/commands/posts/create', object: object, current_profile: current_profile
+  if object.valid
+    include 'lib/commands/events/create', type: 'post_created', actor_id: current_profile.id, object_id: object.id, target_id: object.group_id, delay: 0
+
+    assign payload = '{}' | parse_json
+    hash_assign payload['object'] = object
+    hash_assign payload['object']['data'] = object
+    hash_assign payload['actor'] = current_profile
+    hash_assign payload['type'] = 'post_created'
+
+    render 'theme/simple/activities/feed_unit', payload: payload, current_profile: current_profile, namespace: namespace, context: context
+  else
+    log object.errors, type: 'ERROR: posts/create'
+    response_status 422
+    echo 'app.posts.create.failed' | t
+  endif
+%}

@@ -1,0 +1,34 @@
+{%liquid
+  assign office_location = object.office_location | default: ''
+  assign short_description = object.short_description | default: ''
+  assign mining = object.mining | default: ''
+  assign heavy_civil = object.heavy_civil | default: ''
+  assign transportation_fleet = object.transportation_fleet | default: ''
+  assign aeronautical = object.aeronautical | default: ''
+  assign government = object.government | default: ''
+  assign total_employees = object.total_employees | default: ''
+  assign annual_sales = object.annual_sales | default: ''
+  assign user_id = object.user_id | default: context.current_user.id
+  
+%}
+{% parse_json object %}
+  {
+    "id":           {{ object.id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "office_location":   {{ office_location | json }},
+    "short_description":    {{ short_description | json }},
+    "mining":    {{ mining | json }},
+    "heavy_civil":    {{ heavy_civil | json }},
+    "transportation_fleet":    {{ transportation_fleet | json }},
+    "aeronautical":    {{ aeronautical | json }},
+    "government":    {{ government | json }},
+    "total_employees":    {{ total_employees | json }},
+    "annual_sales":    {{ annual_sales | json }} 
+    
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

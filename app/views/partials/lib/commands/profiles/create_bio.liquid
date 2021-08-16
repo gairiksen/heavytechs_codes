@@ -1,0 +1,7 @@
+{% liquid
+  function object = 'lib/commands/profiles/create_bio/build', object: object, user_id: user_id, latitude: latitude, longitude: longitude
+
+  graphql r = 'profiles/create_bio', args: object 
+
+  return object
+%}

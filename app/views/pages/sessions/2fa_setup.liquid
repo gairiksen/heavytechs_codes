@@ -1,0 +1,18 @@
+---
+method: post
+---
+{% liquid
+  include 'lib/anonymous_or_redirect', user: context.current_user
+
+  function object = 'lib/commands/users/verify_otp', object: context.params.2fa
+  if object.valid
+    function profile = 'lib/queries/profiles/find', user_id: object.id, load_organizations: true
+    function object = 'lib/commands/profiles/mark_otp', profile: profile
+    sign_in_rc user_id: profile.user.id
+    function url = 'lib/after_sign_in_url', user_id: profile.user.id
+    include 'redirect_to', default_url: url  notice: 'app.sessions.created'
+  else
+    function user_otp = 'lib/queries/users/otp', email: object.email
+    include 'theme/simple/sessions/2fa_setup', object: object, otp: user_otp.otp
+  endif
+%}

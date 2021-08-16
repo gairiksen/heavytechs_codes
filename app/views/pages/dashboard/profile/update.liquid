@@ -1,0 +1,365 @@
+---
+slug: dashboard/profile
+method: put
+---
+
+
+{% if context.params.profile_type and context.params.profile_type == 'skills' %}
+
+  {%liquid 
+    function all_oem = 'lib/queries/profiles/find_all_oem', user_id: context.current_user.id
+    for oem in all_oem
+      function delete_oem_obj = 'lib/commands/profiles/delete_oem', oem_id: oem.id, user_id: context.current_user.id 
+    endfor    
+  %}
+
+  
+  {%liquid
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+    function profile_skills = 'lib/queries/profiles/find_skills', user_id: context.current_user.id
+    if profile_skills == blank
+      function object = 'lib/commands/profiles/create_skills', object: context.params.skills, user_id: context.current_user.id      
+    else
+      function object = 'lib/commands/profiles/update_skills', object: context.params.skills, user_id: context.current_user.id
+    endif
+
+    function profile_insurance = 'lib/queries/profiles/find_insurance', user_id: context.current_user.id
+    if profile_insurance == blank
+      function object = 'lib/commands/profiles/create_insurance', object: context.params.insurance, user_id: context.current_user.id
+    else
+      function object = 'lib/commands/profiles/update_insurance', object: context.params.insurance, user_id: context.current_user.id
+    endif
+    
+
+    for oem in context.params.oem
+      assign oem_name = oem[0] | default: ''
+      assign expert_familiar = context.params.skills[oem[0]].expert_familiar | default: ''
+      assign cert_name = context.params.skills[oem[0]].cert_name | default: ''
+
+      function oemObj = 'lib/commands/profiles/create_oem', object:object, user_id: context.current_user.id,oem_name: oem_name, expert_familiar: expert_familiar, cert_name: cert_name
+    endfor
+
+    for oem in context.params.oem
+
+      assign oem_name = oem[0] | default: ''
+
+      function activePdf = 'lib/queries/pdf/findActivePdf', page_category: 'skills', item_category: oem_name, user_id: context.current_user.id, current_profile: current_profile
+      for aPdf in activePdf
+
+        function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'skills', item_category: aPdf.item_category, user_id: context.current_user.id, current_profile: current_profile
+
+        if inactivePdf.size  > 0 
+          function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+        endif
+      endfor
+
+      function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'skills', item_category: oem_name, user_id: context.current_user.id, current_profile: current_profile
+      for iPdf in inactivePdf
+        function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+      endfor
+    endfor
+
+    function activeInsurancePdf = 'lib/queries/pdf/findActivePdf', page_category: 'skills', item_category: 'insurance', user_id: context.current_user.id, current_profile: current_profile
+    for aPdf in activeInsurancePdf
+      function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'skills', item_category: 'insurance', user_id: context.current_user.id, current_profile: current_profile
+
+        if inactivePdf.size  > 0 
+          function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+        endif
+    endfor
+
+    function inactiveInsurancePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'skills', item_category: 'insurance', user_id: context.current_user.id, current_profile: current_profile
+    for iiPdf in inactiveInsurancePdf
+      function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iiPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+    endfor
+
+
+    assign is_caterpillar = '' | default: ''
+    assign is_john_deere = '' | default: ''
+    assign is_hitachi = '' | default: ''
+    assign is_volvo = '' | default: ''
+    assign is_komatsu = '' | default: ''
+    assign is_bobcat = '' | default: ''
+    assign is_other = '' | default: ''
+    assign is_oem = '' | default: ''
+    function all_oem = 'lib/queries/profiles/find_all_oem', user_id: context.current_user.id
+    for oem in all_oem
+      assign is_oem = '1' | default: ''
+
+      if oem.oem_name == 'Caterpillar' 
+        assign is_caterpillar = '1' | default: ''
+      endif
+
+      if oem.oem_name == 'John Deere' 
+        assign is_john_deere = '1' | default: ''
+      endif
+
+      if oem.oem_name == 'Hitachi' 
+        assign is_hitachi = '1' | default: ''
+      endif
+
+      if oem.oem_name == 'Volvo' 
+        assign is_volvo = '1' | default: ''
+      endif
+
+      if oem.oem_name == 'Komatsu' 
+        assign is_komatsu = '1' | default: ''
+      endif
+
+      if oem.oem_name == 'Bobcat' 
+        assign is_bobcat = '1' | default: ''
+      endif
+
+      if oem.oem_name != 'Caterpillar' and oem.oem_name != 'John Deere' and oem.oem_name != 'Hitachi' and oem.oem_name != 'Volvo' and oem.oem_name != 'Komatsu' and oem.oem_name != 'Bobcat'
+        assign is_other = '1' | default: ''
+      endif
+    endfor  
+
+    if context.params.insurance.general_liability == '1' or context.params.insurance.auto_truck_policy == '1' or context.params.insurance.garage_keepers == '1'
+      assign is_insurance = '1' | default: ''
+    else
+      assign is_insurance = '' | default: ''
+    endif
+
+    function sm_params = 'lib/queries/profiles/find_mechanic_search_params', user_id: context.current_user.id
+    function build_object = 'lib/commands/mechanic_availability/update_search_params/build_skills', object: context.params.skills, sm_params: sm_params, user_id: context.current_user.id, is_caterpillar: is_caterpillar, is_john_deere: is_john_deere, is_hitachi: is_hitachi, is_volvo: is_volvo, is_komatsu: is_komatsu, is_bobcat: is_bobcat, is_other: is_other, is_insurance: is_insurance, is_oem: is_oem, object_uuid: current_profile.uuid, user_name: current_profile.name
+    function smp_object = 'lib/commands/mechanic_availability/update_search_params', object: build_object
+
+    include 'redirect_to', url: '/dashboard/profile/education'
+  %}   
+
+{% endif %}
+
+
+
+{% if context.params.profile_type and context.params.profile_type == 'insurance' %}
+
+  {%liquid
+    function profile_insurance = 'lib/queries/profiles/find_insurance', user_id: context.current_user.id
+    if profile_insurance == blank
+      function object = 'lib/commands/profiles/create_insurance', object: context.params.insurance, user_id: context.current_user.id
+      include 'redirect_to', url: '/dashboard/profile/education'
+    else
+      function object = 'lib/commands/profiles/update_insurance', object: context.params.insurance, user_id: context.current_user.id
+      include 'redirect_to', url: '/dashboard/profile/education'
+    endif
+  %}  
+
+{% endif %} 
+
+
+{% if context.params.profile_type and context.params.profile_type == 'bio' %}
+
+  {% parse_json geo_location %}
+  {
+    "type": "Point",
+    "coordinates": [
+      {{context.params.bio.longitude}},
+      {{context.params.bio.latitude}}      
+    ]
+  }
+  {% endparse_json %}
+
+
+  
+  {%liquid
+
+    assign latitude = context.params.bio.latitude
+    assign longitude = context.params.bio.longitude
+
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+    function profile_bio = 'lib/queries/profiles/find_bio', user_id: context.current_user.id
+    if profile_bio == blank
+      function object = 'lib/commands/profiles/create_bio', object: context.params.bio, geo_location: geo_location, user_id: context.current_user.id, latitude: latitude, longitude: longitude      
+    else
+      function object = 'lib/commands/profiles/update_bio', object: context.params.bio, geo_location: geo_location, user_id: context.current_user.id, latitude: latitude, longitude: longitude
+    endif
+
+    function sm_params = 'lib/queries/profiles/find_mechanic_search_params', user_id: context.current_user.id
+    function build_object = 'lib/commands/mechanic_availability/update_search_params/build_bio', object: context.params.bio, sm_params: sm_params, user_id: context.current_user.id, first_name: current_user.first_name, last_name: current_user.last_name, object_uuid: current_profile.uuid, user_name: current_profile.name, latitude: latitude, longitude: longitude
+    function smp_object = 'lib/commands/mechanic_availability/update_search_params', object: build_object
+
+    include 'redirect_to', url: '/dashboard/profile/skills'
+  %}  
+  
+
+
+{% endif %} 
+
+
+{% if context.params.profile_type and context.params.profile_type == 'education' %}
+
+  {%liquid function current_ase = 'lib/queries/profiles/find_ase', user_id: context.current_user.id %}  
+ 
+  {%liquid 
+     function current_profile = 'lib/current_profile', user_id: context.current_user.id
+     function current_ase = 'lib/queries/profiles/find_ase', user_id: context.current_user.id
+     for ase in current_ase
+      function asedelete_ase_obj = 'lib/commands/profiles/delete_ase', ase_id: ase.id, user_id: context.current_user.id 
+     endfor 
+
+     for ase in context.params.education.ase
+          assign ase_name_str = ase | split: " - " 
+          assign ase_code = ase_name_str[0]
+          function object = 'lib/commands/profiles/create_ase', ase_name: ase, ase_code: ase_code, user_id: context.current_user.id
+        
+          function activePdf = 'lib/queries/pdf/findActivePdf', page_category: 'education', item_category: ase, user_id: context.current_user.id, current_profile: current_profile
+          for aPdf in activePdf
+            function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: ase, user_id: context.current_user.id, current_profile: current_profile
+
+              if inactivePdf.size  > 0 
+                function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+              endif
+          endfor
+
+          function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: ase, user_id: context.current_user.id, current_profile: current_profile
+          for iPdf in inactivePdf
+            function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+          endfor
+     endfor
+  %} 
+ 
+  
+  {%liquid
+    function profile_bio = 'lib/queries/profiles/find_education', user_id: context.current_user.id
+    if profile_bio == blank
+      function object = 'lib/commands/profiles/create_education', object: context.params.education, user_id: context.current_user.id
+    else
+      function object = 'lib/commands/profiles/update_education', object: context.params.education, user_id: context.current_user.id
+    endif
+
+    function sm_params = 'lib/queries/profiles/find_mechanic_search_params', user_id: context.current_user.id
+    function build_object = 'lib/commands/mechanic_availability/update_search_params/build_education', object: context.params.education, sm_params: sm_params, user_id: context.current_user.id, object_uuid: current_profile.uuid, user_name: current_profile.name
+    function smp_object = 'lib/commands/mechanic_availability/update_search_params', object: build_object
+
+
+
+    function activePdf = 'lib/queries/pdf/findActivePdf', page_category: 'education', item_category: 'osha_certificate', user_id: context.current_user.id, current_profile: current_profile
+    for aPdf in activePdf
+      function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: 'osha_certificate', user_id: context.current_user.id, current_profile: current_profile
+
+        if inactivePdf.size  > 0 
+          function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+        endif
+    endfor
+
+    function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: 'osha_certificate', user_id: context.current_user.id, current_profile: current_profile
+    for iPdf in inactivePdf
+      function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+    endfor
+
+
+    function activePdf = 'lib/queries/pdf/findActivePdf', page_category: 'education', item_category: 'msha_certificate', user_id: context.current_user.id, current_profile: current_profile
+    for aPdf in activePdf
+      function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: 'msha_certificate', user_id: context.current_user.id, current_profile: current_profile
+
+        if inactivePdf.size  > 0 
+          function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+        endif
+    endfor
+
+    function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: 'msha_certificate', user_id: context.current_user.id, current_profile: current_profile
+    for iPdf in inactivePdf
+      function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+    endfor
+
+
+    function activePdf = 'lib/queries/pdf/findActivePdf', page_category: 'education', item_category: 'highest_degree', user_id: context.current_user.id, current_profile: current_profile
+    for aPdf in activePdf
+      function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: 'highest_degree', user_id: context.current_user.id, current_profile: current_profile
+
+        if inactivePdf.size  > 0 
+          function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+        endif
+    endfor
+
+    function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'education', item_category: 'highest_degree', user_id: context.current_user.id, current_profile: current_profile
+    for iPdf in inactivePdf
+      function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+    endfor
+
+
+    include 'redirect_to', url: '/dashboard/profile/truck'
+  %}   
+  
+{% endif %} 
+
+
+{% if context.params.profile_type and context.params.profile_type == 'truck' %}
+
+  {%liquid
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+    function profile_truck = 'lib/queries/profiles/find_truck', user_id: context.current_user.id
+    if profile_truck == blank
+      function object = 'lib/commands/profiles/create_truck', object: context.params.truck, user_id: context.current_user.id      
+    else
+      function object = 'lib/commands/profiles/update_truck', object: context.params.truck, user_id: context.current_user.id
+    endif
+
+    function sm_params = 'lib/queries/profiles/find_mechanic_search_params', user_id: context.current_user.id
+    function build_object = 'lib/commands/mechanic_availability/update_search_params/build_truck', object: context.params.truck, sm_params: sm_params, user_id: context.current_user.id, object_uuid: current_profile.uuid, user_name: current_profile.name
+    function smp_object = 'lib/commands/mechanic_availability/update_search_params', object: build_object
+
+
+
+    function activePdf = 'lib/queries/pdf/findActivePdf', page_category: 'truck', item_category: 'crane_certification', user_id: context.current_user.id, current_profile: current_profile
+    for aPdf in activePdf
+      function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'truck', item_category: 'crane_certification', user_id: context.current_user.id, current_profile: current_profile
+
+        if inactivePdf.size  > 0 
+          function delete_pdf_obj = 'lib/commands/profiles/delete_pdf', pdf_id: aPdf.id, user_id: context.current_user.id 
+        endif
+    endfor
+
+    function inactivePdf = 'lib/queries/pdf/findInActivePdf', page_category: 'truck', item_category: 'crane_certification', user_id: context.current_user.id, current_profile: current_profile
+    for iPdf in inactivePdf
+      function pdf_object = 'lib/commands/profiles/update_pdf',  pdf_id: iPdf.id, is_active: "1", user_id: context.current_user.id, current_profile: current_profile
+    endfor
+
+    include 'redirect_to', url: '/dashboard/profile/view_information'
+  %}  
+
+{% endif %} 
+
+
+{% if context.params.profile_type and context.params.profile_type == 'basic' %}
+
+  
+  {% liquid
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+    include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+    function object = 'lib/commands/profiles/update', object: context.params.profile, profile: current_profile
+
+    if object.valid
+      include 'lib/commands/events/create', type: 'profile_updated', actor_id: object.id
+
+      function profile = 'lib/queries/profiles/find', user_id: context.current_user.id
+
+      function user_object = 'lib/commands/users/update', object: context.params.profile, current_user: context.current_user
+      if user_object.valid == false
+        log user_object, type: 'users/update error'
+      endif
+
+      if current_profile.profile_for
+
+        if current_profile.profile_for == 'contractor'
+          include 'redirect_to', url: '/dashboard/profile/contractor/bio', notice: 'Profile details has been saved successfully.'
+        else 
+          include 'redirect_to', url: '/dashboard/profile/bio', notice: 'Profile details has been saved successfully.'
+        endif
+
+      else        
+        include 'redirect_to', url: '/dashboard/profile/edit', notice: 'Profile details has been saved successfully.'       
+
+      endif
+      
+    else
+      log object, type: 'showme'
+      graphql presigned_url = 'photos/presign' | dig: 'presigned'
+      render 'theme/simple/dashboard/profile/edit', object: object, context: context, presigned_url: presigned_url
+    endif
+  %}
+  
+
+{% endif %}

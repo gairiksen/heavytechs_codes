@@ -1,0 +1,7 @@
+{% liquid
+  function can = "lib/can", actor: actor, do: do, object: object
+  if can.valid != true
+    render 'theme/simple/401', status: 401
+    break
+  endif
+%}

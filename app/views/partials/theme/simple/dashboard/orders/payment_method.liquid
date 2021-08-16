@@ -1,0 +1,16 @@
+<section>
+
+  {{ 'app.orders.checkout.select_prefered_option' | t }}
+  {% render 'theme/simple/field_error', errors: object.errors.payment_type %}
+
+  <fieldset class="mt-2 flex items-center gap-1">
+    <input type="radio" name="cart[payment_type]" id="payment_type_stripe" value="stripe" required {% if object.payment_type == 'stripe' %}checked{% endif %} />
+    <label for="payment_type_stripe">{{ 'app.models.orders.form.payment_type_stripe' | t }}</label>
+  </fieldset>
+
+  <fieldset class="mt-2 flex items-center gap-1">
+    <input type="radio" name="cart[payment_type]" id="payment_type_example" value="example" required {% if object.payment_type == 'example' %}checked{% endif %} />
+    <label for="payment_type_example">{{ 'app.models.orders.form.payment_type_example' | t }}</label>
+  </fieldset>
+
+</section>

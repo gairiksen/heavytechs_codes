@@ -1,0 +1,33 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+  $fav_id: String
+  $fav_for: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "user_favourites" }
+      properties: [
+        { name: "user_id", value: $user_id }   
+        { name: "fav_id", value: $fav_id }     
+        { name: "fav_for", value: $fav_for } 
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id") 
+      fav_id: property(name: "fav_id") 
+      fav_for: property(name: "fav_for") 
+      uuid: property(name: "uuid") 
+    }
+  }
+}

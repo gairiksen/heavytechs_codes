@@ -1,0 +1,7 @@
+{% liquid
+   hash_assign query['language'] = query.lang
+   assign template = "/search{?language,organization_slugs,category,price_min,price_max,sort_by,keyword}"
+   content_for canonical
+     echo template | expand_url_template: query
+   endcontent_for
+%}

@@ -1,0 +1,9 @@
+{% if shipping_address %}
+  {{ shipping_address.full_name }}<br/>
+  {{ shipping_address.country }}, {{ shipping_address.state }}<br/>
+  {{ shipping_address.zip }} {{ shipping_address.city }}<br/>
+  {{ shipping_address.street }} {{ shipping_address.building_number }} {{ shipping_address.flat_number }}<br/>
+  {{ shipping_phone }}
+{% else %}
+  {{ pickup_point }}
+{% endif %}

@@ -1,0 +1,7 @@
+{% liquid
+  include 'lib/anonymous_or_redirect', user: context.current_user
+
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+  render 'theme/simple/sessions/new', context: context
+%}

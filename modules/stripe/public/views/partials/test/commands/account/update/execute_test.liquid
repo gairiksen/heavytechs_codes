@@ -1,0 +1,14 @@
+{% liquid
+
+  function object = 'modules/stripe/lib/account/create/call', object: object
+
+  function object = 'modules/stripe/lib/account/update/execute', object: object
+
+  comment
+    TODO: insert object into data to update
+  if object.valid != true
+    echo object
+    include 'test/register_error', contract: contract, field_name: 'base', key: 'test.should.be_valid'
+  endif
+  endcomment
+%}

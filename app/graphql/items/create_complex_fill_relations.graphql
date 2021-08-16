@@ -1,0 +1,31 @@
+mutation create_item_complex(
+  $item_id: ID!
+  $item_inventory_id: ID!
+  $item_detail_ids: [ID!]!
+) {
+  item: record_update(
+    id: $item_id
+    record: {
+      table: "item"
+      properties: { name: "item_inventory_id", value: $item_inventory_id }
+    }
+  ) { id }
+
+  item_inventory: record_update(
+    id: $item_inventory_id
+    record: {
+      table: "item_inventory"
+      properties: { name: "item_id", value: $item_id }
+    }
+  ) { id }
+
+  item_details: records_update_all(
+    table: "item_detail"
+    filter: { id: { value_in: $item_detail_ids } }
+    sync: true
+    record: {
+      table: "item_detail"
+      properties: { name: "item_id", value: $item_id }
+    }
+  ) { count }
+}

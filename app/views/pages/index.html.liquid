@@ -1,0 +1,35 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true
+
+  function items_feed = 'lib/queries/activities/search', feed: 'system', feed_id: "5", limit: 3
+  function comments_feed = 'lib/queries/activities/search', feed: 'system', feed_id: "2", limit: 3
+  function posts_feed = 'lib/queries/activities/search', feed: 'system', feed_id: "6", limit: 3
+  function groups_feed = 'lib/queries/activities/search', feed: 'system', feed_id: "3", limit: 3
+  function profiles_feed = 'lib/queries/activities/search', feed: 'system', feed_id: "4", limit: 3
+  function categories_feed = 'lib/queries/categories/search', limit: 3
+  function promoted_items = 'lib/queries/items/promoted', limit: 4, lang: context.language
+
+  assign categories = '{}' | parse_json
+  hash_assign categories['categories'] = categories_feed
+
+  assign items = '{}' | parse_json
+  hash_assign items['items'] = items_feed
+
+  assign comments = '{}' | parse_json
+  hash_assign comments['comments'] = comments_feed
+
+  assign posts = '{}' | parse_json
+  hash_assign posts['posts'] = posts_feed
+
+  assign groups = '{}' | parse_json
+  hash_assign groups['groups'] = groups_feed
+
+  assign profiles = '{}' | parse_json
+  hash_assign profiles['profiles'] = profiles_feed
+
+  assign promoted = '{}' | parse_json
+  hash_assign promoted['promoted_items'] = promoted_items
+
+  include 'theme/simple/home/index', categories: categories, items: items, comments: comments, posts: posts, groups: groups, profiles: profiles, promoted: promoted, current_profile: current_profile
+  render 'theme/simple/wishlists/enable_event', current_profile_id: current_profile.id
+%}

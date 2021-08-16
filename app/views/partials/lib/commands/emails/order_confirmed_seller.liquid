@@ -1,0 +1,26 @@
+---
+metadata:
+  parameters:
+    object:
+    - buyer
+    - order
+    - site_name
+---
+{% liquid
+  context_rc language: object.order.seller.language | default: 'en'
+%}
+{% parse_json object %}
+  {
+    "to": {{ object.order.seller.contact_emails | json }},
+    "from": {{ 'app.support_email' | t | json }},
+    "site_name": {{ object.site_name | json }},
+    "order": {{ object.order | json }},
+    "subject": {{ 'app.emails.orders.confirmed.seller.subject' | t: buyer_name: object.buyer.first_name, site_name: object.site_name | json }},
+    "buyer": {{ object.buyer | json }}
+  }
+{% endparse_json %}
+{% liquid
+  function object = 'lib/commands/emails/send', template: 'orders/confirmed_seller', object: object
+  return object
+%}
+

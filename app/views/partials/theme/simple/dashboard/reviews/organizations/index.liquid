@@ -1,0 +1,56 @@
+{% render 'theme/simple/dashboard/reviews/header', tab: 'organizations' %}
+
+<section class="card !rounded-t-none">
+  {% if reviews.results.size > 0 %}
+    <form action="" id="reviews-form"></form>
+    <div class="table pt-4">
+      <header>
+        <div class="md:!ps-24 border-b">
+          {{ 'app.reviews.organizations.index.name' | t }}
+        </div>
+        <div class="border-b">
+          {{ 'app.reviews.organizations.index.date' | t }}
+        </div>
+        <div class="border-b">
+          {{ 'app.reviews.items.rating' | t }}
+        </div>
+        <div class="border-b"></div>
+      </header>
+
+      <div class="table-content !shadow-none !rounded-t-none">
+        {% for review in reviews.results %}
+          <ul>
+            <li class="!ps-0">
+              {% render 'theme/simple/dashboard/reviews/organizations/organization_card', organization: review.organization %}
+            </li>
+            <li>
+              {{ review.created_at | l: 'compact' }}
+            </li>
+            <li>
+              {% render 'theme/simple/ui/rating_stars', rating: review.score %}
+            </li>
+            <li class="text-end">
+              {% if review.status.name == 'app.statuses.reviews.new' %}
+                <a href="/dashboard/reviews/organizations/{{review.id}}/edit" class="button button-small">
+                  {{ 'app.reviews.items.add_review' | t }}
+                </a>
+              {% else %}
+                <a href="/dashboard/reviews/organizations/{{review.id}}" class="button button-small button-secondary">
+                  {{ 'app.reviews.items.see_review' | t }}
+                </a>
+              {% endif %}
+            </li>
+          </ul>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% render 'theme/simple/ui/pagination', form: 'reviews-form' collection: reviews, current_page: page %}
+  {% else %}
+    <div class="flex items-center justify-around py-20 bg-panel">
+      <h1 class="bigtitle">
+        {{ 'app.reviews.organizations.empty_state' | t }}
+      </h1>
+    </div>
+  {% endif %}
+</section>

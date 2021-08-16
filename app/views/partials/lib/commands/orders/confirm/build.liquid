@@ -1,0 +1,6 @@
+{% liquid
+  assign object = order
+  hash_assign object['c__status'] = "app.statuses.orders.confirmed"
+
+  return object
+%}

@@ -1,0 +1,4 @@
+{% liquid
+  assign now = 'now' | to_date
+  function relation = 'lib/commands/relationships/create', name: 'followship', l_id: event.actor.id, r_id: event.target.id, l_at: now, r_at: now
+%}

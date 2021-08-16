@@ -1,0 +1,53 @@
+<a class="flex items-center underline gap-1" href="/dashboard/reviews/organizations">
+  {% render 'theme/simple/ui/icon', icon: 'dashLeft' %}
+  {{'app.reviews.header.title' | t }}
+</a>
+
+<div class="my-6 flex items-center">
+  {% if organization.logo.photo.versions.tiny %}
+  <img width="80" src="{{ organization.logo.photo.versions.tiny }}" alt="" class="w-20 me-5 rounded">
+  {% else %}
+    {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+  {% endif %}
+  <span class="text-2xl font-bold">
+    {{ organization.name }}
+  </span>
+</div>
+
+<div>
+    <div class="card mb-5">
+
+      <div class="pe-5 flex text-interaction">
+        {% if object.recommend %}
+          {% render 'theme/simple/ui/icon', icon: 'thumbUp', class: "w-5" %}
+          {{'app.reviews.organizations.new.i_recommend' | t }}
+        {% else %}
+          {% render 'theme/simple/ui/icon', icon: 'thumbDown', class: "w-5" %}
+          {{'app.reviews.organizations.new.i_dont_recommend' | t }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mb-5">
+      <div class="flex items-center justify-between">
+        <fieldset>
+          {{'app.reviews.organizations.new.compliance_description' | t }}
+
+          {% render 'theme/simple/ui/rating_stars', rating: object.description_score %}
+        </fieldset>
+        <fieldset>
+          {{'app.reviews.organizations.new.shipping_cost' | t }}
+          {% render 'theme/simple/ui/rating_stars', rating: object.delivery_score %}
+        </fieldset>
+        <fieldset>
+          {{'app.reviews.organizations.new.buyer_service' | t }}
+          {% render 'theme/simple/ui/rating_stars', rating: object.service_score %}
+        </fieldset>
+      </div>
+
+      <fieldset class="mt-6">
+        <textarea name="organization_review[body]" class="w-full p-2 outline-none" rows="3" disabled>{{object.body}}</textarea>
+      </fieldset>
+
+    </div>
+</div>

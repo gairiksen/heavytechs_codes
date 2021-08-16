@@ -1,0 +1,32 @@
+mutation publish_item_review(
+  $id: ID!
+  $score: Int!
+  $body: String!
+  $pros: [String]!
+  $cons: [String]!
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "item_review"
+      properties: [
+        { name: "score" value_int: $score }
+        { name: "body" value: $body }
+        { name: "pros" value_array: $pros }
+        { name: "cons" value_array: $cons }
+      ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+    type: table
+
+    profile_id: property(name: "profile_id")
+    item_inventory_id: property(name: "item_inventory_id")
+    score: property_int(name: "score")
+    body: property(name: "body")
+    pros: property_array(name: "pros")
+    cons: property_array(name: "cons")
+  }
+}

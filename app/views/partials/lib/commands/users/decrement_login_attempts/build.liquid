@@ -1,0 +1,34 @@
+{% liquid
+  if object.attempts == 1
+    assign locked_at = 'now' | to_time | json
+  endif
+%}
+
+{% if object.attempts == blank %}
+
+  {% parse_json object %}
+    {
+      "id":       {{ object.id }},
+      "attempts": {{ default_login_attempts | minus: 1 }},
+      "decrement_attempts": 1
+    }
+  {% endparse_json %}
+
+{% else %}
+
+   {% parse_json object %}
+     {
+       "id":       {{ object.id }},
+       "decrement_attempts": 1
+     }
+   {% endparse_json %}
+
+{% endif %}
+
+{% liquid
+  if locked_at
+    hash_assign object['locked_at'] = locked_at
+  endif
+
+  return object
+%}

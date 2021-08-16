@@ -1,0 +1,12 @@
+{% liquid
+  case order.shipping_type
+  when 'delivery'
+    assign cost = order.seller.delivery_fee
+  when 'personal_pickup'
+    assign cost = 0
+  else
+    assign cost = 0
+  endcase
+
+  return cost
+%}

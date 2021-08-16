@@ -1,0 +1,37 @@
+mutation update_line_item_return(
+  $id: ID!
+  $quantity: Int
+  $reason: String
+  $reason_details: String
+  $shipping_type: String
+  $shipping_pickup_point: String
+  $shipping_address_id: String
+  $c__status: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "line_item_return"
+      properties: [
+        { name: "quantity", value_int: $quantity }
+        { name: "reason", value: $reason }
+        { name: "reason_details", value: $reason_details }
+        { name: "shipping_type", value: $shipping_type }
+        { name: "shipping_pickup_point", value: $shipping_pickup_point }
+        { name: "shipping_address_id", value: $shipping_address_id }
+        { name: "c__status", value: $c__status }
+      ]
+    }
+  ) {
+    id
+    created_at
+    updated_at
+    line_item_id: property(name: "line_item_id")
+    quantity: property_int(name: "quantity")
+    reason: property(name: "reason")
+    reason_details: property(name: "reason_details")
+    shipping_type: property(name: "shipping_type")
+    shipping_pickup_point: property(name: "shipping_pickup_point")
+    shipping_address_id: property(name: "shipping_address_id")
+  }
+}

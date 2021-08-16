@@ -1,0 +1,6 @@
+{% liquid
+  assign category = '{"key": "jewellery", "uuid": "cccc-9999-cccc-9999"}' | parse_json
+  function category = 'lib/commands/categories/create', object: category
+
+  return category
+%}

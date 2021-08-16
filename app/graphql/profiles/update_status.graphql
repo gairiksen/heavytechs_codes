@@ -1,0 +1,31 @@
+mutation update( 
+    $id: ID!
+    $is_blocked: String
+    
+) {
+  model_update(
+    id: $id
+    model: {
+      model_schema_name: "profile"
+      properties: [
+        { name: "is_blocked" value: $is_blocked }  
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    long_description: property(name: "long_description")
+    short_description: property(name: "short_description")
+    company_name: property(name: "company_name")
+    position: property(name: "position")
+    location: property(name: "location")
+    ready_for_travel: property(name: "ready_for_travel")
+    total_experience: property(name: "total_experience")
+    veteran: property(name: "veteran")
+    latitude: property(name: "latitude")  
+    longitude: property(name: "longitude") 
+  }
+}

@@ -1,0 +1,25 @@
+mutation update($id: ID!, $name: String!, $slug: String, $offline_stores: [String!], $delivery_fee: Int, $shipping_types: [String!], $contact_emails: String) {
+  record_update(
+    id: $id
+    record: {
+      table: "organization"
+      properties: [
+        { name: "offline_stores" value_array: $offline_stores }
+        { name: "shipping_types" value_array: $shipping_types }
+        { name: "contact_emails" value: $contact_emails }
+        { name: "delivery_fee" value_int: $delivery_fee }
+        { name: "name" value: $name }
+        { name: "slug" value: $slug }
+      ]
+    }
+  ){
+    id
+    created_at
+    uuid: property(name: "uuid")
+    name: property(name: "name")
+    slug: property(name: "slug")
+    delivery_fee: property(name: "delivery_fee")
+    offline_stores: property_array(name: "offline_stores")
+    shipping_types: property_array(name: "shipping_types")
+  }
+}

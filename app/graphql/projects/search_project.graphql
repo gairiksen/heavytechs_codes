@@ -1,0 +1,183 @@
+query search(
+    $id: ID
+    $limit: Int = 20
+    $user_id: String
+    $project_name: String,
+    $longer_description: String,
+    $location_of_project: String,
+    $expected_start_date: String,
+    $expected_end_date: String,
+    $duration_type: String,
+    $special_pay: String,
+    $short_description: String,
+    $osha: String,
+    $msha: String,
+    $additionally_insured: String,
+    $insurance_cert_holder: String,
+    $liability_limits: String,
+    $crane_required: String,
+    $driver_license_required: String,
+    $driver_license_class: String,
+    $tanker: String,
+    $air_brakes: String,
+    $passenger: String,
+    $doubles_triples: String,
+    $hazmat: String,
+    $earthworks: String,
+    $mining: String,
+    $fleet: String,
+    $pipeline: String,
+    $paving: String,
+    $energy_production: String,
+    $heavy_equipment_training: String,
+    $welder_fabricator: String,
+    $truck_mechanic: String,
+    $oiler_pm_tech: String,
+    $welding: String,
+    $electrical_troubleshooting: String,
+    $computer_diagnostics: String,
+    $company_supplied: String,
+    $not_offered: String,
+    $per_diem: String,
+    $paid_not_paid: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "projects" }
+      properties: [
+        { name: "user_id", value: $user_id }
+        { name: "project_name", value: $project_name }
+        { name: "longer_description", value: $longer_description }
+        { name: "location_of_project", value: $location_of_project }
+        { name: "expected_start_date", value: $expected_start_date }
+        { name: "expected_end_date", value: $expected_end_date }
+        { name: "duration_type", value: $duration_type }
+        { name: "special_pay", value: $special_pay }
+        { name: "short_description", value: $short_description }   
+        { name: "osha", value: $osha }  
+        { name: "msha", value: $msha }  
+        { name: "additionally_insured", value: $additionally_insured }  
+        { name: "insurance_cert_holder", value: $insurance_cert_holder }  
+        { name: "liability_limits", value: $liability_limits }  
+        { name: "crane_required", value: $crane_required }  
+        { name: "driver_license_required", value: $driver_license_required }  
+        { name: "driver_license_class", value: $driver_license_class }  
+        { name: "tanker", value: $tanker }  
+        { name: "air_brakes", value: $air_brakes }  
+        { name: "passenger", value: $passenger }  
+        { name: "doubles_triples", value: $doubles_triples }  
+        { name: "hazmat", value: $hazmat }  
+        { name: "earthworks", value: $earthworks }  
+        { name: "mining", value: $mining }  
+        { name: "fleet", value: $fleet }  
+        { name: "pipeline", value: $pipeline }  
+        { name: "paving", value: $paving }  
+        { name: "energy_production", value: $energy_production }  
+        { name: "heavy_equipment_training", value: $heavy_equipment_training }  
+        { name: "welder_fabricator", value: $welder_fabricator }  
+        { name: "truck_mechanic", value: $truck_mechanic }  
+        { name: "oiler_pm_tech", value: $oiler_pm_tech }  
+        { name: "welding", value: $welding }  
+        { name: "electrical_troubleshooting", value: $electrical_troubleshooting }  
+        { name: "computer_diagnostics", value: $computer_diagnostics }  
+        { name: "company_supplied", value: $company_supplied }  
+        { name: "not_offered", value: $not_offered }  
+        { name: "per_diem", value: $per_diem }  
+        { name: "paid_not_paid", value: $paid_not_paid }    
+        { name: "status", value: "Publish" }
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+
+        project_name: property(name: "project_name")
+        longer_description: property(name: "longer_description")
+        location_of_project: property(name: "location_of_project")
+        expected_start_date: property(name: "expected_start_date")
+        expected_end_date: property(name: "expected_end_date")
+        duration_type: property(name: "duration_type")
+        special_pay: property(name: "special_pay")
+        short_description: property(name: "short_description")
+        osha: property(name: "osha") 
+        msha: property(name: "msha") 
+        additionally_insured: property(name: "additionally_insured") 
+        insurance_cert_holder: property(name: "insurance_cert_holder") 
+        liability_limits: property(name: "liability_limits") 
+        crane_required: property(name: "crane_required") 
+        driver_license_required: property(name: "driver_license_required") 
+        driver_license_class: property(name: "driver_license_class") 
+        tanker: property(name: "tanker") 
+        air_brakes: property(name: "air_brakes") 
+        passenger: property(name: "passenger") 
+        doubles_triples: property(name: "doubles_triples") 
+        hazmat: property(name: "hazmat") 
+        earthworks: property(name: "earthworks") 
+        mining: property(name: "mining") 
+        fleet: property(name: "fleet") 
+        pipeline: property(name: "pipeline") 
+        paving: property(name: "paving") 
+        energy_production: property(name: "energy_production") 
+        heavy_equipment_training: property(name: "heavy_equipment_training") 
+        welder_fabricator: property(name: "welder_fabricator") 
+        truck_mechanic: property(name: "truck_mechanic") 
+        oiler_pm_tech: property(name: "oiler_pm_tech") 
+        welding: property(name: "welding") 
+        electrical_troubleshooting: property(name: "electrical_troubleshooting") 
+        computer_diagnostics: property(name: "computer_diagnostics") 
+        company_supplied: property(name: "company_supplied")
+        not_offered: property(name: "not_offered")
+        per_diem: property(name: "per_diem")
+        paid_not_paid: property(name: "paid_not_paid")  
+        status: property(name: "status") 
+
+        photo: related_record(
+            table: "photo"
+            join_on_property: "object_uuid"
+            foreign_property: "object_uuid"
+        ) {
+            photo: property_upload(name: "photo") {
+            url
+            versions
+            }
+        }
+
+        profile_bio: related_record(
+            table: "profile_contractor_bio"
+            join_on_property: "user_id"
+            foreign_property: "user_id"
+        ) {
+            id
+            type: table
+            aeronautical: property(name: "aeronautical")
+            annual_sales: property(name: "annual_sales")
+            office_location: property(name: "office_location")
+            short_description: property(name: "short_description")
+            total_employees: property(name: "total_employees")
+            transportation_fleet: property(name: "transportation_fleet")
+            company_name: property(name: "company_name")
+        }
+
+        profile: related_record(
+            table: "profile"
+            join_on_property: "user_id"
+            foreign_property: "user_id"
+        ) {
+            id
+            type: table
+            name: property(name: "name")
+            first_name: property(name: "first_name")
+            last_name: property(name: "last_name")
+            mobile_number: property(name: "mobile_number")
+        }
+    }
+  }
+}

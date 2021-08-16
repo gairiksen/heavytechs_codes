@@ -1,0 +1,10 @@
+name: profile_insurance
+properties:
+  - name: uuid
+  - name: uuid
+  - name: user_id
+  - name: general_liability
+  - name: auto_truck_policy
+  - name: garage_keepers
+  - name: expiration_date
+

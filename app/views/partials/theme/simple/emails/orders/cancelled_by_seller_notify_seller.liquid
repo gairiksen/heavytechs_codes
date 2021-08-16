@@ -1,0 +1,27 @@
+<p>
+  {{ 'app.emails.orders.cancelled_seller.seller.greeting' | t: name: data.order.seller.name }}<br>
+  {{ 'app.emails.orders.cancelled_seller.seller.info_cancel' | t: first_name: data.buyer.first_name }}
+</p>
+
+
+
+<table cellspacing="0" class="w-full mt">
+  {% for line_item in data.order.line_items %}
+    <td>
+      {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+      {% if cover_url %}
+          <img src="{{ cover_url }}" width="80" class="w-20 rounded">
+      {% endif %}
+    </td>
+    <td class="table-spacing"></td>
+    <td>{{ line_item.item.item_detail.name }}</td>
+    <td class="table-spacing"></td>
+    <td class="text-right">{{ line_item.quantity }}</td>
+    <td class="table-spacing"></td>
+    <td class="text-right">{% render 'theme/simple/price', amount_cents: line_item.total_price_cents, currency: line_item.currency %}</td>
+  {% endfor %}
+</table>
+
+<div class="mt text-center">
+  <a href="{{ data.order.order_url }}" class="button">{{ 'app.emails.orders.cancelled_seller.seller.order_link' | t }}</a>
+</div>

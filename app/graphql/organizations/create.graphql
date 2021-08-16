@@ -1,0 +1,19 @@
+mutation create($uuid: String!, $name: String!, $offline_stores: [String!], $delivery_fee: Int) {
+  record_create(
+    record: {
+      table: "organization"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "offline_stores" value_array: $offline_stores }
+        { name: "delivery_fee" value_int: $delivery_fee }
+        { name: "name" value: $name }
+      ]
+    }
+  ){
+    id
+    created_at
+    uuid: property(name: "uuid")
+    name: property(name: "name")
+    delivery_fee: property(name: "delivery_fee")
+  }
+}

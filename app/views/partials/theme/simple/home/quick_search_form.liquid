@@ -1,0 +1,17 @@
+<form action="/quick_search" name="search" class="flex justify-center">
+
+  <span class="sr-only">{{ 'app.quick_search.name' | t }}</span>
+
+  <div class="relative">
+    <span class="absolute inset-y-0 start-1 flex items-center ps-3">
+      {% render 'theme/simple/ui/icon', icon: 'search', class: 'w-4 h-4 text-content-sidenote' %}
+    </span>
+
+    <input class="w-full md:w-auto ps-10 pe-4 form-input-small rounded"
+      name="qkeyword" type="text"
+      value="{{ qkeyword | raw_escape_string }}"
+      placeholder="{% print 'app.quick_search.name' | t %}">
+  </div>
+
+  <button value="search" class="ms-3 button button-secondary button-small">{{ 'app.search.search' | t  }}</button>
+</form>

@@ -1,0 +1,22 @@
+{% liquid
+  if audience == blank
+    log 'Audience cannot be empty', type: 'WARN'
+    return null
+  endif
+
+  for target in audience
+    assign ids = target[1]
+
+    case target[0]
+      when 'organization'
+        assign type = "organization-private"
+      when 'profile'
+        assign type = "user-private"
+        if skip_profiles
+          assign ids = ids | subtract_array: skip_profiles
+        endif
+    endcase
+
+    render 'lib/commands/activities/publish', uuid: uuid, type: type, ids: ids
+  endfor
+%}

@@ -1,0 +1,19 @@
+---
+slug: relationships
+method: delete
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile
+
+  assign data = context.params
+
+  function object = 'lib/commands/relationships/delete_with_events', object: data
+
+  assign return_to = context.params.return_to | default: '/'
+  if object.valid
+    include 'redirect_to', url: return_to, notice: context.params.notice_key
+  else
+    include 'redirect_to', url: return_to, error: context.params.error_key
+  endif
+%}

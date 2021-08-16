@@ -1,0 +1,22 @@
+---
+slug: groups/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, membership: true
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  assign group_id = context.params.id | split: '-' | last
+  function group = 'lib/queries/groups/find', id: group_id, with_owner: true
+
+  function can = "lib/can", actor: current_profile, do: "see_meta", object: group
+  unless can.valid
+    assign group = null
+  endunless
+  include 'lib/present_or_404', property: group.id
+
+  function list = 'lib/queries/activities/search', feed: 'group-public', feed_id: group.id, limit: 100
+  function presigned_url = 'lib/queries/presigned_url'
+
+  render 'theme/simple/groups/header', group: group, tab: 'activity', current_profile: current_profile
+  render 'theme/simple/groups/activity', group: group, current_profile: current_profile, list: list, context: context, presigned_url: presigned_url
+%}

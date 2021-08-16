@@ -1,0 +1,29 @@
+---
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function object = 'lib/commands/items/create_complex', object: context.params.item, owner: current_profile.id
+  if object.valid
+    include 'lib/commands/events/create', type: 'item_created', actor_id: current_profile.id, object_id: object.item_id
+    function publish_object = 'lib/commands/processes/wrap', command: 'items/publish', object: object, current_profile: current_profile
+    if publish_object.valid != true
+      log publish_object, type: 'ERROR: items publish'
+    endif
+    if publish_object.require_acceptance
+      include 'redirect_to', url: '/dashboard/sell/items', notice: 'app.items.need_to_be_accepted_before_create_publish'
+    else
+      function url = 'link_to', item: object.item
+      include 'redirect_to', url: url, notice: 'app.items.created'
+    endif
+  else
+    function filters = 'lib/queries/search/filters', query: context.params
+    function presigned_url = 'lib/queries/presigned_url'
+    function photos = 'lib/queries/photos/search', object_uuid: object.uuid
+    function default_currency = 'lib/queries/constants/find' name: "CURRENCY", context: context
+
+    include 'theme/simple/dashboard/items/new', item: object, lib: filters, presigned_url: presigned_url, photos: photos.results, default_currency
+  endif
+%}

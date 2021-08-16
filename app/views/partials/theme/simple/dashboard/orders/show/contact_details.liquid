@@ -1,0 +1,15 @@
+<h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.contact_title' | t }}</h3>
+<ul class="card md:flex md:gap-4 md:justify-between">
+  <li class="flex items-center">
+    {% render 'theme/simple/ui/icon', icon: 'userCircle', class: 'w-6 me-2' %}
+    {{ order.shipping_first_name }} {{ order.shipping_last_name }}
+  </li>
+  <li class="py-4 md:py-0 flex items-center">
+    {% render 'theme/simple/ui/icon', icon: 'mail', class: 'w-6 me-2' %}
+    {{ order.shipping_email }}
+  </li>
+  <li class="flex items-center">
+    {% render 'theme/simple/ui/icon', icon: 'phone', class: 'w-6 me-2' %}
+    {{ order.shipping_phone }}
+  </li>
+</ul>

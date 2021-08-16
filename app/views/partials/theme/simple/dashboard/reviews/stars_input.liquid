@@ -1,0 +1,20 @@
+<div x-data="{ temp: {{value | json}}, orig: {{value | json}} }" class="my-2 flex cursor-pointer" x-on:click="orig=temp">
+
+  <input type="number" class="hidden" name="{{input_name}}" :value="orig">
+
+  <template x-for="item in [1,2,3,4,5]">
+    <span data-tc="rate-star"
+          x-on:mouseenter="temp = item"
+          x-on:mouseleave="temp = orig"
+          :class="{'text-warning': (temp >= item), 'text-content': (temp < item)}"
+          class="pe-2">
+      <span x-show="temp < item">
+        {% render 'theme/simple/ui/icon', icon: 'star' %}
+      </span>
+      <span x-show="temp >= item">
+        {% render 'theme/simple/ui/icon', icon: 'starFull' %}
+      </span>
+    </span>
+  </template>
+
+</div>

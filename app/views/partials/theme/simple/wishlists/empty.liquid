@@ -1,0 +1,12 @@
+<section class="md:h-64 card flex flex-col md:flex-row justify-center items-center text-center md:text-start">
+  <div class="order-2 md:order-1">
+    <p class="subtitle">{{ 'app.wishlists.empty.title' | t }}</p>
+    <p>{{ 'app.wishlists.empty.description' | t }}</p>
+    <p>
+      <a href="/search" class="button">{{ 'app.wishlists.empty.button' | t }}</a>
+    </p>
+  </div>
+  <div class="w-16 mb-6 md:mb-0 md:w-32 md:ms-10 md:ps-10 md:mt-1 order-1 md:order-last md:border-s">
+    {% render 'theme/simple/ui/icon', icon: 'heart', class: 'w-full text-interaction-disabled' %}
+  </div>
+</section>

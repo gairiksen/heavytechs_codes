@@ -1,0 +1,29 @@
+<div class="container"
+  x-data="searchComponent()"
+  x-init="init()"
+>
+  <div class="flex flex-wrap antialiased text-gray-900 bg-gray-100">
+
+    <div class="fixed inset-0 z-20 bg-gray-800 lg:hidden"
+      style="opacity: 0.8"
+      aria-hidden="true"
+      x-show="isSidebarOpen" @click="isSidebarOpen = false"
+    ></div>
+
+    {% render 'theme/simple/items/sidebar', filters: filters %}
+    {% render 'theme/simple/items/sidebar_buttons' %}
+
+    <main class="flex-1">
+      {% render 'theme/simple/items/search_form', query: search.query, filters: filters %}
+      <div class="flex items-center justify-center h-32 lg:h-screen" x-show="spinner">
+        {% render 'theme/simple/ui/spinner', size: 32 %}
+      </div>
+
+      <div
+        x-ref="main" x-html="render($refs.main)" x-show="!spinner"
+      >
+        {% render 'theme/simple/items/search_frame', items: items, filters: filters, current_profile: current_profile %}
+      </div>
+    </main>
+  </div>
+</div>

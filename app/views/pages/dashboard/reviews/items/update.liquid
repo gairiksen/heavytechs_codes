@@ -1,0 +1,22 @@
+---
+slug: dashboard/reviews/items/:id
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function review = 'lib/queries/item_reviews/find_by_profile', id: context.params.item_review.id, profile_id: current_profile.id
+  include 'lib/can_do_or_unauthorized', object: review, do: "fill", actor: current_profile
+
+  function object = 'lib/commands/item_reviews/publish', object: context.params.item_review, profile: current_profile
+  if object.valid
+    function status = 'lib/commands/statuses/create', profile_id: current_profile.id, object_id: object.id, name: 'app.statuses.reviews.filled', scope: 'app.statuses.reviews'
+    function evt = 'lib/commands/events/create', type: 'item_review_filled', actor_id: current_profile.id, object_id: object.id, target_id: object.item_inventory_id
+
+    include 'redirect_to', url: '/dashboard/reviews/items'
+  else
+    function item_inventory = 'lib/queries/item_inventories/find', id: context.params.item_review.item_inventory_id
+    render 'theme/simple/dashboard/reviews/items/form', item_inventory: item_inventory, object: object, context: context
+  endif
+%}

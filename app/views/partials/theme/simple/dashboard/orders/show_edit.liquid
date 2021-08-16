@@ -1,0 +1,92 @@
+{% if order.line_items.size > 0 %}
+
+  {% liquid
+    assign last_row = forloop.last
+  %}
+
+  <div class="align-middle lg:table-row" data-lineItem-seller data-lineItem-sellerId="{{ order.seller.id }}">
+    <span class="w-full lg:pt-4 lg:w-auto lg:ps-4 block {% if forloop.first == false %} pt-4 border-t {% else %} rounded-ts {% endif %} lg:table-cell font-semibold">
+      {{ order.seller.name }}
+    </span>
+    <span class="{% if forloop.first == false %} border-t pt-4 {% endif %} lg:table-cell"></span>
+    <span class="{% if forloop.first == false %} border-t pt-4 {% endif %} lg:table-cell"></span>
+    <span class="{% if forloop.first == false %} border-t pt-4 {% endif %} lg:table-cell"></span>
+    <span class="{% if forloop.first == false %} border-t pt-4 {% else %} rounded-te {% endif %} lg:table-cell"></span>
+  </div>
+
+  {% for line_item in order.line_items %}
+    {% assign id = '' | uuid %}
+    <ul
+      class="item {% if forloop.first == false %} border-t border-dotted {% endif %} lg:table-row flex-wrap"
+      data-lineItem
+      data-lineItem-id="{{ line_item.id }}"
+      data-lineItemCurrency="{{ line_item.currency }}"
+      data-lineItem-sellerId="{{ order.seller.id }}"
+      >
+
+      <li class="py-4 lg:ps-4 {% if forloop.last == true %} lg:pb-6 {% endif %} {% if last_row == true %} rounded-bs {% endif %} align-middle lg:table-cell">
+        {% function item_url = 'link_to', item: line_item.item %}
+        <div class="flex items-center align">
+          <a href="{{ item_url }}">
+            {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+            {% if cover_url %}
+              <img src="{{ cover_url }}" class="w-20 rounded me-5">
+            {% else %}
+              {% render 'theme/simple/ui/picture-placeholder', class: 'w-20 rounded me-5' %}
+            {% endif %}
+          </a>
+          <div>
+            <a href="{{ item_url }}">{{ line_item.item.item_detail.name }}</a><br>
+            <button data-lineItem-wishlist data-item-id="{{ line_item.item.id }}" data-lineItem-id="{{ line_item.id }}" class="text-xs text-interaction hover:text-interaction-hover">{{ 'app.wishlists.save_for_later' | t }}</button>
+            <div
+              data-lineItem-errors
+              data-lineItem-id="{{ line_item.id }}"
+              class="w-full lg:table-row text-danger"
+            ></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="lg:ps-3 lg:py-4 {% if forloop.last == true %} lg:pb-6 {% endif %} lg:table-cell align-middle lg:text-end" data-lineItem-unitPrice>
+        <span class="w-20 me-4 inline-block lg:hidden">{{ 'app.orders.show.unit_price' | t }}: </span>
+        {% render 'theme/simple/price', amount_cents: line_item.item.price, currency: line_item.currency  %}
+      </li>
+
+      <li class="mb-3 align-middle lg:mb-0 lg:ps-4 lg:py-4 {% if forloop.last == true %} lg:pb-6 {% endif %} lg:table-cell lg:text-right">
+        <span class="inline-block w-20 me-4 lg:hidden">{{ 'app.orders.show.quantity' | t }}: </span>
+        <form action="/orders/line_items" method="post" class="inline">
+          {% include 'authenticity_token' %}
+          <input  type="hidden" name="_method" value="put" />
+          <input type="hidden" name="id" value="{{ line_item.id }}">
+          <input data-tc="cart-product-quantity"
+            type="number"
+            name="line_item[quantity]" value="{{ line_item.quantity }}"
+            min="1"
+            max="{{ line_item.item.item_inventory.quantity | at_most: line_item.item.item_inventory.max_in_one_order }}"
+            class="w-20 h-full text-center item-quantity form-input-small"
+            data-lineItem-quantity>
+        </form>
+      </li>
+
+      <li id="data-item-totalprice" class="align-middle lg:ps-4 lg:py-4 {% if forloop.last == true %} lg:pb-6 {% endif %} lg:table-cell lg:text-end font-bold" data-lineItem-totalPrice>
+        <span class="inline-block w-20 font-normal me-4 lg:hidden">{{ 'app.orders.show.total_price' | t }}: </span>
+        {% render 'theme/simple/price', amount_cents: line_item.total_price_cents, currency: line_item.currency %}
+      </li>
+
+      <li class="py-4 align-middle lg:ps-10 lg:pe-4 {% if forloop.last == true %} lg:pb-6 {% endif %} {% if last_row == true %} rounded-be {% endif %} lg:table-cell">
+        <form action="/orders/line_items" method="post" class="flex lg:justify-end">
+          {% include 'authenticity_token' %}
+          <input type="hidden" name="_method" value="delete" />
+          <input type="hidden" name="id" value="{{ line_item.id }}">
+          <button type="button" title="{{ 'app.orders.show.remove_item' | t }}" class="flex items-center lg:p-3 text-interaction hover:text-danger" data-lineItem-remove>
+            <span class="me-3 lg:hidden">{{ 'app.orders.show.remove_item' | t }} </span>
+            {% render 'theme/simple/ui/icon', icon: 'x' %}
+          </button>
+        </form>
+      </li>
+
+    </ul>
+
+  {% endfor %}
+
+{% endif %}

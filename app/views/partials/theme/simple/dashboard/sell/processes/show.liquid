@@ -1,0 +1,50 @@
+<header class="mt-2.5 mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'check', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'app.admin.processes.show.title' | t }}
+  </h2>
+</header>
+
+<div>
+  <div class="py-2 font-semibold">{{ 'app.admin.processes.attr.name' | t }}</div>
+  <div>
+    {% render 'theme/simple/processes/name', process: process %}
+  </div>
+</div>
+
+<div>
+  <div class="py-2 font-semibold">{{ 'app.admin.processes.attr.status' | t }}</div>
+  <div>
+    {% render 'theme/simple/processes/status', process: process %}
+  </div>
+</div>
+
+<div>
+  <div class="py-2 font-semibold">{{ 'app.admin.processes.attr.description' | t }}</div>
+  <div>
+    {% render 'theme/simple/processes/description', process: process %}
+  </div>
+</div>
+
+<div class="mt-10">
+  {% case process.status.name %}
+  {% when 'app.statuses.processes.requested' %}
+    <h2 class="subtitle pb-3">
+      {{ 'app.processes.sell.show.cancel_request' | t }}
+    </h2>
+
+    <form action="/dashboard/sell/processes" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="_method" value="put">
+      <input type="hidden" name="process[id]" value="{{ process.id }}">
+      <button class="button button-danger mb-5" name="process[action]" value="cancel">
+        {{ 'app.processes.sell.show.cancel' | t }}
+      </button>
+    </form>
+  {% else %}
+    {{ process.status.name | t  }}
+    {{ 'app.admin.processes.list.by' | t }}
+    {{ process.status.profile.first_name }} {{ process.status.profile.last_name }} {{ process.status.profile.name  }}
+  {% endcase %}
+</div>

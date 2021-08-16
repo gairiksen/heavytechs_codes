@@ -1,0 +1,41 @@
+mutation create(
+  $buyer: String!
+  $seller: String!
+  $currency: String!
+  $c__status: String
+) {
+  record_create(
+    record: {
+      table: "order"
+      properties: [
+        { name: "buyer", value: $buyer }
+        { name: "seller", value: $seller }
+        { name: "currency", value: $currency }
+        { name: "c__status", value: $c__status }
+      ]
+    }
+  ) {
+    id
+    type: table
+
+    currency: property(name: "currency")
+
+    buyer: related_record(table: "profile", join_on_property: "buyer", foreign_property: "id") {
+      id
+    }
+
+    seller: related_record(table: "organization", join_on_property: "seller", foreign_property: "id") {
+      id
+    }
+
+    status: related_record(
+      table: "status"
+      join_on_property: "id"
+      foreign_property: "object_id"
+    ) {
+      id
+      created_at
+      name: property(name: "name")
+    }
+  }
+}

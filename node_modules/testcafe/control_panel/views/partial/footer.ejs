@@ -1,0 +1,49 @@
+<div class="footer">
+    <div class="footer-line"></div>
+    <div class="content">
+        <ul class="links">
+            <% if(selected === 'OPTIONS') { %>
+            <li class="active" title="Return to project">
+                <a href="/">
+                    <span></span>
+                </a>
+            </li>
+            <%} else {%>
+            <li>
+                <a href="/options/" title="TestCafe settings">
+                    <span></span>
+                </a>
+            </li>
+            <%}%>
+            <li><a target="_blank" href="https://go.devexpress.com/DevExpress_TestCafe_Documentation.aspx">DOCUMENTATION</a></li>
+            <li><a target="_blank" href="http://www.devexpress.com/Support/Center/Question/ChangeFilterSet/1?FavoritesOnly=False&amp;MyItemsOnly=False&amp;MyTeamItemsOnly=False&amp;TechnologyName=Testing+Tools&amp;PlatformName=AllPlatforms&amp;ProductName=AllProducts&amp;TicketType=All">SUPPORT</a></li>
+            <li class="new-version">
+                <a target="_blank" href="http://testcafe.devexpress.com/Download">
+                    <span></span>
+                    Download new version
+                </a>
+            </li>
+            <li class="current-version">
+            </li>
+            <% if(remainingTime) { %>
+            <li class="trial_days">
+                <a href="http://testCafe.devexpress.com/Buy">
+                    Trial will expire in <%= Math.ceil(remainingTime / (24 * 3600 * 1000)) %> days.
+                </a>
+            </li>
+            <%}%>
+        </ul>
+
+        <div class="copyright">
+            Copyright &copy;&nbsp;
+            2012-<%= new Date().getFullYear() %>
+            <a target="_blank" href="http://www.devexpress.com">Developer Express Inc.</a>
+            <br>
+            ALL RIGHTS RESERVED
+        </div>
+
+
+        <div class="clear"></div>
+
+    </div>
+</div>

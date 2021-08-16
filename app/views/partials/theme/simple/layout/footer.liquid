@@ -1,0 +1,133 @@
+<div class="footer py-10 bg-white">
+        <div class="container mx-auto px-3.5 justify-between md:flex">
+            <div class="footerLogo w-full mb-5 md:w-56 md:mb-0">
+                <a href="#" class="mb-5 inline-block"><img src="{{ 'images/footer-logo.svg' | asset_url }}" alt=""></a>
+                <p class="text-xs">
+                    Heavy Techs template is modern marketplace to gather your clients together
+                </p>
+            </div>
+
+            <div class="md:w-2/4 justify-between md:flex">
+                <div class="mb-5 md:mb-0">
+                    <h3 class="uppercase font-semibold text-base text-gray-800 mb-2">GENERAL</h3>
+                    <ul>
+                        <li class="mb-2"><a href="/find_project" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Find a Project</a></li>
+                        <li class="mb-2"><a href="/find_mechanic" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Find a Mechanic</a></li>
+                        <li class="mb-2"><a href="/about-us" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">What We Do</a></li>
+
+                        {%comment%}
+                        <li class="mb-2"><a href="about-us" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">About Us</a></li>
+                        {%endcomment%}
+                    </ul>
+                </div>
+
+                <div class="mb-5 md:mb-0">
+                    <h3 class="uppercase font-semibold text-base text-gray-800 mb-2">JOIN</h3>
+                    <ul>
+                        <li class="mb-2"><a href="/sign-up-main" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Sign Up</a></li>
+                        <li class="mb-2"><a href="/sessions/new" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Log In</a></li>
+                    </ul>
+                </div>
+
+                <div class="">
+                    <h3 class="uppercase font-semibold text-base text-gray-800 mb-2">Community</h3>
+                    <ul>
+                        <li class="mb-2"><a href="#" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Blog</a></li>
+                        <li class="mb-2"><a href="/contact-us" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Contact Us</a></li>
+                        <li class="mb-2"><a href="/faq" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="text-base text-gray-800 font-normal hover:text-red-500 hover:underline">Terms Of Use</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footerBottom bg-gray-900 py-5"><!--footerBottom-->
+        <div class="container mx-auto px-3.5 justify-between items-center md:flex">
+            <span class="text-gray-200 text-xs mb-3 block md:mb-0">© 2021 MVP Heavy Techs — Powered by platformOS</span>
+            <ul class="flex">
+                <li class="mr-5"><a href="#"><img src="{{ 'images/facebook.png' | asset_url }}" alt=""></a></li>
+                <li><a href="#"><img src="{{ 'images/twitter.png' | asset_url }}" alt=""></a></li>
+            </ul>
+        </div>
+    </div><!--footerBottom-->
+
+</body>
+</html> 
+{% comment %}
+<footer class="mt-10 border-t">
+
+  <div class="card py-14 rounded-none">
+    <div class="container lg:grid lg:grid-cols-3 lg:gap-5">
+
+      <div class="w-full lg:w-1/5 sm:min-w-80 mb-12 lg:mb-0 flex-shrink-0 text-center lg:text-start">
+        <a href="/" class="flex items-center justify-center lg:justify-start font-medium text-content">
+          {% render 'theme/simple/ui/logo' %}
+        </a>
+        <p class="mt-4 text-sm">{{ 'app.footer.description' | t }}</p>
+      </div>
+
+      <div class="col-span-2 sm:flex sm:justify-between lg:justify-start text-center sm:text-start">
+
+        <div class="lg:w-1/4 lg:ms-4">
+          <h2 class="mb-2">{{ 'app.footer.header.title.general' | t }}</h2>
+          <ul class="mb-10 md:mb-0 leading-loose">
+            <li>
+              <a href="/" class="hover:text-content hover:underline">{{ 'app.footer.header.list.home' | t }}</a>
+            </li>
+            <li>
+              <a href="/about-us" class="hover:text-content hover:underline">{{ 'app.footer.header.list.about_us' | t }}</a>
+            </li>
+            <li>
+              <a href="/terms-of-service" class="hover:text-content hover:underline">{{ 'app.footer.header.list.terms_of_service' | t }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="lg:w-1/4 lg:ms-1">
+          <h2 class="mb-2">{{ 'app.footer.header.title.join' | t }}</h2>
+          <ul class="mb-10 md:mb-0 leading-loose">
+            <li>
+              <a href="/sign-up" class="hover:text-content hover:underline">{{ 'app.footer.header.list.sign_up' | t }}</a>
+            </li>
+            <li>
+              <a href="/sessions/new" class="hover:text-content hover:underline">{{ 'app.footer.header.list.log_in' | t }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="lg:w-1/4 lg:ms-1">
+          <h2 class="mb-2">{{ 'app.footer.header.title.support' | t }}</h2>
+          <ul class="mb-10 md:mb-0 leading-loose">
+            <li>
+              <a href="/contact-us" class="hover:text-content hover:underline">{{ 'app.footer.header.list.contact_us' | t }}</a>
+            </li>
+            <li>
+              <a href="/faq" class="hover:text-content hover:underline">{{ 'app.footer.header.list.faq' | t }}</a>
+            </li>
+          </ul>
+        </div>
+
+    </div>
+
+    </div>
+  </div>
+
+  <div class="container pt-6 pb-5 md:flex md:justify-between md:items-center text-center md:text-start">
+    <p class="text-sm">
+      {{ 'app.footer.copyrights.year' | t }}{{ 'app.footer.copyrights.title' | t }}
+      <a href="https://www.platformos.com" target="_blank" rel="noopener external noreferrer" target="_blank" class="hover:underline">{{ 'app.footer.copyrights.product_owner' | t }}</a>
+    </p>
+    <div class="mt-4 md:mt-0 inline-flex justify-center gap-6">
+      {% render 'theme/simple/ui/icon', icon: 'facebook' %}
+      <a target="_blank" rel="noopener external noreferrer" href="https://twitter.com/platformos" class="hover:text-interaction-hover transition-colors">
+        <span class="sr-only">platformOS Twitter</span>
+        {% render 'theme/simple/ui/icon', icon: 'twitter' %}
+      </a>
+    </div>
+  </div>
+
+</footer>
+{% endcomment %}

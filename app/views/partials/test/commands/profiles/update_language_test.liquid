@@ -1,0 +1,9 @@
+{% liquid
+  function profile = 'test/fixtures/profile', user_id: "6999"
+  assign params = '{"language": "de"}' | parse_json
+
+  function object = 'lib/commands/profiles/update_language', object: params, profile: profile
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'language', given: object.language, expected: "de"
+%}

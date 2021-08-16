@@ -1,0 +1,24 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.orders.seller
+    - label: app.orders.sales
+---
+
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function filters = 'lib/commands/report_filters/create', object: params
+  hash_assign filters['page'] = filters['page'] | to_positive_integer: 1
+  hash_assign filters['limit'] = 20
+
+  assign default_statuses = 'app.statuses.orders.paid,app.statuses.orders.delivered' | split: ','
+
+  function orders = 'lib/queries/orders/search', limit: filters.limit, page: filters.page, seller: current_profile.id, status: default_statuses, lang: context.language, to: filters.to, from: filters.from
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs, value: orders.total_entries
+  render 'theme/simple/dashboard/sell/sales/list', orders: orders, filters: filters, statuses: default_statuses
+%}

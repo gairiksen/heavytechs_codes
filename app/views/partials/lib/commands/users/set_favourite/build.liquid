@@ -1,0 +1,14 @@
+{% parse_json object %}
+  {
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "fav_id":   {{ fav_id | json }},
+    "fav_for":   {{ fav_for | json }},
+    "fav_uuid":  {{ fav_uuid | json }},
+    "contractor_id": {{ contractor_id | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

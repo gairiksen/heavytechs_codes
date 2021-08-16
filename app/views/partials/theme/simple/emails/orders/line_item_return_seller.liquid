@@ -1,0 +1,75 @@
+<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+    <tbody>
+        <tr>
+            <td style="padding:0; margin:0;" align="center" valign="top" width="100%">
+                <table style="padding: 10px; max-width: 512px;" border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px; color: #fff; border-radius: 8px 8px 0 0;border:none;" align="center" valign="middle" width="100%" bgcolor="#111827">
+                                <a href="#">
+                                    <img src="{{ 'images/logo.png' | asset_url }}" alt="" width="auto" style="margin-bottom: 5px; max-width:100%; display: block; margin: auto;">
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F9FAFB" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#ef4444;margin-bottom:0;">Hi, {{data.first_name}} {{data.last_name}}!</p>
+
+                                <h2 style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:18px;line-height:1.2;font-weight:bold;color:#374151;margin-bottom:15px;">Welcome to Heavy Techs as {{data.profile_for}}!</h2>
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#ef4444;margin-bottom:0;">Thank you for joining our {{data.profile_for}} community.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F3F4F6" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.4;font-weight:bold;color:#1f2937;margin-bottom:0;">You can check our {{data.profile_for}} related topics and FAQ <a href="{{data.host}}/faq" style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.4;font-weight:normal;color:#818cf8;margin-bottom:0;">here</a> for further information.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F9FAFB" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.2;font-weight:normal;color:#374151;margin-bottom:0;"><strong>Heavy Techs</strong> Team</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{%comment%}
+<div class="max-w-lg m-auto">
+    <div class="bg-gray-900 py-5 text-center rounded-t-lg">
+        <img src="{{ 'images/Logo.svg' | asset_url }}" alt="" class="m-auto">
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6">
+        <h2 class="text-gray-700 text-2xl font-extrabold mb-3">Heavy Techs {{data.profile_for}} registration</h2>
+        <span class="block text-base font-normal text-red-500">Hi, {{data.first_name}} {{data.last_name}}!</span>
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6 p-8">
+        <span class="text-gray-700 text-2xl font-extrabold mb-3">Welcome to Heavy Techs as {{data.profile_for}}!</span>
+        <span class="block text-base font-normal text-red-500">Thank you for joining our {{data.profile_for}} community.</span>
+    </div>
+
+    <div class="bg-gray-100 p-8">
+        <h4 class="text-sm text-gray-800 font-bold mb-2 flex flex-wrap whitespace-nowrap">
+            You can check our {{data.profile_for}} related topics and FAQ <a href="{{data.host}}/faq" class="flex items-center text-indigo-400 px-2 hover:underline">here</a> for further information.
+        </h4>
+        
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6 rounded-b-lg">
+        <strong class="text-sm font-bold text-gray-700">Heavy Techs <span class="font-normal">Team</span></strong>
+    </div>
+
+</div>
+{%endcomment%}
+
+{%comment%}
+<h2 class="subtitle">{{ 'app.emails.passwords.reset.title' | t }}</h2>
+
+<p>{{ 'app.emails.passwords.reset.content' | t }}</p>
+<p class="sidenote">{{ 'app.emails.passwords.reset.ignore' | t }}</p>
+
+<p class="mt text-center"><a href="{{ data.url }}" class="button">{{ 'app.emails.passwords.reset.subject' | t }}</a></p>
+{%endcomment%}

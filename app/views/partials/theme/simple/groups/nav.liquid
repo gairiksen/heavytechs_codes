@@ -1,0 +1,32 @@
+<nav class="flex items-center justify-between mb-5 bg-panel sm:flex-row">
+    <div class="flex h-full text-lg">
+      {% assign active_class = 'text-interaction-hover border-b-2 font-medium border-interaction-hover'  %}
+      <a href="{% render 'link_to', group: group %}" class="pt-5 pb-4 px-6 focus:outline-none {% if tab == 'activity' %}{{ active_class }}{% endif %}">
+        {{ 'app.groups.nav.activity' | t }}
+      </a>
+      <a href="{% render 'link_to', group: group, action: 'content' %}" class="pt-5 pb-4 px-6 focus:outline-none {% if tab == 'content' %}{{ active_class }}{% endif %}">
+        {{ group.content_type | t: scope: 'app.groups.form.content_types' | pluralize }}
+      </a>
+      <a href="{% render 'link_to', object: group, action: 'about' %}" class="pt-5 pb-4 px-6 focus:outline-none {% if tab == 'about' %}{{ active_class }}{% endif %}">
+        {{ 'app.groups.nav.about' | t }}
+      </a>
+      <a href="{% render 'link_to', group: group, action: 'members' %}" class="pt-5 pb-4 px-6 focus:outline-none {% if tab == 'members' %}{{ active_class }}{% endif %}">
+        {{ 'app.groups.nav.members' | t }}
+      </a>
+
+      <!--
+      <a href="/groups/{{ group.id }}/invitations" class="pt-5 pb-4 px-6 focus:outline-none {% if tab == 'invitations' %}{{ active_class }}{% endif %}">
+        Invitations
+      </a>
+      -->
+    </div>
+
+    <div class="flex items-center me-3">
+      {% comment %}
+      <!-- TODO: For members show invite button. If secret group, show it only for admins. -->
+      {% render 'theme/simple/groups/invite_button', group: group, current_profile: current_profile %}
+      {% endcomment %}
+
+      {% render 'theme/simple/groups/join_button', group: group, current_profile: current_profile %}
+    </div>
+  </nav>

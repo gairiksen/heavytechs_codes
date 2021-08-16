@@ -1,0 +1,30 @@
+{% liquid
+  if object.id
+    assign method = 'put'
+  else
+    assign method = 'post'
+  endif
+%}
+<div class="container flex flex-wrap mx-auto groups-center">
+  <form action="/admin/tags" method="post" class="w-full md:w-2/3">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="_method" value="{{method}}" />
+
+    {% if object.id %}
+      <input type="hidden" name="tag[id]" value="{{ object.id }}" />
+    {% endif %}
+
+    <div class="mt-5">
+      <label class="block" for="name">{{ 'app.tags.attr.name' | t }}</label>
+      <input class="w-2/3 form-input" type="text" id="name" name="tag[name]" value="{{ object.name }}" autofocus required />
+      {% render 'theme/simple/field_error', errors: object.errors.name %}
+    </div>
+    <div class="mt-5">
+      <label class="block" for="disabled_at">{{ 'app.tags.attr.disabled_at' | t }}</label>
+      <input class="w-2/3 form-input" type="text" id="disabled_at" name="tag[disabled_at]" value="{{ object.disabled_at }}" autofocus />
+      {% render 'theme/simple/field_error', errors: object.errors.disabled_at %}
+    </div>
+
+    <button class="mt-8 button">{{ 'app.models.shared.submit' | t }}</button>
+  </form>
+</div>

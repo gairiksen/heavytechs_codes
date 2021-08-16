@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/addresses/create/build', object: object
+  function object = 'lib/commands/addresses/create/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: 'addresses/create' object: object, selection: 'record_create'
+  endif
+
+  return object
+%}

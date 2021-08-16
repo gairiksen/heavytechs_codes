@@ -1,0 +1,30 @@
+mutation create_item(
+  $category: String
+  $price: Int!
+  $return_days: Int!
+  $currency: String!
+  $uuid: String!
+  $item_inventory_id: ID!
+) {
+  model_create(
+    model: {
+      model_schema_name: "item"
+      properties: [
+        { name: "item_inventory_id", value: $item_inventory_id }
+        { name: "uuid", value: $uuid }
+        { name: "category", value: $category }
+        { name: "price", value_int: $price }
+        { name: "return_days", value_int: $return_days }
+        { name: "currency", value: $currency }
+      ]
+    }
+  ) {
+    id
+    price: property(name: "price")
+    return_days: property_int(name: "return_days")
+    currency: property(name: "currency")
+    uuid: property(name: "uuid")
+    category: property(name: "category")
+    slug: property(name: "slug")
+  }
+}

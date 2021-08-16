@@ -1,0 +1,11 @@
+{% comment %} Set the site's default currency to USD {% endcomment %}
+
+{% graphql r %}
+mutation set_currency {
+  currency: constant_set(name: "CURRENCY", value: "USD"){
+    name
+    value
+  }
+}
+{% endgraphql %}
+{% log r, type: 'migrations/set_default_currency' %}

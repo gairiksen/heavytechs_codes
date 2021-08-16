@@ -1,0 +1,14 @@
+{% liquid
+  if id == blank
+    log 'Something went wrong. ID cannot be blank.', type: 'ERROR'
+    return null
+  endif
+  if profile_id == blank
+    log 'Something went wrong. Profile cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  graphql r  = 'organization_reviews/search', id: id, profile_id: profile_id, limit: 1, with_organization: true
+
+  return r.organization_reviews.results.first
+%}

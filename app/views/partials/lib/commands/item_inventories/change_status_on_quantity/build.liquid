@@ -1,0 +1,15 @@
+{% liquid
+  assign data = '{}' | parse_json
+  hash_assign data['id'] = item_inventory.id
+  hash_assign data['old_quantity'] = item_inventory.quantity
+  hash_assign data['new_quantity'] = object.quantity
+  hash_assign data['valid'] = true
+
+  if data.old_quantity == 0 and data.new_quantity > 0
+    hash_assign data['status_name'] = 'app.statuses.items.published'
+  elsif data.new_quantity == 0 and data.old_quantity > 0
+    hash_assign data['status_name'] = 'app.statuses.items.unavailable'
+  endif
+
+  return data
+%}

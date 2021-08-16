@@ -1,0 +1,21 @@
+{%liquid
+    function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+    assign fav_id = context.params.fav_id
+    assign fav_for = context.params.fav_for
+
+    graphql r = 'profiles/remove_favourite', id: context.params.id 
+
+
+    if fav_for == 'mechanic'
+        assign redirect_url = '/find_mechanic/details?m_id=' | append: fav_id
+        assign message = "This mechanic has been removed from your favorite list successfully."
+    endif
+
+    if fav_for == 'project'
+        assign redirect_url = '/find_project/details?p_id=' | append: fav_id
+        assign message = "This project has been removed from your favorite list successfully."
+    endif
+
+    include 'redirect_to', url: redirect_url, notice: message
+%}

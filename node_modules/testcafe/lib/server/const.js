@@ -1,0 +1,3 @@
+exports.RECORDER_JOB_OWNER_TOKEN = "r";
+
+exports.TEST_RUNNER_JOB_OWNER_TOKEN = "t";

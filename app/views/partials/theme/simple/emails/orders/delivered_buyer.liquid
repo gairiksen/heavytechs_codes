@@ -1,0 +1,144 @@
+<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+    <tbody>
+        <tr>
+            <td style="padding:0; margin:0;" align="center" valign="top" width="100%">
+                <table style="padding: 10px; max-width: 512px;" border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px; color: #fff; border-radius: 8px 8px 0 0;border:none;" align="center" valign="middle" width="100%" bgcolor="#111827">
+                                <a href="#">
+                                    <img src="{{ 'images/logo.png' | asset_url }}" alt="" width="auto" style="margin-bottom: 5px; max-width:100%; display: block; margin: auto;">
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F9FAFB" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <h2 style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:18px;line-height:1.2;font-weight:bold;color:#374151;margin-bottom:15px;">New Message from Heavy Techs Team</h2>
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;margin-bottom:0;">Hi, {{data.recipient_first_name}} {{data.recipient_last_name}}!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F3F4F6" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <h3 style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.2;font-weight:bold;color:#1f2937;margin-bottom:15px;">{{data.sender_first_name}} {{data.sender_last_name}} sent you a message.</h3>
+
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:11px;line-height:1.4;font-weight:normal;color:#1f2937;margin-bottom:0;">{{data.message_safe}}</p>
+
+                                {%comment%}
+                                <button style="background-color:#E7601A;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1;font-weight:normal;color:#ffffff;padding:16px 24px;margin-bottom:16px;border-radius:999px;border:none;">Open message</button>
+                                {%endcomment%}
+
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:11px;line-height:1.4;font-weight:bold;color:#1f2937;margin-bottom:0;">Click here
+                                    <a href="{{data.host}}/inbox" style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:11px;line-height:1.4;font-weight:normal;color:#818cf8;">Link</a> to check it</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F9FAFB" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.2;font-weight:normal;color:#374151;margin-bottom:0;"><strong>Heavy Techs</strong> Team</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{%comment%}
+{% liquid
+  assign buyer = data.order.buyer
+  assign order = data.order
+  assign shipped_at = order.order_delivery.status.created_at | l
+  assign pickup_until = order.order_delivery.status.created_at | l: 'day_month_year'
+  function seller_url = 'link_to', organization: order.seller
+%}
+
+<p>
+  {{ 'app.emails.orders.delivered.buyer.greeting' | t: first_name: buyer.first_name, last_name: buyer.last_name }}<br/>
+  {% if order.shipping_type == 'personal_pickup' %}
+    {{ 'app.emails.orders.delivered.buyer.info_personal_pickup' | t: pickup_address: 'Yellow street 14', pickup_until: pickup_until, opening_hours: '8 – 16' }}
+  {% elsif order.shipping_type == 'delivery' %}
+    {{ 'app.emails.orders.delivered.buyer.info_delivery' | t: shipped_at: shipped_at, delivery_time: '7 days' }}
+  {% endif %}
+</p>
+
+<p>
+  {{ 'app.emails.orders.delivered.buyer.merchant_provided_info' | t}}:<br>
+  {{ order.order_delivery.delivery_information }}
+</p>
+
+
+<div class="mt border"></div>
+
+
+<h2 class="mt subtitle">{{ 'app.emails.orders.delivered.buyer.order_summary' | t }}</h2>
+
+<div class="mt">
+  <b>{{ order.seller.name }}</b> (<a href="{{ seller_url }}">{{ 'app.emails.orders.delivered.buyer.contact_link' | t: name: order.seller.name }}</a>)<br>
+  <span class="sidenote">{{ 'app.emails.orders.delivered.buyer.order_id' | t }}: {{ order.id }}</span>
+</div>
+
+<table cellspacing="0" class="mt-2 w-full">
+  {% for item in order.line_items %}
+    <tr>
+      <td>
+        {% function cover_url = 'theme/simple/items/cover_url', item: item.item %}
+        {% if cover_url %}
+            <img src="{{ cover_url }}" width="80" class="w-20 rounded">
+        {% endif %}
+      </td>
+      <td class="table-spacing"></td>
+      <td>{{ item.item.item_detail.name }}</td>
+      <td class="table-spacing"></td>
+      <td class="text-right">{{ item.quantity }}</td>
+      <td class="table-spacing"></td>
+      <td class="text-right">{% render 'theme/simple/price', amount_cents: item.total_price_cents, currency: item.currency %}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<div class="mt-2">
+  <i>{{ 'app.emails.orders.delivered.buyer.delivery' | t }}</i>:<br>
+  {{ 'app.models.orders.form.shipping_type_' | append: order.shipping_type | t }} – {% render 'theme/simple/price', amount_cents: order.total_shipping_cost_cents, currency: order.currency %}<br>
+  {% render 'theme/simple/emails/delivery', shipping_address: order.shipping_address, pickup_point: data.order.shipping_pickup_point %}
+</div>
+
+
+<div class="mt border"></div>
+
+
+<h2 class="mt subtitle">{{ 'app.emails.orders.delivered.buyer.order_total' | t }}</h2>
+<table cellspacing="0">
+  <tr>
+    <td>{{ 'app.emails.orders.delivered.buyer.subtotal' | t }}:</td>
+    <td class="table-spacing"></td>
+    <td>{% render 'theme/simple/price', amount_cents: order.products_price_cents, currency: order.currency %}</td>
+  </tr>
+  <tr>
+    <td>{{ 'app.emails.orders.delivered.buyer.delivery' | t }}:</td>
+    <td class="table-spacing"></td>
+    <td>{% render 'theme/simple/price', amount_cents: order.total_shipping_cost_cents, currency: order.currency %}</td>
+  </tr>
+  <tr>
+    <td><b>{{ 'app.emails.orders.delivered.buyer.total_price' | t }}:</b></td>
+    <td class="table-spacing"></td>
+    <td>{% render 'theme/simple/price', amount_cents: order.total_price_cents, currency: order.currency %}</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>{{ 'app.emails.orders.delivered.buyer.payment_method' | t }}:</td>
+    <td class="table-spacing"></td>
+    <td>{{ 'app.orders.payment_types.' | append: order.payment_type | t }}</td>
+  </tr>
+</table>
+
+
+<div class="mt border"></div>
+
+<p class="mt">
+  <a href="{{ seller_url }}">{{ 'app.emails.orders.delivered.buyer.contact_info' | t: name: order.seller.name }}</a>
+</p>
+{%endcomment%}

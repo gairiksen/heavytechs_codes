@@ -1,0 +1,11 @@
+{% liquid
+  function order = 'lib/queries/orders/find', id: order_id
+  function line_items_returns = 'lib/queries/line_item_returns/search', order_id: order.id, status: 'app.statuses.line_item_returns.returned', limit: 100
+  assign total_returned_quantity = line_items_returns.results | map: 'quantity' | sum_array
+
+  if order.total_quantity == total_returned_quantity and total_returned_quantity > 0
+    function status = 'lib/commands/statuses/create', profile_id: order.seller.id, object_id: order.id, name: 'app.statuses.orders.returned', scope: 'app.statuses.orders'
+    include 'lib/commands/events/create', type: 'status_created', actor_id: order.seller.id, object_id: status.id, target_id: status.object_id
+  endif
+  return true
+%}

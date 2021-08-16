@@ -1,0 +1,39 @@
+---
+slug: users
+method: post
+---
+{% liquid
+
+  if context.params.profile.profile_for != 'contractor' and context.params.profile.profile_for != 'mechanic'
+     include 'redirect_to', url: '/'
+  endif
+
+  include 'lib/anonymous_or_redirect', user: context.current_user
+  function object = 'lib/commands/users/create', object: context.params.user, profile: context.params.profile, hcaptcha_params: context.params
+
+  if object.valid
+    function profile_object = 'lib/commands/profiles/create_or_convert_anonymous/build', object: context.params.profile, user: object, session: context.session
+    function profile = 'lib/commands/profiles/create_or_convert_anonymous', object: profile_object
+
+    if profile.valid == false
+      log profile, type: 'ERROR: users/create profile'
+      break
+    endif
+
+    function email = 'lib/commands/emails/registration', object: context.params.profile, user_object: context.params.user, host: context.location.host
+
+    assign url = context.session.return_to | default: '/dashboard'
+    include 'lib/commands/events/create', type: 'account_created', actor_id: profile.id, object_id: profile.id
+
+    function last_login = 'lib/commands/profiles/last_login', profile_id: profile.id
+
+    if context.params.profile.profile_for == 'mechanic'
+      function sp_object = 'lib/commands/mechanic_availability/create_search_params', user_id: object.id
+    endif
+
+    sign_in_rc user_id: object.id
+    include 'redirect_to', url: url, notice: 'app.account.created'
+  else
+    include 'theme/simple/users/new', object: object, profile_for: context.params.profile.profile_for
+  endif
+%}

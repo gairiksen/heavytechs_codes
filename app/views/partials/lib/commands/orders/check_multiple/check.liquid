@@ -1,0 +1,18 @@
+
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  for order in object.orders.results
+    assign order_object = order
+    function order_object = 'lib/commands/orders/check/check', object: order_object, order: order
+
+    if order_object.valid == false
+      hash_assign c['valid'] = false
+    endif
+  endfor
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}

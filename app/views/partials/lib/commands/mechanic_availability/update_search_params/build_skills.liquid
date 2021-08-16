@@ -1,0 +1,61 @@
+{% parse_json geo_location %}
+{
+  "type": "Point",
+  "coordinates": [
+    {{sm_params.longitude}},
+    {{sm_params.latitude}}   
+  ]
+}
+{% endparse_json %}
+
+{% parse_json object %}
+  {
+    "id":                 {{ sm_params.id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "distance":      {{ sm_params.ready_for_travel | json }},
+    "mechanic_name":      {{ sm_params.company_name | json }},
+    "company_name":      {{ sm_params.company_name | json }},
+    "position":      {{ sm_params.position | json }},
+    "short_description":      {{ sm_params.short_description | json }},
+    "description":      {{ sm_params.long_description | json }},  
+    "type_of_job":      {{ sm_params.type_of_job | json }},
+    "area_of_expertise":      {{ sm_params.area_of_expertise | json }},
+    "availability":      {{ sm_params.availability | json }},
+    "total_experience":      {{ sm_params.total_experience | json }},
+    "earthworks":      {{ object.earthworks | json }},
+    "mining":      {{ object.mining | json }},
+    "fleet":      {{ object.fleet | json }},
+    "pipeline":      {{ object.pipeline | json }},
+    "paving":      {{ object.paving | json }},
+    "energy_production":      {{ object.energy_production | json }},
+    "heavy_equipment_mechnic":      {{ object.heavy_equipment_mechnic | json }},
+    "truck_mechanic":      {{ object.truck_mechanic | json }},
+    "welder_fabricator":      {{ object.welder_fabricator | json }},
+    "oilers_pm_tech":      {{ object.oilers_pm_tech | json }},
+    "caterpillar":      {{ is_caterpillar | json }},
+    "john_deere":      {{ is_john_deere | json }},
+    "hitachi":      {{ is_hitachi | json }},
+    "volvo":      {{ is_volvo | json }},
+    "komatsu":      {{ is_komatsu | json }},
+    "bobcat":      {{ is_bobcat | json }},
+    "other":      {{ is_other | json }},
+    "insurance_coverage":      {{ is_insurance | json }},
+    "oem":      {{ is_oem | json }},
+    "ase":      {{ sm_params.ase | json }},
+    "osha":      {{ sm_params.osha | json }},
+    "msha":      {{ sm_params.msha | json }},
+    "truck_type":      {{ sm_params.truck_type | json }},
+    "object_uuid":      {{ object_uuid | json }},
+    "user_name":      {{ user_name | json }},
+    "percent_complete":      {{ '50' | json }},
+    "location":      {{ sm_params.location | json }},
+    "latitude":      {{ sm_params.latitude | json }},
+    "longitude":      {{ sm_params.longitude | json }},
+    "geo_location": {{geo_location}}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

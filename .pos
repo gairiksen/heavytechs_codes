@@ -1,0 +1,12 @@
+{
+  "staging": {
+    "url": "https://heavytechs.staging.oregon.platform-os.com/",
+    "token": "J3f18ufc2QD58YEO06-XCxIVEDS5Ndng9JB-IPs8-aY",
+    "email": "gairik.sen@indusnet.co.in"
+  },
+  "production": {
+    "url": "https://heavytechs.prod01.oregon.platform-os.com/",
+    "token": "WVnBlqC5QitVQ_a_23FTRRNsjStPwS_3f2jhIpNY5VA",
+    "email": "gairik.sen@indusnet.co.in"
+  }
+}

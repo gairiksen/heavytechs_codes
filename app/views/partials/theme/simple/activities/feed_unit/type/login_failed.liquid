@@ -1,0 +1,2 @@
+{% assign meta = payload.object | escape %}
+{{ payload.type | t: meta: meta, scope: 'app.activities.types' }}

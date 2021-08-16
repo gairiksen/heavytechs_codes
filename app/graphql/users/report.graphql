@@ -1,0 +1,14 @@
+query report(
+  $limit: Int = 999
+  $from: String!
+  $to: String!
+) {
+  users(
+    per_page: $limit
+    filter: {
+      created_at: { lte: $to, gte: $from }
+    }
+  ){
+    total_entries
+  }
+}

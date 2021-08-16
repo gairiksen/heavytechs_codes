@@ -1,0 +1,39 @@
+<article class="flex flex-col">
+  <div class="bg-panel rounded shadow">
+    {% if object.photo %}
+      <a class="block w-full h-64 overflow-hidden rounded-tl rounded-tr" href="{{ object.url }}">
+        <img alt="{{ object.name | default: object.id | truncate: 120 }}" class="block object-cover object-center w-full h-full" src="{{ object.photo.url.versions.small }}">
+      </a>
+    {% elsif target.photo %}
+      <a class="block w-full h-64 overflow-hidden rounded-tl rounded-tr" href="{{ target.url }}">
+        <img alt="{{ target.name | default: object.id | truncate: 120 }}" class="block object-cover object-center w-full h-full" src="{{ target.photo.url.versions.small }}">
+      </a>
+    {% endif %}
+
+    <div class="p-4">
+      {% comment %}
+        FIX: Properly instead of this monster ;)
+        For "People posting" `target` is present, but for "People gathering" (groups)
+        `target` is missing, but `object` is populated.
+      {% endcomment %}
+      {% assign obj = target | default: object %}
+      <h2 class="text-lg font-medium">
+        <a href="{% render 'link_to', object: obj %}">{{ obj.name }}</a>
+      </h2>
+
+      <p class="mt-2 break-all">
+        {% liquid
+          assign comment_body_formatted = object.body | default: object.description | default: object.bio | markdown: '{ "elements": ["b","strong","i","em","a","code", "pre"], "attributes":{ "a": ["href"] } }'
+          echo comment_body_formatted | truncatewords: 15
+        %}
+      </p>
+    </div>
+
+    <div class="flex items-center p-4 flex-end ml-auto mt-auto">
+      <div class="sidenote">
+        {% render 'theme/simple/business_card', user: actor, current_profile: current_profile %}
+      </div>
+    </div>
+  </div>
+
+</article>

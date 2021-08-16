@@ -1,0 +1,13 @@
+{% liquid
+  if id == blank
+    log 'Something went wrong. ID cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  assign lang = lang | default: context.language
+  graphql r = 'orders/search', id: id, limit: 1, buyer: buyer, status: status, seller: seller, lang: lang
+  include 'lib/handle_graphql_response', r: r, name: 'queries/orders/search'
+
+  function orders = 'lib/commands/orders/recalculate/build', object: r.orders
+  return orders.results.first
+%}

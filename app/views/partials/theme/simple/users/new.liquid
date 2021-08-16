@@ -1,0 +1,12 @@
+<section class="my-10 container items-center">
+  <!--<h2 class="bigtitle text-center">{{ 'app.users.create_account' | t }}</h2>-->
+  {%comment%}
+  {%liquid
+  if context.params.profile != 'contractor' and context.params.profile != 'mechanic' and profile_for != 'contractor' and contractor != 'mechanic'
+     include 'redirect_to', url: '/'
+  endif
+  %}
+  {%endcomment%}
+
+  {% include 'theme/simple/users/form' %}
+</section>

@@ -1,0 +1,24 @@
+mutation update_transaction(
+  $id: ID!
+  $c__status: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "transaction"
+      properties: [
+        { name: "c__status" value: $c__status }
+      ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+      profile_id: property(name: "profile_id")
+      order_ids: property_array(name: "order_ids")
+      amount: property_int(name: "amount")
+      currency: property(name: "currency")
+      gateway: property(name: "gateway")
+      c__status: property(name: "c__status")
+    }
+}

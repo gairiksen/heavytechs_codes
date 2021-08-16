@@ -1,0 +1,35 @@
+mutation create( 
+    $uuid: String!
+    $user_id: String!
+    $oem_name: String!
+    $expert_familiar: String!
+    $cert_name: String!
+    $is_custom: String!
+    
+) {
+  model_create(
+    model: {
+      model_schema_name: "profile_oem"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "oem_name" value: $oem_name }
+        { name: "expert_familiar" value: $expert_familiar }
+        { name: "cert_name" value: $cert_name } 
+        { name: "is_custom" value: $is_custom } 
+             
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    oem_name: property(name: "oem_name")
+    expert_familiar: property(name: "expert_familiar")
+    cert_name: property(name: "cert_name")
+    is_custom: property(name: "is_custom")
+
+  }
+}

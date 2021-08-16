@@ -1,0 +1,7 @@
+{% liquid
+  assign lang = lang | default: context.language
+  graphql r = 'item_details/search', limit: limit, page: 1, item_id: item_id, lang: lang
+  include 'lib/handle_graphql_response', r: r, name: 'queries/item_details/search'
+
+  return r.item_details
+%}

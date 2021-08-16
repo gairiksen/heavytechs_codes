@@ -1,0 +1,24 @@
+<table class="table w-full text-sm table-auto">
+  <thead>
+    <tr>
+      <th class="text-lg font-normal text-left">{{ 'app.categories.attr.key' | t }}</th>
+      <th class="text-lg font-normal text-left">{{ 'app.categories.attr.name' | t }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in list.results %}
+      <tr>
+        <td class="text-left">
+          {{ record.key }}
+        </td>
+        <td class="text-left">
+          <a href="{% render 'link_to', category: record.key %}">
+            {{ 'categories.' | append: record.key | t }}
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+

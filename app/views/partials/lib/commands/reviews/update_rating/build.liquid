@@ -1,0 +1,11 @@
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "c__rating_score": {{ object.c__rating_score | json }},
+    "c__rating_count": {{ object.c__rating_count | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/item_inventories/update/build', object: object, item_inventory: item_inventory
+  function object = 'lib/commands/item_inventories/update/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: 'item_inventories/update' object: object, selection: 'record_update'
+  endif
+
+  return object
+%}

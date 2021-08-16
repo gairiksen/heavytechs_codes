@@ -1,0 +1,63 @@
+<a class="inline-flex items-center underline gap-1" href="/dashboard/reviews/organizations">
+  {% render 'theme/simple/ui/icon', icon: 'dashLeft' %}
+  {{'app.reviews.header.title' | t }}
+</a>
+
+<div class="mt-12 mb-8 pb-8 flex items-center border-b-2">
+  {% if organization.logo.photo.versions.tiny %}
+  <img width="80" src="{{ organization.logo.photo.versions.tiny }}" alt="" class="w-20 me-5 rounded">
+  {% else %}
+    {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+  {% endif %}
+  <h2 class="bigtitle !mt-0">
+    {{ organization.name }}
+  </h2>
+</div>
+
+<form action="/dashboard/reviews/organizations/{{object.id}}" method="POST">
+  {% render 'authenticity_token', context: context %}
+  <input type="hidden" name="_method" value="put">
+  <input type="hidden" name="organization_review[id]" value="{{ object.id }}" />
+  <input type="hidden" name="organization_review[organization_id]" value="{{ object.organization_id }}" />
+  <h3 class="subtitle !font-bold">
+    {{'app.reviews.organizations.new.would_you_recommend' | t }}
+  </h3>
+  <div class="card mb-5 py-6">
+    {% render 'theme/simple/dashboard/reviews/thumb_up_down_input', input_name: 'organization_review[recommend]' %}
+    {% render 'theme/simple/field_error', errors: object.errors.recommend %}
+  </div>
+
+  <h3 class="subtitle !font-bold">
+    {{'app.reviews.organizations.new.how_do_you_rate_purchase' | t }}
+  </h3>
+  <div class="card mb-5">
+    <div class="flex items-center justify-between">
+      <fieldset data-tc="compilance-rating">
+        {{'app.reviews.organizations.new.compliance_description' | t }}
+        {% render 'theme/simple/dashboard/reviews/stars_input', input_name: "organization_review[description_score]", value: object.description_score %}
+        {% render 'theme/simple/field_error', errors: object.errors.description_score %}
+      </fieldset>
+      <fieldset data-tc="delivery-rating">
+        {{'app.reviews.organizations.new.shipping_cost' | t }}
+        {% render 'theme/simple/dashboard/reviews/stars_input', input_name: "organization_review[delivery_score]", value: object.delivery_score %}
+        {% render 'theme/simple/field_error', errors: object.errors.delivery_score %}
+      </fieldset>
+      <fieldset data-tc="service-rating">
+        {{'app.reviews.organizations.new.buyer_service' | t }}
+        {% render 'theme/simple/dashboard/reviews/stars_input', input_name: "organization_review[service_score]", value: object.service_score %}
+        {% render 'theme/simple/field_error', errors: object.errors.service_score %}
+      </fieldset>
+    </div>
+
+    <fieldset class="mt-6">
+      <textarea name="organization_review[body]" class="w-full p-2 outline-none" rows="3" placeholder="{{'app.reviews.organizations.new.body_placeholder' | t }}" autofocus>{{object.body}}</textarea>
+      {% render 'theme/simple/field_error', errors: object.errors.body %}
+    </fieldset>
+
+  </div>
+  <div class="text-end">
+    <button class="ms-auto button">
+      {{'app.reviews.organizations.new.submit' | t }}
+    </button>
+  </div>
+</form>

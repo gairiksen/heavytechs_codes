@@ -1,0 +1,25 @@
+<header class="mt-2.5 mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'users', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ profile.first_name | append: ' ' | append: profile.last_name }}
+  </h2>
+</header>
+
+<div class="grid md:grid-cols-2 text-sm mb-6 pb-7 border-b">
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.profiles.username' | t }}</div>
+    <div class="px-4 py-2">{{profile.name}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.profiles.first_name' | t }}</div>
+    <div class="px-4 py-2">{{profile.first_name}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.profiles.last_name' | t }}</div>
+    <div class="px-4 py-2">{{profile.last_name}}</div>
+  </div>
+  <div class="grid grid-cols-2">
+    <div class="px-4 py-2 font-semibold">{{ 'app.users.attr.email' | t }}</div>
+    <div class="px-4 py-2">{{profile.user.email }}</div>
+  </div>
+</div>

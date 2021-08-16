@@ -1,0 +1,6 @@
+{% include 'lib/commands/activities/publish', uuid: event.uuid, type: "system", ids: "1" %}
+
+{% liquid
+  function audience = 'lib/queries/activities/returns/audience', id: event.object.id
+  render 'lib/commands/activities/publish_to_many', uuid: event.uuid, audience: audience, meta: event.type
+%}

@@ -1,0 +1,112 @@
+{% liquid
+  assign type = type | default: object.type
+  if type
+    case type
+    when 'group'
+      assign group = object
+    when 'profile'
+      assign profile = object
+    when 'organization'
+      assign organization = object
+    when 'item'
+      assign item = object
+    when 'category'
+      assign category = object
+    when 'comment'
+      assign comment = object
+    when 'post'
+      assign post = object
+    when 'seller_order'
+      assign seller_order = object
+    when 'buyer_order'
+      assign buyer_order = object
+    when 'order'
+      assign order = object
+    when 'line_item_return'
+      assign line_item_return = object
+    endcase
+  endif
+
+  if group
+    assign url = '/groups/' | append: group.id
+    if action
+      assign url = url | append: '/' | append: action
+    endif
+
+    print url
+    return url
+  endif
+
+  if profile
+    print "/profile/" | append: profile.slug
+    return "/profile/" | append: profile.slug
+  endif
+
+  if organization
+    print "/o/" | append: organization.slug
+    return "/o/" | append: organization.slug
+  endif
+
+  if item
+    function slug = 'generate_slug', title: item.item_detail.name, id: item.id
+    print "/items/" | append: slug
+    return "/items/" | append: slug
+  endif
+
+  if category
+    print "/categories/" | append: category
+    return "/categories/" | append: category
+  endif
+
+  if comment
+    print comment.url
+    return comment.url
+  endif
+
+  if seller_order
+    print "/dashboard/sell/orders/" | append: seller_order.id
+    return "/dashboard/sell/orders/" | append: seller_order.id
+  endif
+
+  if buyer_order
+    print "/dashboard/buy/orders/" | append: buyer_order.id
+    return "/dashboard/buy/orders/" | append: buyer_order.id
+  endif
+
+  if order
+    if current_profile.type == 'organization'
+      print "/dashboard/sell/orders/" | append: order.id
+      return "/dashboard/sell/orders/" | append: order.id
+    else
+      print "/dashboard/buy/orders/" | append: order.id
+      return "/dashboard/buy/orders/" | append: order.id
+    endif
+  endif
+
+  if line_item_return
+    if current_profile.type == 'organization'
+      print "/dashboard/sell/line_item_returns/" | append: line_item_return.id
+      return "/dashboard/sell/line_item_returns/" | append: line_item_return.id
+    else
+      print "/dashboard/buy/line_item_returns/" | append: line_item_return.id
+      return "/dashboard/buy/line_item_returns/" | append: line_item_return.id
+    endif
+  endif
+
+  if post
+    function slug = 'generate_slug', title: post.title, id: post.id
+    assign url = "/groups/" | append: post.group_id |  append: "/content/" | append: slug
+
+    if action
+      assign url = url | append: '/' | append: action
+    endif
+    if anchor
+      assign url = url | append: '#post-' | append: anchor
+    endif
+    print url
+    return url
+  endif
+  log object, type: 'unknown-model-when-generating-url'
+  print "/unknown/"
+  return "/unknown-object"
+%}

@@ -1,0 +1,12 @@
+---
+slug: dashboard/reviews/organizations/:id/edit
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_anonymous: true
+
+  function review = 'lib/queries/organization_reviews/find_by_profile', id: context.params.id, profile_id: current_profile.id
+  include 'lib/can_do_or_unauthorized', object: review, do: "fill", actor: current_profile
+
+  render 'theme/simple/dashboard/reviews/organizations/form', object: review, organization: review.organization, context: context
+%}

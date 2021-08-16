@@ -1,0 +1,18 @@
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'id'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'name'
+  if object.shipping_types contains 'delivery'
+    function c = 'lib/validations/presence', c: c, object: object, field_name: 'delivery_fee'
+    function c = 'lib/validations/number', c: c, object: object, field_name: 'delivery_fee', greater_than_or_equal: 0
+  endif
+  if object.shipping_types contains 'personal_pickup'
+    function c = 'lib/validations/presence', c: c, object: object, field_name: 'offline_stores'
+  endif
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}

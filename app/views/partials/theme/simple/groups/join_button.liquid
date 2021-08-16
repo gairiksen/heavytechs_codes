@@ -1,0 +1,36 @@
+{% function can = "lib/can", actor: current_profile, do: "join", object: group %}
+{% liquid
+  assign group_id = group.id | append: ''
+  assign ids = current_profile.joined_group_ids | map: 'id'
+  assign member = false
+
+  if ids contains group_id
+    assign member = true
+  endif
+%}
+
+{% if can.valid or member %}
+
+<form action="#"
+  x-data="relationship()" x-init="exists = {{ member }}" x-on:submit.prevent
+  method="post">
+  <input type="hidden" name="l_id" value="{{ current_profile.id }}">
+  <input type="hidden" name="r_id" value="{{ group.id }}">
+  <input type="hidden" name="name" value="membership">
+
+  <button class="button button-primary"
+    x-on:click="toggle()"
+    x-cloak
+    x-show="!exists">
+    {{ 'app.groups.join' | t }}
+  </button>
+
+  <button class="button button-secondary"
+    x-on:click="toggle()"
+    x-cloak
+    x-show="exists">
+    {{ 'app.groups.leave' | t }}
+  </button>
+</form>
+
+{% endif %}

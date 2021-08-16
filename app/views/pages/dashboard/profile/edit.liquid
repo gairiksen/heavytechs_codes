@@ -1,0 +1,14 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  graphql presigned_url = 'photos/presign' | dig: 'presigned'
+
+  function profile_availability = 'lib/queries/mechanic_availability/find', user_id: context.current_user.id, current_profile: current_profile
+
+  assign err_update_email = context.params.err_update_email | default: ''
+
+  function search_mechanic_deatils = 'lib/queries/mechanic/details', user_id: context.current_user.id
+
+  render 'theme/simple/dashboard/profile/edit', object: current_profile, presigned_url: presigned_url, context: context, profile_availability: profile_availability, err_update_email: err_update_email, search_mechanic_deatils: search_mechanic_deatils
+%}

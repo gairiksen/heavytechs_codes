@@ -1,0 +1,12 @@
+<label for="group[content_type][{{ content_type }}]" class="flex flex-wrap items-center cursor-pointer">
+
+  <input type="radio"
+    id="group[content_type][{{ content_type }}]"
+    name="group[content_type]"
+    value="{{ content_type }}"
+    x-on:change="content_type = '{{ content_type }}'"
+    {% if group.content_type == blank or group.content_type == content_type %}checked{% endif %}
+  >
+
+  <p class="my-2 ms-2">{{ content_type | titleize }}</p>
+</label>

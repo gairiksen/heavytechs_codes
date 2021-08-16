@@ -1,0 +1,21 @@
+{% liquid
+
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  assign contractor_profile_id = context.params.id
+
+  function filters = 'lib/commands/report_filters/create', object: context.params
+  function report = 'lib/commands/reports/create', filters: filters
+
+  function records = 'lib/queries/contractor/search_details', keyword: context.params.qkeyword, limit: 15, lang: context.language, contractor_profile_id: contractor_profile_id
+
+  function user_details = 'lib/queries/users/find', id: records.results[0].user_id
+
+  assign this_page = 'contractor_details' | default: ''
+%}
+{%
+
+  render 'theme/simple/admin/contractor/details', report: report, filters: filters, records: records, contractor_details: user_details, this_page: this_page
+%}

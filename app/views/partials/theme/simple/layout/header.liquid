@@ -1,0 +1,391 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>index</title>-->
+<!--<link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">-->
+<!--<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">-->
+<!--<link rel="stylesheet" href="/css/tailwind.css">-->
+<!-- <link rel="stylesheet" href="build/tailwind.css"> -->
+<!--<link rel="stylesheet" href="https://uploads.staging.oregon.platform-os.com/instances/5645/assets/css/app.css?updated=1621315826">-->
+
+<!--<link rel="stylesheet" href="css/custom.css">-->
+
+
+<!--<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>-->
+
+<!--</head>-->
+{% liquid
+  if profile and profile.user_id != blank
+    assign registered_profile = true
+    function profile_url = 'link_to', profile: profile
+  endif
+
+%}
+<body>
+    {% if context.location.pathname == '/' %}
+    <div x-data="{ atTop : true }">
+    {% else %}
+    <div x-data="{ atTop : true }" class="h-20 innerHeader bg-white">
+    {% endif %}
+        <div class="header fixed w-full z-10 py-3.5"
+        :class="{'bg-white shadow-md headerFixed' : !atTop}"
+        @scroll.window="atTop = (window.pageYOffset > 20) ? false : true"><!--header-->
+            <div class="container mx-auto px-3.5 flex justify-start items-center lg:justify-between"
+            x-data="{isOpen: false}">
+                {%comment%}
+                <div class="mobileNav mr-4 lg:hidden">
+                    <a href="javascript:void(0)" @click="isOpen = !isOpen" >
+                        <img class="h-7" src="{{ 'images/mobile-nav.png' | asset_url }}" alt="">
+                    </a>
+                </div>
+                {%endcomment%}
+                <div class="mobileNav mr-4 lg:hidden">
+                    <!-- <a href="javascript:void(0)" @click="isOpen = !isOpen" >
+                        <img class="h-7" src="images/mobile-nav.png" alt="">
+                    </a> -->
+
+                    {% if context.location.pathname == '/' %}
+                    <a href="javascript:void(0)" class="text-white white-logo" @click="isOpen = !isOpen">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                          </svg>
+                    </a>
+
+                    <a href="javascript:void(0)" class="text-gray-800 black-logo" @click="isOpen = !isOpen">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                          </svg>
+                    </a>
+                    {%else%}
+
+                    <a href="javascript:void(0)" class="text-gray-800" @click="isOpen = !isOpen">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-11 h-11" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </a>
+
+                    {%endif%}
+
+                    
+                    
+                </div>
+
+                <div class="logo">
+                    <a href="/"><img src="{{ 'images/Logo.svg' | asset_url }}" alt=""></a>
+                    <a href="/" class="hidden"><img src="{{ 'images/footer-logo.svg' | asset_url }}" alt=""></a>
+                </div>
+
+                <div 
+                class="fixed h-full items-center w-full left-0 bg-gray-600 top-16 p-6 hidden lg:p-0 lg:flex lg:justify-between lg:w-2/3 lg:relative lg:top-0 lg:bg-transparent"
+                :aria-expanded="isOpen ? 'true' : 'false'" :class="{ 'hidden': !isOpen }">
+                    
+                    {% if context.location.pathname contains 'do_search' %}
+
+                      <form name="frm_do_search" action="{{context.location.pathname}}" class="w-1/2">
+                      <div class="flex border-b border-gray-200 items-center max-w-lg justify-between w-full">
+                          <button><img src="{{ 'images/search.png' | asset_url }}" alt=""></button>
+                          <input type="text" placeholder="Type something..." value="{{context.params.keyword}}" name="keyword" class="ht-border-0 text-base text-gray-500 w-4/5 bg-transparent focus:outline-none focus:shadow-none">
+                          <input type="hidden" name="search_type" value="{{context.params.search_type}}" >
+                          <a href="javascript:void(0)">
+                              <img src="{{ 'images/close-icon.svg' | asset_url }}" alt="">
+                          </a>
+                      </div>
+                      </form>
+
+                    {% else %}
+
+                      <ul class="grid .grid-flow-row gap-4 lg:grid-flow-col scroll-color-menu">
+                          <li><a class="text-base {% if context.location.pathname contains '/find_project' %}heavytechs-text-dark-orange{%else%}text-white{%endif%} hover:text-red-500" href="/find_project">Find a Project</a></li>
+                          <li><a class="text-base {% if context.location.pathname contains '/find_mechanic' %}heavytechs-text-dark-orange{%else%}text-white{%endif%} hover:text-red-500" href="/find_mechanic">Find a Mechanic</a></li>
+                          <li><a class="text-base text-white hover:text-red-500" href="/about-us">What We Do</a></li>
+                          <li><a class="text-base text-white hover:text-red-500" href="/contact-us">Resources</a></li>
+                      </ul>
+
+                    {% endif %}                    
+
+                    <div class="headerRight flex items-center justify-start mt-4 lg:mt-0 lg:justify-center">
+                        <div class="search flex">
+                            <a href="/do_search?keyword=">
+                            <button class="mr-5"><img src="{{ 'images/search.png' | asset_url }}" alt=""></button>
+                            </a>
+                        </div>
+
+                        {% if registered_profile %}
+                        <div class="search flex">
+                            <a href="/dashboard/profile/my_favourites">
+                            <img src="{{ 'images/heart-normal.svg' | asset_url }}" alt="">
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        {% if registered_profile %}
+                        <ul>
+                        <li class="ms-2" data-tc="profile-menu-dropdown">
+                            {% capture 'header_profile_label' %}
+                              <div class="flex items-center px-3 py-1 rounded-md bg-page">
+                                {{ profile.first_name | default: initial_name }}
+                                {% render 'theme/simple/ui/avatar', profile: profile, size: 48, class: 'w-5 h-5 ms-2 text-2xs' %}
+                              </div>
+                            {% endcapture %}
+                            {% capture 'header_profile_content' %}
+                              <ul class="whitespace-nowrap">
+
+                                {%comment%}
+                                <li>
+                                  <a href="/dashboard" class="block py-3 px-7 md:rounded-t-md hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.dashboard' | t }}</a>
+                                </li>
+                                {%endcomment%}
+                                <li>
+                                  <a href="/inbox" class="block py-3 px-7 md:rounded-t-md hover:bg-interaction hover:text-content-inverted transition-colors">Messages</a>
+                                </li>
+                                <li class="border-t"><a href="/dashboard/profile/edit" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.profile' | t }}</a></li>
+                                
+                                
+                                
+                                <!--<li class="border-t"><a href="/dashboard/sell/items" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.selling' | t }}</a></li>
+                                <li class="border-t"><a href="/dashboard/buy/orders" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.purchases' | t }}</a></li>-->
+                                {% function can_be_admin = "lib/can", actor: profile, do: "be_admin", object: profile %}
+                                {% if can_be_admin.valid %}
+
+                                  <li class="border-t"><a href="/admin/admin_dashboard" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.admin' | t }}</a></li>
+
+                                {% else %}
+
+                                  {% if profile.profile_for == 'contractor' %}
+                                    <li class="border-t"><a href="/dashboard/profile/contractor/bio" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">Your Information</a></li>
+                                  {%else%}
+                                    <li class="border-t"><a href="/dashboard/profile/bio" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">Your Information</a></li>
+                                  {%endif%}
+
+                                  <li class="border-t"><a href="/dashboard/profile/my_favourites" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">My Favorites</a></li>
+
+                                {% endif %}
+
+                                
+
+                                <li class="border-t">
+                                  <form action="/sessions/destroy" method="post">
+                                  {% include 'authenticity_token' %}
+                                    <button type="submit" class="block w-full py-3 px-7 rounded-b-md hover:bg-interaction hover:text-content-inverted text-start transition-colors">
+                                      {{ 'app.header.log-out' | t }}
+                                    </button>
+                                  </form>
+                                </li>
+                              </ul>
+                                {% endcapture %}
+                                {% render 'theme/simple/ui/dropdown',
+                                  class: '-me-3',
+                                  label: header_profile_label,
+                                  toggle_class: 'p-3',
+                                  content: header_profile_content
+                                %}
+                            </li>
+                        </ul>
+                        {% else %}
+                        <a href="/sessions/new" class="login heavytechs-bg-dark-orange text-white mr-2 px-5 leading-7  rounded-3xl text-sm ">Log in</a>
+                        <a href="/sign-up-main" class="signup heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border px-5 leading-7 rounded-3xl text-sm">Sign Up</a>
+                        {% endif %}
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div><!--header-->
+    </div>
+
+    
+
+    
+
+
+{% comment %}
+{% liquid
+  if profile and profile.user_id != blank
+    assign registered_profile = true
+    function profile_url = 'link_to', profile: profile
+  endif
+
+%}
+<header class="py-3 shadow mb-10">
+  <div class="container flex flex-wrap items-center">
+
+    <a class="flex items-center order-1 font-light" href="/">
+      {% render 'theme/simple/ui/logo' %}
+      {% render 'theme/simple/ui/icon', icon: 'home', class: 'text-white w-5 h-5 ms-3' %}
+    </a>
+
+    {% comment %} desktop search {% endcomment %}
+    <div class="hidden md:ms-auto lg:block lg:order-2">
+      {% render 'theme/simple/home/quick_search_form', qkeyword: context.params.qkeyword %}
+    </div>
+
+    {% comment %} mobile separator {% endcomment %}
+    <div class="order-3 w-full mt-4 md:hidden"></div>
+
+    <nav class="order-4 w-full md:w-auto md:ms-auto">
+      <ul class="flex flex-wrap items-center justify-center w-full">
+
+
+        {% comment %} mobile search {% endcomment %}
+        <li class="-ms-3 md:ms-auto lg:ms-0 me-auto md:me-0 lg:hidden">
+          {% capture 'header_search_label' %}
+            {% render 'theme/simple/ui/icon', icon: 'search', class: 'w-6' %}
+          {% endcapture %}
+          {% capture 'header_search_content' %}
+            <div class="px-8 py-4">
+              {% render 'theme/simple/home/quick_search_form', qkeyword: context.params.qkeyword %}
+            </div>
+          {% endcapture %}
+
+          {% render 'theme/simple/ui/dropdown',
+            name: 'quickSearch',
+            toggle_title_key: 'app.quick_search.name',
+            label: header_search_label,
+            toggle_class: 'p-3 focus:outline-none focus:text-interaction hover:text-interaction-hover',
+            content: header_search_content
+          %}
+        </li>
+
+        {% comment %} notifications {% endcomment %}
+        {% if registered_profile %}
+        <li>
+          <a href="/dashboard"
+            class="relative block p-3 focus:outline-none focus:text-interaction hover:text-interaction-hover"
+            x-data="unreadCount()" x-init="init()">
+            {% render 'theme/simple/ui/icon', icon: 'bell', class: 'w-6' %}
+            <span x-cloak x-show="unreadCount" x-text="unreadCount > 9 ? '9+' : unreadCount"
+              class="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-700 rounded-full">
+            </span>
+          </a>
+        </li>
+        {% endif %}
+
+        {% comment %} wishlist {% endcomment %}
+        {% if profile %}
+        <li class="relative">
+          <a href="/wishlist" data-header-wishlist data-tc="wishlist" title="{{ 'app.header.wishlist' | t }}" class="relative block p-3 focus:outline-none focus:text-interaction hover:text-interaction-hover">
+            {% render 'theme/simple/ui/icon', icon: 'heart', class: 'w-6' %}
+            {% render 'theme/simple/ui/icon', icon: 'heartFull', class: 'w-6 absolute top-3 left-3 text-interaction hidden' %}
+          </a>
+        </li>
+        {% endif %}
+
+
+        {% comment %} add content dropdown {% endcomment %}
+        {% if registered_profile %}
+        <li>
+          {% capture 'header_add_label' %}
+            {% render 'theme/simple/ui/icon', icon: 'circlePlus', class: 'w-6' %}
+          {% endcapture %}
+          {% capture 'header_add_content' %}
+            <ul class="whitespace-nowrap">
+              <li><a href="/dashboard" class="block py-3 px-7 md:rounded-t-md hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.add_post' | t }}</a></li>
+              <li><a href="/posts/new" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.add_question' | t }}</a></li>
+              <li><a href="/groups/new" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.add_group' | t }}</a></li>
+              <li><a href="/dashboard/items/new" class="block py-3 px-7 rounded-b-md hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.add_item' | t }}</a></li>
+            </ul>
+          {% endcapture %}
+
+          {% render 'theme/simple/ui/dropdown',
+            toggle_title_key: 'app.header.add_content',
+            toggle_class: 'p-3 focus:outline-none focus:text-interaction hover:text-interaction-hover',
+            label: header_add_label,
+            content: header_add_content
+          %}
+        </li>
+        {% endif %}
+
+
+        <div style="display: inherit"
+          {% if profile %} x-data="navigationStats()" x-init="init()" {% endif %}
+        >
+          {% comment %} chat {% endcomment %}
+          {% if registered_profile %}
+          <li>
+            <a href="/inbox" class="relative block p-3 focus:outline-none focus:text-interaction hover:text-interaction-hover" title="{{ 'app.header.chat' | t }}" id="notifications-chat" data-current-user-id="{{ profile.id }}" data-current-user-slug="{{ profile.slug }}">
+              {% render 'theme/simple/ui/icon', icon: 'commentText', class: 'w-6' %}
+              <span id="notification-bell"
+                class="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs text-white rounded-full bg-interaction"
+                x-cloak x-show="inboxUnread" x-text="inboxUnread"
+              >
+              </span>
+            </a>
+          </li>
+          {% endif %}
+
+
+          {% comment %} cart {% endcomment %}
+          <li>
+            <a href="/dashboard/buy/cart" title="{{ 'app.header.cart' | t }}"
+              class="relative block p-3 focus:outline-none focus:text-interaction hover:text-interaction-hover"
+            >
+              {% render 'theme/simple/ui/icon', icon: 'shoppingCart', class: 'w-6' %}
+              {% if profile %}
+                <span
+                  class="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs text-white rounded-full bg-interaction"
+                  x-cloak x-show="cartQuantity" x-text="cartQuantity"
+                  data-cart-counter>
+                </span>
+              {% endif %}
+            </a>
+          </li>
+        </div>
+
+
+        {% comment %} profile {% endcomment %}
+        {% if registered_profile %}
+        <li class="ms-2" data-tc="profile-menu-dropdown">
+            {% capture 'header_profile_label' %}
+              <div class="flex items-center px-3 py-1 rounded-md bg-page">
+                {{ profile.first_name | default: initial_name }}
+                {% render 'theme/simple/ui/avatar', profile: profile, size: 48, class: 'w-5 h-5 ms-2 text-2xs' %}
+              </div>
+            {% endcapture %}
+            {% capture 'header_profile_content' %}
+              <ul class="whitespace-nowrap">
+                <li>
+                  <a href="/dashboard" class="block py-3 px-7 md:rounded-t-md hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.dashboard' | t }}</a>
+                </li>
+
+                <li class="border-t"><a href="/dashboard/sell/items" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.selling' | t }}</a></li>
+                <li class="border-t"><a href="/dashboard/buy/orders" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.purchases' | t }}</a></li>
+                {% function can_be_admin = "lib/can", actor: profile, do: "be_admin", object: profile %}
+                {% if can_be_admin.valid %}
+                  <li class="border-t"><a href="/admin" class="block py-3 px-7 hover:bg-interaction hover:text-content-inverted transition-colors">{{ 'app.header.admin' | t }}</a></li>
+                {% endif %}
+                <li class="border-t">
+                  <form action="/sessions/destroy" method="post">
+                  {% include 'authenticity_token' %}
+                    <button type="submit" class="block w-full py-3 px-7 rounded-b-md hover:bg-interaction hover:text-content-inverted text-start transition-colors">
+                      {{ 'app.header.log-out' | t }}
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            {% endcapture %}
+            {% render 'theme/simple/ui/dropdown',
+              class: '-me-3',
+              label: header_profile_label,
+              toggle_class: 'p-3',
+              content: header_profile_content
+            %}
+        </li>
+        {% endif %}
+
+        {% comment %} login button {% endcomment %}
+        {% unless registered_profile %}
+          <a href="/sessions/new" class="button button-small ms-3">
+            {{ 'app.login' | t }}
+          </a>
+        {% endunless %}
+
+        {% render 'theme/simple/layout/language_switch', context: context, class: 'p-3' %}
+      </ul>
+    </nav>
+
+  </div>
+</header>
+{% endcomment %}

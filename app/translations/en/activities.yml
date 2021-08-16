@@ -1,0 +1,35 @@
+en:
+  app:
+    activities:
+      list: Activities
+      new: new
+      attr:
+        id: ID
+        created_at: Created at
+        object: Object
+        target: Target
+        actor: Actor
+        type: Type
+      types:
+        user_followed_user: 'started following <a href="%{url}">%{target}</a>'
+        user_unfollowed_user: 'stopped following <a href="%{url}">%{target}</a>'
+        page_visited: 'visited <a href="%{obj}">%{obj}</a> page'
+        order_status_created: >-
+          changed status of the <a href="/admin/sales/show/%{target_id}">order[%{target_id}]</a> to <span
+          class="font-semibold">%{status}</span>
+        order_created: >-
+          placed an <a href="/admin/sales/show/%{object_id}">order(%{object_id})</a> for <a href="/items/%{target_id}">item(%{target_id})</a>
+        account_created: created an account.
+        profile_updated: updated profile information
+        item_created: 'created a <a href="/items/%{object_id}">%{name}</a>'
+        item_inventory_updated: >-
+          changed item inventory %{item_name} <br/>
+          "quantity" from %{old_quantity} to %{new_quantity} <br/>
+          "max in one order" from %{old_max_in_one_order} to %{new_max_in_one_order}
+        comment_created: 'posted a comment on <a href="%{url}"> %{target} </a>'
+        post_created: 'posted <a href="%{url}"> %{title} </a>'
+        post_answered: 'posted answer on <a href="%{url}"> %{target} </a>'
+        user_joined_group: 'joined to <a href="%{url}"> %{target} </a> group'
+        group_created: 'created <a href="%{url}"> %{target} </a> group'
+    feed:
+      title: Feed

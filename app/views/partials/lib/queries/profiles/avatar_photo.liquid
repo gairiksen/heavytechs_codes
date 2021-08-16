@@ -1,0 +1,8 @@
+{% liquid
+  assign img_url = profile.avatar.photo.versions[version]
+  unless img_url
+    assign img_url = 'images/user.svg' | asset_url
+  endunless
+
+  return img_url
+%}

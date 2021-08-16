@@ -1,0 +1,101 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $page: Int = 1
+  $profile_id: String
+  $item_inventory_id: String
+  $score: Int
+  $score_gte: Int
+  $body: String
+  $pros: String
+  $cons: String
+  $lang: String
+  $with_item_inventory: Boolean = false
+) {
+  item_reviews: records(
+    per_page: $limit
+    page: $page
+    filter: {
+      id: { value: $id }
+      table: { value: "item_review" }
+      properties: [
+        { name: "profile_id" value: $profile_id }
+        { name: "item_inventory_id" value: $item_inventory_id }
+        { name: "score" value_int: $score, range: { gte: $score_gte }  }
+        { name: "body" value: $body }
+        { name: "pros" value: $pros }
+        { name: "cons" value: $cons }
+      ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    total_pages
+    has_previous_page
+    has_next_page
+    results {
+      id
+      created_at
+      type: table
+      profile_id: property(name: "profile_id")
+      item_inventory_id: property(name: "item_inventory_id")
+      score: property_int(name: "score")
+      body: property(name: "body")
+      pros: property_array(name: "pros")
+      cons: property_array(name: "cons")
+
+      item_inventory: related_record(
+        join_on_property: "item_inventory_id"
+        foreign_property: "id"
+        table: "item_inventory"
+      ) @include(if: $with_item_inventory) {
+        id
+        item: related_record(
+          join_on_property: "item_id"
+          foreign_property: "id"
+          table: "item"
+        ) {
+          id
+          type: table
+          photo_ids: property_array(name: "photo_ids")
+          photos: related_records(
+            table: "photo"
+            join_on_property: "photo_ids"
+            foreign_property: "id"
+          ) {
+            id
+            photo: property_upload(name: "photo") {
+              file_name
+              url
+              versions
+            }
+          }
+          item_detail: related_record(
+            table: "item_detail"
+            join_on_property: "id"
+            foreign_property: "item_id"
+            filter: { properties: { name: "lang", value: $lang } }
+          ) {
+            id
+            type: table
+            name: property(name: "name")
+          }
+        }
+      }
+
+      status: related_record(
+        join_on_property: "id"
+        foreign_property: "object_id"
+        table: "status"
+        sort: { created_at: { order: ASC } }
+      ) {
+        id
+        created_at
+        name: property(name: "name")
+        timestamp: property(name: "timestamp")
+      }
+    }
+  }
+}

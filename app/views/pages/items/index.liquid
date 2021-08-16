@@ -1,0 +1,8 @@
+---
+slug: search
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true
+
+  include 'theme/simple/items/list', lang: context.language, current_profile: current_profile
+%}

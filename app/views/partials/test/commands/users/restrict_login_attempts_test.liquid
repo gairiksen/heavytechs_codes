@@ -1,0 +1,167 @@
+{% comment %}PARTIAL INPUT{% endcomment %}
+{% assign passphrase = "password" | base64_encode %}
+{% parse_json payload %}
+{
+  "user": {
+    "username": "name",
+    "first_name": "name",
+    "last_name": "name",
+    "email": {{ '' | uuid | split: '-' | first | append: '@example.com' | json }},
+    "password": {{ passphrase | json }},
+    "agreed": "true"
+  },
+  "profile": {
+    "first_name": "first name",
+    "last_name": "last name",
+    "phone": "1234234"
+  }
+}
+{% endparse_json %}
+
+{% liquid
+  assign default_login_attempts = 2
+%}
+
+{% comment %}LOAD TESTED PARTIAL/FUNCTION{% endcomment %}
+{% liquid
+  function user = 'lib/commands/users/create', object: payload.user, profile: payload.profile
+  function contract = 'test/assertions/valid_object', contract: contract, object: user, field_name: 'created-user'
+%}
+
+{% comment %} ACCOUNT IS LOCKED AND PASS IS OK {% endcomment %}
+{% liquid
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/valid_object', contract: contract, object: password, field_name: 'user-password'
+%}
+
+{% liquid
+  hash_assign password['attempts'] = 0
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/invalid_object', contract: contract, object: restrict, field_name: 'restrict-locked-account'
+  function contract = 'test/assertions/presence', contract: contract, object: restrict.errors, field_name: 'attempts'
+%}
+
+{% comment %} ACCOUNT IS NOT LOCKED AND PASS IS OK {% endcomment %}
+{% liquid
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/valid_object', contract: contract, object: password, field_name: 'password'
+%}
+
+{% liquid
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/valid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+%}
+
+{% comment %} ACCOUNT IS NOT LOCKED AND PASS IS NOT OK {% endcomment %}
+{% liquid
+  hash_assign payload['user']['password'] = 'wrong'
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/invalid_object', contract: contract, object: password, field_name: 'password'
+%}
+
+{% liquid
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/invalid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'attempts', object: u
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts', given: u.attempts, expected: 1
+  function contract = 'test/assertions/blank', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% comment %} ACCOUNT IS NOT LOCKED AND PASS IS NOT OK AGAIN {% endcomment %}
+{% liquid
+  hash_assign payload['user']['password'] = 'wrong'
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/invalid_object', contract: contract, object: password, field_name: 'password'
+%}
+
+{% liquid
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/invalid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'attempts', object: u
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts', given: u.attempts, expected: 0
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% comment %} ACCOUNT IS LOCKED AND PASS WRONG - account stays locked {% endcomment %}
+{% liquid
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/invalid_object', contract: contract, object: password, field_name: 'user-password:89'
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'pass-attempts', given: password.attempts, expected: 0
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% liquid
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/invalid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'attempts', object: u
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts', given: u.attempts, expected: 0
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% comment %} ACCOUNT IS LOCKED AND PASS OK - account stays locked {% endcomment %}
+{% liquid
+  hash_assign payload['user']['password'] = passphrase
+
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/valid_object', contract: contract, object: password, field_name: 'user-password:106'
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'pass-attempts', given: password.attempts, expected: 0
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% liquid
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/invalid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'attempts', object: u
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts', given: u.attempts, expected: 0
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% comment %} UNLOCK {% endcomment %}
+{% liquid
+  function reset = 'lib/commands/users/reset_login_attempts', object: u, default_login_attempts: 2
+  function contract = 'test/assertions/valid_object', contract: contract, object: reset, field_name: 'reset-account'
+%}
+
+{% liquid
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts', given: u.attempts, expected: 2
+  function contract = 'test/assertions/blank', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% comment %} WRONG PASS AND THEN OK SHOULD RESET COUNTER {% endcomment %}
+{% liquid
+  hash_assign payload['user']['password'] = 'wrong'
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function contract = 'test/assertions/invalid_object', contract: contract, object: password, field_name: 'password'
+%}
+
+{% liquid
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/invalid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/presence', contract: contract, field_name: 'attempts', object: u
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts', given: u.attempts, expected: 1
+  function contract = 'test/assertions/blank', contract: contract, field_name: 'locked_at', object: u
+%}
+
+{% comment %} ACCOUNT IS LOCKED AND PASS OK - account stays locked {% endcomment %}
+{% liquid
+  hash_assign payload['user']['password'] = passphrase
+
+  function password = 'lib/commands/users/verify_password', object: payload.user
+  function restrict = 'lib/commands/users/restrict_login_attempts', object: password, default_login_attempts: default_login_attempts
+  function contract = 'test/assertions/valid_object', contract: contract, object: restrict, field_name: 'restict-unlocked-account'
+
+  function u = 'lib/queries/users/find', id: user.id
+  function contract = 'test/assertions/equal', contract: contract, field_name: 'attempts:168', given: u.attempts, expected: 2
+  function contract = 'test/assertions/blank', contract: contract, field_name: 'locked_at', object: u
+%}

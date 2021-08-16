@@ -1,0 +1,23 @@
+<address class="not-italic">
+  <div class="flex items-start ">
+    {% render 'theme/simple/ui/icon', icon: 'userCircle', class: 'w-6 me-2' %}
+    {{ address.full_name  }}
+  </div>
+  <div class="flex items-start mt-4">
+    {% render 'theme/simple/ui/icon', icon: 'pin' class: 'w-6 me-2' %}
+    <ul>
+      <li>
+        {{ address.street  }}<br />
+        {% if address.building_number != blank %}
+          {{ address.building_number  }} {{ 'app.models.addresses.building' | t }}<br />
+        {% endif %}
+        {% if address.flat_number != blank %}
+          {{ address.flat_number  }} {{ 'app.models.addresses.flat' | t }}
+        {% endif %}
+      </li>
+      <li class="mt-2">{{ address.zip  }} {{ address.city  }}</li>
+      <li class="mt-2">{{ address.state  }}</li>
+      <li class="mt-2">{{ address.country  }}</li>
+    </ul>
+  </div>
+</address>

@@ -1,0 +1,41 @@
+{% liquid
+  function root_post_url = 'link_to', post: root_post
+%}
+<ul>
+  {% for comment in list %}
+    <li class="mt-4 md:ms-14 pt-2 md:px-4 flex border-t border-dashed {% if forloop.last %} border-b pb-3 {% endif %}">
+      <div class="w-full">
+        <div class="md:h-10 mb-2 md:flex justify-between items-center">
+          <a href="{% render 'link_to', profile: comment.creator %}">
+            {{ comment.creator.name }}
+          </a>
+          <span class="block">
+            {% if comment.creator.id == current_profile.id %}
+              <span class="pe-5">
+                <a href="/comments/edit/{{comment.id}}?return_to={{root_post_url}}" class="text-interaction">{{ 'app.models.shared.edit' | t }}</a>
+                |
+                <form action="/comments" method="post" onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')){ return false; }" class="inline">
+                  {% render 'authenticity_token', context: context %}
+                  <input type="hidden" name="_method" value="delete">
+                  <input type="hidden" name="id" value="{{ comment.id }}">
+                  <input type="hidden" name="return_to" value="{{ root_post_url }}">
+                  <button class="text-danger">{{ 'app.models.shared.delete' | t }}</button>
+                </form>
+              </span>
+            {% endif %}
+            <date datetime="{{ comment.created_at }}" class="text-sm text-content-sidenote">
+              {{comment.created_at | l: 'compact'}}
+            </date>
+          </span>
+        </div>
+
+        <span class="prose">
+          {% liquid
+            assign comment_body_formatted = comment.body | markdown: '{ "elements": ["b","strong","i","em","a","code", "pre"], "attributes":{ "a": ["href"] } }'
+            echo comment_body_formatted
+          %}
+        </span>
+      </div>
+    </li>
+  {% endfor %}
+</ul>

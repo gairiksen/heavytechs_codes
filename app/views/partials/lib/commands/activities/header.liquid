@@ -1,0 +1,21 @@
+{% liquid
+  assign header = '{}' | parse_json
+
+  assign actor = payload.actor.organization | default: payload.actor
+  if role == 'organization' or namespace == 'admin'
+    assign name = '[]' | parse_json | add_to_array: payload.actor.name | add_to_array: payload.actor.organization.name | compact
+    function url = 'link_to', object: actor, namespace: namespace
+  else
+    assign name = actor.name | split: '---'
+    function url = 'link_to', object: actor, namespace: namespace, role: role
+  endif
+
+  if name[1]
+    hash_assign header['name'] = name[0] | append: " (" | append: name[1] | strip | append: ")"
+  else
+    hash_assign header['name'] = name[0]
+  endif
+  hash_assign header['url'] = url
+
+  return header
+%}

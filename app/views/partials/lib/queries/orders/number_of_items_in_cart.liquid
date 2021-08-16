@@ -1,0 +1,6 @@
+{% liquid
+  graphql r = 'orders/search', limit: 100, page: 1, buyer: buyer, status: 'app.statuses.orders.placed'
+
+  assign number = r.orders.results | map: 'line_items' | flatten | map: 'quantity' | sum_array
+  return number
+%}

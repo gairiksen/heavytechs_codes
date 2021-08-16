@@ -1,0 +1,47 @@
+{% if order.line_items.size > 0 %}
+
+  <section class="{% if first_item != true %}mt-7 pt-4 border-t {% endif %}">
+
+    <div class="mb-4 font-medium">{{ order.seller.name }}</div>
+
+    {% for line_item in order.line_items %}
+      {% function item_url = 'link_to', item: line_item.item %}
+      <div class="mb-5 lg:flex gap-2 last:mb-0">
+
+        <div class="lg:w-8/12">
+          <a href="{{ item_url }}" class="md:flex items-center">
+            {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+
+            {% if cover_url %}
+              <img src="{{ cover_url }}" class="md:w-20 mb-2 md:mb-0 me-5 rounded">
+            {% else %}
+              {% render 'theme/simple/ui/picture-placeholder', class:"md:w-20 mb-2 md:mb-0 me-5 rounded" %}
+            {% endif %}
+            {{ line_item.item.item_detail.name }}
+          </a>
+        </div>
+
+        <div class="flex items-center mt-2 lg:w-4/12 lg:ps-2 lg:mt-0 justify-between lg:justify-end">
+          <span class="me-1 lg:hidden">{{ 'app.orders.show.total_price' | t }}: </span>
+          <span class="text-end">
+            {% render 'theme/simple/price', amount_cents: line_item.total_price_cents, currency: line_item.currency %}
+            {% if line_item.quantity > 1 %}
+              <span class="block sidenote">
+                ({{ line_item.quantity }} {{ 'app.orders.checkout.pieces' | t }})
+              </span>
+            {% endif %}
+          </span>
+        </div>
+
+      </div>
+    {% endfor %}
+
+  </section>
+
+{% else %}
+
+  <section class="p-8 shadow-lg bg-panel">
+    <p>{{ 'app.orders.show.empty' | t }}</p>
+  </section>
+
+{% endif %}

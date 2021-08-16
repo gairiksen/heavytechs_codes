@@ -1,0 +1,6 @@
+name: order_delivery
+properties:
+  - name: order_id
+    type: string
+  - name: delivery_information
+    type: string

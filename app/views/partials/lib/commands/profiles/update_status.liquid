@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/profiles/update_status/build', profile_id: profile_id, is_blocked: is_blocked
+
+  
+    graphql r = 'profiles/update_status', args: object 
+
+    
+
+  return object
+%}

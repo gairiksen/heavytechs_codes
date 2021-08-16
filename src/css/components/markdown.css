@@ -1,0 +1,83 @@
+.markdown > * + * {
+  @apply mt-0 mb-4;
+}
+
+.markdown li + li {
+  @apply mt-1;
+}
+
+.markdown li > p + p {
+  @apply mt-6;
+}
+
+.markdown strong {
+  @apply font-semibold;
+}
+
+.markdown a {
+  @apply font-semibold text-interaction;
+}
+
+.markdown strong a {
+  @apply font-bold;
+}
+
+.markdown h1 {
+  @apply pb-2 mt-6 mb-4 text-4xl font-semibold leading-tight border-b;
+}
+
+.markdown h2 {
+  @apply pb-2 mt-6 mb-4 text-2xl font-semibold leading-tight border-b;
+}
+
+.markdown h3 {
+  @apply mt-6 mb-4 text-lg font-semibold leading-snug;
+}
+
+.markdown h4 {
+  @apply mt-6 mb-4 text-base font-semibold leading-none;
+}
+
+.markdown h5 {
+  @apply mt-6 mb-4 text-sm font-semibold leading-tight;
+}
+
+.markdown h6 {
+  @apply mt-6 mb-4 text-sm font-semibold leading-tight text-gray-600;
+}
+
+.markdown blockquote {
+  @apply text-base text-gray-600 border-l-4 border-gray-300 ps-4 pe-4;
+}
+
+.markdown code {
+  @apply
+    inline px-1 py-1 font-mono text-sm break-words rounded bg-frame;
+}
+
+.markdown pre {
+  @apply
+    max-w-full p-4 mt-3 overflow-x-auto rounded bg-frame;
+}
+
+.markdown pre code {
+  @apply
+    p-0 bg-transparent rounded-none;
+}
+
+.markdown ul {
+  @apply text-base list-disc ps-8;
+}
+
+.markdown ol {
+  @apply text-base list-decimal ps-8;
+}
+
+.markdown kbd {
+  @apply inline-block px-1 py-5 font-mono text-xs font-normal align-middle border rounded shadow;
+}
+
+
+.markdown img{
+  @apply max-w-sm p-1 my-2 border cursor-pointer;
+}

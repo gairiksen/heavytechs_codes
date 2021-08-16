@@ -1,0 +1,11 @@
+{% parse_json profile_data %}
+  {
+    "user_id": "{{ user_id }}"
+  }
+{% endparse_json %}
+
+{% liquid
+  function profile = 'lib/commands/profiles/create', object: profile_data
+
+  return profile
+%}

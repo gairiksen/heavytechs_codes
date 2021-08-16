@@ -1,0 +1,115 @@
+<section class="table w-full mt-16 lg:table leading-loose lg:leading-normal">
+
+  <header class="hidden uppercase lg:table-row sidenote">
+    <div class="lg:pb-2 lg:table-cell">{{ 'app.orders.show.item' | t }}</div>
+    <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.unit_price' | t }}</div>
+    <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.quantity' | t }}</div>
+    <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.total_price' | t }}</div>
+    <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.return_info' | t }}</div>
+  </header>
+
+  <div class="table-content">
+    {% for line_item in order.line_items %}
+      <ul class="{% if forloop.first == false %} mt-4 lg:mt-0 pt-4 lg:pt-0 border-t {% endif %} lg:table-row">
+
+        <li class="lg:py-4 align-middle lg:table-cell lg:border-t">
+          {% function item_url = 'link_to', item: line_item.item %}
+          <a href="{{ item_url }}" class="flex items-center">
+            {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+            {% if cover_url %}
+              <img src="{{ cover_url }}" class="w-20 rounded me-5">
+            {% else %}
+              {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+            {% endif %}
+            {{ line_item.item.item_detail.name }}
+          </a>
+        </li>
+
+        <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+          <span class="lg:hidden">{{ 'app.orders.show.unit_price' | t }}: </span>
+          {% render 'theme/simple/price', amount_cents: line_item.price_cents, currency: line_item.currency %}
+        </li>
+
+        <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+          <span class="lg:hidden">{{ 'app.orders.show.quantity' | t }}: </span>
+          {{ line_item.quantity }}
+        </li>
+
+        <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+          <span class="lg:hidden">{{ 'app.orders.show.total_price' | t }}: </span>
+          {% render 'theme/simple/price', amount_cents: line_item.total_price_cents, currency: line_item.currency %}
+        </li>
+
+        <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+          {% liquid
+            assign return_status = line_item.line_item_return.status.name
+
+            case return_status
+              when 'app.statuses.line_item_returns.requested'
+                assign return_status_class = ''
+                assign return_status_icon = 'questionCircle'
+              when 'app.statuses.line_item_returns.accepted'
+                assign return_status_class = 'text-confirmation'
+                assign return_status_icon = 'check'
+              when 'app.statuses.line_item_returns.rejected'
+                assign return_status_class = 'text-danger hover:text-danger-hover border-danger hover:border-danger-hover hover:bg-danger-disabled'
+                assign return_status_icon = 'x'
+              when 'app.statuses.line_item_returns.returned'
+                assign return_status_class = 'text-confirmation hover:text-confirmation-hover border-confirmation hover:border-confirmation-hover hover:bg-confirmation-disabled'
+                assign return_status_icon = 'arrowReturnCircle'
+            endcase
+          %}
+
+          {% if role == 'buyer' %}
+            {% function can_return_line_items = 'lib/can/orders', actor: current_profile, order: order, do: 'return_line_items' %}
+
+            {% if line_item.line_item_return %}
+              <div class="mb-1">
+                {% function return_url = 'link_to', line_item_return: line_item.line_item_return %}
+                <a href="{{ return_url }}" class="inline-flex items-center justify-end gap-1 button button-small button-secondary button-icon-left cursor-help {{ return_status_class }}">
+                  {% render 'theme/simple/ui/icon', icon: return_status_icon %}
+                  {{ return_status | t }}
+                </a>
+              </div>
+            {% endif %}
+            {% if can_return_line_items %}
+              {% liquid
+                assign item_return_days = line_item.item.return_days | default: 30
+                assign days_from_buy = line_item.created_at | time_diff: 'now', 'd'
+              %}
+              {% if line_item.line_item_return %}
+              {% elsif line_item.line_item_return == null and days_from_buy <= item_return_days %}
+                <a href="/dashboard/buy/line_item_returns/new?line_item_id={{ line_item.id }}" class="button button-small">{{ 'app.orders.show.return' | t }}</a>
+                <div class="sidenote mt-2">
+                  {% render 'theme/simple/ui/icon', icon: 'timeHand', class: 'w-4 me-1 inline-block text-confirmation' %}
+                  {% assign days_remaining = item_return_days | minus: days_from_buy | round %}
+                  {{ 'app.orders.show.return_days_remaining' | t: count: days_remaining }}
+                </div>
+              {% else %}
+                <div class="sidenote">
+                  {% render 'theme/simple/ui/icon', icon: 'warning',  class: 'w-4 me-1 inline-block text-warning' %}
+                  {{ 'app.orders.show.expired_return_period' | t }}
+                </div>
+              {% endif %}
+            {% endif %}
+          {% elsif role == 'seller' %}
+            {% if line_item.line_item_return %}
+              <div class="mb-1 flex items-center justify-end gap-1 {{ return_status_class }}">
+                {% render 'theme/simple/ui/icon', icon: return_status_icon %}
+                {{ return_status | t }}
+              </div>
+              <a href="{% render 'link_to', line_item_return: line_item.line_item_return, current_profile: current_profile %}" class="button button-small button-secondary">
+                {{ 'app.models.line_item_returns.return_details' | t }}
+              </a>
+            {% endif %}
+          {% elsif role == 'admin' %}
+              <div class="mb-1 flex items-center justify-end gap-1 {{ return_status_class }}">
+                {% render 'theme/simple/ui/icon', icon: return_status_icon %}
+                {{ return_status | t }}
+              </div>
+          {% endif %}
+        </li>
+      </ul>
+    {% endfor %}
+  </div>
+</section>

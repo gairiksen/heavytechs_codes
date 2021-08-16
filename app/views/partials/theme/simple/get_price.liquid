@@ -1,0 +1,4 @@
+{%- capture total_price -%}
+  {%- render 'theme/simple/price', amount_cents: amount_cents, currency: currency, options: options -%}
+{%- endcapture -%}
+{% return total_price | strip %}

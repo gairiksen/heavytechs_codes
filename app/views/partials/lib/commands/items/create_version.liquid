@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/items/create_version/build', object: object, owner: owner
+  function object = 'lib/commands/items/create_version/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/items/create_version/execute', object: object
+  endif
+
+  return object
+%}

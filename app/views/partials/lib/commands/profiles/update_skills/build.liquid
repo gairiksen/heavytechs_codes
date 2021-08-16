@@ -1,0 +1,80 @@
+{%liquid
+  assign earthworks = object.earthworks | default: ''
+  assign mining = object.mining | default: ''
+  assign fleet = object.fleet | default: ''
+  assign pipeline = object.pipeline | default: ''
+  assign paving = object.paving | default: ''
+  assign energy_production = object.energy_production | default: ''
+  assign heavy_equipment_mechanic = object.heavy_equipment_mechanic | default: ''
+  assign welder_fabricator = object.welder_fabricator | default: ''
+  assign truck_mechanic = object.truck_mechanic | default: ''
+  assign oilers_pm_tech = object.oilers_pm_tech | default: ''
+  assign welding = object.welding | default: ''
+
+  if object.welding and object.welding == '1'
+    assign welding_cert = object.welding_cert | default: ''
+  else
+    assign welding_cert = '' | default: ''
+  endif
+
+  assign electrical_troubleshooting = object.electrical_troubleshooting | default: ''
+
+  if object.electrical_troubleshooting and object.electrical_troubleshooting == '1'
+    assign electrical_troubleshooting_cert = object.electrical_troubleshooting_cert | default: ''
+  else
+    assign electrical_troubleshooting_cert = '' | default: ''
+  endif
+
+  assign computer_diagnostics = object.computer_diagnostics | default: ''
+
+  if object.computer_diagnostics and object.computer_diagnostics == '1'
+    assign computer_diagnostics_cert = object.computer_diagnostics_cert | default: ''
+  else
+    assign computer_diagnostics_cert = '' | default: ''
+  endif
+
+  assign drivers_license_class = object.drivers_license_class | default: ''
+  assign expiry_date = object.expiry_date | default: ''
+  assign tanker = object.tanker | default: ''
+  assign air_brakes = object.air_brakes | default: ''
+  assign passanger = object.passanger | default: ''
+  assign double_triples = object.double_triples | default: ''
+  assign hazmat = object.hazmat | default: ''
+  assign expiry_date_2 = object.expiry_date_2 | default: ''
+  
+%}
+{% parse_json object %}
+  {
+    "id":                 {{ object.id }},
+    "uuid":         {{ '' | uuid | json }},
+    "user_id":      {{ user_id | json }},
+    "earthworks":   {{ earthworks | json }},
+    "mining":    {{ mining | json }},
+    "fleet":    {{ fleet | json }},
+    "pipeline":    {{ pipeline | json }},
+    "paving":    {{ paving | json }},
+    "energy_production":    {{ energy_production | json }},
+    "heavy_equipment_mechanic":    {{ heavy_equipment_mechanic | json }},
+    "welder_fabricator":    {{ welder_fabricator | json }},
+    "truck_mechanic":    {{ truck_mechanic | json }},
+    "oilers_pm_tech":    {{ oilers_pm_tech | json }},
+    "welding":    {{ welding | json }},
+    "welding_cert":    {{ welding_cert | json }},
+    "electrical_troubleshooting":    {{ electrical_troubleshooting | json }},
+    "electrical_troubleshooting_cert":    {{ electrical_troubleshooting_cert | json }},
+    "computer_diagnostics":    {{ computer_diagnostics | json }},
+    "computer_diagnostics_cert":    {{ computer_diagnostics_cert | json }},
+    "drivers_license_class":    {{ drivers_license_class | json }},
+    "expiry_date":    {{ expiry_date | json }},
+    "tanker":    {{ tanker | json }},
+    "air_brakes":    {{ air_brakes | json }},
+    "passanger":    {{ passanger | json }},
+    "double_triples":    {{ double_triples | json }},
+    "hazmat":    {{ hazmat | json }},
+    "expiry_date_2":    {{ expiry_date_2 | json }} 
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

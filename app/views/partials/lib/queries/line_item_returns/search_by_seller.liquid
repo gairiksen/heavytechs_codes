@@ -1,0 +1,14 @@
+{% liquid
+  if seller_id == blank
+    log 'Something went wrong. Seller cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  assign lang = lang | default: context.language
+  assign page = page | to_positive_integer: 1
+
+  graphql r = 'line_item_returns/search', limit: limit, page: page, seller_id: seller_id, status: status, lang: lang
+  include 'lib/handle_graphql_response', r: r, name: 'queries/line_item_returns/search_for_seller'
+
+  return r.line_item_returns
+%}

@@ -1,0 +1,13 @@
+---
+slug: search_frame
+layout: null
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, followships: true
+  assign statuses = 'published,unavailable' | split: ','
+  function items = 'lib/queries/items/search', params: context.params, limit: 21, statuses: statuses, lang: context.language, only_public: true
+  function filters = 'lib/queries/search/filters', query: items.query
+
+  include 'theme/simple/items/search_frame', items: items, filters: filters, current_profile: current_profile
+  render 'theme/simple/wishlists/enable_event', current_profile_id: current_profile.id
+%}

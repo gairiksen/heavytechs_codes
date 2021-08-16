@@ -1,0 +1,57 @@
+{% comment %}before{% endcomment %}
+{% liquid
+  assign ctx = '{"constants": {"superadmins": "admin@example.com"}}' | parse_json
+  assign profile = '{"id":"1000", "type": "profile", "user": {"email": "admin@example.com"}}' | parse_json
+
+  function result = 'lib/can', actor: profile, do: 'be_admin', object: profile, context: ctx
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'be_admin'
+%}
+
+{% liquid
+  assign ctx = '{"constants": {"superadmins": "admin@example.com"}}' | parse_json
+  assign profile = '{"id":"1000", "type": "profile", "user": {"email": "buyer@example.com"}}' | parse_json
+
+  function result = 'lib/can', actor: profile, do: 'be_admin', object: profile, context: ctx
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'be_admin'
+  include 'test/assertions/presence', contract: contract, object: result.errors, field_name: 'permission_denied'
+%}
+
+{% liquid
+  assign ctx = '{"constants": {"REQUIRED_2FA": "true"}}' | parse_json
+  assign profile = '{"id":"1000", "type": "profile", "user": {"email": "seller@example.com"}, "organizations": [{"id": "3000"}]}' | parse_json
+
+  function result = 'lib/can', actor: profile, do: 'required_2fa', object: profile, context: ctx
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'be_admin'
+%}
+
+{% liquid
+  assign ctx = '{"constants": {"REQUIRED_2FA": "false"}}' | parse_json
+  assign profile = '{"id":"1000", "type": "profile", "user": {"email": "seller@example.com"}, "organizations": [{"id": "3000"}]}' | parse_json
+
+  function result = 'lib/can', actor: profile, do: 'required_2fa', object: profile, context: ctx
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'be_admin'
+%}
+
+{% liquid
+  assign ctx = '{"constants": {"REQUIRED_2FA": "false"}}' | parse_json
+  assign profile = '{"id":"1000", "type": "profile", "otp_configured": true }' | parse_json
+
+  function result = 'lib/can', actor: profile, do: 'required_2fa', object: profile, context: ctx
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'be_admin'
+%}
+
+{% liquid
+  assign profile = '{"id":"1000", "type": "profile", "user": {"email": "admin3@example.com"}, "permissions": {"checker": true} }' | parse_json
+  hash_assign profile['permissions'] = profile.permissions | json
+
+  function result = 'lib/can', actor: profile, do: 'be_checker', object: profile
+  include 'test/assertions/valid_object', contract: contract, object: result, field_name: 'be_checker'
+%}
+
+{% liquid
+  assign profile = '{"id":"1000", "type": "profile", "user": {"email": "admin3@example.com"}, "permissions": {} }' | parse_json
+  hash_assign profile['permissions'] = profile.permissions | json
+
+  function result = 'lib/can', actor: profile, do: 'be_checker', object: profile, context: ctx
+  include 'test/assertions/not_valid_object', contract: contract, object: result, field_name: 'be_checker'
+%}

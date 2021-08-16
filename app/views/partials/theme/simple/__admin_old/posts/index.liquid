@@ -1,0 +1,68 @@
+{% if posts.results.size > 0 %}
+  <section class="w-full lg:table">
+
+    <header class="hidden lg:table-row sidenote uppercase">
+      <div class="lg:ps-4 lg:py-4 lg:table-cell">{{ 'admin_old.menu.posts.author' | t }}</div>
+      <div class="lg:ps-4 lg:py-4 lg:table-cell">{{ 'app.models.posts.form.title' | t }}</div>
+      <div class="lg:ps-4 lg:py-4 lg:table-cell">{{ 'app.models.posts.form.tags' | t }}</div>
+      <div class="lg:ps-4 lg:py-4 lg:table-cell lg:text-right">{{ 'app.models.posts.form.upvotes' | t }}</div>
+      <div class="lg:ps-4 lg:py-4 lg:table-cell lg:text-right">{{ 'app.models.posts.form.downvotes' | t }}</div>
+      <div class="lg:table-cell"></div>
+    </header>
+
+    <div class="card p-0 lg:table-row-group">
+      {% for post in posts.results %}
+        <div class="p-5 lg:table-row border-b last:border-0">
+
+          <div class="lg:ps-4 lg:py-4 lg:table-cell lg:border-t {% if forloop.first %} rounded-tl {% endif %} {% if forloop.last %} rounded-bl {% endif %} align-middle">
+            <span class="lg:hidden">{{ 'app.models.posts.form.title' | t }}: </span>
+            {% function url = 'link_to', profile: post.creator %}
+            <a href="{{ url }}">
+              {{ post.creator.name }}
+            </a>
+          </div>
+
+          <div class="lg:ps-4 lg:py-4 lg:table-cell lg:border-t {% if forloop.first %} rounded-tl {% endif %} {% if forloop.last %} rounded-bl {% endif %} align-middle">
+            <span class="lg:hidden">{{ 'app.models.posts.form.title' | t }}: </span>
+            {% function url = 'link_to', post: post %}
+            <a href="{{ url }}">
+              {{ post.title }}
+            </a>
+          </div>
+
+          <div class="flex items-center lg:ps-4 lg:py-4 lg:table-cell lg:border-t align-middle">
+            <span class="me-2 lg:hidden">{{ 'app.models.posts.form.tags' | t }}: </span>
+            {% render 'theme/simple/ui/tags', tags: post.tags, url: '/posts?tag='  %}
+          </div>
+
+          <div class="lg:ps-4 lg:py-4 lg:table-cell lg:border-t align-middle lg:text-right">
+            <span class="lg:hidden">{{ 'app.models.posts.form.upvotes' | t }}: </span>
+            {{ post.upvote_profile_ids.size }}
+          </div>
+
+          <div class="lg:ps-4 lg:py-4 lg:table-cell lg:border-t align-middle lg:text-right">
+            <span class="lg:hidden">{{ 'app.models.posts.form.downvotes' | t }}: </span>
+            {{ post.downvote_profile_ids.size }}
+          </div>
+
+          <div class="mt-2 lg:mt-0 lg:ps-4 lg:py-6 lg:pe-4 lg:table-cell lg:border-t lg:text-right align-middle whitespace-nowrap {% if forloop.first %} rounded-tr {% endif %} {% if forloop.last %} rounded-br {% endif %}">
+            <form action="/admin/posts" method="post" class="inline" onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')){ return false; }" >
+              {% include 'authenticity_token' %}
+              <input type="hidden" name="_method" value="delete">
+              <input type="hidden" name="id" value="{{ post.id }}">
+
+              <button class="button button-compact button-danger" title="{{ 'app.models.shared.delete' | t }}">
+                {% render 'theme/simple/ui/icon', icon: 'trash' %}
+              </button>
+            </form>
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </section>
+{% else %}
+    {% include 'theme/simple/__admin_old/posts/empty_state' %}
+{% endif %}
+

@@ -1,0 +1,10 @@
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "otp_configured": true
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

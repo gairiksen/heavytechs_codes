@@ -1,0 +1,40 @@
+---
+en:
+  app:
+    reviews:
+      header:
+        title: Reviews
+        products: Products
+        merchants: Merchants
+      items:
+        items: Products
+        name: Name
+        date: Date
+        rating: Rating
+        add_review: Add review
+        see_review: See review
+        empty_state: You don't have any item reviews
+        choose_score: Choose score
+        new:
+          rate_this_product: Rate this product
+          submit: Save review
+          body_placeholder: Product review (optional)
+          pros: Benefits
+          pros_tip: Separate the items with commas
+          cons: Disadvantages
+          cons_tip: Separate the items with commas
+      organizations:
+        empty_state: You don't have any merchant reviews
+        index:
+          name: Name
+          date: Date
+        new:
+          would_you_recommend: Would you recommend this merchant?
+          how_do_you_rate_purchase: How do you rate this purchase?
+          i_recommend: I recommend
+          i_dont_recommend: I don’t recommend
+          buyer_service: Buyer service
+          shipping_cost: Shipping cost
+          compliance_description: Compliance with the description
+          body_placeholder: Describe the merchant based on your experience (optional)
+          submit: Save review

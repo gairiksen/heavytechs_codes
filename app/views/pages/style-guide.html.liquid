@@ -1,0 +1,1184 @@
+---
+metadata:
+  breadcrumbs:
+    - label: Example
+      url: /
+    - label: app.style_guide.title
+      url: /style-guide
+---
+
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+%}
+
+
+<section class="container" id="styleGuide">
+
+  <article id="styleGuide-colors">
+    <header>
+      <h3 class="title">Colors</h3>
+    </header>
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10">
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-32 bg-page"></div>
+        </div>
+        <h4 class="subtitle">Page background</h4>
+        <dl class="flex flex-wrap justify-between">
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-32 bg-panel"></div>
+        </div>
+        <h4 class="subtitle">Page background</h4>
+        <dl>
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-32 bg-frame"></div>
+        </div>
+        <h4 class="subtitle">Frames</h4>
+        <dl>
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-16 bg-content"></div>
+          <div class="h-8 bg-content-sidenote"></div>
+          <div class="h-8 bg-content-inverted"></div>
+        </div>
+        <h4 class="subtitle">Text</h4>
+        <dl class="flex flex-wrap justify-between">
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-16 bg-interaction"></div>
+          <div class="h-8 bg-interaction-hover"></div>
+          <div class="h-8 bg-interaction-disabled"></div>
+        </div>
+        <h4 class="subtitle">Interactive elements</h4>
+        <dl class="flex flex-wrap justify-between">
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-16 bg-danger"></div>
+          <div class="h-8 bg-danger-hover"></div>
+          <div class="h-8 bg-danger-disabled"></div>
+        </div>
+        <h4 class="subtitle">Danger</h4>
+        <dl class="flex flex-wrap justify-between">
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-16 bg-confirmation"></div>
+          <div class="h-8 bg-confirmation-hover"></div>
+          <div class="h-8 bg-confirmation-disabled"></div>
+        </div>
+        <h4 class="subtitle">Confirmation</h4>
+        <dl class="flex flex-wrap justify-between">
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+      <li>
+        <div class="mb-1 border styleGuide-colorBox">
+          <div class="h-16 bg-warning"></div>
+          <div class="h-8 bg-warning-hover"></div>
+          <div class="h-8 bg-warning-disabled"></div>
+        </div>
+        <h4 class="subtitle">Warning</h4>
+        <dl class="flex flex-wrap justify-between">
+          <div class="flex justify-between w-full">
+            <dt>Class suffix:</dt>
+            <dd class="text-right font-mono styleGuide-className">
+              <ul></ul>
+            </dd>
+          </div>
+          <div class="flex justify-between w-full">
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color">
+              <ul></ul>
+            </dd>
+          </div>
+        </dl>
+      </li>
+    </ul>
+  </article>
+
+  <article id="styleGuide-icons" class="mt-20">
+    <header>
+      <h3 class="title">Icons</h3>
+    </header>
+
+    <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+      {% raw %}{% render 'theme/simple/ui/icon', icon: 'plus' %}{% endraw %}
+      <button class="float-right styleGuide-copy" title="Copy to clipboard">
+        <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <ul class="mt-10 flex flex-wrap gap-10 text-center">
+      {% render 'theme/simple/ui/icon', icon: 'all', class: 'w-6 mb-2' %}
+    </ul>
+  </article>
+
+  <article id="styleGuide-images" class="mt-20">
+    <header>
+      <h3 class="title">Images</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Picture placeholder</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/picture-placeholder' %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        {% render 'theme/simple/ui/picture-placeholder' %}
+      </section>
+    </div>
+  </article>
+
+  <article id="styleGuide-typography" class="mt-20">
+    <header>
+      <h3 class="title">Typography</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Text content</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Color:</dt>
+            <dd class="table-cell font-mono styleGuide-color"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font:</dt>
+            <dd class="table-cell font-mono styleGuide-font"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Size:</dt>
+            <dd class="table-cell font-mono styleGuide-size"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font Weight:</dt>
+            <dd class="table-cell font-mono styleGuide-fontWeight"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Line height:</dt>
+            <dd class="table-cell font-mono styleGuide-lineHeight"></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum luctus magna quis ex suscipit pharetra. Phasellus eleifend nisi sit amet risus imperdiet commodo. Suspendisse eu vestibulum mauris. Donec lacinia risus urna, tincidunt pretium lorem tincidunt nec. In in enim quis nibh feugiat imperdiet quis quis velit.</p>
+        <p>Nunc tortor purus, egestas ac tristique non, fringilla in ipsum. Pellentesque in auctor turpis, ac vestibulum nisl.</p>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Big titles</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Class:</dt>
+            <dd class="table-cell font-mono styleGuide-class"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Color:</dt>
+            <dd class="table-cell font-mono styleGuide-color"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font:</dt>
+            <dd class="table-cell font-mono styleGuide-font"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Size:</dt>
+            <dd class="table-cell font-mono styleGuide-size"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font Weight:</dt>
+            <dd class="table-cell font-mono styleGuide-fontWeight"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Line height:</dt>
+            <dd class="table-cell font-mono styleGuide-lineHeight"></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        <h2 class="bigtitle">Example title</h2>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Titles</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Class:</dt>
+            <dd class="table-cell font-mono styleGuide-class"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Color:</dt>
+            <dd class="table-cell font-mono styleGuide-color"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font:</dt>
+            <dd class="table-cell font-mono styleGuide-font"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Size:</dt>
+            <dd class="table-cell font-mono styleGuide-size"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font Weight:</dt>
+            <dd class="table-cell font-mono styleGuide-fontWeight"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Line height:</dt>
+            <dd class="table-cell font-mono styleGuide-lineHeight"></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        <h3 class="title">Example title</h3>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Subtitles</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Class:</dt>
+            <dd class="table-cell font-mono styleGuide-class"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Color:</dt>
+            <dd class="table-cell font-mono styleGuide-color"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font:</dt>
+            <dd class="table-cell font-mono styleGuide-font"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Size:</dt>
+            <dd class="table-cell font-mono styleGuide-size"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font Weight:</dt>
+            <dd class="table-cell font-mono styleGuide-fontWeight"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Line height:</dt>
+            <dd class="table-cell font-mono styleGuide-lineHeight"></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        <h4 class="subtitle">Example subtitle</h4>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Sidenotes</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Class:</dt>
+            <dd class="table-cell font-mono">sidenote</dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Color:</dt>
+            <dd class="table-cell font-mono styleGuide-color"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Font:</dt>
+            <dd class="table-cell font-mono styleGuide-font"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Size:</dt>
+            <dd class="table-cell font-mono styleGuide-size"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Font Weight:</dt>
+            <dd class="table-cell font-mono styleGuide-fontWeight"></dd>
+          </div>
+          <div class="table-row">
+            <dt class="pe-5 table-cell">Line height:</dt>
+            <dd class="table-cell font-mono styleGuide-lineHeight"></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        <span class="sidenote">Example sidenote</span>
+      </section>
+    </div>
+  </article>
+
+  <article id="styleGuide-formats" class="mt-20">
+    <header>
+      <h3 class="title">Text formatting</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Prices</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/price', amount_cents: 553344, currency: context.constants.CURRENCY %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        {% render 'theme/simple/price', amount_cents: 553344, currency: 'USD' %}
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Dates</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{{ '2021-02-20T11:06:37.718Z' | l: 'compact' }}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        {{ '2021-02-20T11:06:37.718Z' | l: 'compact' }}
+      </section>
+    </div>
+
+  </article>
+
+
+  <article id="styleGuide-linksButtons" class="mt-20">
+    <header>
+      <h3 class="title">Links and buttons</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Links</h4>
+        <dl>
+          <div>
+            <dt>Color:</dt>
+            <dd class="font-mono styleGuide-color"></dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center border styleGuide-example">
+        <a href="http://platformos.com/">Sample link</a>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button</dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dt class="table-cell ps-4 font-mono">button-disabled button-small button-icon-left button-icon-right</dt>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3">
+        <div class="p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button">Button</button>
+          <a href="http://platformos.com" class="button">Link</a>
+        </div>
+        <div class="mt-2 p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button" disabled>Disabled</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Icon buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button-icon-left button-icon-right</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3">
+        <div class="p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button button-icon-left">
+            {% render 'theme/simple/ui/icon', icon: 'plus' %}
+            Icon button
+          </button>
+          <a href="http://platformos.com" class="button button-icon-right">
+            Link button
+            {% render 'theme/simple/ui/icon', icon: 'plus' %}
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Secondary buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button button-secondary</dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dt class="table-cell ps-4 font-mono">button-disabled button-small</dt>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3">
+        <div class="p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button button-secondary">Button</button>
+          <a href="http://platformos.com" class="button button-secondary">Link</a>
+        </div>
+        <div class="mt-2 p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button button-secondary" disabled>Disabled</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Danger buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button button-danger</dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dt class="table-cell ps-4 font-mono">button-disabled button-small</dt>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3">
+        <div class="p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button button-danger">Button</button>
+          <a href="http://platformos.com" class="button button-danger">Link</a>
+        </div>
+        <div class="mt-2 p-5 flex flex-wrap items-center justify-center space-x-1 border">
+          <button class="button button-danger" disabled>Disabled</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Small buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button button-small</dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dt class="table-cell ps-4 font-mono">button-disabled</dt>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center justify-center space-x-1 border styleGuide-example">
+        <button class="button button-small">Button</button>
+        <a href="http://platformos.com" class="button button-small">Link</a>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Small secondary buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button button-secondary button-small</dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dt class="table-cell ps-4 font-mono">button-disabled</dt>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center justify-center space-x-1 border styleGuide-example">
+        <button class="button button-secondary button-small">Button</button>
+        <a href="http://platformos.com" class="button button-secondary button-small">Link</a>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Compact buttons</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">button button-compact</dd>
+          </div>
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dt class="table-cell ps-4 font-mono">button-disabled button-secondary</dt>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 flex items-center justify-center space-x-1 border styleGuide-example">
+        <button class="button button-compact">
+          {% render 'theme/simple/ui/icon', icon: 'trash' %}
+        </button>
+        <a href="http://platformos.com" class="button button-compact button-secondary">
+          {% render 'theme/simple/ui/icon', icon: 'trash' %}
+        </a>
+      </section>
+    </div>
+
+  </article>
+
+  <article id="styleGuide-forms" class="mt-20">
+    <header>
+      <h3 class="title">Forms</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Checkboxes</h4>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset>
+          <input type="checkbox" id="styleGuide-checkbox-a"> <label for="styleGuide-checkbox-a">Test checkbox</label>
+        </fieldset>
+        <fieldset>
+          <input type="checkbox" disabled id="styleGuide-checkbox-b"> <label for="styleGuide-checkbox-b">Disabled checkbox</label>
+        </fieldset>
+        <fieldset>
+          <input type="checkbox" disabled checked id="styleGuide-checkbox-b"> <label for="styleGuide-checkbox-b">Disabled checked checkbox</label>
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Radios</h4>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset>
+          <input type="radio" name="styleGuide-radio" id="styleGuide-radio-a"> <label for="styleGuide-radio-a">Radio</label>
+        </fieldset>
+        <fieldset>
+          <input type="radio" name="styleGuide-radio" disabled id="styleGuide-radio-b"> <label for="styleGuide-radio-a">Disabled radio</label>
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Text inputs</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Modifiers:</dt>
+            <dd class="table-cell ps-4 font-mono">form-input-small</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset>
+          <input type="text" placeholder="Text input">
+        </fieldset>
+        <fieldset class="mt-1">
+          <input type="text" disabled placeholder="Disabled input">
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Small text inputs</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">form-input-small</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset>
+          <input type="text" class="form-input-small" placeholder="Small text input">
+        </fieldset>
+        <fieldset class="mt-1">
+          <input type="text" class="form-input-small" disabled placeholder="Disabled small input">
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Selects</h4>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <select>
+          <option>Option A</option>
+          <option>Option B</option>
+          <option>Option C</option>
+          <option>Option D</option>
+        </select>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Form tip</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/form-tip', content: 'Lorem ipsum dolor sit amet…'  %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/form-tip', content_key: 'app.translation.test'  %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <input type="text">
+        {% render 'theme/simple/ui/form-tip', content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus eros eget velit tristique, sit amet facilisis nulla viverra.' %}
+      </section>
+    </div>
+
+    <section class="mt-16 flex flex-col gap-10">
+        <h4 class="subtitle">Forms playground</h4>
+
+        <div class="p-5 flex items-center gap-1 border styleGuide-example">
+          <input type="text">
+          <button class="button">Button</button>
+          <button class="button button-secondary">Secondary</button>
+          <button class="button button-compact">{% render 'theme/simple/ui/icon', icon: 'binocular' %}</button>
+          <select>
+            <option>Option 1</option>
+            <option>Option 2</option>
+          </select>
+          <button class="button button-icon-left">
+            {% render 'theme/simple/ui/icon', icon: 'plus' %}
+            Icon button
+          </button>
+        </div>
+
+        <div class="p-5 flex items-center gap-1 border styleGuide-example">
+          <input type="text" class="form-input-small">
+          <button class="button button-small">Button</button>
+          <button class="button button-secondary button-small">Secondary</button>
+        </div>
+    </section>
+  </article>
+
+
+  <article id="styleGuide-boxes" class="mt-20">
+    <header>
+      <h3 class="title">Boxes</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Card</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">card</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset class="mt-1">
+          <div class="card">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex orci, molestie vitae dolor pretium, tristique fringilla dui. Phasellus luctus at sapien eget ornare. Maecenas faucibus condimentum lacinia. Quisque blandit iaculis commodo. Cras in congue massa, nec auctor ante. Morbi fermentum quam ut ante volutpat convallis.
+          </div>
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Card overlay</h4>
+        <dl class="table">
+          <div class="table-row">
+            <dt class="table-cell">Class:</dt>
+            <dd class="table-cell ps-4 font-mono">card-overlay</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset class="mt-1">
+          <div class="card relative">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ex orci, molestie vitae dolor pretium, tristique fringilla dui. Phasellus luctus at sapien eget ornare. Maecenas faucibus condimentum lacinia. Quisque blandit iaculis commodo. Cras in congue massa, nec auctor ante. Morbi fermentum quam ut ante volutpat convallis.
+            <div class="card-overlay">Loading…</div>
+          </div>
+        </fieldset>
+      </section>
+    </div>
+
+  </article>
+
+  <article id="styleGuide-tables" class="mt-20">
+    <header>
+      <h3 class="title">Tables</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="w-2/3">
+        <div class="p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">
+{{'<div class="table">
+  <header>
+    <div>Column 1</div>
+    <div>Column 2</div>
+    <div class="text-end">Column 3</div>
+  </header>
+
+  <div class="table-content">
+    <ul>
+      <li>Content 1</li>
+      <li>Content 1</li>
+      <li class="text-end">Number</li>
+    </ul>
+    <ul>
+      <li>Content 2</li>
+      <li>Content 2</li>
+      <li class="text-end">Number</li>
+    </ul>
+  </div>
+</div>'}}
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+
+        <div class="table">
+          <header>
+            <div>Column 1</div>
+            <div>Column 2</div>
+            <div class="text-end">Column 3</div>
+          </header>
+
+          <div class="table-content">
+            <ul>
+              <li>Content 1</li>
+              <li>Content 1</li>
+              <li class="text-end">Number</li>
+            </ul>
+            <ul>
+              <li>Content 2</li>
+              <li>Content 2</li>
+              <li class="text-end">Number</li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </article>
+
+  <article id="styleGuide-tables" class="mt-20">
+    <header>
+      <h3 class="title">Slider (simple)</h3>
+    </header>
+
+    <div class="flex gap-10">
+      <section class="p-5 border styleGuide-example">
+
+        <div class="flex" data-slider>
+
+          <button
+            disabled
+            class="pe-6 hidden lg:block text-interaction disabled:text-interaction-disabled hover:text-interaction-hover transition-colors"
+            data-slider-prev
+          >
+            {% if dir == 'rtl' %}
+              {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'fill-current w-4 h-4' %}
+            {% else %}
+              {% render 'theme/simple/ui/icon', icon: 'dashLeft', class: 'fill-current w-4 h-4' %}
+            {% endif %}
+          </button>
+
+          <ul class="w-full relative flex whitespace-nowrap overflow-x-auto lg:overflow-hidden">
+            <li class="w-1/3 mx-2 first:ms-0 last:me-0 flex-shrink-0">Item 1</li>
+            <li class="w-1/3 mx-2 first:ms-0 last:me-0 flex-shrink-0">Item 2</li>
+            <li class="w-1/3 mx-2 first:ms-0 last:me-0 flex-shrink-0">Item 3</li>
+            <li class="w-1/3 mx-2 first:ms-0 last:me-0 flex-shrink-0">Item 4</li>
+          </ul>
+
+          <button
+            class="ps-6 hidden lg:block text-interaction disabled:text-interaction-disabled hover:text-interaction-hover transition-colors"
+            data-slider-next
+          >
+            {% if dir == 'rtl' %}
+              {% render 'theme/simple/ui/icon', icon: 'dashLeft', class: 'fill-current w-4 h-4' %}
+            {% else %}
+              {% render 'theme/simple/ui/icon', icon: 'dashRight', class: 'fill-current w-4 h-4' %}
+            {% endif %}
+          </button>
+
+        </div>
+
+      </section>
+    </div>
+  </article>
+
+  <article id="styleGuide-navigation" class="mt-20">
+    <header>
+      <h3 class="title">Navigation elements</h3>
+    </header>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Spinner</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">{% raw %}{% render 'theme/simple/ui/spinner' %}{% endraw %}</div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        {% render 'theme/simple/ui/spinner' %}
+      </section>
+    </div>
+
+
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Dropdowns</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">
+{% raw %}{% capture 'example_dropdown' %}{% endraw %}
+  {{ '<ul class="px-7 py-4 flex flex-col gap-3 whitespace-nowrap">
+    <li><a href="https://platformos.com">platformOS</a></li>
+    <li><a href="https://documentation.platformos.com/get-started">Get started</a></li>
+    <li><a href="https://documentation.platformos.com">Documentation</a></li>
+  </ul>' }}
+{% raw %}{% endcapture %}{% endraw %}
+        </div>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/dropdown', toggle_title: 'Toggle dropdown', label: 'Example dropdown', content: example_dropdown %}{% endraw %}
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+      {% capture 'example_dropdown' %}
+        <ul class="px-7 py-4 flex flex-col gap-3 whitespace-nowrap">
+          <li><a href="https://platformos.com">platformOS</a></li>
+          <li><a href="https://documentation.platformos.com/get-started">Get started</a></li>
+          <li><a href="https://documentation.platformos.com">Documentation</a></li>
+        </ul>
+      {% endcapture %}
+      {% render 'theme/simple/ui/dropdown', toggle_title: 'Toggle dropdown', label: 'Example dropdown', content: example_dropdown %}
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Breadcrumbs</h4>
+        <div class="p-5 border bg-panel font-mono whitespace-pre styleGuide-code">{% raw %}---
+metadata:
+  breadcrumbs:
+    - label: Example
+      url: /
+    - label: app.style_guide.title
+      url: /style-guide
+---
+{% endraw %}</div>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre styleGuide-code">{% raw %}{% parse_json breadcrumbs %}
+[
+{
+  "label": "Example",
+  "url": "http://platformos.com"
+},
+{
+  "label": "Style guide",
+  "url": "http://platformos.com"
+}
+]
+{% endparse_json %}{% endraw %}</div>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs, value: 2 %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        {% render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs, value: 2 %}
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Tags</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">tags = ['tag #1', 'tag #2']</div>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/tags', tags: tags, url: 'http://platformos.com/?tag='  %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset class="mt-1">
+          {% assign tags = 'tag #1, tag #2' | split: ',' %}
+          {% render 'theme/simple/ui/tags', tags: tags, url: 'http://platformos.com/?tag='  %}
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Pagination</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono styleGuide-code">
+          {% raw %}{% render 'theme/simple/ui/pagination', collection: collection, current_page: 3 %}{% endraw %}
+          <button class="float-right styleGuide-copy" title="Copy to clipboard">
+            <svg width="24" height="24" class="text-gray-700" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 21.75C16.5 22.5784 15.8284 23.25 15 23.25H4.5C3.67157 23.25 3 22.5784 3 21.75V8.25C3 7.42157 3.67157 6.75 4.5 6.75H12.129C12.5265 6.75008 12.9078 6.90798 13.189 7.189L16.061 10.061C16.342 10.3422 16.4999 10.7235 16.5 11.121V21.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7.5 6.75V2.25C7.5 1.42157 8.17157 0.75 9 0.75H16.629C17.0265 0.750085 17.4078 0.907982 17.689 1.189L20.561 4.061C20.842 4.3422 20.9999 4.72345 21 5.121V15.75C21 16.5784 20.3284 17.25 19.5 17.25H16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset class="mt-1">
+          {% liquid
+            assign collection = '{ "total_pages": 100, "total_entries": 1000, "has_next_page": true, "has_previous_page": true }' | parse_json
+          %}
+          {% render 'theme/simple/ui/pagination', collection: collection, current_page: 3 %}
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">User avatar</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">{% raw %}{% render 'theme/simple/ui/avatar', profile: profile, size: 96, class: 'w-24 h-24' %}{% endraw %}</div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        <fieldset class="mt-1 flex justify-around">
+          {% render 'theme/simple/ui/avatar', profile: current_profile, size: 96, class: 'w-24 h-24' %}
+          {% render 'theme/simple/ui/avatar', size: 96, class: 'w-24 h-24' %}
+        </fieldset>
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10" id="styleGuide-flashes">
+      <section class="w-2/3">
+        <h4 class="subtitle">Notifications</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">{% raw %}{% render 'theme/simple/ui/flash', error: 'Error message' %}{% endraw %}</div>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">new api.Flash('error', 'Error message')</div>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">{% raw %}{% render 'theme/simple/ui/flash', notice: 'Notice message', autohide: false %}{% endraw %}</div>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">new api.Flash('success', 'Success message')</div>
+      </section>
+      <section class="w-1/3 p-5 border styleGuide-example">
+        {% render 'theme/simple/ui/flash', error: 'Error message' %}
+        {% render 'theme/simple/ui/flash', notice: 'Notice message', autohide: false %}
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-2/3">
+        <h4 class="subtitle">Badges</h4>
+        <div class="mt-5 p-5 border bg-panel font-mono whitespace-pre-wrap styleGuide-code">{% raw %}{% render 'theme/simple/ui/badge', class: 'bg-confirmation', label: 'badge' %}{% endraw %}</div>
+      </section>
+      <section class="w-1/3 border relative overflow-hidden styleGuide-example">
+        {% render 'theme/simple/ui/badge', class: 'bg-confirmation', label: 'badge' %}
+      </section>
+    </div>
+
+    <div class="mt-16 flex gap-10">
+      <section class="w-1/3">
+        <h4 class="subtitle">Prose - readable formatting long/user input content</h4>
+      </section>
+      <section class="w-2/3 border relative overflow-hidden styleGuide-example">
+
+        <div class="prose">
+
+          <h1>Heading 1 (.bigtitle)</h1>
+          <h2>Heading 2 (.title)</h2>
+          <h3>Heading 3 (.subtitle)</h3>
+          <h4>Heading 4</h4>
+          <h5>Heading 5</h5>
+          <h6>Heading 6</h6>
+
+          <blockquote>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. At voluptate, totam expedita facilis in velit, et quasi ut non, ipsum modi tempora ipsa error maiores rem adipisci. Soluta, ut quibusdam?
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur harum tenetur velit explicabo pariatur debitis quasi soluta quam alias in porro, nulla illo iusto excepturi adipisci vel ex aut incidunt!
+          </blockquote>
+
+          <p><b>Lorem ipsum dolor sit amet </b><i>consectetur adipisicing elit</i>. Nihil, odio possimus. Dolorem odit eum doloribus. Explicabo aspernatur ducimus accusantium repellendus voluptas nemo illum cum? Possimus tenetur esse veritatis temporibus laboriosam.</p>
+
+          <ul>
+            <li>UL List item</li>
+            <li>UL List item</li>
+            <li>UL List item</li>
+          </ul>
+
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, odio possimus. Dolorem odit eum doloribus. Explicabo aspernatur ducimus accusantium repellendus voluptas nemo illum cum? Possimus tenetur esse veritatis temporibus laboriosam.</p>
+
+          <ol>
+            <li>OL List item</li>
+            <li>OL List item</li>
+            <li>OL List item</li>
+          </ol>
+
+          <pre><code>function highlight() {
+  let x = document.querySelectorAll("pre > code");
+  return x.highlight();
+}</code></pre>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Template</td>
+                <td>{{ 'now' | to_date }}</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Community</td>
+                <td>{{ 'now' | to_date }}</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Mesh</td>
+                <td>{{ 'now' | to_date }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <img src="{{ 'images/person1.jpg' | asset_url }}" alt="Person">
+          <img src="{{ 'images/person1.jpg' | asset_url }}" alt="Person">
+          <img src="{{ 'images/person1.jpg' | asset_url }}" alt="Person">
+        </div>
+
+      </section>
+    </div>
+
+
+
+</section>

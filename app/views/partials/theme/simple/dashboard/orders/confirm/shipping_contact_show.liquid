@@ -1,0 +1,19 @@
+<section class="card mb-9">
+  <p class="flex items-center">
+    {% render 'theme/simple/ui/icon', icon: 'userCircle', class: 'w-6 me-2' %}
+    {{ object.shipping_first_name  }} {{ object.shipping_last_name  }}
+  </p>
+  <p class="flex items-center">
+    {% render 'theme/simple/ui/icon', icon: 'mail', class: 'w-6 me-2' %}
+    {{ object.shipping_email  }}
+  </p>
+  <p class="flex items-center">
+    {% render 'theme/simple/ui/icon', icon: 'phone', class: 'w-6 me-2' %}
+    {{ object.shipping_phone  }}
+  </p>
+  <p>
+    <a href="/dashboard/buy/review">
+      {{ 'app.orders.confirm.change' | t }}
+    </a>
+  </p>
+</section>

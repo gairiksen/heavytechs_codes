@@ -1,0 +1,4 @@
+{% liquid
+  function transaction = 'lib/queries/transactions/find', id: event.target.id
+  function res = 'lib/commands/orders/mark_paid', orders: transaction.orders, profile_id: transaction.profile_id
+%}

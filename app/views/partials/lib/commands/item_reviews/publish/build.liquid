@@ -1,0 +1,13 @@
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "score": {{ object.score | plus: 0 | json }},
+    "body": {{ object.body | json }},
+    "pros": {{ object.pros | json }},
+    "cons": {{ object.cons | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

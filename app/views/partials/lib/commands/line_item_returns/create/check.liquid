@@ -1,0 +1,26 @@
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'line_item_id'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'order_id'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'reason'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'reason_details'
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'quantity'
+  assign returned_quantity = line_item.line_item_returns | map: 'quantity' | sum_array
+  assign line_items_to_return = line_item.quantity | minus: returned_quantity
+  function c = 'lib/validations/number', c: c, object: object, field_name: 'quantity', greater_than: 0, less_than_or_equal: line_items_to_return
+
+  assign item_return_days = line_item.item.return_days | default: 30
+  assign days_from_buy = line_item.created_at | time_diff: 'now', 'd'
+  if days_from_buy > item_return_days
+    include 'lib/register_error', contract: c, field_name: field_name, key: 'app.models.line_item_returns.errors.expired_return_period'
+  endif
+
+  function c = 'lib/validations/shipping_type', c: c, object: object
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}

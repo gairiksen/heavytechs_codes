@@ -1,0 +1,31 @@
+<div class="w-full mx-auto container p-2 bg-gray-200">
+  {{ events.results.size }} / {{ events.total_entries }}
+  {% for event in events.results %}
+    {% assign p = event.payload %}
+    <div class="rounded m-2 p-2 text-xs {% if p.type == 'status_created' %}{% else %}bg-white shadow-md{% endif %}">
+      <div class="float-right"> {{ p.date | l }} </div>
+      <div class="mb-2">{{ p.type }} <strong>{{ p.object.name | replace: "app.statuses.", "" }}</strong></div>
+
+      <span class="">{{ p.actor.type }}#{{ p.actor.id }}</span>
+      <span class="">{{ p.object.type }}#{{ p.object.id }}</span>
+      <span class="">{{ p.target.type }}#{{ p.target.id }}</span>
+
+      {% if p.attributed_to.type == 'collection' %}
+        <span class="">{{ p.attributed_to.type }}#{{ p.attributed_to.id }} items({{ p.attributed_to.items.size }})</span>
+      {% else %}
+        <span class="">{{ p.attributed_to.type }}#{{ p.attributed_to.id }}</span>
+      {% endif %}
+
+      <span class="float-right">
+        <a href="/admin/activities/events/{{ p.uuid }}/trigger">show</a> |
+        <a href="/admin/activities/events/{{ p.uuid }}/trigger?trigger=1">broadcast</a> |
+        <a href="/admin/activities/events/{{ p.uuid }}/duplicate">duplicate</a>
+      </span>
+      <div>
+        {{ p.uuid }}
+      </div>
+    </div>
+  {% else %}
+    <h3>no events found</h3>
+  {% endfor %}
+</div>

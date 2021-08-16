@@ -1,0 +1,22 @@
+{% parse_json object %}
+  {
+    "id":          {{ object.id | json }},
+    "owner_id":    {{ owner_id | json }},
+    "name":        {{ object.name | json }},
+    "summary":     {{ object.summary | json }},
+    "content_type":     {{ object.content_type | json }},
+    "description": {{ object.description | default: "" | json }},
+    "uuid":        {{ object.uuid | json }},
+    "group_type": {{ object.group_type | json }},
+    "ask_to_join": {{ object.ask_to_join | json }},
+    "meta_visible": {{ object.meta_visible | json }},
+    "content_visible": {{ object.content_visible | json }},
+    "approve_request": {{ object.approve_request | json }},
+    "post_content": {{ object.post_content | json }},
+    "invite_member": {{ object.invite_member | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

@@ -1,0 +1,5 @@
+mutation delete_user_ase($id: ID!) {
+  model_delete(
+    id: $id
+  ){ id }
+}

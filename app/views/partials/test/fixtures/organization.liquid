@@ -1,0 +1,13 @@
+{% parse_json data %}
+  {
+    "name": "{{ name }}",
+    "uuid": {{ '' | uuid | json }},
+    "offline_stores": {{ offline_stores | json }},
+    "delivery_fee": 300
+  }
+{% endparse_json %}
+
+{% liquid
+  function profile = 'lib/commands/organizations/create', object: data
+  return profile
+%}

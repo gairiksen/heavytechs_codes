@@ -1,0 +1,19 @@
+mutation create($uuid: String $slug: String, $name: String $anonymous_session_id: String) {
+  record_create(
+    record: {
+      table: "profile"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "name" value: $name }
+        { name: "slug" value: $slug }
+        { name: "anonymous_session_id" value: $anonymous_session_id }
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    anonymous_session_id: property(name: "anonymous_session_id")
+  }
+}

@@ -1,0 +1,102 @@
+mutation update( 
+    $id: ID!
+    $uuid: String
+    $user_id: String
+    $is_truck: String
+    $short_description_service_skills: String
+    $truck_type: String
+    $crane_certification: String
+    $crane_cert_expiry_date: String
+    $capacity: String
+    $no_of_products_tank: String
+    $fuel_tank_size: String
+    $truck_class: String
+    $air_compressor: String
+    $tooling_basic: String
+    $tooling_basic_1_drive: String
+    $tooling_generic_diagnostics: String
+    $master_set: String
+    $tooling_speciality_tool: String
+    $line_boring: String
+    $nitrogen_charge_kit: String
+    $mag_drill: String
+    $fifty_t_hydraulic_jacks: String
+    $track_pin_press: String
+    $field_hose_press: String
+    $hydraulic_pulling_rams: String
+    $hydraulic_torque_wrench: String
+    $generic_diagnostic_pc: String
+    $oem_diagnostic_software: String
+    $lube_skid: String
+    
+) {
+  model_update(
+    id: $id
+    model: {
+      model_schema_name: "profile_truck"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "is_truck" value: $is_truck }
+        { name: "short_description_service_skills" value: $short_description_service_skills }      
+        { name: "truck_type" value: $truck_type }
+        { name: "crane_certification" value: $crane_certification }
+        { name: "crane_cert_expiry_date" value: $crane_cert_expiry_date }
+        { name: "capacity" value: $capacity }
+        { name: "no_of_products_tank" value: $no_of_products_tank }
+        { name: "fuel_tank_size" value: $fuel_tank_size }
+        { name: "truck_class" value: $truck_class }
+        { name: "air_compressor" value: $air_compressor }
+        { name: "tooling_basic" value: $tooling_basic }
+        { name: "tooling_basic_1_drive" value: $tooling_basic_1_drive }
+        { name: "tooling_generic_diagnostics" value: $tooling_generic_diagnostics }
+        { name: "master_set" value: $master_set }
+        { name: "tooling_speciality_tool" value: $tooling_speciality_tool }
+        { name: "line_boring" value: $line_boring }   
+        { name: "nitrogen_charge_kit" value: $nitrogen_charge_kit }   
+        { name: "mag_drill" value: $mag_drill }   
+        { name: "fifty_t_hydraulic_jacks" value: $fifty_t_hydraulic_jacks }   
+        { name: "track_pin_press" value: $track_pin_press }   
+        { name: "field_hose_press" value: $field_hose_press }   
+        { name: "hydraulic_pulling_rams" value: $hydraulic_pulling_rams }   
+        { name: "hydraulic_torque_wrench" value: $hydraulic_torque_wrench }   
+        { name: "generic_diagnostic_pc" value: $generic_diagnostic_pc }   
+        { name: "oem_diagnostic_software" value: $oem_diagnostic_software } 
+        { name: "lube_skid" value: $lube_skid }    
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    is_truck: property(name: "is_truck")
+    short_description_service_skills: property(name: "short_description_service_skills")
+    truck_type: property(name: "truck_type")
+    crane_certification: property(name: "crane_certification")
+    crane_cert_expiry_date: property(name: "crane_cert_expiry_date")
+    capacity: property(name: "capacity")
+    no_of_products_tank: property(name: "no_of_products_tank")
+    fuel_tank_size: property(name: "fuel_tank_size")
+    truck_class: property(name: "truck_class")
+    air_compressor: property(name: "air_compressor")
+    tooling_basic: property(name: "tooling_basic")
+    tooling_basic_1_drive: property(name: "tooling_basic_1_drive")
+    tooling_generic_diagnostics: property(name: "tooling_generic_diagnostics")
+    master_set: property(name: "master_set")
+    tooling_speciality_tool: property(name: "tooling_speciality_tool")
+    line_boring: property(name: "line_boring")  
+    nitrogen_charge_kit: property(name: "nitrogen_charge_kit")  
+    mag_drill: property(name: "mag_drill")  
+    fifty_t_hydraulic_jacks: property(name: "fifty_t_hydraulic_jacks")  
+    track_pin_press: property(name: "track_pin_press")  
+    field_hose_press: property(name: "field_hose_press")  
+    hydraulic_pulling_rams: property(name: "hydraulic_pulling_rams")  
+    hydraulic_torque_wrench: property(name: "hydraulic_torque_wrench")  
+    generic_diagnostic_pc: property(name: "generic_diagnostic_pc")  
+    oem_diagnostic_software: property(name: "oem_diagnostic_software")  
+    lube_skid: property(name: "lube_skid") 
+
+  }
+}

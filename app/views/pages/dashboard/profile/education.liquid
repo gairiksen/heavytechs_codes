@@ -1,0 +1,18 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  graphql presigned_url = 'photos/presign' | dig: 'presigned'
+
+  function profile_education = 'lib/queries/profiles/find_education', user_id: context.current_user.id
+  function profile_ase = 'lib/queries/profiles/find_ase', user_id: context.current_user.id
+  function profile_custom_oem = 'lib/queries/profiles/find_custom_oem', user_id: context.current_user.id
+  function profile_insurance = 'lib/queries/profiles/find_insurance', user_id: context.current_user.id
+  function profile_availability = 'lib/queries/mechanic_availability/find', user_id: context.current_user.id, current_profile: current_profile
+  function search_mechanic_deatils = 'lib/queries/mechanic/details', user_id: context.current_user.id
+  
+%}
+{%
+  render 'theme/simple/dashboard/profile/education', object: current_profile, presigned_url: presigned_url, context: context, profile_education: profile_education, profile_ase: profile_ase, profile_custom_oem: profile_custom_oem, profile_insurance: profile_insurance, profile_availability: profile_availability, search_mechanic_deatils: search_mechanic_deatils, host: context.location.host
+%}
+

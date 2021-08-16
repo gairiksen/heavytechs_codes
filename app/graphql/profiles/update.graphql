@@ -1,0 +1,73 @@
+mutation update(
+  $id: ID!
+  $uuid: String
+  $user_id: String
+  $slug: String
+  $name: String
+  $first_name: String
+  $last_name: String
+  $default_address_id: String
+  $mobile_number: String
+  $company_name: String
+  $short_description: String
+  $position: String
+  $ready_for_travel: String
+  $total_experience: String
+  $drivers_license_class_a: String
+  $drivers_license_class_b: String
+  $drivers_license_class_c: String
+  $drivers_license_tanker: String
+) {
+  model_update(
+    id: $id
+    model: {
+      properties: [
+        { name: "user_id", value: $user_id }
+        { name: "uuid", value: $uuid }
+        { name: "name", value: $name }
+        { name: "slug", value: $slug }
+        { name: "first_name", value: $first_name }
+        { name: "last_name", value: $last_name }
+        { name: "default_address_id", value: $default_address_id }
+        { name: "mobile_number", value: $mobile_number }
+        { name: "company_name", value: $company_name }
+        { name: "short_description", value: $short_description }
+        { name: "position", value: $position }
+        { name: "ready_for_travel", value: $ready_for_travel }
+        { name: "total_experience", value: $total_experience }
+        { name: "drivers_license_class_a", value: $drivers_license_class_a }
+        { name: "drivers_license_class_b", value: $drivers_license_class_b }
+        { name: "drivers_license_class_c", value: $drivers_license_class_c }
+        { name: "drivers_license_tanker", value: $drivers_license_tanker }
+        
+      ]
+    }
+  ) {
+    id
+    created_at
+
+    user_id: property(name: "user_id")
+    name: property(name: "name")
+    slug: property(name: "slug")
+    uuid: property(name: "uuid")
+    first_name: property(name: "first_name")
+    last_name: property(name: "last_name")
+    default_address_id: property(name: "default_address_id")
+    mobile_number: property(name: "mobile_number")
+    company_name: property(name: "company_name")
+    short_description: property(name: "short_description")
+    position: property(name: "position")
+    ready_for_travel: property(name: "ready_for_travel")
+    drivers_license_class_a: property(name: "drivers_license_class_a")
+    drivers_license_class_b: property(name: "drivers_license_class_b")
+    drivers_license_class_c: property(name: "drivers_license_class_c")
+    drivers_license_class_tanker: property(name: "drivers_license_tanker")
+    total_experience: property(name: "total_experience")
+
+
+    user: related_user(join_on_property: "uuid", foreign_property: "uuid") {
+      id
+      email
+    }
+  }
+}

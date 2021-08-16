@@ -1,0 +1,18 @@
+---
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_superadmin'
+  assign constant_name = context.params.name
+  function object = 'lib/commands/constants/set', name: constant_name, value: context.params.value
+
+  if object.valid
+    include 'redirect_to', url: '/admin/setup', notice: 'app.admin.setup.saved'
+  else
+    echo context.constants[constant_name]
+    echo context.params
+    echo object
+    break
+  endif
+%}

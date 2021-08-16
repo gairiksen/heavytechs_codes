@@ -1,0 +1,122 @@
+<%
+var taskStatusClass = '';
+
+if(r.status === 'failed')
+    taskStatusClass = 'failed-view';
+else if(r.status === 'succeeded')
+    taskStatusClass = 'succeeded-view';
+%>
+
+<div class="report-head <%= taskStatusClass %>">
+    <% if(r.status === 'failed' || r.status === 'succeeded') { %>
+    <div class="report-btns-container">
+        <% if(r._runOptions) { %>
+        <div class="restart-task">
+            <span></span>
+            <div class="separator"></div>
+            <ul class="restart-options">
+                <li>Restart all tests</li>
+                <% if(r.status === 'failed') {%>
+                    <li data-run-failed-tests="true">Restart failed tests</li>
+                <% } %>
+            </ul>
+        </div>
+        <% } %>
+        <div class="export-report-btn">
+            <span></span>
+            <div class="separator"></div>
+            <ul class="export-options">
+                <li data-taskid="<%= r.uid%>" data-format="json">Export to JSON</li>
+                <li data-taskid="<%= r.uid%>" data-format="junit">Export to JUnit</li>
+                <li data-taskid="<%= r.uid%>" data-format="nunit">Export to NUnit</li>
+            </ul>
+        </div>
+        <div class="remove-report-btn" title="Remove report"><span></span></div>
+    </div>
+    <% } %>
+    <div class="breadcrumbs">
+        <a href="/results/" class="root nav-link">results</a>&nbsp;/
+        <span class="final"><%= r.name %></span>&nbsp;
+    </div>
+
+    <div class="report-stats">
+        <div class="stats">
+            <ul>
+                <%if(r.status != 'pending'){%>
+                <li>
+                    <p>
+                        <span>Passed:</span>
+                        <span><%= r.passed %></span>
+                    </p>
+                </li>
+                <li <%if(r.failed > 0) {%> class="red" <%}%>>
+                    <p>
+                        <span>Failed:</span>
+                        <span><%= r.failed %></span>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <span>Total:</span>
+                        <span><%= r.testCount %></span>
+                    </p>
+                </li>
+                <%}else{%>
+                <li class="pending">
+                    Pending
+                </li>
+                <%}%>
+            </ul>
+
+            <%if(r.status === 'running') {%>
+                <p class="progress">in progress</p>
+            <%}%>
+        </div>
+
+        <%var taskTime = r.time;
+        if(taskTime > 0) {%>
+        <%var duration = '';
+
+        if(taskTime >= 3600) {
+        duration += Math.floor(taskTime / 3600) + 'h ';
+        taskTime = taskTime % 3600;
+        }
+
+        if(taskTime >= 60) {
+        duration += Math.floor(taskTime / 60) + 'm ';
+        taskTime = taskTime % 60;
+        }
+
+        if(taskTime > 0)
+        duration += taskTime + 's';
+        %>
+        <%}%>
+
+        <div class="task-info">
+            <div class="time-col">
+                <%if(r.startedAt){%>
+                    <div class="started-at"><span class="time-title">Started at: </span><span><%= r.startedAt[1] %>  <%= r.startedAt[2] %> <%= r.startedAt[0] %></span></div>
+                    <%if(duration) {%>
+                        <div class="duration"><div></div><span class="time-title">Duration: </span><span><%= duration %></span></div>
+                    <%}%>
+                <%}%>
+                <%if(r.completedAt){%>
+                    <div class="completed-at"><div></div><span class="time-title">Completed at: </span><span><%= r.completedAt[1] %> <%= r.completedAt[2] %> <%= r.completedAt[0]%></span></div>
+                <%}%>
+            </div>
+            <%var browserVersions = Object.keys(r.browserVersions) %>
+            <%if(browserVersions.length) {%>
+            <div class="workers-list">
+                <span class="workers-title">Workers: </span>
+                <ul>
+                    <%browserVersions.forEach(function(workerName) {%>
+                    <li>
+                        <%=workerName%> (v. <%=r.browserVersions[workerName]%>)<%if(browserVersions[browserVersions.length - 1] !== workerName) {%>, <%}%>
+                    </li>
+                    <%});%>
+                </ul>
+            </div>
+            <%}%>
+        </div>
+    </div>
+</div>

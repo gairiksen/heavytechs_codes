@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/profiles/mark_otp/build', object: profile
+  function object = 'lib/commands/profiles/mark_otp/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', mutation_name: 'profiles/mark_otp' object: object, selection: 'record_update'
+  endif
+
+  return object
+%}

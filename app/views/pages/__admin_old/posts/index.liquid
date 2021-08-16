@@ -1,0 +1,9 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/must_be_superadmin', profile: current_profile
+
+  function posts = 'lib/queries/posts/search', limit: 100, parent_id_exists: false, creator_id: creator_id
+  include 'theme/simple/__admin_old/menu', section: 'posts'
+  include 'theme/simple/__admin_old/posts/index', posts: posts
+%}

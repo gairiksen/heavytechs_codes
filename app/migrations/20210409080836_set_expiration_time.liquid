@@ -1,0 +1,9 @@
+{% graphql r %}
+mutation {
+  max_cart_value: constant_set(name: "ORDER_CANCEL_UNPAID_AFTER_X_HOURS", value: "1"){
+    name
+    value
+  }
+}
+{% endgraphql %}
+{% log r, type: 'migrations/set_expiration_time' %}

@@ -1,0 +1,74 @@
+---
+slug: find_project/search
+method: post
+---
+{% liquid
+  
+
+  assign user_id = context.params.user_id | default: ''
+
+  assign c_user_id = context.params.c_user_id
+
+  function current_profile = 'lib/current_profile', user_id: user_id
+
+  assign keyword_search = context.params.keyword_search | default: ''
+  assign earthworks = context.params.earthworks | default: ''
+  assign mining = context.params.mining | default: ''
+  assign fleet = context.params.fleet | default: ''
+  assign paving = context.params.paving | default: ''
+  assign pipeline = context.params.pipeline | default: ''
+  assign energy_production = context.params.energy_production | default: ''
+
+  assign duration_type = context.params.duration_type | default: ''
+
+  assign heavy_equipment_mechanic = context.params.heavy_equipment_mechanic | default: ''
+  assign truck_mechanic = context.params.truck_mechanic | default: ''
+  assign welder_fabricator = context.params.welder_fabricator | default: ''
+  assign oilers_pm_tech = context.params.oilers_pm_tech | default: ''
+  assign mechanist = context.params.mechanist | default: ''  
+
+  assign latitude = context.params.latitude | default: ''
+  assign longitude = context.params.longitude | default: ''
+  assign distance = context.params.distance | plus: 0
+  assign location = context.params.location
+
+  assign start_date = context.params.start_date | default: ''
+  assign todays_date = 'now' | date: "%d-%m-%Y"
+  if start_date == '1'
+    assign start_seconds = 7 | times: 24 | times: 60 | times: 60
+    assign project_start_from = todays_date | plus: start_seconds | date: "%d-%m-%Y"
+  endif
+
+  assign industry_category = context.params.industry_category | default: ''
+  if industry_category and industry_category == 'ew'
+    assign earthworks = '1' | default: ''
+  endif
+
+  if industry_category and industry_category == 'mn'
+    assign mining = '1' | default: ''
+  endif
+
+  if industry_category and industry_category == 'fo'
+    assign fleet = '1' | default: ''
+  endif
+
+  if industry_category and industry_category == 'pv'
+    assign paving = '1' | default: ''
+  endif
+
+  if industry_category and industry_category == 'ep'
+    assign energy_production = '1' | default: ''
+  endif
+
+  if industry_category and industry_category == 'pl'
+    assign pipeline = '1' | default: ''
+  endif
+
+  function records = 'lib/queries/project/search', keyword: context.params.qkeyword, limit: 15, lang: context.language, latitude: latitude, longitude: longitude, distance: distance, location: location, earthworks: earthworks, fleet: fleet, paving: paving, energy_production: energy_production, pipeline: pipeline, industry_category: industry_category, mining: mining, duration_type: duration_type, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic, welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, mechanist: mechanist, keyword_search: keyword_search, user_id: c_user_id
+
+  function favorites = 'lib/queries/profiles/find_my_favourites', limit: 15, lang: context.language, user_id: context.params.user_id
+
+  render 'theme/simple/find_project/index', records: records, user_id: user_id, latitude: latitude, longitude: longitude, distance: distance, location: location, earthworks: earthworks, fleet: fleet, paving: paving, energy_production: energy_production, pipeline: pipeline, industry_category: industry_category, mining: mining, duration_type: duration_type, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic, welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, mechanist: mechanist, keyword_search: keyword_search, start_date: start_date, current_profile: current_profile, c_user_id: c_user_id, favorites: favorites
+
+  
+%}

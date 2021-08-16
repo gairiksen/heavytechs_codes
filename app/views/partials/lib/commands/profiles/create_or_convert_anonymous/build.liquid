@@ -1,0 +1,6 @@
+{% liquid
+  hash_assign object["user_id"] = user.id
+  function profile_anonymous = 'lib/queries/profiles/find', anonymous_session_id: session.anonymous_session_id
+  hash_assign object["id"] = profile_anonymous.id
+  return object
+%}

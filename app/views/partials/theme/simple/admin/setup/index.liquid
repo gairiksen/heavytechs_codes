@@ -1,0 +1,191 @@
+<div>
+  <div class="mt-3 mb-10"
+    x-data='{"open": false}'
+  >
+    <div class="mb-2 w-full">
+      <h1 class="title">{{ 'admin_old.stripe.header' | t }}</h1>
+    </div>
+    <a href="#"
+      x-on:click="open=!open"
+    >
+      {{ 'admin_old.stripe.setup_stripe' | t }}
+    </a>
+    <div
+      x-show="open"
+    >
+      <div class="w-full p-6 mt-8 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+        <div class="mb-2 w-full">
+          <ul class="leading-10 list-decimal list-inside">
+            <li>
+              {{ 'admin_old.stripe.register' | t }}
+            </li>
+            <li>
+              {{ 'admin_old.stripe.copy_and_add' | t }}
+              <a href="https://dashboard.stripe.com/settings/applications" target="_blank" rel="extrnal noopener">{{ 'admin_old.stripe.settings' | t }}</a>
+              <br>
+              <span class="px-4 py-3 bg-gray-200 rounded-sm select-all">https://{{ context.location.host }}/dashboard/payments/account/success</span>
+            </li>
+            <li>
+              {{ 'admin_old.stripe.public_key' | t }}
+            </li>
+          </ul>
+        </div>
+
+        <form action="/admin/setup" method="post">
+          {% include 'authenticity_token' %}
+          {% assign keys = 'mpo_fee_percent,stripe_pk_key,stripe_sk_key,stripe_client_id' | split: ',' %}
+          {% for key in keys %}
+            <label class="block mt-4" for="{{ key }}">
+              <span class="block mb-1">{{ 'app.marketplace_setup.' | append: key | t }}</span>
+              <input name="constants[{{ key }}]" type="text" id="{{ key }}" value="{{ object[key] }}" class="w-full form-input" />
+              {% include 'theme/simple/field_error', errors: object.errors[key] %}
+            </label>
+          {% endfor %}
+
+          <button class="mt-3 button">{{ 'app.admin.setup.save' | t }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="title">{{ 'app.currency.setup.title' | t }}</h1>
+  </div>
+
+  <div class="w-full p-5 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="currency" />
+      <label class="block mt-4" for="currency"></label>
+      <input type="text" id="currency" name="value" value="{{ currency }}" />
+      <input type="submit" class="ml-3 button button" value="{{ 'app.currency.setup.save' | t }}" class="mt-3 button"></br>
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="title">{{ 'app.chat.setup.title' | t }}</h1>
+  </div>
+
+  <div class="w-full p-5 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="chat">
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="true" id="chatOn"{% if chat_enabled %}checked{% endif %}>
+        <label class="mt-4" for="chatOn">{{ 'app.chat.setup.enable' | t }}</label>
+      </fieldset>
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="false" id="chatOff"{% unless chat_enabled %}checked{% endunless %}>
+        <label class=" mt-4" for="chatOff">{{ 'app.chat.setup.disable' | t }}</label>
+      </fieldset>
+      <input type="submit" value="{{ 'app.admin.setup.save' | t }}" class="mt-3 button">
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="text-2xl">{{ 'admin_old.slack.setup.title' | t }}</h1>
+  </div>
+
+  <div class="w-full p-6 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="slack" />
+      <label class="block mt-4" for="slack-alerts"></label>
+      <input type="text" id="slack-alerts" name="value" value="{{ context.constants.SLACK_WEBHOOK_URL }}" />
+      <input type="submit" class="ml-3 button button" value="submit" class="mt-3 button"><br />
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="text-2xl">{{ 'admin_old.order.title' | t }}</h1>
+  </div>
+
+  <div class="w-full p-6 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="order_cancel_unpaid_after_x_hours" />
+      <label class="block mt-4" for="order-cancel-setup">{{ 'admin_old.order.cancel_unpaid_after_x_hours' | t }}</label>
+      <input type="text" id="order-cancel-setup" name="value" value="{{ context.constants.ORDER_CANCEL_UNPAID_AFTER_X_HOURS }}" />
+
+      <input type="submit" class="ml-3 button button" value="submit" class="mt-3 button"><br />
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="text-2xl">{{ 'app.admin.auth.title' | t }}</h1>
+  </div>
+
+  <div class="w-full p-6 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="required_2fa" />
+      <label for="auth-require-2fa">{{ 'app.admin.auth.required_2fa' | t }}</label>
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="true" id="required-2fa-on"{% if context.constants.REQUIRED_2FA == 'true' %}checked{% endif %}>
+        <label class="mt-4" for="required-2fa-on">{{ 'app.admin.setup.enable' | t }}</label>
+      </fieldset>
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="false" id="required-2fa-off"{% if context.constants.REQUIRED_2FA != 'true' %}checked{% endif %}>
+        <label class=" mt-4" for="required-2fa-on">{{ 'app.admin.setup.disable' | t }}</label>
+      </fieldset>
+      <input type="submit" class="ml-3 button button" value="submit" class="mt-3 button"><br />
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="text-2xl">{{ 'app.admin.hcaptcha.title' | t }}</h1>
+  </div>
+  <div class="w-full p-5 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="verify_hcaptcha">
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="true" id="captchaOn"{% if verify_hcaptcha %}checked{% endif %}>
+        <label class="mt-4" for="captchaOn">{{ 'app.admin.setup.enable' | t }}</label>
+      </fieldset>
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="false" id="captchaOff"{% unless verify_hcaptcha %}checked{% endunless %}>
+        <label class=" mt-4" for="captchaOff">{{ 'app.admin.setup.disable' | t }}</label>
+      </fieldset>
+      <input type="submit" value="{{ 'app.admin.setup.save' | t }}" class="mt-3 button">
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="text-2xl">{{ 'app.admin.password_policy.title' | t }}</h1>
+  </div>
+  <div class="w-full p-5 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="use_complex_password">
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="true" id="passwordPolicyOn"{% if use_complex_password %}checked{% endif %}>
+        <label class="mt-4" for="passwordPolicyOn">{{ 'app.admin.setup.enable' | t }}</label>
+      </fieldset>
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="false" id="passwordPolicyOff"{% unless use_complex_password %}checked{% endunless %}>
+        <label class=" mt-4" for="passwordPolicyOff">{{ 'app.admin.setup.disable' | t }}</label>
+      </fieldset>
+      <input type="submit" value="{{ 'app.admin.setup.save' | t }}" class="mt-3 button">
+    </form>
+  </div>
+
+  <div class="mt-8 w-full">
+    <h1 class="text-2xl">{{ 'app.admin.inventory_acceptance.title' | t }}</h1>
+  </div>
+  <div class="w-full p-5 mt-2 mb-2 bg-gray-200 rounded lg:w-4/6 md:w-3/4">
+    <form action="/admin/setup/constants/set" method="post">
+      {% include 'authenticity_token' %}
+      <input type="hidden" name="name" value="inventory_require_acceptance">
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="true" id="inventoryAcceptanceOn" {% if context.constants.INVENTORY_REQUIRE_ACCEPTANCE == 'true' %}checked{% endif %}>
+        <label class="mt-4" for="inventoryAcceptanceOn">{{ 'app.admin.setup.enable' | t }}</label>
+      </fieldset>
+      <fieldset>
+        <input type="radio" class="mt-3" name="value" value="false" id="inventoryAcceptanceOff" {% if context.constants.INVENTORY_REQUIRE_ACCEPTANCE != 'true' %}checked{% endif %}>
+        <label class=" mt-4" for="inventoryAcceptanceOff">{{ 'app.admin.setup.disable' | t }}</label>
+      </fieldset>
+      <input type="submit" value="{{ 'app.admin.setup.save' | t }}" class="mt-3 button">
+    </form>
+  </div>
+</div>

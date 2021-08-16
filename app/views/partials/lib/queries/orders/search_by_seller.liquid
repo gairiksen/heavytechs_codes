@@ -1,0 +1,14 @@
+{% liquid
+  if seller == blank
+    log 'Something went wrong. Seller cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  assign lang = lang | default: context.language
+
+  graphql r = 'orders/search', limit: limit, page: page, seller: seller, status: status, id: id, lang: lang
+  include 'lib/handle_graphql_response', r: r, name: 'queries/orders/search_by_seller'
+
+  function orders = 'lib/commands/orders/recalculate/build', object: r.orders
+  return orders
+%}

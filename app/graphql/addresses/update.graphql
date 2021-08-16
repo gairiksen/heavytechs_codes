@@ -1,0 +1,40 @@
+mutation update_address(
+  $id: ID!
+  $full_name: String
+  $country: String
+  $city: String
+  $state: String
+  $street: String
+  $zip: String
+  $building_number: String
+  $flat_number: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "address"
+      properties: [
+              { name: "full_name" value: $full_name }
+              { name: "country" value: $country }
+              { name: "city" value: $city }
+              { name: "state" value: $state }
+              { name: "street" value: $street }
+              { name: "zip" value: $zip }
+              { name: "building_number" value: $building_number }
+              { name: "flat_number" value: $flat_number }
+            ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+      full_name: property(name: "full_name")
+      country: property(name: "country")
+      city: property(name: "city")
+      state: property(name: "state")
+      street: property(name: "street")
+      zip: property(name: "zip")
+      building_number: property(name: "building_number")
+      flat_number: property(name: "flat_number")
+    }
+}

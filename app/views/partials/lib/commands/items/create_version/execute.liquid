@@ -1,0 +1,23 @@
+{% liquid
+  assign name = object.details.en.name
+  graphql r = 'items/create_version', args: object
+
+  if r.errors
+    log r.errors, type: 'errors.graphql.invalid'
+    hash_assign object['valid'] = false
+    hash_assign object['errors'] = r.errors
+  else
+    graphql relations = 'items/create_version_fill_relations', item_id: r.item.id, item_detail_ids: r.item_details.ids
+    if relations.errors
+      log relations.errors, type: 'errors.graphql.invalid'
+      hash_assign object['valid'] = false
+      hash_assign object['errors'] = relations.errors
+    else
+      assign object = r
+      hash_assign object['name'] = name
+      hash_assign object['valid'] = true
+    endif
+  endif
+
+  return object
+%}

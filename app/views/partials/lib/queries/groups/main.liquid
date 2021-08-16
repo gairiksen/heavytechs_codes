@@ -1,0 +1,6 @@
+{% liquid
+  graphql r  = 'groups/main', name: 'main'
+  include 'lib/handle_graphql_response', r: r, name: 'queries/groups/main'
+
+  return r.groups.results.first
+%}

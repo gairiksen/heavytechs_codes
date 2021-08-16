@@ -1,0 +1,20 @@
+<section class="text-gray-900 body-font">
+  <div class="grid grid-cols-1 gap-6 my-6 md:px-5 md:py-5 container">
+    {% content_for metatags %}{% render 'theme/simple/posts/metatags', post: post %}{% endcontent_for %}
+
+    <div class="container">
+      <h2 class="break-words bigtitle">{{ post.title }}</h2>
+
+      {% render 'theme/simple/ui/tags', tags: post.tags, url: '/posts?tag=' %}
+      {% render 'theme/simple/groups/content/card', post: post, root_post: post, current_profile: current_profile, context: context  %}
+
+      {% liquid
+        for child_post in post.posts
+          render 'theme/simple/groups/content/card', post: child_post, current_profile: current_profile, root_post: post, context: context
+        endfor
+      %}
+
+      {% render 'theme/simple/groups/content/reply', post: post, object: object, presigned_url: presigned_url, context: context %}
+    </div>
+  </div>
+</section>

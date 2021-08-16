@@ -1,0 +1,9 @@
+name: user_pdf
+properties:
+  - name: uuid
+  - name: direct_url
+  - name: user_id
+  - name: page_category
+  - name: item_category
+  - name: is_active
+  - name: file_type

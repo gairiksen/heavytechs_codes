@@ -1,0 +1,119 @@
+{% comment %}
+{% render 'theme/simple/home/hero' %}
+{% render 'theme/simple/home/shields' %}
+
+{% for item in categories %}
+  {% if item[1].results.size > 0 %}
+    <section class="container py-12">
+      <h2 class="bigtitle">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/home/category', object: item %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+
+
+{% for item in promoted %}
+  {% if item[1].results.size > 0 %}
+    <section class="bg-gray-600 py-12 mb-6">
+    <div class="container">
+      <h2 class="bigtitle text-white">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+
+      <div class="grid gap-5 md:grid-cols-3 lg:grid-cols-4">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/items/card', item: item, current_profile: current_profile, showMeta: false %}
+        {% endfor %}
+      </div>
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+
+{% for item in groups %}
+  {% if item[1].results.size > 0 %}
+    <section class="container py-5 mb-3">
+      <h2 class="bigtitle">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/home/card', actor: item.payload.actor, target: item.payload.target, object: item.payload.object, type: item.payload.type %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+
+{% for item in items %}
+  {% if item[1].results.size > 0 %}
+    <section class="container py-5 mb-3">
+      <h2 class="bigtitle">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/home/card', actor: item.payload.actor, target: item.payload.target, object: item.payload.object, type: item.payload.type %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+
+{% for item in profiles %}
+  {% if item[1].results.size > 0 %}
+    <section class="container py-5 mb-3">
+      <h2 class="bigtitle">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/home/card', actor: item.payload.actor, target: item.payload.target, object: item.payload.object, type: item.payload.type %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+
+{% for item in posts %}
+  {% if item[1].results.size > 0 %}
+    <section class="container py-5 mb-3">
+      <h2 class="bigtitle">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/home/card', actor: item.payload.actor, target: item.payload.target, object: item.payload.object, type: item.payload.type %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+
+
+{% for item in comments %}
+  {% if item[1].results.size > 0 %}
+    <section class="container py-5 mb-3">
+      <h2 class="bigtitle">
+        {{ item[0] | t: scope: 'app.home.feeds' }}
+      </h2>
+
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {% for item in item[1].results %}
+          {% render 'theme/simple/home/card', actor: item.payload.actor, target: item.payload.target, object: item.payload.object, type: item.payload.type %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+{% endfor %}
+{% endcomment %}

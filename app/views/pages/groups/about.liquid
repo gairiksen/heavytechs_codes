@@ -1,0 +1,20 @@
+---
+slug: groups/about/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, membership: true
+
+  assign group_id = context.params.id | split: '-' | last
+  function group = 'lib/queries/groups/find', id: group_id, with_owner: true
+
+  function can = "lib/can", actor: current_profile, do: "see_meta", object: group
+  unless can.valid
+    assign group = null
+  endunless
+
+  include 'lib/present_or_404', property: group.id
+
+  function list = 'lib/queries/relationships/search', limit: 4, name: 'membership', r_id: group_id
+
+  include 'theme/simple/groups/show', group: group, current_profile: current_profile, tab: 'about', list: list
+%}

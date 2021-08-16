@@ -1,0 +1,19 @@
+{% liquid
+  unless object.valid
+    return object
+  endunless
+
+  case object.command
+  when 'organizations/update'
+    assign target_id = object.payload.id
+  when 'items/publish_version'
+    assign target_id = object.payload.new_item.id
+  when 'items/publish'
+    assign target_id = object.payload.item.id
+  endcase
+
+  assign representative = current_profile.representative | default: current_profile
+  function event = 'lib/commands/events/create', type: 'process_approval_requested', actor_id: representative.id, object: object, target_id: target_id
+
+  return object
+%}

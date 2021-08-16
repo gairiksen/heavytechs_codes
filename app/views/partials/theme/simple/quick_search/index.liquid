@@ -1,0 +1,593 @@
+  {%comment%}
+  <div class="innerBanner relative"><!--innerBanner-->
+    <figure>
+        <img src="{{'images/mechanic-banner.jpg' | asset_url}}" alt="" class="w-full">
+    </figure>
+    <div class="container mx-auto px-3.5">
+        <div class="absolute pt-12 top-0">
+            <h2 class="text-white text-5xl font-bold mb-3.5">Find a Mechanic</h2>
+            <span class="text-white text-xl">Subtitle or description lorem ispum dolor sit amet</span>
+            <ul class="pt-11 flex flex-col gap-4 md:flex-row md:gap-6">
+                <li>
+                    <select class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                        <option value="" disabled selected hidden>Distance</option>
+                        <option>100 + Mi</option>
+                        <option>200 + Mi</option>
+                        <option>300 + Mi</option>
+                        <option>400 + Mi</option>
+                        <option>500 + Mi</option>
+                    </select>
+                </li>
+
+                <li>
+                    <select class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                        <option value="" disabled selected hidden>Type of job</option>
+                        
+                        <option>Mining</option>
+                        <option>Heavy Civil</option>
+                        <option>Transportation Fleet</option>
+                        <option>Aeronautical</option>
+                        <option>Government</option>
+                    </select>
+                </li>
+
+                <li>
+                    <select placeholder="Type of job" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                        <option value="" disabled selected hidden>Area of Expertise</option>
+                        <option>Area of Expertise2</option>
+                        <option>Area of Expertise3</option>
+                    </select>
+                </li>
+
+                <li>
+                    <button class="heavytechs-bg-dark-orange text-white mr-2 px-8 leading-10 rounded-3xl text-base inline-block">Search</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div><!--innerBanner-->
+  	{{records}}
+  <div class="bg-gray-50">
+    <div class="container mx-auto px-3.5">
+        <div class="py-6">
+            <ul class="flex flex-wrap gap-4 items-center">
+                <li class="text-base text-gray-800 font-semibold">
+                    Filter
+                </li>
+                <li>
+                    <a href="#" class="text-white block bg-gray-500 px-4 leading-7 rounded-3xl text-sm">
+                        Clear all
+                    </a>
+                    
+                </li>
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">
+                        Riverton, WY
+                    </span>
+                    <a href="#">
+                        <img src="{{ 'images/x-circle.svg' | asset_url }}" alt="">
+                    </a>
+                </li>
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">
+                        Mechanic
+                    </span>
+                    <a href="#">
+                        <img src="{{ 'images/x-circle.svg' | asset_url }}" alt="">
+                    </a>
+                </li>
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">
+                        Welding
+                    </span>
+                    <a href="#">
+                        <img src="{{ 'images/x-circle.svg' | asset_url }}" alt="">
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="profileEdit flex justify-between flex-col pb-28 md:flex-row">
+            <div class="w-full mb-6 bg-white py-6 rounded-md md:mb-0 md:w-60">
+                <div class="border-b border-gray-200 pb-4 px-3.5">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>Availablity</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="availablity1" type="checkbox" name="availablity">
+                            <label for="availablity1" class="text-base font-medium text-gray-800"><span></span>Available now</label>
+                        </li>
+                        <li>
+                            <input id="availablity2" type="checkbox" name="availablity">
+                            <label for="availablity2" class="text-base font-medium text-gray-800"><span></span>Show all</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>Years of experience:</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="experience1" type="checkbox" name="experience">
+                            <label for="experience1" class="text-base font-medium text-gray-800"><span></span>1-5</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="experience2" type="checkbox" name="experience">
+                            <label for="experience2" class="text-base font-medium text-gray-800"><span></span>5-10</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="experience3" type="checkbox" name="experience">
+                            <label for="experience3" class="text-base font-medium text-gray-800"><span></span>10-20</label>
+                        </li>
+                        <li>
+                            <input id="experience4" type="checkbox" name="experience">
+                            <label for="experience4" class="text-base font-medium text-gray-800"><span></span>20+</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>Industries serviced</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="industries1" type="checkbox" name="industries">
+                            <label for="industries1" class="text-base font-medium text-gray-800"><span></span>Earthworks</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="industries2" type="checkbox" name="industries">
+                            <label for="industries2" class="text-base font-medium text-gray-800"><span></span>Mining</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="industries3" type="checkbox" name="industries">
+                            <label for="industries3" class="text-base font-medium text-gray-800"><span></span>Fleet</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="industries4" type="checkbox" name="industries">
+                            <label for="industries4" class="text-base font-medium text-gray-800"><span></span>Pipeline</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="industries5" type="checkbox" name="industries">
+                            <label for="industries5" class="text-base font-medium text-gray-800"><span></span>Paving</label>
+                        </li>
+                        <li>
+                            <input id="industries6" type="checkbox" name="industries">
+                            <label for="industries6" class="text-base font-medium text-gray-800"><span></span>Energy production</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>Service skills</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="skills1" type="checkbox" name="skills">
+                            <label for="skills1" class="text-base font-medium text-gray-800"><span></span>Heavy equipment mechanic</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="skills2" type="checkbox" name="skills">
+                            <label for="skills2" class="text-base font-medium text-gray-800"><span></span>Truck mechanic</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="skills3" type="checkbox" name="skills">
+                            <label for="skills3" class="text-base font-medium text-gray-800"><span></span>Welder/ Fabricator</label>
+                        </li>
+                        <li>
+                            <input id="skills4" type="checkbox" name="skills">
+                            <label for="skills4" class="text-base font-medium text-gray-800"><span></span>Oilers/ PM tech</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>OEM brands serviced</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="brands1" type="checkbox" name="brands">
+                            <label for="brands1" class="text-base font-medium text-gray-800"><span></span>Caterpillar</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="brands2" type="checkbox" name="brands">
+                            <label for="brands2" class="text-base font-medium text-gray-800"><span></span>John Deere</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="brands3" type="checkbox" name="brands">
+                            <label for="brands3" class="text-base font-medium text-gray-800"><span></span>Hitachi</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="brands4" type="checkbox" name="brands">
+                            <label for="brands4" class="text-base font-medium text-gray-800"><span></span>Volvo</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="brands5" type="checkbox" name="brands">
+                            <label for="brands5" class="text-base font-medium text-gray-800"><span></span>Komatsu</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="brands6" type="checkbox" name="brands">
+                            <label for="brands6" class="text-base font-medium text-gray-800"><span></span>Bobcat</label>
+                        </li>
+                        <li>
+                            <input id="brands7" type="checkbox" name="brands">
+                            <label for="brands7" class="text-base font-medium text-gray-800"><span></span>Other</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>Insurance coverage</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="insurance1" type="checkbox" name="insurance">
+                            <label for="insurance1" class="text-base font-medium text-gray-800"><span></span>Yes</label>
+                        </li>
+                        <li>
+                            <input id="insurance2" type="checkbox" name="insurance">
+                            <label for="insurance2" class="text-base font-medium text-gray-800"><span></span>No</label>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div class="flex justify-between items-center pb-3.5">
+                        <h3>Certifications</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul class="customCheck">
+                        <li class="mb-3">
+                            <input id="certifications1" type="checkbox" name="certifications">
+                            <label for="certifications1" class="text-base font-medium text-gray-800"><span></span>ASE</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="certifications2" type="checkbox" name="certifications">
+                            <label for="certifications2" class="text-base font-medium text-gray-800"><span></span>OSHA</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="certifications3" type="checkbox" name="certifications">
+                            <label for="certifications3" class="text-base font-medium text-gray-800"><span></span>MSHA</label>
+                        </li>
+                        <li>
+                            <input id="certifications4" type="checkbox" name="certifications">
+                            <label for="certifications4" class="text-base font-medium text-gray-800"><span></span>OEM</label>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+                <div x-data="{isOpen: false}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                    <div @click="isOpen = !isOpen" class="flex justify-between items-center pb-3.5">
+                        <h3>Truck</h3>
+                        <figure>
+                            <img src="{{ 'images/up-arrow.svg' | asset_url }}" alt="">
+                        </figure>
+                    </div>
+                    <ul :aria-expanded="isOpen ? 'true' : 'false'" :class="{ 'hidden': isOpen }" class="customCheck">
+                        <li class="mb-3">
+                            <input id="truck1" type="checkbox" name="truck">
+                            <label for="truck1" class="text-base font-medium text-gray-800"><span></span>Welder truck</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="truck2" type="checkbox" name="truck">
+                            <label for="truck2" class="text-base font-medium text-gray-800"><span></span>Service truck-crane</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="truck3" type="checkbox" name="truck">
+                            <label for="truck3" class="text-base font-medium text-gray-800"><span></span>Small service-no crane</label>
+                        </li>
+                        <li class="mb-3">
+                            <input id="truck4" type="checkbox" name="truck">
+                            <label for="truck4" class="text-base font-medium text-gray-800"><span></span>Lube</label>
+                        </li>
+                        <li>
+                            <input id="truck5" type="checkbox" name="truck">
+                            <label for="truck5" class="text-base font-medium text-gray-800"><span></span>No</label>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="profileEdit_right w-full">
+                {% for u in records.results %}
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">{{u.name}}</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+                
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                
+
+            </div>
+        </div>
+
+    </div>
+  </div>
+
+{%endcomment%}
+
+<div class="container mx-auto">
+  {% if records.results.size > 0 %}
+    {% assign sorted = records.results | group_by: 'type' %}
+    {% for type in sorted %}
+      <h2 class="title">{{ type[0] | capitalize | pluralize }}</h2>
+      <div class="grid grid-cols-3 gap-x-8 gap-y-6 cards mb-10">
+        {% for model in type[1] %}
+        {{model}}<br >
+          {% if type[0] == 'profile' and model.slug == blank %}
+            {% continue %}
+          {% endif %}
+
+            {%comment%}
+          {% render 'theme/simple/quick_search/card', model: model %}
+          {%endcomment%}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="container my-8 text-lg">{{ 'app.search.no_items_found.title' | t }}</p>
+  {% endif %}
+</div>

@@ -1,0 +1,48 @@
+en:
+  app:
+    statuses:
+      order_deliveries:
+        delivered: delivered
+        shipping_types:
+          delivery: Out for delivery
+          personal_pickup: Ready for pickup
+      orders_for_role:
+        buyer:
+          confirmed: waiting for payment
+          paid: in progress
+          delivered: delivered
+          cancelled_buyer: cancelled by you
+          cancelled_seller: cancelled by merchant
+          returned: returned
+        seller:
+          paid: new
+          delivered: delivered
+          cancelled_buyer: cancelled by buyer
+          cancelled_seller: cancelled by you
+          returned: returned
+      orders:
+        placed: new
+        confirmed: confirmed
+        paid: paid
+        delivered: delivered
+        cancelled_seller: cancelled by seller
+        cancelled_buyer: cancelled by buyer
+        returned: returned
+      items:
+        published: Published
+        unpublished: Unpublished
+        unavailable: Out of stock
+      transactions:
+        new: New
+        success: Success
+        failed: Failed
+        expired: Expired
+      line_item_returns:
+        requested: Requested
+        accepted: Accepted
+        rejected: Rejected
+        returned: Returned
+      processes:
+        requested: Requested
+        accepted: Accepted
+        rejected: Rejected

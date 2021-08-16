@@ -1,0 +1,10 @@
+model:
+  new: New process
+  add: Add process
+  edit: Edit process
+  empty_state: You haven't added any processes yet. <br> Create your first one now!
+  form:
+    name: Name
+    description: Description
+    requested_by: Requested By
+    approved_by: Approved By

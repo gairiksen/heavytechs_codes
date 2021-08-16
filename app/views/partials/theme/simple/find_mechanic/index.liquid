@@ -1,0 +1,963 @@
+  {% assign token = authenticity_token | default: context.authenticity_token %}
+  <div class="innerBanner relative bg-gray-50"><!--innerBanner-->
+    <figure>
+        <img src="{{'images/mechanic-banner.jpg' | asset_url}}" alt="" class="w-full">
+    </figure>
+    <div class="container mx-auto px-3.5">
+        <script type="text/javascript">
+            function initialize() {
+                var input = document.getElementById('location');
+                const options = {
+                    componentRestrictions: { country: "us" },
+                    fields: ["address_components", "geometry", "icon", "name"],
+                    strictBounds: false,
+                    types: ["establishment"],
+                };
+                new google.maps.places.Autocomplete(input, options);
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <form action="/find_mechanic/search" method="POST" id="frm_saerch_by_location">
+
+        
+        <input type="hidden" name="authenticity_token" value="{{ token }}">
+        <input type="hidden" name="user_id" id="filter_user_id" value="{{user_id}}" />
+
+        <div class="relative md:absolute md:pt-12 top-0 md:bg-transparent bg-white p-5">
+        <h2 class="text-gray-700 md:text-white text-4xl md:text-5xl font-bold mb-3.5">Find a Mechanic</h2>
+        <span class="text-gray-700 md:text-white text-xl">Subtitle or description lorem ispum dolor sit amet</span>
+        <ul class="pt-4 md:pt-11 flex flex-col gap-4 md:flex-row md:gap-6">
+            <!--<li>
+                <input type="text" name="zip_code" id="zip_code" placeholder="Enter your zip code ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+            </li>
+
+            <li>
+                
+            </li>
+
+            <li>
+                
+            </li>-->
+
+            <li>
+                <input type="text" value="{{location}}" name="location" id="location" placeholder="Enter your search location ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                <p class="text-red-700" id="err_zip_code" ></p>
+
+                <input type="hidden" value="{{latitude}}" name="latitude" id="latitude" placeholder="Enter latitude ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{longitude}}" name="longitude" id="longitude" placeholder="Enter longitude ..." class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+            </li>
+
+            <li>
+                {%liquid
+                    assign distance = distance | strip
+                %}
+                <select name="distance" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                    <option value="" disabled hidden>Distance</option>
+                    <option value="161" {%if distance == "161" %}selected{%endif%}>100 + Mi</option>
+                    <option value="322" {%if distance == "322" %}selected{%endif%}>200 + Mi</option>
+                    <option value="483" {%if distance == "483" %}selected{%endif%}>300 + Mi</option>
+                    <option value="644" {%if distance == "644" %}selected{%endif%}>400 + Mi</option>
+                    <option value="805" {%if distance == "805" %}selected{%endif%}>500 + Mi</option>
+                </select>
+            </li>
+
+            <li>
+                <select name="area_of_expertise" placeholder="Type of job" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+                    <option value="">Any Expertise</option>
+                    <option value="hes" {%if area_of_expertise == "hes"%}selected{%endif%}>Heavy Equipment Skill</option>
+                    <option value="tm" {%if area_of_expertise == "tm"%}selected{%endif%}>Truck Mechanic</option>
+                    <option value="wf" {%if area_of_expertise == "wf"%}selected{%endif%}>Welder/Fabricator</option>
+                    <option value="opt" {%if area_of_expertise == "opt"%}selected{%endif%}>Oilers/PM Tech</option>
+                </select>
+            </li>
+
+            <li>
+                <!--<button class="heavytechs-bg-dark-orange text-white mr-2 px-8 leading-10 rounded-3xl text-base inline-block">Search</button>-->
+                <input type="button" onclick="search_location()" class="heavytechs-bg-dark-orange text-white mr-2 px-8 leading-10 rounded-3xl text-base inline-block cursor-pointer" name="searchLocation" id="searchLocation" value="Search" >
+            </li>
+        </ul>
+        </div>
+        </form>
+
+        
+        <script type="text/javascript">
+        function search_location(){
+
+            document.getElementById("err_zip_code").innerHTML = '';
+            var location = document.getElementById('location').value;
+
+            if(location.includes("USA") == false){
+                location = location + ", USA";
+            }
+
+            var zip_code_url = 'https://app.zipcodebase.com/landing_demo/?codes='+location+'&country=';
+
+            const xhttp = new XMLHttpRequest();
+            xhttp.onload = function() {
+                var response = JSON.parse(this.responseText);
+                /*if (response.results.length == '0') {
+                    document.getElementById("err_zip_code").innerHTML = "Invalid zip code!";
+                    return false;
+                } else {*/
+                    var geocoder = new google.maps.Geocoder();
+
+                    geocoder.geocode( { 'address': location}, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+
+                            console.log(results);
+                            var latitude = results[0].geometry.location.lat();
+                            var longitude = results[0].geometry.location.lng();
+                            
+                            document.getElementById('latitude').value = latitude;
+                            document.getElementById('longitude').value = longitude;
+
+                            document.getElementById('frm_saerch_by_location').submit();
+                        } 
+                    });
+                //}
+            }
+            xhttp.open("GET", zip_code_url, true);
+            xhttp.send();            
+        }
+        </script>
+
+    </div>
+  </div><!--innerBanner-->
+  <div class="bg-gray-50">
+    <div class="container mx-auto px-3.5">
+        <div class="py-6">
+            <ul class="flex flex-wrap gap-4 items-center">
+                <li class="text-base text-gray-800 font-semibold">
+                    Filter
+                </li>
+                <li>
+                    <a href="/find_mechanic" class="text-white block bg-gray-500 px-4 leading-7 rounded-3xl text-sm">
+                        Clear all
+                    </a>
+                    
+                </li>
+
+                {% if earthworks == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Earthworks</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if mining == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Mining</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if fleet == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Fleet</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if pipeline == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Pipeline</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if paving == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Paving</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if heavy_equipment_mechanic == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Heavy Equipment Mechanic</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if truck_mechanic == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Truck Mechanic</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if welder_fabricator == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Welder/Fabricator</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if oilers_pm_tech == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Oilers/ PM Tech</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if caterpillar == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Caterpillar</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if john_deere == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">John Deere</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if hitachi == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Hitachi</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if volvo == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Volvo</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if komatsu == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Komatsu</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if bobcat == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">Bobcat</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if ase == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">ASE</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if osha == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">OSHA</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if msha == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">MSHA</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {% if oem == '1' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">OEM</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+
+                {%comment%}
+                {% if truck_type != '' %}
+                <li class="text-base text-gray-700 border border-gray-200 leading-7 rounded-3xl flex items-center px-4">
+                    <span class="block mr-2">{{truck_type}}</span>
+                    <a href="#"><img src="{{ 'images/x-circle.svg' | asset_url }}" alt=""></a>
+                </li>
+                {% endif %}
+                {%endcomment%}
+            </ul>
+        </div>
+
+        <div class="profileEdit flex justify-between flex-col pb-28 md:flex-row">
+
+            <form action="/find_mechanic/search" method="POST">
+
+                <input type="hidden" name="authenticity_token" value="{{ token }}">
+                <input type="hidden" name="user_id" id="filter_user_id" value="{{user_id}}" />
+
+                <input type="hidden" value="{{latitude}}" name="latitude" id="filter_latitude" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{longitude}}" name="longitude" id="filter_latitude" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{location}}" name="location" id="filter_location" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{distance}}" name="distance" id="filter_distance" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <input type="hidden" value="{{area_of_expertise}}" name="area_of_expertise" id="filter_area_of_expertise" class="bg-gray-100 appearance-none border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-64">
+
+                <div class="w-full mb-6 bg-white py-6 rounded-md md:mb-0 md:w-60">
+
+                    {%liquid
+                        if availability == '1' or availability == '0'
+                            assign avlOpen = true
+                        else
+                            assign avlOpen = false
+                        endif 
+                    %}
+
+                    <div class="mb-7 mx-3.5 flex items-center bg-gray-50 border border-gray-100 rounded-3xl">                     
+                        <input type="text" name="keyword_search" value="{{keyword_search}}" placeholder="Search ..." class="bg-gray-50 w-full rounded-3xl focus:outline-none ht-border-0 h-9 text-gray-600">
+                    </div>
+
+                    <div x-data="{avlOpen: {{avlOpen}}}" class="border-b border-gray-200 pb-4 px-3.5">
+                        <div @click="avlOpen = !avlOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Availablity</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="avlOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if availability == '1'%}checked{%endif%} id="available_now" type="radio" name="availability" value="1">
+                                <label for="available_now" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Available now</label>
+                            </li>
+                            <li>
+                                <input {%if availability == '0'%}checked{%endif%} id="show_all" type="radio" name="availability" value="0">
+                                <label for="show_all" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Show all</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if total_experience == '1-4 Years' or total_experience == '5-9 Years' or total_experience == '10-20 Years' or total_experience == '20+ Years' 
+                            assign expOpen = true
+                        else
+                            assign expOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{expOpen: {{expOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="expOpen = !expOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Years of experience:</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="expOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if total_experience == '1-4 Years'%}checked{%endif%} id="experience1" type="radio" name="total_experience" value="1-4 Years">
+                                <label for="experience1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>1-4</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if total_experience == '5-9 Years'%}checked{%endif%} id="experience2" type="radio" name="total_experience" value="5-9 Years">
+                                <label for="experience2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>5-9</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if total_experience == '10-20 Years'%}checked{%endif%} id="experience3" type="radio" name="total_experience" value="10-20 Years">
+                                <label for="experience3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>10-20</label>
+                            </li>
+                            <li>
+                                <input {%if total_experience == '20+ Years'%}checked{%endif%} id="experience4" type="radio" name="total_experience" value="20+ Years">
+                                <label for="experience4" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>20+</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if earthworks == '1' or mining == '1' or fleet == '1' or pipeline == '1' or paving == '1' or energy_production == '1'
+                            assign industryOpen = true
+                        else
+                            assign industryOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{industryOpen: {{industryOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="industryOpen = !industryOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Industries serviced</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="industryOpen" class="customCheck">
+                            <li class="mb-3">
+                                <input {%if earthworks == '1'%}checked{%endif%} id="industries1" type="checkbox" name="earthworks" value="1">
+                                <label for="industries1" class="text-base font-medium text-gray-800">
+                                <span></span>Earthworks</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if mining == '1'%}checked{%endif%} id="industries2" type="checkbox" name="mining" value="1">
+                                <label for="industries2" class="text-base font-medium text-gray-800">
+                                <span></span>Mining</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if fleet == '1'%}checked{%endif%} id="industries3" type="checkbox" name="fleet" value="1">
+                                <label for="industries3" class="text-base font-medium text-gray-800">
+                                <span></span>Fleet</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if pipeline == '1'%}checked{%endif%} id="industries4" type="checkbox" name="pipeline" value="1">
+                                <label for="industries4" class="text-base font-medium text-gray-800">
+                                <span></span>Pipeline</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if paving == '1'%}checked{%endif%} id="industries5" type="checkbox" name="paving" value="1">
+                                <label for="industries5" class="text-base font-medium text-gray-800">
+                                <span></span>Paving</label>
+                            </li>
+                            <li>
+                                <input {%if energy_production == '1'%}checked{%endif%} id="industries6" type="checkbox" name="energy_production" value="1">
+                                <label for="industries6" class="text-base font-medium text-gray-800">
+                                <span></span>Energy production</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if heavy_equipment_mechanic == '1' or truck_mechanic == '1' or welder_fabricator == '1' or oilers_pm_tech == '1'
+                            assign serviceOpen = true
+                        else
+                            assign serviceOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{serviceOpen: {{serviceOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="serviceOpen = !serviceOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Service skills</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="serviceOpen" class="customCheck">
+                            <li class="mb-3">
+                                <input {%if heavy_equipment_mechanic == '1'%}checked{%endif%} id="skills1" type="checkbox" name="heavy_equipment_mechanic" value="1">
+                                <label for="skills1" class="text-base font-medium text-gray-800">
+                                <span></span>Heavy equipment mechanic</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if truck_mechanic == '1'%}checked{%endif%} id="skills2" type="checkbox" name="truck_mechanic" value="1">
+                                <label for="skills2" class="text-base font-medium text-gray-800">
+                                <span></span>Truck mechanic</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if welder_fabricator == '1'%}checked{%endif%} id="skills3" type="checkbox" name="welder_fabricator" value="1">
+                                <label for="skills3" class="text-base font-medium text-gray-800">
+                                <span></span>Welder/ Fabricator</label>
+                            </li>
+                            <li>
+                                <input {%if oilers_pm_tech == '1'%}checked{%endif%} id="skills4" type="checkbox" name="oilers_pm_tech" value="1">
+                                <label for="skills4" class="text-base font-medium text-gray-800">
+                                <span></span>Oilers/ PM tech</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if caterpillar == '1' or john_deere == '1' or hitachi == '1' or volvo == '1' or komatsu == '1' or bobcat == '1' or other == '1'
+                            assign oemOpen = true
+                        else
+                            assign oemOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{oemOpen: {{oemOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="oemOpen = !oemOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>OEM brands serviced</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="oemOpen" class="customCheck">
+                            <li class="mb-3">
+                                <input {%if caterpillar == '1'%}checked{%endif%} id="brands1" type="checkbox" name="caterpillar" value="1">
+                                <label for="brands1" class="text-base font-medium text-gray-800">
+                                <span></span>Caterpillar</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if john_deere == '1'%}checked{%endif%} id="brands2" type="checkbox" name="john_deere" value="1">
+                                <label for="brands2" class="text-base font-medium text-gray-800">
+                                <span></span>John Deere</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if hitachi == '1'%}checked{%endif%} id="brands3" type="checkbox" name="hitachi" value="1">
+                                <label for="brands3" class="text-base font-medium text-gray-800">
+                                <span></span>Hitachi</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if volvo == '1'%}checked{%endif%} id="brands4" type="checkbox" name="volvo" value="1">
+                                <label for="brands4" class="text-base font-medium text-gray-800">
+                                <span></span>Volvo</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if komatsu == '1'%}checked{%endif%} id="brands5" type="checkbox" name="komatsu" value="1">
+                                <label for="brands5" class="text-base font-medium text-gray-800">
+                                <span></span>Komatsu</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if bobcat == '1'%}checked{%endif%} id="brands6" type="checkbox" name="bobcat" value="1">
+                                <label for="brands6" class="text-base font-medium text-gray-800">
+                                <span></span>Bobcat</label>
+                            </li>
+                            <li>
+                                <input {%if other == '1'%}checked{%endif%} id="brands7" type="checkbox" name="other" value="1">
+                                <label for="brands7" class="text-base font-medium text-gray-800">
+                                <span></span>Other</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if insurance_coverage == '1' or insurance_coverage == '0'
+                            assign insuranceOpen = true
+                        else
+                            assign insuranceOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{insuranceOpen: {{insuranceOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="insuranceOpen = !insuranceOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Insurance coverage</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="insuranceOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if insurance_coverage == '1'%}checked{%endif%} id="insurance1" type="radio" name="insurance_coverage" value="1">
+                                <label for="insurance1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Yes</label>
+                            </li>
+                            <li>
+                                <input {%if insurance_coverage == '0'%}checked{%endif%} id="insurance2" type="radio" name="insurance_coverage" value="0">
+                                <label for="insurance2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>No</label>
+                            </li>
+                            
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if ase == '1' or osha == '1' or msha == '1' or oem == '1'
+                            assign certOpen = true
+                        else
+                            assign certOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{certOpen: {{certOpen}}}" class="border-b border-gray-200 pb-4 px-3.5 pt-2">
+                        <div @click="certOpen = !certOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Certifications</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="certOpen" class="customCheck">
+                            <li class="mb-3">
+                                <input {%if ase == '1'%}checked{%endif%} id="certifications1" type="checkbox" name="ase" value="1">
+                                <label for="certifications1" class="text-base font-medium text-gray-800">
+                                <span></span>ASE</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if osha == '1'%}checked{%endif%} id="certifications2" type="checkbox" name="osha" value="1">
+                                <label for="certifications2" class="text-base font-medium text-gray-800">
+                                <span></span>OSHA</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if msha == '1'%}checked{%endif%} id="certifications3" type="checkbox" name="msha" value="1">
+                                <label for="certifications3" class="text-base font-medium text-gray-800">
+                                <span></span>MSHA</label>
+                            </li>
+                            <li>
+                                <input {%if oem == '1'%}checked{%endif%} id="certifications4" type="checkbox" name="oem" value="1">
+                                <label for="certifications4" class="text-base font-medium text-gray-800">
+                                <span></span>OEM</label>
+                            </li>
+                            
+                        </ul>
+                    </div>
+
+                    {%liquid
+                        if truck_type and truck_type != ''
+                            assign truckOpen = true
+                        else
+                            assign truckOpen = false
+                        endif 
+                    %}
+
+                    <div x-data="{truckOpen: {{truckOpen}}}" class="px-3.5 pt-2">
+                        <div @click="truckOpen = !truckOpen" class="flex justify-between items-center pb-3.5">
+                            <h3>Truck</h3>
+                            <figure>
+                                <img src="{{'images/down-arrow.svg' | asset_url}}" alt="">
+                            </figure>
+                        </div>
+                        <ul x-show="truckOpen" class="customRadio">
+                            <li class="mb-3">
+                                <input {%if truck_type == 'Welder truck'%}checked{%endif%} id="truck1" type="radio" name="truck_type" value="Welder truck">
+                                <label for="truck1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Welder Truck</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if truck_type == 'Service Truck (with crane)'%}checked{%endif%} id="truck2" type="radio" name="truck_type" value="Service Truck (with crane)">
+                                <label for="truck2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Service Truck with Crane</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if truck_type == 'Small Service (no crane)'%}checked{%endif%} id="truck3" type="radio" name="truck_type" value="Small Service (no crane)">
+                                <label for="truck3" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Service Truck without Crane</label>
+                            </li>
+                            <li class="mb-3">
+                                <input {%if truck_type == 'Lube Truck'%}checked{%endif%} id="truck4" type="radio" name="truck_type" value="Lube Truck">
+                                <label for="truck4" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Lube Truck</label>
+                            </li>
+                            <li>
+                                <input {%if truck_type == 'No'%}checked{%endif%} id="truck5" type="radio" name="truck_type" value="No">
+                                <label for="truck5" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>None</label>
+                            </li>
+                            
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pt-5 text-center">
+                <input type="submit" name="subSearch" value="Filter" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block cursor-pointer">
+                <a href="/find_mechanic" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">Reset</a>
+                </div>
+            </form>
+
+            <div class="profileEdit_right w-full pt-10 md:pt-0">
+                {% if records.results.size == 0 %}
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    <div class="flex justify-between">
+                    No records found.
+                    </div>
+                </div>
+                {%else%}
+                {% for u in records.results %}
+
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between flex-col md:flex-row">
+                        <div>
+                            <figure>
+                                {%if u.photo.photo.url %}
+                                    <img src="{{u.photo.photo.url}}" alt="" class="w-36 h-36 rounded-full m-auto mb-5 md:m-0">
+                                {%else%}
+                                    <img src="{{'images/signup-img2.png' | asset_url}}" alt="" class="w-36 h-36 rounded-full m-auto mb-5 md:m-0">
+                                {%endif%}
+                            </figure>
+                        </div>
+
+                        <div class="w-full md:w-4/5">
+                            <div class="flex justify-between items-start flex-col-reverse md:flex-row">
+                                <div>
+                                    {%if u.name != ''%}
+                                        <h2 class="text-gray-700 font-bold text-xl mb-2">{{u.name}}</h2>
+                                    {%else%}
+                                        <h2 class="text-gray-700 font-bold text-xl mb-2">N/A</h2>
+                                    {%endif%}
+
+                                    {%if u.profile_bio != ''%}
+                                        <span class="block heavytechs-text-dark-orange text-base mb-3">{{u.profile_bio.position}}</span>
+                                    {%else%}
+                                        <h2 class="text-gray-700 font-bold text-xl mb-2">N/A</h2>
+                                    {%endif%}
+                                </div>
+                                
+                                {%if u.availability == '1'%}
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                                {%endif%}
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">{{u.profile_bio.short_description}}</p>
+                            <ul class="mb-8">
+                                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                                    <span class="block text-gray-500 text-base mr-7 md:w-28  mb-3 md:mb-0">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">{{u.profile_bio.company_name}}</strong>
+                                </li>
+                                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                                    <span class="block text-gray-500 text-base mr-7 md:w-28 mb-3 md:mb-0">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">{{u.profile_bio.location}}, {{u.profile_bio.ready_for_travel}}</strong>
+                                </li>
+                                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                                    <span class="block text-gray-500 text-base mr-7 md:w-28 mb-3 md:mb-0">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">{{u.profile_bio.total_experience}}</strong>
+                                </li>
+                                <li class="flex items-left md:items-center mb-1.5 flex-col md:flex-row">
+                                    <span class="block text-gray-500 text-base mr-7 md:w-28 mb-3 md:mb-0">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">{{u.profile_skills.drivers_license_class}}</strong>
+                                </li>
+                            </ul>
+
+                            <div class="flex justify-between items-center">
+                                <a href="/find_mechanic/details?m_id={{u.user_id}}" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+
+                                {%liquid 
+                                    assign is_favorite = '0'
+                                    for fv in favorites.results
+                                        if fv.fav_id == u.user_id and fv.fav_for == 'mechanic'
+                                            assign is_favorite = '1'
+                                            assign favorite_id = fv.id
+                                        endif
+                                    endfor
+                                %}
+
+                                {% if user_id %}
+                                    {% if is_favorite == '1' %}
+                                        <a href="/remove-favourite?id={{favorite_id}}&fav_id={{user_id}}&fav_for=mechanic">
+                                            <img src="{{ 'images/heart-full.svg' | asset_url }}" alt="">
+                                        </a>
+                                    {% else %}
+                                        <a href="/set-favourite?fav_id={{u.user_id}}&fav_for=mechanic">
+                                            <img src="{{ 'images/heart-normal.svg' | asset_url }}" alt="">
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+
+                                {%comment%}
+                                <a href="#">
+                                    <img src="{{ 'images/heart-full.svg' | asset_url }}" alt="">
+                                </a>
+                                <a href="#">
+                                    <img src="{{ 'images/heart-normal.svg' | asset_url }}" alt="">
+                                </a>
+                                {%endcomment%}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+                {%endif%}
+
+                {%comment%}
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="bg-white p-5 shadow-sm rounded-md mb-2.5">
+                    
+                    <div class="flex justify-between">
+                        <div>
+                            <figure>
+                                <img src="{{ 'images/img01.png' | asset_url }}" alt="" class="w-36 h-36 rounded-full">
+                            </figure>
+                        </div>
+
+                        <div class="w-4/5">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h2 class="text-gray-700 font-bold text-xl mb-2">Harry Cooper</h2>
+                                    <span class="block heavytechs-text-dark-orange text-base mb-3">Lead field mechanic</span>
+                                </div>
+                                
+                                <strong class="text-base text-gray-700 font-normal bg-blue-200 px-2 block leading-7 rounded-md">Available now</strong>    
+                            </div>
+                            
+                            <p class="text-base text-gray-700 mb-5">
+                                Lead field mechanic. Care of maintenance. Order all the parts .All supplies Contact John Deer. Computer work .Coordinate with the office people re costs. Deal with mechanics with problems they have.
+
+                            </p>
+                            <ul class="mb-8">
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Company name:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Heavy Techs</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Location:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Riverton, WY 400+ Mi</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Experience:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">10-20 years</strong>
+                                </li>
+                                <li class="flex items-center mb-1.5">
+                                    <span class="block text-gray-500 text-base mr-7 w-28">Drivers License:</span>
+                                    <strong class="block text-base text-gray-800 font-medium">Class D</strong>
+                                </li>
+                            </ul>
+
+                            <a href="#" class="heavytechs-bg-dark-orange text-white heavytechs-border-color-orange border-2 px-6 leading-7 rounded-3xl text-sm inline-block">View more</a>
+                        </div>
+                    </div>
+
+                </div>
+                {%endcomment%}
+
+            </div>
+        </div>
+
+    </div>
+  </div>
+{%comment%}
+<div class="container mx-auto">
+  {% if records.results.size > 0 %}
+    {% assign sorted = records.results | group_by: 'type' %}
+    {% for type in sorted %}
+      <h2 class="title">{{ type[0] | capitalize | pluralize }}</h2>
+      <div class="grid grid-cols-3 gap-x-8 gap-y-6 cards mb-10">
+        {% for model in type[1] %}
+          {% if type[0] == 'profile' and model.slug == blank %}
+            {% continue %}
+          {% endif %}
+
+          {% render 'theme/simple/quick_search/card', model: model %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="container my-8 text-lg">{{ 'app.search.no_items_found.title' | t }}</p>
+  {% endif %}
+</div>
+{%endcomment%}

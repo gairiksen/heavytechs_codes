@@ -1,0 +1,31 @@
+---
+slug: posts
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, membership: true
+  include 'lib/profile_present_or_redirect', profile: current_profile
+
+  assign object = context.params.post
+  if object.group_id == current_profile.id
+    function group = 'lib/commands/groups/find_or_create_for_profile', profile: current_profile
+  else
+    function group = 'lib/queries/groups/find', id: object.group_id, with_owner: true
+  endif
+  include 'lib/present_or_404', property: group.id
+
+  function can_post = "lib/can", actor: current_profile, do: "post", object: group
+  unless can_post.valid
+    include 'lib/present_or_404', property: null
+  endunless
+
+  hash_assign object['group_id'] = group.id
+  function object = 'lib/commands/posts/create', object: object, current_profile: current_profile
+  if object.valid
+    include 'lib/commands/events/create', type: 'post_created', actor_id: current_profile.id, object_id: object.id, target_id: object.group_id, delay: 0
+    include 'redirect_to', url: context.params.return_to, notice: 'app.posts.create.success'
+  else
+    log object.errors, type: 'ERROR: posts/create'
+    include 'redirect_to', url: context.params.return_to, error: 'app.posts.create.failed'
+  endif
+%}

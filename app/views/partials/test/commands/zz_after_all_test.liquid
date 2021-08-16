@@ -1,0 +1,8 @@
+{% liquid
+  log 'zz_after_all_test'
+  function category = 'lib/queries/categories/find', key: "jewellery"
+  if category
+    function res = 'lib/commands/categories/delete', object: category
+    log res, type: 'zz_after_all_test'
+  endif
+%}

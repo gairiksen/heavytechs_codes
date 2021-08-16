@@ -1,0 +1,24 @@
+mutation update(
+  $id: ID!
+  $c__status: String
+  $total_shipping_cost_cents: Int
+  $total_price_cents: Int
+  $products_price_cents: Int
+) {
+  record_update(
+    id: $id
+    record: {
+      properties: [
+        { name: "c__status", value: $c__status }
+        { name: "total_shipping_cost_cents", value_int: $total_shipping_cost_cents }
+        { name: "total_price_cents", value_int: $total_price_cents }
+        { name: "products_price_cents", value_int: $products_price_cents }
+      ]
+    }
+  ) {
+    id
+    total_shipping_cost_cents: property_int(name: "total_shipping_cost_cents")
+    total_price_cents: property_int(name: "total_price_cents")
+    products_price_cents: property_int(name: "products_price_cents")
+  }
+}

@@ -1,0 +1,87 @@
+<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+    <tbody>
+        <tr>
+            <td style="padding:0; margin:0;" align="center" valign="top" width="100%">
+                <table style="padding: 10px; max-width: 512px;" border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                    <tbody>
+                        <tr>
+                            <td style="padding:20px; color: #fff; border-radius: 8px 8px 0 0;border:none;" align="center" valign="middle" width="100%" bgcolor="#111827">
+                                <a href="#">
+                                    <img src="{{ 'images/logo.png' | asset_url }}" alt="" width="auto" style="margin-bottom: 5px; max-width:100%; display: block; margin: auto;">
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F9FAFB" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <h2 style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:18px;line-height:1.2;font-weight:bold;color:#374151;margin-bottom:15px;">Heavy Techs reset password</h2>
+
+                                {%comment%}
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#ef4444;margin-bottom:0;">Hi, Harry Cooper!</p>
+                                {%endcomment%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F3F4F6" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <h3 style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.2;font-weight:bold;color:#1f2937;margin-bottom:15px;">Someone requested that your password for your Heavy Techs account be reset.</h3>
+
+                                <a href="{{ data.url }}">
+                                <button style="background-color:#E7601A;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1;font-weight:normal;color:#ffffff;padding:16px 24px;margin-bottom:16px;border-radius:999px;border:none;">Reset password</button></a>
+
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:11px;line-height:1.4;font-weight:bold;color:#1f2937;margin-bottom:16px;">or copy this link: <a href="{{ data.url }}" style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:11px;line-height:1.4;font-weight:normal;color:#818cf8;">{{ data.url }}</a></p>
+                                
+                                {%comment%}
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:10px;line-height:1.4;font-weight:normal;color:#1f2937;margin-bottom:0;">This link is valid until [time] and can be used once. If you did not request to reset your password please ignore this email. Your password won’t change until you create a new password.</p>
+                                {%endcomment%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" bgcolor="#F9FAFB" style="padding-top:24px;padding-right:32px;padding-bottom:24px;padding-left:32px;font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:14px;line-height:1.2;font-weight:normal;color:#333;border:none;">
+                                <p style="font-family:Verdana,Arial,Helvetica,Geneva,Tahoma,sans-serif;font-size:12px;line-height:1.2;font-weight:normal;color:#374151;margin-bottom:0;"><strong>Heavy Techs</strong> Team</p>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{%comment%}
+<div class="max-w-lg m-auto">
+    <div class="bg-gray-900 py-5 text-center rounded-t-lg">
+        <img src="{{ 'images/Logo.svg' | asset_url }}" alt="" class="m-auto">
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6">
+        <h2 class="text-gray-700 text-2xl font-extrabold mb-3">HeavyTechs Reset Password</h2>
+    </div>
+
+    <div class="bg-gray-100 p-8">
+        <h4 class="text-sm text-gray-800 font-bold mb-4">
+            Someone requested that your password for your HeavyTechs account be reset.  
+        </h4>
+        <div class="flex items-center mb-3">
+            <a href="{{ data.url }}" class="flex items-center text-indigo-400 hover:underline">Reset link</a>
+            
+        </div>
+        <p class="text-xs text-gray-800">
+            This link is valid until can be used once. If you did not request to reset your password please ignore this email. Your password won’t change until you create a new password.
+        </p>
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6 rounded-b-lg">
+        <strong class="text-sm font-bold text-gray-700">Heavy Techs <span class="font-normal">Team</span></strong>
+    </div>
+
+</div>
+{%endcomment%}
+
+{%comment%}
+<h2 class="subtitle">{{ 'app.emails.passwords.reset.title' | t }}</h2>
+
+<p>{{ 'app.emails.passwords.reset.content' | t }}</p>
+<p class="sidenote">{{ 'app.emails.passwords.reset.ignore' | t }}</p>
+
+<p class="mt text-center"><a href="{{ data.url }}" class="button">{{ 'app.emails.passwords.reset.subject' | t }}</a></p>
+{%endcomment%}

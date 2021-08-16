@@ -1,0 +1,17 @@
+{% parse_json object_build %}
+  {
+    "gateway": {{ gateway | json }},
+    "external_id": {{ external_id | json }},
+    "api_call_name": {{ object.template | json }},
+
+    "template": {{ object.template | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  assign payload = object.data | json
+  hash_assign object_build['payload'] = payload
+  hash_assign object_build['data'] = object.data
+
+  return object_build
+%}

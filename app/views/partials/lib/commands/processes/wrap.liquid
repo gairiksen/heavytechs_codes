@@ -1,0 +1,21 @@
+{%  liquid
+  function object = 'lib/commands/processes/wrap/build', object: object, command: command, current_profile: current_profile
+  function object = 'lib/commands/processes/wrap/check', object: object
+
+  assign command = 'lib/commands/' | append: object.command
+
+  function require_acceptance = 'lib/queries/constants/find' name: "INVENTORY_REQUIRE_ACCEPTANCE", type: "boolean"
+  if require_acceptance
+    function command_object = command, object: object.payload, skip_execution: true, current_profile: object.current_profile
+    if command_object.valid
+      function object = 'lib/commands/processes/create', payload: object.payload, command: object.command, profile: object.current_profile
+      hash_assign object['require_acceptance'] = true
+    else
+      assign object = command_object
+    endif
+  else
+    function object = command, object: object.payload, current_profile: current_profile
+  endif
+
+  return object
+%}

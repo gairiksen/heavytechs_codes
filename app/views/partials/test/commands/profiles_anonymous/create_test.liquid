@@ -1,0 +1,7 @@
+{% comment %}LOAD TESTED PARTIAL/FUNCTION{% endcomment %}
+{% liquid
+  assign payload = '{"session_id": "12345"}' | parse_json
+  function profile = 'lib/commands/profiles_anonymous/create', object: payload
+
+  include 'test/assertions/valid_object', contract: contract, object: profile, field_name: 'profile'
+%}

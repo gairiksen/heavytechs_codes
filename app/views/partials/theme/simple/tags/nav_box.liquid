@@ -1,0 +1,39 @@
+{% if tags %}
+  <div class="card mt-5">
+    <header class="uppercase">{{ 'app.tags.followed' | t }}</header>
+    <div class="flex flex-wrap uppercase mt-4">
+      {% for tag in tags.results %}
+        <form action="#" x-data="relationship('tagIds')" x-on:submit.prevent data-id="{{ tag.id }}" x-on:data-ready.window="init()">
+          <input type="hidden" name="r_id" value="{{ tag.id }}">
+          <input type="hidden" name="name" value="followship:tag">
+          <button
+            class="uppercase button button-small button-secondary mb-2 ms-2"
+            x-on:click="toggle($dispatch)"
+            x-cloak
+            x-show.transition="exists"
+            title="{{ "app.relationships.posts.title" | t }}"
+          >{{ tag.name }}</button>
+        </form>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card mt-5">
+    <header class="uppercase">{{ 'app.tags.followable' | t  }}</header>
+    <div class="flex flex-wrap mt-4">
+      {% for tag in tags.results %}
+        <form action="#" x-data="relationship('tagIds')" x-on:submit.prevent data-id="{{ tag.id }}" x-on:data-ready.window="init()">
+          <input type="hidden" name="r_id" value="{{ tag.id }}">
+          <input type="hidden" name="name" value="followship:tag">
+          <button
+            class="uppercase button button-small button-secondary mb-2 ms-2"
+            x-on:click="toggle($dispatch)"
+            x-show="!exists"
+            x-cloak
+            title="{{ "app.relationships.posts.title" | t }}"
+          >{{ tag.name }}</button>
+        </form>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

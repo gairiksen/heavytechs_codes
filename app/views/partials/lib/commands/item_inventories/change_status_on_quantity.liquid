@@ -1,0 +1,14 @@
+{% liquid
+  function object = 'lib/commands/item_inventories/change_status_on_quantity/build', object: object, item_inventory: item_inventory
+
+  if object.status_name
+    function status = 'lib/commands/statuses/create', object_id: item_inventory.id, name: object.status_name, profile_id: profile.id
+    if status['valid']
+      include 'lib/commands/events/create', type: 'status_created', actor_id: profile.id, object_id: status.id, target_id: status.object_id
+    else
+      hash_assign object['valid'] = false
+      log status, type: 'ERROR: change_status_on_quantity'
+    endif
+  endif
+  return object
+%}

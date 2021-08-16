@@ -1,0 +1,17 @@
+{% liquid
+  case process.command
+  when 'items/publish_version'
+    assign payload = process.payload | parse_json
+    function new_item = 'lib/queries/items/find', id: payload.new_item.id, withAllLangs: true
+    function old_item = 'lib/queries/items/find', id: payload.old_item.id, withAllLangs: true
+    hash_assign process['new_item'] = new_item
+    hash_assign process['old_item'] = old_item
+  when 'organizations/update'
+    assign payload = process.payload | parse_json
+    function old_organization = 'lib/queries/organizations/find', id: payload.id
+    hash_assign process['new_organization'] = payload
+    hash_assign process['old_organization'] = old_organization
+  endcase
+
+  return process
+%}

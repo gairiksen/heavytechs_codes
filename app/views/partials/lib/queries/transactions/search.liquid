@@ -1,0 +1,6 @@
+{% liquid
+  graphql r = 'transactions/search', limit: limit, page: 1
+  include 'lib/handle_graphql_response', r: r, name: 'queries/transactions/search'
+
+  return r.transactions
+%}

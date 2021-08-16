@@ -1,0 +1,81 @@
+<div class="relative">
+        <figure>
+            <img src="{{ 'images/about-banner.svg' | asset_url }}" alt="" class="w-full h-48 object-cover md:h-auto">
+        </figure>
+        <div class="absolute w-full top-1/2 -translate-y-1/2 transform text-center">
+            <div class="container mx-auto px-3.5">
+                <h2 class="text-white text-4xl mb-4 font-extrabold">About US</h2>
+                <span class="text-white block text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gray-50 py-24">
+        <div class="container mx-auto px-3.5">
+            <div class="flex justify-between flex-col md:flex-row">
+                <div class="w-full mb-5 md:pr-16 md:mb-0 md:w-3/6">
+                    <figure>
+                        <img src="{{ 'images/our-story-img.svg' | asset_url }}" alt="" class="w-full">
+                    </figure>
+                </div>
+
+                <div class="w-full md:w-3/6">
+                    <h2 class="text-3xl font-bold text-gray-600 mb-2">Our story</h2>
+                        <p class="text-base mb-8 text-gray-600">
+                            Our mission is to bring the heavy equipment professionals  together as a community of peers determined to elevate our industry to the next level. 
+                        </p>
+
+                        <p class="text-base mb-8 text-gray-600">
+                            Our story: We at Heavy Techs felt there wasn’t a place focused on the hard working men and women that dedicated themselves to repairing the machines used to build, rebuild and power the world. We know there is more work than we as mechanics can keep up with but there might be a better way to find the good jobs. We are committed to showcasing your abilities and investment you have made in your truck, tools and equipment. We will also highlight the companies in your area that need people with your specialty training or years of experience.
+                        </p>
+                        <p class="text-base mb-8 text-gray-600">
+                            Building a place for heavy tech professionals to collaborate. Innovate and elevate. 
+
+                        </p>
+
+                </div>
+            </div>
+            
+
+            
+        </div>
+    </div>
+    
+{%comment%}
+<section class="container py-6 px-4 text-center">
+  <h2 class="bigtitle">{{ 'static-pages.about-us.our-story' | t }}</h2>
+  <p class="max-w-xl mx-auto mb-12 text-gray-500">{{ 'static-pages.about-us.our-story-subtitle' | t }}</p>
+
+  <p class="mb-10 text-left prose mx-auto">
+    {{ 'static-pages.about-us.our-story-paragraph' | t }}
+  </p>
+  <p class="mb-10 text-left prose mx-auto">
+    {{ 'static-pages.about-us.our-story-paragraph2' | t }}
+  </p>
+</section>
+
+<section class="container py-6 px-4 text-center">
+  <h2 class="bigtitle">{{ 'static-pages.about-us.our-team' | t }}</h2>
+  <p class="max-w-xl mx-auto mb-12 text-gray-500">{{ 'static-pages.about-us.our-team-subtitle' | t }}</p>
+  <div class="flex flex-wrap">
+    <div class="md:w-1/3 p-8">
+      <img class="w-1/3 mx-auto mb-4 rounded-full" src="{{ 'images/person1.jpg' | asset_url }}" alt="">
+      <h3 class="subtitle">{{ 'static-pages.about-us.person1-name' | t }}</h3>
+      <span>{{ 'static-pages.about-us.person1-position' | t }}</span>
+      <p class="mt-4 text-gray-500 leading-relaxed">{{ 'static-pages.about-us.person1-description' | t }}</p>
+    </div>
+    <div class="md:w-1/3 p-8">
+      <img class="w-1/3 mx-auto mb-4 rounded-full" src="{{ 'images/person2.jpg' | asset_url }}" alt="">
+      <h3 class="subtitle">{{ 'static-pages.about-us.person2-name' | t }}</h3>
+      <span>{{ 'static-pages.about-us.person2-position' | t }}</span>
+      <p class="mt-4 text-gray-500 leading-relaxed">{{ 'static-pages.about-us.person2-description' | t }}</p>
+    </div>
+    <div class="md:w-1/3 p-8">
+      <img class="w-1/3 mx-auto mb-4 rounded-full" src="{{ 'images/person3.jpg' | asset_url }}" alt="">
+      <h3 class="subtitle">{{ 'static-pages.about-us.person3-name' | t }}</h3>
+      <span>{{ 'static-pages.about-us.person3-position' | t }}</span>
+      <p class="mt-4 text-gray-500 leading-relaxed">{{ 'static-pages.about-us.person3-description' | t }}</p>
+    </div>
+  </div>
+</section>
+{%endcomment%}

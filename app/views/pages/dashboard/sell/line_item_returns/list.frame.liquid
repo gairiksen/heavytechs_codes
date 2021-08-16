@@ -1,0 +1,15 @@
+---
+layout: null
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  assign page = context.params.page | to_positive_integer: 1
+  assign allowed_statuses = 'app.statuses.line_item_returns.requested,app.statuses.line_item_returns.accepted,app.statuses.line_item_returns.rejected,app.statuses.line_item_returns.returned' | split: ','
+  assign statuses = context.params.status | split: ',' | default: allowed_statuses
+
+  function line_item_returns = 'lib/queries/line_item_returns/search_by_seller', seller_id: current_profile.id, limit: 20, page: context.params.page, lang: context.language, status: statuses
+
+  include 'theme/simple/dashboard/line_item_returns/list/table', line_item_returns: line_item_returns, statuses: statuses, current_profile: current_profile, role: 'seller'
+%}

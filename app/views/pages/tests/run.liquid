@@ -1,0 +1,8 @@
+---
+layout: test
+---
+{% liquid
+  if context.environment == 'staging'
+    include 'test/run', format: context.params.formatter
+  endif
+%}

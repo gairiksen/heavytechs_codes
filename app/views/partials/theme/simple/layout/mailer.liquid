@@ -1,0 +1,19 @@
+<div class="container">
+
+  {%comment%}
+  <h1 class="title">
+    <a class="" href="{{ url }}" class="text-center">
+      <img src="{{ 'images/logo.png' | asset_url }}" width="48" height="48" alt=""><br>
+      {{ 'app.title' | t }}
+    </a>
+  </h1>
+  {%endcomment%}
+
+  {{ content_for_layout }}
+
+  <div class="footer">
+    <p>This message was sent by <a href="https://platformos.com">PlatformOS</a>.</p>
+    <p><a href="{{ url }}/terms-of-service">Terms of service</a>, <a href="{{ url }}/contact-us">Contact us</a></p>
+  </div>
+
+</div>

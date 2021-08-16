@@ -1,0 +1,138 @@
+mutation update( 
+    $id: ID!
+    $uuid: String,
+    $user_id: String,
+    $distance: String,
+    $mechanic_name: String,
+    $company_name: String,
+    $position: String,
+    $short_description: String,
+    $description: String,    
+    $type_of_job: String,
+    $area_of_expertise: String,
+    $availability: String,
+    $total_experience: String,
+    $earthworks: String,
+    $mining: String,
+    $fleet: String,
+    $pipeline: String,
+    $paving: String,
+    $energy_production: String,
+    $heavy_equipment_mechnic: String,
+    $truck_mechanic: String,
+    $welder_fabricator: String,
+    $oilers_pm_tech: String,
+    $caterpillar: String,
+    $john_deere: String,
+    $hitachi: String,
+    $volvo: String,
+    $komatsu: String,
+    $bobcat: String,
+    $other: String,
+    $insurance_coverage: String,
+    $ase: String,
+    $osha: String,
+    $msha: String,
+    $oem: String,
+    $truck_type: String,
+    $object_uuid: String,
+    $user_name: String,
+    $percent_complete: String,
+    $latitude: String,
+    $longitude: String,
+    $geo_location: JSONPayload
+) {
+  model_update(
+    id: $id
+    model: {
+      model_schema_name: "search_mechanic_params"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "distance" value: $distance }
+        { name: "mechanic_name" value: $mechanic_name }
+        { name: "company_name" value: $company_name }
+        { name: "position" value: $position }
+        { name: "short_description" value: $short_description }
+        { name: "description" value: $description }        
+        { name: "type_of_job" value: $type_of_job }
+        { name: "area_of_expertise" value: $area_of_expertise }
+        { name: "availability" value: $availability }
+        { name: "total_experience" value: $total_experience }
+        { name: "earthworks" value: $earthworks }
+        { name: "mining" value: $mining }
+        { name: "fleet" value: $fleet }
+        { name: "pipeline" value: $pipeline }
+        { name: "paving" value: $paving }
+        { name: "energy_production" value: $energy_production }
+        { name: "heavy_equipment_mechnic" value: $heavy_equipment_mechnic }
+        { name: "truck_mechanic" value: $truck_mechanic }
+        { name: "welder_fabricator" value: $welder_fabricator }
+        { name: "oilers_pm_tech" value: $oilers_pm_tech }
+        { name: "caterpillar" value: $caterpillar }
+        { name: "john_deere" value: $john_deere }
+        { name: "hitachi" value: $hitachi }
+        { name: "volvo" value: $volvo }
+        { name: "komatsu" value: $komatsu }
+        { name: "bobcat" value: $bobcat }
+        { name: "other" value: $other }
+        { name: "insurance_coverage" value: $insurance_coverage }
+        { name: "ase" value: $ase }
+        { name: "osha" value: $osha }
+        { name: "msha" value: $msha }
+        { name: "oem" value: $oem }
+        { name: "truck_type" value: $truck_type }
+        { name: "object_uuid" value: $object_uuid }
+        { name: "user_name" value: $user_name }
+        { name: "percent_complete" value: $percent_complete }
+        { name: "latitude" value: $latitude }
+        { name: "longitude" value: $longitude }
+        { name: "geo_location" value_json: $geo_location } 
+              
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    distance: property(name: "distance")
+    company_name: property(name: "company_name")
+    position: property(name: "position")
+    mechanic_name: property(name: "mechanic_name")
+    short_description: property(name: "short_description")
+    description: property(name: "description")    
+    type_of_job: property(name: "type_of_job")
+    area_of_expertise: property(name: "area_of_expertise")
+    availability: property(name: "availability")
+    total_experience: property(name: "total_experience")
+    earthworks: property(name: "earthworks")
+    mining: property(name: "mining")
+    fleet: property(name: "fleet")
+    pipeline: property(name: "pipeline")
+    paving: property(name: "paving")
+    energy_production: property(name: "energy_production")
+    heavy_equipment_mechnic: property(name: "heavy_equipment_mechnic")
+    truck_mechanic: property(name: "truck_mechanic")
+    welder_fabricator: property(name: "welder_fabricator")
+    oilers_pm_tech: property(name: "oilers_pm_tech")
+    caterpillar: property(name: "caterpillar")
+    john_deere: property(name: "john_deere")
+    hitachi: property(name: "hitachi")
+    volvo: property(name: "volvo")
+    komatsu: property(name: "komatsu")
+    bobcat: property(name: "bobcat")
+    other: property(name: "other")
+    insurance_coverage: property(name: "insurance_coverage")
+    ase: property(name: "ase")
+    osha: property(name: "osha")
+    msha: property(name: "msha")
+    oem: property(name: "oem")
+    truck_type: property(name: "truck_type")
+    object_uuid: property(name: "object_uuid")
+    user_name: property(name: "user_name")
+    latitude: property(name: "latitude")
+    longitude: property(name: "longitude")
+  }
+}

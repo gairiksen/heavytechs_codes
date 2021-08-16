@@ -1,0 +1,8 @@
+{% assign o = payload.object %}
+{{ payload.type | t: item_name: o.item_name,
+    old_quantity: o.old_quantity,
+    new_quantity: o.new_quantity,
+    old_max_in_one_order: o.old_max_in_one_order,
+    new_max_in_one_order: o.new_max_in_one_order,
+    scope: 'app.activities.types'
+}}

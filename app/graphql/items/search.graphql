@@ -1,0 +1,232 @@
+query search(
+  $id: ID
+  $ids: [ID!]
+  $limit: Int = 20
+  $page: Int = 1
+  $status: [String!]
+  $owner: String
+  $tag: String
+  $keyword: String
+  $category: String
+  $sort: RecordsSortInput = { created_at: { order: DESC } }
+  $withStatuses: Boolean = false
+  $withOrders: Boolean = false
+  $withInventoryItem: Boolean = false
+  $withAllLangs: Boolean = false
+  $lang: String!
+  $price_min: String
+  $price_max: String
+  $organizations: [String!]
+  $promoted: Boolean
+) {
+  items: records(
+    per_page: $limit
+    page: $page
+    filter: {
+      id: { value: $id value_in: $ids }
+      table: { value: "item" }
+      deleted_at: { exists: false }
+      properties: [
+        { name: "tags", contains: $tag }
+        { name: "category", starts_with: $category }
+        { name: "c__status", value_in: $status }
+        { name: "owner", value: $owner }
+        { name: "price", range: { gte: $price_min } }
+        { name: "price", range: { lte: $price_max } }
+        { name: "owner", value_in: $organizations }
+        { name: "promoted", value_boolean: $promoted }
+      ]
+      or: [
+        { properties: { name: "tags", contains: $keyword } }
+        { properties: { name: "category", contains: $keyword } }
+        {
+          related_records: {
+            join: { join_on_property: "id", foreign_property: "item_id" }
+            filter: {
+              table: { value: "item_detail" }
+              or: [
+                { properties: { name: "name", contains: $keyword } }
+                { properties: { name: "description", contains: $keyword } }
+              ]
+            }
+          }
+        }
+      ]
+    }
+    sort: [$sort]
+  ) {
+    total_entries
+    total_pages
+    has_previous_page
+    has_next_page
+    results {
+      id
+      created_at
+      type: table
+
+      uuid: property(name: "uuid")
+      category: property(name: "category")
+      price: property_int(name: "price")
+      original_price: property_int(name: "original_price")
+      return_days: property_int(name: "return_days")
+      currency: property(name: "currency")
+      cover_photo_url: property(name: "cover_photo_url")
+      slug: property(name: "slug")
+      promoted: property_boolean(name: "promoted")
+      photo_ids: property_array(name: "photo_ids")
+
+      item_detail: related_record(
+        table: "item_detail"
+        join_on_property: "id"
+        foreign_property: "item_id"
+        filter: { properties: { name: "lang", value: $lang } }
+      ) {
+        id
+        type: table
+        name: property(name: "name")
+        description: property(name: "description")
+        tags: property_array(name: "tags")
+        lang: property(name: "lang")
+      }
+
+      item_details: related_records(
+        table: "item_detail"
+        join_on_property: "id"
+        foreign_property: "item_id"
+        sort: { properties: { name: "lang", order: ASC } }
+
+      ) @include(if: $withAllLangs) {
+        id
+        type: table
+        name: property(name: "name")
+        description: property(name: "description")
+        tags: property_array(name: "tags")
+        lang: property(name: "lang")
+      }
+
+      item_inventory: related_record(
+        table: "item_inventory"
+        join_on_property: "item_inventory_id"
+        foreign_property: "id"
+      ) {
+        id
+        type: table
+
+        status: related_record(
+          join_on_property: "id"
+          foreign_property: "object_id"
+          table: "status"
+          sort: { created_at: { order: ASC } }
+        ) {
+          id
+          created_at
+          name: property(name: "name")
+          object_id: property(name: "object_id")
+        }
+
+        statuses: related_records(
+          join_on_property: "id"
+          foreign_property: "object_id"
+          table: "status"
+          sort: { created_at: { order: ASC } }
+        ) {
+          id
+          created_at
+          name: property(name: "name")
+          object_id: property(name: "object_id")
+        }
+
+        item_id: property(name: "item_id")
+        quantity: property_int(name: "quantity")
+        max_in_one_order: property_int(name: "max_in_one_order")
+        sku: property(name: "sku")
+
+        owner: related_record(
+          table: "organization"
+          join_on_property: "owner"
+          foreign_property: "id"
+        ) {
+          id
+          type: table
+          name: property(name: "name")
+          first_name: property(name: "first_name")
+          last_name: property(name: "last_name")
+          slug: property(name: "slug")
+          logo: property_upload(name: "logo") {
+            url
+            file_name
+            extension
+          }
+          shipping_types: property_array(name: "shipping_types")
+          delivery_fee: property_int(name: "delivery_fee")
+
+          avatar: related_record(
+            table: "photo"
+            join_on_property: "uuid"
+            foreign_property: "object_uuid"
+            filter: { properties: { name: "photo_type", value: "avatar" } }
+          ) {
+            photo: property_upload(name: "photo") {
+              url
+              versions
+            }
+          }
+        }
+
+        item: related_record(
+          table: "item"
+          join_on_property: "item_id"
+          foreign_property: "id"
+        ) @include(if: $withInventoryItem) {
+          id
+          type: table
+          uuid: property(name: "uuid")
+          item_detail: related_record(
+            table: "item_detail"
+            join_on_property: "id"
+            foreign_property: "item_id"
+            filter: { properties: { name: "lang", value: $lang } }
+          ) {
+            id
+            type: table
+            name: property(name: "name")
+            description: property(name: "description")
+          }
+        }
+      }
+
+      status: related_record(
+        join_on_property: "id"
+        foreign_property: "object_id"
+        table: "status"
+        sort: { created_at: { order: ASC } }
+      ) @include(if: $withStatuses) {
+        id
+        created_at
+        name: property(name: "name")
+        object_id: property(name: "object_id")
+      }
+
+      line_items: related_records(
+        join_on_property: "id"
+        foreign_property: "item_id"
+        table: "line_item"
+      ) @include(if: $withOrders) {
+        id
+      }
+
+      photos: related_records(
+        table: "photo"
+        join_on_property: "photo_ids"
+        foreign_property: "id"
+      ) {
+        id
+        photo: property_upload(name: "photo") {
+          file_name
+          url
+          versions
+        }
+      }
+    }
+  }
+}

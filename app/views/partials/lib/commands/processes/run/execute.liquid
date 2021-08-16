@@ -1,0 +1,13 @@
+{% liquid
+  assign command = 'lib/commands/' | append: object.command
+  assign payload = object.payload | parse_json
+  function result = command, object: payload, current_profile: object.profile
+  if result.valid
+  else
+    hash_assign object['valid'] = false
+    hash_assign object['errors'] = result.errors
+    log result, type: 'ERROR: processes/run/execute'
+  endif
+
+  return object
+%}

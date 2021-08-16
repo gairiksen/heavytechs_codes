@@ -1,0 +1,8 @@
+<h3 class="subtitle mt-8 font-bold">{{'app.orders.checkout.delivery_details' | t }}</h3>
+<div class="card">
+  {% render 'theme/simple/dashboard/orders/address',
+    pickup_title: 'app.models.orders.form.shipping_type_personal_pickup',
+    delivery_title: 'app.orders.checkout.shipping_type_delivery'
+    delivery_subtitle: 'app.models.orders.form.shipping_type_delivery_hours'
+    object: order %}
+</div>

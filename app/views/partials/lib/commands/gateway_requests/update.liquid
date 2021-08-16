@@ -1,0 +1,10 @@
+{%  liquid
+  function object = 'lib/commands/gateway_requests/update/build', object: object, gateway_request: gateway_request
+  function object = 'lib/commands/gateway_requests/update/check', object: object
+
+  if object.valid
+    function object  = 'lib/commands/execute', mutation_name: 'gateway_requests/update', object: object, selection: 'record_update'
+  endif
+
+  return object
+%}

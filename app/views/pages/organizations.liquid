@@ -1,0 +1,18 @@
+---
+slug: o/:slug
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+  assign query = '{}' | parse_json
+  function filters = 'lib/queries/search/filters', query: query
+  hash_assign query['organization_slugs'] = context.params.slug
+  function items = 'lib/queries/items/search', params: query, limit: 21, lang: context.language
+
+  assign org = filters.organizations | detect: slug: query.organization_slugs
+
+  include 'lib/present_or_404', property: org
+
+  include 'theme/simple/search_canonical_url', query: items.query
+  include 'theme/simple/items/index', items: items, organization: query.organization, header_text: org.name
+%}

@@ -1,0 +1,14 @@
+{% parse_json data %}
+  {
+    "profile_id": "211",
+    "item_inventory_id": {{item_inventory_id | json}},
+    "order_id": "111",
+    "score": {{score}}
+  }
+{% endparse_json %}
+{% liquid
+  function review = 'lib/commands/item_reviews/create', object: data
+  include 'test/assertions/valid_object', contract: contract, object: review, field_name: 'review'
+
+  return review
+%}

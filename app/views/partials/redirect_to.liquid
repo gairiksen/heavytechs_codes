@@ -1,0 +1,19 @@
+{% liquid
+  unless url
+    if context.session.return_to
+      assign url = context.session.return_to
+      session return_to = null
+    endif
+  endunless
+
+  if context.params.return_to
+    assign url = context.params.return_to
+  endif
+
+  assign url = url | default: default_url | default: '/'
+
+  include 'lib/flash/publish', notice: notice, error: error
+
+  redirect_to url
+  break
+%}

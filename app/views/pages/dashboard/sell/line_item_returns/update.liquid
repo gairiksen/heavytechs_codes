@@ -1,0 +1,19 @@
+---
+slug: dashboard/sell/line_item_returns
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function line_item_return = 'lib/queries/line_item_returns/find_for_seller', id: context.params.line_item_return.id, seller_id: current_profile.id
+  include 'lib/present_or_404', property: line_item_return.id
+
+  function object = 'lib/commands/line_item_returns/update', object: context.params.line_item_return, line_item_return: line_item_return, current_profile: current_profile
+  if object.valid
+    function url = 'link_to', line_item_return: line_item_return, current_profile: current_profile
+    include 'redirect_to', url: url, notice: 'app.models.line_item_returns.updated'
+  else
+    include 'theme/simple/dashboard/line_item_returns/show', object: object, line_item_return: line_item_return
+  endif
+%}

@@ -1,0 +1,50 @@
+<div class="container flex flex-wrap items-center mx-auto">
+  <h2 class="bigtitle">{{ 'app.organizations.edit.edit' | t }} - {{ object.name }}</h2>
+</div>
+
+<div class="container flex flex-wrap items-center mx-auto">
+  <form action="/dashboard/sell/organizations" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input name="_method" type="hidden" value="put">
+
+    <fieldset class="mt-5">
+      <label class="block" for="name">{{ 'app.organizations.attr.name' | t }}:</label>
+      <input class="w-full" type="text" id="name" name="organization[name]" value="{{ object.name }}" required >
+      {% render 'theme/simple/field_error', errors: object.errors.name %}
+    </fieldset>
+
+    <fieldset class="mt-5">
+      <label class="block" for="contact_emails">{{ 'app.organizations.attr.contact_emails' | t }}:</label>
+      <input class="w-full" type="text" id="contact_emails" name="organization[contact_emails]" value="{{ object.contact_emails }}">
+      {% render 'theme/simple/field_error', errors: object.errors.contact_emails %}
+      {% render 'theme/simple/ui/form-tip', content_key: 'app.organizations.edit.contact_emails_tip' %}
+    </fieldset>
+
+    <div class="mt-5" data-photo-upload-base>
+      <label class="block">{{ 'app.organizations.attr.logo' | t }}:</label>
+      {% render 'theme/simple/photos/uppy_area' %}
+    </div>
+
+    {% render 'theme/simple/dashboard/organizations/shipping_types', object: object, currency: currency %}
+
+    <div class="mt-5">
+      <button class="button" type="submit">
+        {{ 'app.organizations.edit.update' | t }}
+      </button>
+    </div>
+  </form>
+</div>
+
+{% liquid
+  assign photo = object.logo
+  assign photos = '[]' | parse_json
+  assign photos = photos | add_to_array: photo | compact
+%}
+{% render 'theme/simple/photos/uppy_form',
+  object_uuid: object.uuid,
+  presigned_url: presigned_url,
+  photo_type: 'logo',
+  note: 'Image up to 2MB',
+  max_number_of_files: 1
+  existing_photos: photos
+%}

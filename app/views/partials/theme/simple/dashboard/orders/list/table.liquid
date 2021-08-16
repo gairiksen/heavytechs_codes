@@ -1,0 +1,138 @@
+{% if orders.total_entries > 0 %}
+
+  {% liquid
+    assign page = page | default: 1 | plus: 0
+  %}
+
+  <form id="orders-list">
+    <input type="hidden" name="status" value="{{ statuses | join: ',' }}">
+  </form>
+
+  <section class="table relative">
+
+    <div
+      x-show="loading"
+      class="mt-6 card-overlay"
+      x-transition:enter="transition ease-in-out duration-100"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-80"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      x-cloak
+    >
+    {% render 'theme/simple/ui/spinner', size: 10 %}
+    </div>
+
+    <header>
+      <div>{{ 'app.orders.history.number' | t }}</div>
+      {% if role == 'buyer' %}
+        <div>{{ 'app.orders.seller' | t }}</div>
+      {% endif %}
+      {% if role == 'seller' %}
+        <div>{{ 'app.orders.buyer' | t }}</div>
+      {% endif %}
+      <div>{{ 'app.created_at' | t }}</div>
+      <div>{{ 'app.orders.payment_method' | t }}</div>
+      <div>{{ 'app.orders.shipping_type' | t }}</div>
+      <div class="lg:text-right">{{ 'app.orders.total' | t }}</div>
+      <div>{{ 'app.status' | t }}</div>
+    </header>
+
+    <div class="table-content">
+
+      {% for order in orders.results %}
+        {% function order_url = 'link_to', order: order, current_profile: current_profile %}
+        <ul>
+
+          <li>
+            <span class="lg:hidden">{{ 'app.models.orders.form.id' | t }}: </span>
+            <a data-tc="order-id" href="/dashboard/sell/orders/{{ order.id }}" class="font-bold lg:font-normal">
+              {{ order.id }}
+            </a>
+          </li>
+
+          {% if role == 'buyer' %}
+            <li>
+              <span class="lg:hidden">{{ 'app.orders.seller' | t }}: </span>
+              {% liquid
+                if order.seller.first_name
+                  assign name = order.seller.first_name | append: ' ' | append: order.seller.last_name
+                else
+                  assign name = order.seller.name
+                endif
+              %}
+              {{ name }}
+            </li>
+          {% endif %}
+
+          {% if role == 'seller' %}
+            <li>
+              <span class="lg:hidden">{{ 'app.orders.buyer' | t }}: </span>
+              {{ order.buyer.first_name }} {{ order.buyer.last_name }}
+            </li>
+          {% endif %}
+
+          <li>
+            <span class="lg:hidden">{{ 'app.created_at' | t }}: </span>
+            <time datetime="{{ order.created_at }}">{{ order.created_at | l: 'compact' }}</time>
+          </li>
+
+          <li>
+            <span class="lg:hidden">{{ 'app.orders.payment_method' | t }}: </span>
+            {{ order.payment_type }}
+          </li>
+
+          <li class="align-middle lg:ps-4 lg:py-4">
+            <span class="lg:hidden">{{ 'app.orders.shipping_type' | t }}: </span>
+            {% if order.shipping_type %}
+              {{ 'app.orders.shipping_types.' | append: order.shipping_type | t }}
+            {% endif %}
+          </li>
+
+          <li class="lg:text-right">
+            <span class="lg:hidden">{{ 'app.orders.total' | t }}: </span>
+            {% render 'theme/simple/price', amount_cents: order.total_price_cents, currency: order.currency %}
+          </li>
+
+          <li>
+            {% if order.status.timestamp %}
+              <span class="lg:hidden">{{ 'app.status' | t }}: </span>
+
+              {% liquid
+                assign status = order.status.name
+                assign status_for_role = status | split: '.' | last | t: scope: 'app.statuses.orders_for_role.seller'
+
+                case status
+                  when 'app.statuses.orders.paid'
+                    assign status_class = 'bg-warning-disabled border-warning'
+                    assign status_label = 'app.statuses.orders_for_role.seller.paid' | t
+                  when 'app.statuses.orders.delivered'
+                    assign status_class = 'bg-confirmation-disabled border-confirmation'
+                    assign status_label = 'app.statuses.orders_for_role.seller.delivered' | t
+                  when 'app.statuses.orders.cancelled_seller'
+                    assign status_class = 'bg-warning-disabled border-warning'
+                    assign status_label = 'app.statuses.orders_for_role.seller.cancelled_seller' | t
+                  when 'app.statuses.orders.cancelled_buyer'
+                    assign status_class = 'bg-warning-disabled border-warning'
+                    assign status_label = 'app.statuses.orders_for_role.seller.cancelled_buyer' | t
+                  when 'app.statuses.orders.returned'
+                    assign status_class = 'bg-warning-disabled border-warning'
+                    assign status_label = 'app.statuses.orders_for_role.seller.returned' | t
+                endcase
+              %}
+              <span class="px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase" data-tc="order-status">{{ status_label }}</span>
+            {% endif %}
+          </li>
+        </ul>
+      {% endfor %}
+
+    </div>
+
+  </section>
+
+  {% render 'theme/simple/ui/pagination', form: 'orders-list', collection: orders, current_page: page %}
+
+{% else %}
+  {% render 'theme/simple/dashboard/orders/list/empty' %}
+{% endif %}

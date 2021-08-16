@@ -1,0 +1,37 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $item_id: String
+  $lang: String
+  $name: String
+  $description: String
+) {
+  item_details: records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "item_detail" }
+      properties: [
+              { name: "item_id" value: $item_id }
+              { name: "lang" value: $lang }
+              { name: "name" value: $name }
+              { name: "description" value: $description }
+            ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+          item_id: property(name: "item_id")
+          lang: property(name: "lang")
+          name: property(name: "name")
+          description: property(name: "description")
+        }
+  }
+}

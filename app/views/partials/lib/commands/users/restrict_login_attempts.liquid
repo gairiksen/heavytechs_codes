@@ -1,0 +1,30 @@
+{% liquid
+  if object.id == blank
+    return object
+  endif
+
+  function attempts = 'lib/commands/users/restrict_login_attempts/build', object: object, default_login_attempts: default_login_attempts, lock_time: lock_time
+  function attempts = 'lib/commands/users/restrict_login_attempts/check', object: attempts
+
+  if attempts.valid
+    if object.valid
+      function attempts = 'lib/commands/users/reset_login_attempts', object: object, default_login_attempts: default_login_attempts
+      return object
+    else
+      function attempts = 'lib/commands/users/decrement_login_attempts', object: object, default_login_attempts: default_login_attempts
+
+      hash_assign attempts['client_ip'] = client_ip
+      hash_assign attempts['lock_time'] = lock_time
+      hash_assign attempts['default_login_attempts'] = default_login_attempts
+
+      function evt = 'lib/commands/events/create', type: 'login_failed', actor: object, object: attempts, delay: 0
+
+      if attempts.locked_at
+        function evt = 'lib/commands/events/create', type: 'account_locked', actor: attempts, object: attempts, delay: 0
+      endif
+      return object
+    endif
+  else
+    return attempts
+  endif
+%}

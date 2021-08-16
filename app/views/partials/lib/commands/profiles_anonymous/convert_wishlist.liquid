@@ -1,0 +1,10 @@
+{% liquid
+  function object = 'lib/commands/profiles_anonymous/convert_wishlist/build', profile_anonymous: profile_anonymous, profile: profile
+  function object = 'lib/commands/profiles_anonymous/convert_wishlist/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', object: object, mutation_name: 'profiles_anonymous/convert_wishlist', selection: 'records_update_all'
+  endif
+
+  return object
+%}

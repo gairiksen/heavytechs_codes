@@ -1,0 +1,29 @@
+<section class="my-10 container items-center" x-data>
+
+  <h2 class="bigtitle text-center">{{ 'app.login_form.log_in' | t }}</h2>
+
+  <form action="/sessions/2fa" method="post" class="card md:max-w-lg mx-auto text-center" x-ref="otpForm" x-on:submit.prevent="$refs.fullCode.value = $refs.no1.value + $refs.no2.value + $refs.no3.value + $refs.no4.value + $refs.no5.value + $refs.no6.value; $refs.otpForm.submit()">
+    <p>{{ 'app.2fa.new.please_confirm' | t }}</p>
+
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="2fa[email]" value="{{ object.email }}">
+    <input type="hidden" name="2fa[password]" value="{{ object.password }}">
+    <input name="2fa[otp_code]" type="hidden" value="{{ object.otp_code | raw_escape_string }}" x-ref="fullCode">
+
+    <fieldset class="mt-4 flex justify-center gap-4">
+      <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no1" x-on:input="$refs.no2.focus()" autofocus required>
+      <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no2" x-on:input="$refs.no3.focus()" required>
+      <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no3" x-on:input="$refs.no4.focus()" required>
+      <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no4" x-on:input="$refs.no5.focus()" required>
+      <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no5" x-on:input="$refs.no6.focus()" required>
+      <input type="number" min="0" max="9" class="w-10 appearance-reset text-center subtitle" x-ref="no6" x-on:input="$refs.submit.click()" required>
+    </fieldset>
+
+    {% render 'theme/simple/field_error', errors: object.errors.otp_code %}
+
+    <fieldset class="mt-5 text-center">
+      <button class="button mt-3" x-ref="submit">{{ 'app.2fa.session.verify' | t }}</button>
+    </fieldset>
+  </form>
+
+</section>

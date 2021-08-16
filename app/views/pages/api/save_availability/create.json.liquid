@@ -1,0 +1,22 @@
+---
+slug: api/save-availability
+method: post
+---
+{% liquid
+function current_profile = 'lib/current_profile', user_id: context.current_user.id
+include 'lib/profile_present_or_not_authenticated', profile: current_profile
+
+
+function pA = 'lib/queries/mechanic_availability/find', user_id: context.current_user.id, current_profile: current_profile
+
+if pA.id
+    graphql r = 'profiles/delete_availablity', id: pA.id 
+endif
+function object = 'lib/commands/mechanic_availability/create', availability: context.params.details.availability, current_profile: current_profile
+
+function sm_params = 'lib/queries/profiles/find_mechanic_search_params', user_id: context.current_user.id
+function build_object = 'lib/commands/mechanic_availability/update_search_params/build_availability', availability: context.params.details.availability, sm_params: sm_params, user_id: context.current_user.id
+function smp_object = 'lib/commands/mechanic_availability/update_search_params', object: build_object
+
+include 'theme/json/shared/show', object: object
+%}

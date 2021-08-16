@@ -1,0 +1,78 @@
+{% liquid
+  function creator_url = 'link_to', profile: post.creator
+%}
+
+<article class="mb-10 {% if post.parent_id == null %} mt-5 {% endif %}">
+  <section class="w-full flex {% if post.parent_id == null %} card {% else %} p-4 border-t {% endif %}">
+    <aside class="flex flex-col items-center flex-shrink-0 pe-4">
+      <a href="{{ creator_url }}">
+        {% render 'theme/simple/ui/avatar', profile: post.creator, size: 40, class: 'w-10 h-10 mb-2', alt: post.creator.name %}
+      </a>
+      {% include 'theme/simple/posts/vote_box', post: post, current_profile: current_profile, root_post: root_post %}
+    </aside>
+
+    <div class="flex flex-col flex-1 w-full min-w-0">
+      <header class="items-center justify-between w-full h-10 mb-2 md:flex">
+        <a href="{{ creator_url }}">
+          {{ post.creator.name }}
+        </a>
+        <date datetime="{{ post.created_at }}" class="block text-sm text-content-sidenote">{{ post.created_at | l: 'compact' }}</date>
+      </header>
+
+      <div class="mb-5 prose">
+        {{ post.body | default: '' | markdown }}
+      </div>
+
+      <footer class="self-end mt-auto">
+        {% if root_post.id == post.id and root_post.creator.id == current_profile.id %}
+          <a href="/groups/{{post.group_id}}/content/{{ post.id }}/edit" class="button button-secondary button-small">
+            {{ 'app.models.posts.edit' | t }}
+          </a>
+        {% elsif root_post.creator.id != current_profile.id and current_profile and root_post.id == post.id %}
+          <div class="flex flex-row-reverse items-center justify-between w-full">
+            <form action="#" x-data="relationship()" x-init="init()" x-on:submit.prevent>
+              <input type="hidden" name="l_id" value="{{ current_profile.id }}">
+              <input type="hidden" name="r_id" value="{{ post.id }}">
+              <input type="hidden" name="name" value="followship">
+            <button
+              class="text-sm underline cursor-pointer hover:no-underline me-5"
+              x-show.transition="initialized"
+              x-text="exists ? '{{ "app.relationships.posts.unfollow" | t }}' : '{{ "app.relationships.posts.follow" | t }}'"
+              x-on:click="toggle()"
+              title="{{ "app.relationships.posts.title" | t }}"
+            >
+            </button>
+          </form>
+          </div>
+        {% elsif post.creator_id == current_profile.id %}
+          <a href="/dashboard/posts/edit_answer?id={{ post.id }}" class="button button-secondary button-small">
+            {{ 'app.models.posts.edit_answer' | t }}
+          </a>
+
+          <form action="/dashboard/posts/" method="post" class="inline ms-2" onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')){ return false; }" >
+            {% include 'authenticity_token' %}
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="id" value="{{ post.id }}">
+            <input type="hidden" name="return_to" value="{% render 'link_to', post: root_post %}">
+
+            <button class="button button-small button-danger">{{ 'app.models.shared.delete' | t }}</button>
+          </form>
+        {% endif %}
+      </footer>
+    </div>
+  </section>
+
+  {% if post.comments.size > 0 %}
+    <section>
+      {% include 'theme/simple/posts/comments', list: post.comments, root_post: root_post, current_profile: current_profile %}
+    </section>
+  {% endif %}
+
+  <section class="mt-4 md:ms-14 md:px-4">
+    {% liquid
+      if current_profile.id
+        include 'theme/simple/comments/new_entry', commentable: post, commentable_type: 'post', placeholder: 'Your comment', hidden: true, images: false
+      endif
+    %}
+  </section>
+</article>

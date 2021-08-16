@@ -1,0 +1,19 @@
+{%  liquid
+  function object = 'lib/commands/organizations/create_member/build', object: object
+  function object = 'lib/commands/organizations/create_member/check', object: object
+
+  if object.valid and skip_execution != true
+    if object.profile == blank
+      function object = 'lib/commands/organizations/create_member/execute', object: object
+      if object.valid
+        include 'lib/commands/events/create', type: 'organization_member_created', actor_id: object.profile.id, object_id: object.organization_id, target_id: object.profile.id
+      endif
+    else
+      assign now = 'now' | to_time
+      function rel = 'lib/commands/relationships/create', name: 'membership', l_id: object.profile.id, r_id: object.organization_id, l_at: now, r_at: now
+      include 'lib/commands/events/create', type: 'organization_member_added_existing_profile', actor_id: object.profile.id, object_id: object.organization_id, target_id: object.profile.id
+    endif
+  endif
+
+  return object
+%}

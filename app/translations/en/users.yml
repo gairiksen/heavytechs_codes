@@ -1,0 +1,191 @@
+en:
+  app:
+    account:
+      created: Your account has been created
+      reset_password:
+        title: Reset password
+        description: >-
+          Please provide your registered email address and we will send you a
+          link that will enable you to reset the password.
+        send_link: Reset password
+    login: Log in
+    logout: 'Log out %{user}'
+    login_form:
+      log_in: Log In
+      email: E-mail
+      password: Password
+      register: Register
+      reset: Reset
+      anonymous: Don't have an account?
+      password_lost: Lost your password?
+    organizations:
+      new: Start selling items
+      create: Create organization
+      start_selling: You can start selling
+      already_have_organization: You are already in a organization
+    passwords:
+      edit: Change password
+      updated: Your new password has been set successfully.
+      password: Password
+      password_confirmation: Password Confirmation
+      password_update: Update Password
+    profiles:
+      edit: Profile Edit
+      username: Username
+      first_name: First Name
+      last_name: Last Name
+      mobile_number: Mobile Number
+      company_name: Company Name
+      ready_for_travel: How far are you prepared to travel?
+      position: Position
+      location: Location
+      profile_photo: Profile Photo
+      incomplete: Fill your profile
+      bio: Short Bio
+      short_description: Short Description of services/skills
+      long_description: Description
+      service_location: Service Location
+      service_category: Service Category
+      specialized_training: Specialized Training
+      specialized_training_certificate: Specialized Training Certificate
+      specialized_training_expiry: Specialized Training Expiry
+      total_experience: Experience(Years)
+      veteran: Veteran
+      upload_insurance_doc: Insurance Document
+      license_details: License Details
+      drivers_license: Driver's License
+      driver_license_certificate: Driver's License Certificate
+      tech_type: Tech Type
+      brand_of_equipment: Brand Of Equioment
+      basic_details: Bio
+      truck_details: Truck Details
+      crane_certification: Crane Certificate
+      crane_certificate_expiry: Crane Certificate Expiry
+      crane_certificate_document: Crane Certificate Document
+      truck_type: Truck Type
+      truck_capacity: Truck Capacity
+      truck_class: Truck Class
+      air_compressor: Air Compressor
+      tooling: Tooling
+      speciality_tool_type: Speciality Tool Type
+      skill_details: Skills
+      address_details: Address Details
+      plot_number: Plot Number
+      street: Street
+      city: City
+      state: State
+      country: Country
+      zip_code: Zip Code
+
+      osha_training_certificate: OSHA (Occupation Safety Hazard Association)
+      osha_training_expiry: OSHA Expiry
+      msha_training_certificate: MSHA (Mining Safety Hazard Association)
+      msha_training_expiry: MSHA Expiry
+      automotive_service_excellence: Automotive Service Excellence (ASE) certifications
+      military_training: Military Training
+      oem_training_certificate: OEM Certificate
+      oem_training_expiry: OEM Expiry
+      most_advanced_training: Most advanced training
+      date_of_completion: Date Of Completion
+      other_military_training: Outline other military training
+      max_300_characters: Max 300 characters
+      highest_degree: Most relevant or highest degree name and College/University
+      college_degree: College Degree
+      date_of_completion: Date of Completion
+
+      insurance_coverage_details: Insurance Coverage Details
+      insurance_document: Insurance Document
+      skills_service_offerings: Skills/Service Offerings
+
+      caterpillar_type: Caterpillar Type
+      john_deere_type: John Deere Type
+      hitachi_type: Hitachi Type
+      bobcat_type: Bobcat Type
+      volvo_type: Volbo Type
+      komatsu_type: Komatsu Type
+
+      skills_service_offerings: Skills/Service Offerings
+      qualification_area_of_expertise: Qualification/Area of Expertise
+      industries_serviced: Industries Serviced(Project Type)
+      choose_welding_certification: Welding Certificate
+      choose_electrical_troubleshooting_certificate: Electrical Troubleshooting Certificate
+      choose_computer_diagnostics_certificate: Computer Diagnostics Certificate
+      oem: OEM
+      add_another_oem: Add another OEM
+      choose_certification: Choose Certification
+      expiry_date: Expiry Date
+      enter_some_value: Please enter some value
+      insurance_coverage: Insurance Coverage
+      expiration_date: Expiration Date
+      save: Save
+
+      short_description_service_skills: Short description of service/skills
+      max_150_characters: Max 150 characters
+      upload_photos_truck: Upload photos of the truck (max 10)
+      truck_type: Type
+      no_of_products_tank: Number of product tanks
+      fuel_tank_size: Fuel tank size
+      crane_certification: Crane Certification
+      select_the_capacity: Select the capacity
+      truck_class: Class
+      air_compressor: Air Compressor
+      tooling: Tooling
+
+      nav:
+        activity: Activity
+        groups: Groups
+        following: Following
+        followers: Followers
+        products: Products
+    users:
+      new: new user
+      list: Users
+      create_account: Create an Account
+      form:
+        id: ID
+        first_name: First Name
+        last_name: Last Name
+        email: E-mail
+        password: Password
+        signup: Sign Up
+        agreed: >-
+          I understand and agree to <a href="/terms-of-service">Terms of
+          Service</a> and <a href="/privacy-policy">Privacy Policy</a>
+      attr:
+        id: ID
+        created_at: Created at
+        email: Email
+        first_name: First name
+        last_name: Last Name
+        list_id: List ID
+        slug: slug
+        followers: Followers
+        profile: Profile
+        name: Name
+    sessions:
+      created: Logged in
+      destroyed: Logged out
+    2fa:
+      attr:
+        password: Password
+        otp_code: OTP Code
+      errors:
+        password: The password you’ve entered is invalid.
+        otp_code: The code you’ve entered is not valid. Please retry or try again if the code has expired.
+      new:
+        enter_password: Please enter your password as a first authentication step.
+        confirm_and_enable: Confirm and Enable Two Factor
+        two_factor_authentication: Two-factor authentication
+        scan_qr_code: Scan QR Code
+        2fa_info: >-
+          To be able to log in you need to scan this QR Code with your authentication app.
+
+
+          You can use [Authy](https://authy.com) or [any other authentication tool](https://www.lastpass.com/two-factor-authentication).</a>
+        if_you_cannot_scan: 'Or enter the following code manually in the app:'
+        confirm_otp_code: Confirm code
+        please_confirm: Enter 6-digit code from your two-factor authenticator app.
+      create:
+        success: Successfully enabled two factor authentication.
+      session:
+        login: Log in

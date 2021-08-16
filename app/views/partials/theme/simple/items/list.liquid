@@ -1,0 +1,5 @@
+{% liquid
+  render 'theme/simple/search_canonical_url', query: items.query
+  render 'theme/simple/items/index', items: items, filters: filters, current_profile: current_profile
+  render 'theme/simple/wishlists/enable_event', current_profile_id: current_profile.id
+%}

@@ -1,0 +1,17 @@
+<p class="sr-only" >
+  Rating: <span>{{ rating }}</span> out of 5
+</p>
+<div class="flex items-center gap-2 {{ stars_class }}">
+  {% for i in (0..4) %}
+    {% liquid
+      assign star_rating = rating | minus: i
+    %}
+
+    {% if star_rating > 0 %}
+      {% render 'theme/simple/ui/icon', icon: 'starFull', class: 'w-4 text-warning' %}
+    {% else %}
+      {% render 'theme/simple/ui/icon', icon: 'star', class: 'w-4 text-content' %}
+    {% endif %}
+
+  {% endfor %}
+</div>

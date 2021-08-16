@@ -1,0 +1,34 @@
+---
+slug: groups/:group_id/content/:post_id/reply
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+%}
+
+{% liquid
+  assign group_id = context.params.group_id | split: '-' | last
+  function group = 'lib/queries/groups/find', id: group_id, with_owner: true
+  include 'lib/present_or_404', property: group.id
+%}
+
+{% liquid
+  assign post_id = context.params.post_id | split: '-' | last
+  function post = 'lib/queries/posts/find', id: post_id, group_id: group_id
+  include 'lib/present_or_404', property:  post.id
+%}
+
+{% liquid
+  function object = 'lib/commands/posts/reply', object: context.params.post, current_profile: current_profile
+
+  if object.valid
+    include 'lib/commands/events/create', type: 'post_answered', actor_id: current_profile.id, object_id: object.id, target_id: object.parent_id
+
+    function url = 'link_to', object: post, anchor: object.id
+    redirect_to url
+  else
+    graphql presigned_url = 'photos/presign' | dig: 'presigned'
+    render 'theme/simple/groups/content/show',  object: object, post: post, root_post: post, presigned_url: presigned_url, context: context, current_profile: current_profile, group: group
+  endif
+%}

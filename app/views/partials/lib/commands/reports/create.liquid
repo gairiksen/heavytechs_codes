@@ -1,0 +1,12 @@
+{% liquid
+  assign income = 0
+  graphql graph_orders = 'orders/report', args: filters
+  graphql graph_items = 'items/report', args: filters
+  graphql graph_users = 'users/report', args: filters
+
+  function object = 'lib/commands/reports/create/build', orders: graph_orders.orders, items: graph_items.items, users: graph_users.users
+
+  print object
+  return object
+%}
+

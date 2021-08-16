@@ -1,0 +1,11 @@
+{% liquid
+  function line_item_return = 'lib/queries/line_item_returns/find', id: event.object.id
+
+  function return_url = 'link_to', line_item_return: line_item_return, current_profile: line_item_return.order.seller
+  assign url_object = '{}' | parse_json
+  hash_assign url_object['host'] = context.location.host
+  hash_assign url_object['return_url'] = return_url
+
+  hash_assign line_item_return['return_url'] = 'https://{host}{order_url}' | expand_url_template: url_object
+  function object = 'lib/commands/emails/line_item_return_seller', line_item_return: line_item_return
+%}

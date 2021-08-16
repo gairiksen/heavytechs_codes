@@ -1,0 +1,16 @@
+mutation update($profile_anonymous_id: ID! $profile_id: String!){
+  records_update_all(
+    table: "relationship"
+    filter: {
+      properties: [
+        { name: "name" value: "wishlist" }
+        { name: "l_id" value: $profile_anonymous_id }
+      ]
+    }
+    record: {
+      properties: { name: "l_id", value: $profile_id }
+    }
+  ){
+    count
+  }
+}

@@ -1,0 +1,17 @@
+---
+slug: categories/*category_key
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+  function category = 'lib/queries/categories/find', key: context.params.category_key
+  include 'lib/present_or_404', property: category
+
+
+  assign statuses = 'published,unavailable' | split: ','
+  function items = 'lib/queries/items/search', params: context.params, limit: 21, statuses: statuses, lang: lang, only_public: true
+  function filters = 'lib/queries/search/filters', query: items.query
+  assign header_text = 'categories.' | append: category.key | t
+
+  include 'theme/simple/items/list', query: query, lang: context.language, current_profile: current_profile, header_text: header_text, items: items, filters: filters
+%}

@@ -1,0 +1,55 @@
+{% for order in orders %}
+  <h4 class="mb-3 font-medium">
+    {{ 'app.orders.checkout.shipping_for' | t }} – {{ order.seller.name }}
+  </h4>
+
+  <section class="card mb-9">
+
+    {% for line_item in order.line_items %}
+      {% function item_url = 'link_to', item: line_item.item %}
+      <div class="mb-5 last:mb-0 md:flex items-center">
+        <a href="{{ item_url }}">
+          {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+          <img src="{{ cover_url }}" class="md:w-20 mb-2 md:mb-0 me-5 rounded">
+        </a>
+        <div>
+          <a href="{{ item_url }}">
+            {{ line_item.item.item_detail.name }}
+          </a>
+
+          {% if line_item.quantity > 1 %}
+            <small class="sidenote block">
+              ({{ line_item.quantity }} {{ 'app.orders.checkout.pieces' | t }})
+            </small>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% liquid
+      assign shipping_method_object = object.orders[order.id]
+      assign shipping_method_name_prefix = 'cart[orders][' | append: order.id | append: ']'
+      function shipping_price = 'theme/simple/get_price', amount_cents: order.seller.delivery_fee, currency: order.currency
+      assign delivery_title = 'app.models.orders.form.shipping_type_delivery' | t: shipping_price: shipping_price
+      if order.seller.shipping_types.size == 0
+        function shipping_types = 'lib/queries/orders/default_shipping_types'
+        assign order_fix_me = order
+        hash_assign order_fix_me['seller']['shipping_types'] = shipping_types
+      endif
+    %}
+
+    {% render 'theme/simple/shipping_methods/form', wrapper_classes: 'pt-3 border-t',
+                                                    title: 'app.orders.checkout.select_prefered_option',
+                                                    delivery_title: delivery_title,
+                                                    delivery_subtitle: ''
+                                                    pickup_title: 'app.models.orders.form.shipping_type_personal_pickup',
+                                                    pickup_subtitle: 'app.models.orders.form.shipping_pickup_point'
+                                                    object: shipping_method_object,
+                                                    name: shipping_method_name_prefix,
+                                                    seller: order.seller,
+                                                    default_address: profile.default_address,
+                                                    save_default_address: true
+                                                    %}
+  </section>
+
+{% endfor %}

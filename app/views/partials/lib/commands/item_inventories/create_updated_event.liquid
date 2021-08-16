@@ -1,0 +1,11 @@
+{% liquid
+  assign diff_object = '{}' | parse_json
+  hash_assign diff_object['id'] = item_inventory.id
+  hash_assign diff_object['item_name'] = item_inventory.item.item_detail.name
+  hash_assign diff_object['old_quantity'] = item_inventory.quantity
+  hash_assign diff_object['old_max_in_one_order'] = item_inventory.max_in_one_order
+  hash_assign diff_object['new_quantity'] = object.quantity
+  hash_assign diff_object['new_max_in_one_order'] = object.max_in_one_order
+  include 'lib/commands/events/create', type: 'item_inventory_updated', actor_id: current_profile.id, object: diff_object
+  return true
+%}

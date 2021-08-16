@@ -1,0 +1,62 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $user_id: String
+) {
+  records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "search_mechanic_params" }
+      properties: [
+        { name: "user_id", value: $user_id }        
+      ]
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      user_id: property(name: "user_id")
+
+      distance: property(name: "distance")
+      mechanic_name: property(name: "mechanic_name")
+      company_name: property(name: "company_name")
+      position: property(name: "position")
+      short_description: property(name: "short_description")
+      description: property(name: "description")      
+      type_of_job: property(name: "type_of_job")
+      area_of_expertise: property(name: "area_of_expertise")
+      availability: property(name: "availability")
+      total_experience: property(name: "total_experience")
+      earthworks: property(name: "earthworks")
+      mining: property(name: "mining")
+      fleet: property(name: "fleet")
+      pipeline: property(name: "pipeline")
+      paving: property(name: "paving")
+      energy_production: property(name: "energy_production")
+      heavy_equipment_mechnic: property(name: "heavy_equipment_mechnic")
+      truck_mechanic: property(name: "truck_mechanic")
+      welder_fabricator: property(name: "welder_fabricator")
+      oilers_pm_tech: property(name: "oilers_pm_tech")
+      caterpillar: property(name: "caterpillar")
+      john_deere: property(name: "john_deere")
+      hitachi: property(name: "hitachi")
+      volvo: property(name: "volvo")
+      komatsu: property(name: "komatsu")
+      bobcat: property(name: "bobcat")
+      other: property(name: "other")
+      insurance_coverage: property(name: "insurance_coverage")
+      ase: property(name: "ase")
+      osha: property(name: "osha")
+      msha: property(name: "msha")
+      oem: property(name: "oem")
+      truck_type: property(name: "truck_type")     
+      latitude: property(name: "latitude")  
+      longitude: property(name: "longitude")  
+    }
+  }
+}

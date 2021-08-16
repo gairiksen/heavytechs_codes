@@ -1,0 +1,26 @@
+mutation create_item_review(
+  $profile_id: String!
+  $item_inventory_id: String!
+  $order_id: String!
+  $score: Int
+) {
+  record_create(
+    record: {
+      table: "item_review"
+      properties: [
+        { name: "profile_id" value: $profile_id }
+        { name: "item_inventory_id" value: $item_inventory_id }
+        { name: "score" value_int: $score }
+        { name: "order_id" value: $order_id }
+      ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+
+    profile_id: property(name: "profile_id")
+    order_id: property(name: "order_id")
+    item_inventory_id: property(name: "item_inventory_id")
+  }
+}

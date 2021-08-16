@@ -1,0 +1,27 @@
+mutation update( 
+    $id: ID!
+    $uuid: String
+    $user_id: String 
+    $is_active: String
+    
+) {
+  model_update(
+    id: $id
+    model: {
+      model_schema_name: "user_pdf"
+      properties: [
+        { name: "uuid" value: $uuid }
+        { name: "user_id" value: $user_id }
+        { name: "is_active" value: $is_active }      
+      ]
+    }
+  ){
+    id
+    created_at
+
+    uuid: property(name: "uuid")
+    user_id: property(name: "user_id")
+    is_active: property(name: "is_active")
+
+  }
+}

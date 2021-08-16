@@ -1,0 +1,14 @@
+---
+slug: dashboard/buy/pay_stripe/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function transaction = 'lib/queries/transactions/find', buyer: current_profile.id, id: context.params.id
+  include 'lib/present_or_404', property: transaction.id
+
+  function checkout_session = 'lib/commands/orders/checkout_session/create', transaction: transaction, constants: context.constants
+
+  include 'theme/simple/orders/pay_button_stripe', transaction: transaction, checkout_session: checkout_session
+%}

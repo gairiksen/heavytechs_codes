@@ -1,0 +1,16 @@
+mutation update(
+  $id: ID!
+  $permissions: String!
+) {
+  record_update(
+    id: $id
+    record: {
+      properties: [
+        { name: "permissions", value: $permissions }
+      ]
+    }
+  ) {
+    id
+    permissions: property(name: "permissions")
+  }
+}

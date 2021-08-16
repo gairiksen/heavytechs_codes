@@ -1,0 +1,4 @@
+{% assign created_at = order.statuses | select: name: status_name | first | dig: 'created_at' %}
+{% if created_at %}
+  {{ created_at | l: 'compact'}}
+{% endif %}

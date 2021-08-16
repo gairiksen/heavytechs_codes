@@ -1,0 +1,32 @@
+---
+slug: 'orders/line_items'
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_anonymous: true
+
+  function line_item = 'lib/queries/line_items/find', id: context.params.id, buyer: current_profile
+
+  if context.params.line_item.quantity == "0"
+    function object = 'lib/commands/line_items/delete', object: line_item
+  else
+    function object = 'lib/commands/line_items/update', line_item: line_item, object: context.params.line_item
+  endif
+
+  if object.valid
+    if context.params.line_item.quantity == "0"
+      include 'redirect_to', url: '/dashboard/buy/cart', notice: 'app.models.line_items.deleted'
+    else
+      include 'redirect_to', url: '/dashboard/buy/cart', notice: 'app.models.line_items.updated'
+    endif
+  else
+    if context.params.line_item.quantity == "0"
+      include 'redirect_to', url: '/dashboard/buy/cart', error: 'app.models.shared.delete_failed'
+    else
+      assign error_message = 'app.models.line_items.update_failed' | t
+      assign error_message = error_message | append: ', ' | append: object.errors.quantity[0]
+      include 'redirect_to', url: '/dashboard/buy/cart', error: error_message
+    endif
+  endif
+%}

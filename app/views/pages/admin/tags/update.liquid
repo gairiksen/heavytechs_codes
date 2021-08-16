@@ -1,0 +1,22 @@
+---
+layout: admin
+slug: admin/tags
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  assign tag_id = context.params.tag.id | split: '-' | last
+  function tag = 'lib/queries/tags/find', id: tag_id
+  include 'lib/present_or_404', property: tag.id
+
+  function object = 'lib/commands/tags/update', object: context.params.tag
+
+  if object.valid
+    include 'redirect_to', url: '/admin/tags'
+  else
+    render 'theme/simple/admin/tags/edit', object: object, context: context
+  endif
+%}

@@ -1,0 +1,20 @@
+<form action="/search" name="search" id="search_form">
+
+  <div class="flex flex-wrap lg:flex-nowrap items-end">
+    <div class="flex-1 md:mb-0 md:w-auto md:mb-0 me-6">
+      <label for="keyword" class="block mb-1 w-full capitalize">{{ 'app.search.keywords' | t }}</label>
+      <input class="w-full form-input"
+        name="keyword" id="keyword" type="text" autocomplete="off"
+        value="{{ filters.query.keyword | default: "" | raw_escape_string }}"
+        x-on:input.debounce.750ms="submitSearch()"
+      />
+    </div>
+
+    <button value="search" class="md:w-auto ml-auto button"
+      x-on:click.prevent="submitSearch()"
+    >
+      {{ 'app.search.search' | t }}
+    </button>
+
+  </div>
+</form>

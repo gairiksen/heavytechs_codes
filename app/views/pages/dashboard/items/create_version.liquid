@@ -1,0 +1,32 @@
+---
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function item_inventory = 'lib/queries/item_inventories/find', id: context.params.item.item_inventory_id, owner: current_profile.id, lang: context.language
+  include 'lib/present_or_404', property: item_inventory.id
+  include 'lib/can_edit', user_id: current_profile.id, item: item_inventory
+
+  function object = 'lib/commands/items/create_version', object: context.params.item, owner: current_profile.id
+  if object.valid
+    assign publish_object = '{}' | parse_json
+    hash_assign publish_object['new_item'] = object.item
+    hash_assign publish_object['old_item'] = item_inventory.item
+    function publish_object = 'lib/commands/processes/wrap', command: 'items/publish_version', object: publish_object, current_profile: current_profile
+    if publish_object.require_acceptance
+      include 'redirect_to', url: '/dashboard/sell/items', notice: 'app.items.need_to_be_accepted_before_publish'
+    else
+      function url = 'link_to', item: object.item
+      include 'redirect_to', url: url, notice: 'app.items.updated'
+    endif
+  else
+    function object = 'lib/commands/items/build_new_version', item_inventory: item_inventory
+    function filters = 'lib/queries/search/filters', query: context.params
+    function presigned_url = 'lib/queries/presigned_url'
+    function default_currency = 'lib/queries/constants/find' name: "CURRENCY", context: context
+
+    include 'theme/simple/dashboard/items/edit', item: object, lib: filters, presigned_url: presigned_url, default_currency
+  endif
+%}

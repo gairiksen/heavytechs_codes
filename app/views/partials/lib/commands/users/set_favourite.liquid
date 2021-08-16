@@ -1,0 +1,7 @@
+{% liquid
+function object = 'lib/commands/users/set_favourite/build', user_id: user_id, fav_id: fav_id, fav_for: fav_for, fav_uuid: fav_uuid, contractor_id: contractor_id
+
+graphql r = 'profiles/set_favourite', args: object 
+
+return object
+%}

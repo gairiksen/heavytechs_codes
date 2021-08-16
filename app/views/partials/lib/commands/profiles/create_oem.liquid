@@ -1,0 +1,7 @@
+{% liquid
+    function object = 'lib/commands/profiles/create_oem/build', object: object, user_id:user_id, oem_name: oem_name, expert_familiar: expert_familiar, cert_name: cert_name
+
+    graphql r = 'profiles/create_oem', args: object 
+
+    return object
+%}

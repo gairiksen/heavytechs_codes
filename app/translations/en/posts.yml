@@ -1,0 +1,48 @@
+en:
+  app:
+    groups:
+      content:
+        back: Return to the list
+        new: New
+    relationships:
+      posts:
+        follow: Follow
+        unfollow: Unfollow
+        title: When following you will receive notifications about activities in this question
+    models:
+      posts:
+        reply: Reply
+        title: Latest Questions
+        list: Questions
+        new: Ask Question
+        add: Add Question
+        add_heading: New post
+        edit: Edit
+        edit_heading: Edit my post
+        edit_answer: Edit
+        empty_state:
+          title: You haven't added any questions yet.
+          subtitle: Create your first one now!
+        read_more: Read more
+        post_answer: Post answer
+        your_answer: Your Answer
+        answers: answers
+        score: score
+        questions-tagged-by: 'Questions tagged: <span class="font-bold">%{tag}</span>'
+        upvote: '+1'
+        downvote: '-1'
+        clear: clear
+        errors:
+          only_owner_can_accept_answer: Only owner can accept answer
+          owner_cant_vote_his_answer: You can't vote on answer you wrote
+        form:
+          title_help: Be specific and imagine you’re asking a question to another person
+          body_help: >-
+            Include all the information someone would need to answer your
+            question
+          tags_help: Add up to 5 tags. Separate the tags by comma.
+          body: Body
+          title: Title
+          tags: Tags
+          upvotes: Upvotes
+          downvotes: Downvotes

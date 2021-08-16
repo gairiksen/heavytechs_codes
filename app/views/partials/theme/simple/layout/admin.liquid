@@ -1,0 +1,11 @@
+<main class="flex">
+  {% include 'lib/flash/display' %}
+  {% render 'theme/simple/layout/flash' %}
+  {% render 'theme/simple/admin/ui/navigation', current_profile: current_profile, page: page %}
+
+  <div class="w-full ms-24 p-8 pb-0">
+    {{ content_for_layout }}
+  </div>
+
+</main>
+{% include 'theme/simple/layout/scripts' %}

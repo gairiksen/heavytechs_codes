@@ -1,0 +1,12 @@
+{% liquid
+  if buyer == blank
+    log 'Something went wrong. Buyer cannot be blank.', type: 'ERROR'
+    return null
+  endif
+
+  graphql r = 'orders/search', limit: limit, buyer: buyer, status: status, id: id, ids: ids, lang: lang, load_status_history: load_status_history
+  include 'lib/handle_graphql_response', r: r, name: 'queries/orders/search'
+
+  function orders = 'lib/commands/orders/recalculate/build', object: r.orders
+  return orders
+%}

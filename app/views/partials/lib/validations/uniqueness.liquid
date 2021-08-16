@@ -1,0 +1,13 @@
+{% liquid
+  assign value = object[field_name]
+  if value != blank
+    graphql r = 'records/count', property_name: field_name, property_value: value, not_id: object.id, table: table
+    include 'lib/handle_graphql_response', r: r, name: 'queries/records/count'
+
+    assign count = r.records.total_entries
+    if count > 0
+      include 'lib/register_error', contract: c, field_name: field_name, key: 'app.errors.taken'
+    endif
+  endif
+  return c
+%}

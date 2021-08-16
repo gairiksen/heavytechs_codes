@@ -1,0 +1,76 @@
+<div
+  x-data="listFiltered"
+  x-init="status = {{ statuses | replace: "'", '"' }}; url='/dashboard/sell/orders/list.frame'"
+  x-on:orders-filters-changed="filter()"
+>
+
+    <div class="flex justify-between items-center">
+      <h2 class="bigtitle">{{ 'app.orders.order_history' | t }}</h2>
+
+      {% capture 'filters' %}
+        <div class="px-7 py-4">
+          <ul class="flex flex-col gap-3 whitespace-nowrap">
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="app.statuses.orders.paid"
+                class="me-1"
+                id="orders-list-filter-status-paid"
+              >
+              <label for="orders-list-filter-status-paid">{{ 'app.statuses.orders_for_role.seller.paid' | t }}</label>
+            </li>
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="app.statuses.orders.delivered"
+                class="me-1"
+                id="orders-list-filter-status-delivered"
+              >
+              <label for="orders-list-filter-status-delivered">{{ 'app.statuses.orders_for_role.seller.delivered' | t }}</label>
+            </li>
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="app.statuses.orders.cancelled_seller"
+                class="me-1"
+                id="orders-list-filter-status-cancelledSeller"
+              >
+              <label for="orders-list-filter-status-cancelledSeller">{{ 'app.statuses.orders_for_role.seller.cancelled_seller' | t }}</label>
+            </li>
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="app.statuses.orders.returned"
+                class="me-1"
+                id="orders-list-filter-status-returned"
+              >
+              <label for="orders-list-filter-status-returned">{{ 'app.statuses.orders_for_role.seller.returned' | t }}</label>
+            </li>
+          </ul>
+          <button x-on:click="$dispatch('orders-filters-changed'); open = false;" class="button mt-4">
+            {{ 'app.apply' | t }}
+          </button>
+        </div>
+      {% endcapture %}
+
+      {% capture 'filters_label' %}
+        {{ 'app.filters' | t }}
+        {% render 'theme/simple/ui/icon', icon: 'settings' %}
+      {% endcapture %}
+
+      {% render 'theme/simple/ui/dropdown', toggle_class: 'button button-secondary button-small button-icon-right' label: filters_label, content_ content: filters %}
+    </div>
+
+    <div class="relative">
+      <div data-list-filtered-frame>
+        {% liquid
+          render 'theme/simple/dashboard/orders/list/table', orders: orders, role: role, statuses: statuses, page: page
+        %}
+      </div>
+    </div>
+
+</div>

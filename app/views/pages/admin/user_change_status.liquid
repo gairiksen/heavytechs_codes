@@ -1,0 +1,38 @@
+{% liquid
+
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  function filters = 'lib/commands/report_filters/create', object: context.params
+  function report = 'lib/commands/reports/create', filters: filters
+
+  assign profile_id = context.params.profile_id
+  assign is_blocked = context.params.is_blocked
+  assign user_id = context.params.user_id
+  assign profile_for = context.params.profile_for
+
+  if is_blocked == '1'
+    assign notice_text = 'User has been blocked successfully.'
+  else
+    assign notice_text = 'User has been unblocked successfully.'
+  endif
+
+  function update_status = 'lib/commands/profiles/update_status', profile_id: profile_id, is_blocked: is_blocked
+
+  function mechanic_record = 'lib/queries/mechanic/search_by_user_id', user_id: user_id
+
+  if mechanic_record
+    function update_status_search_mechanic = 'lib/commands/mechanic_availability/update_status', id: mechanic_record.id, is_blocked: is_blocked
+  endif
+
+  if profile_for == 'mechanic'
+    assign redirect_to_url = '/admin/mechanic/details?m_id=' | append: user_id
+    include 'redirect_to', default_url: redirect_to_url, notice: notice_text
+  endif
+
+  if profile_for == 'contractor'
+    assign redirect_to_url = '/admin/contractor/details?id=' | append: user_id
+    include 'redirect_to', default_url: redirect_to_url, notice: notice_text
+  endif
+%}

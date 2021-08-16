@@ -1,0 +1,20 @@
+<header class="mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'user', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'admin.navigation.activities' | t }}
+  </h2>
+
+</header>
+
+<div class="flex min-h-screen">
+  <div class="w-full">
+    <div class="my-5">
+      {% for record in list.results %}
+        {% render 'theme/simple/activities/feed_unit', payload: record.payload, current_profile: current_profile %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% render 'theme/simple/admin/activities/filters', filters: filters %}
+</div>

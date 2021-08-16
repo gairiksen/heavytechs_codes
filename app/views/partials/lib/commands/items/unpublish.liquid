@@ -1,0 +1,11 @@
+{% liquid
+  function object = 'lib/commands/items/unpublish/build', object: object
+  function object = 'lib/commands/items/unpublish/check',  object: object
+
+  if object.valid and skip_execution != true
+    function status = 'lib/commands/statuses/create', object_id: object.id, name: 'app.statuses.items.unpublished', profile_id: current_profile.id
+    include 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: status.id, target_id: status.object_id
+  endif
+
+  return object
+%}

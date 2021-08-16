@@ -1,0 +1,66 @@
+<div class="w-full">
+  <div class="mb-5 text-right">
+    <a href="/groups/new" class="button">
+      {{ 'app.groups.add' | t }}
+    </a>
+  </div>
+  <div class="my-6 rounded shadow-md bg-panel">
+    {% if groups.results.size > 0 %}
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr>
+            <th class="px-6 py-4 text-sm font-bold uppercase border-b">
+              {{ "app.groups.picture" | t }}
+            </th>
+            <th class="px-6 py-4 text-sm font-bold uppercase border-b">
+              {{ "app.groups.name" | t }}
+            </th>
+            <th class="px-6 py-4 text-sm font-bold uppercase border-b">
+              {{ "app.groups.summary" | t }}
+            </th>
+            <th class="px-6 py-4 text-sm font-bold uppercase border-b">
+              {{ "app.groups.actions" | t }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for group in groups.results %}
+            <tr>
+              <td class="px-6 py-4 border-b">
+                <a href="{% render 'link_to', group: group %}">
+                  <img src="{{ group.main_photo.photo.versions.small | default: 'https://ipsumimage.appspot.com/100x100' }}" class="object-cover object-center w-32 h-32" />
+                </a>
+              </td>
+              <td class="px-6 py-4 border-b">
+                <a href="{% render 'link_to', group: group %}">
+                  {{ group.name }}
+                </a>
+              </td>
+              <td class="px-6 py-4 border-b">
+                {{ group.summary }}
+              </td>
+              <td class="px-6 py-4 border-b">
+                <div class="flex">
+                  <a href="{% render 'link_to', object: group, action: 'edit' %}" class="button button-small">
+                    Edit
+                  </a>
+                  <form action="{% render 'link_to', object: group %}"
+                    method="post"
+                    class="inline ms-2"
+                    onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')) { return false; }">
+                    {% render 'authenticity_token', context: context %}
+                    <input type="hidden" name="_method" value="delete" />
+
+                    <button class="button button-small button-secondary">{{ 'app.delete' | t }}</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      {% render 'theme/simple/groups/empty_state' %}
+    {% endif %}
+  </div>
+</div>

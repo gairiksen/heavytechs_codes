@@ -1,0 +1,44 @@
+{% if context.location.pathname contains '/pdf_upload' or context.location.pathname contains '/truck_photo_upload' %}
+  
+  <div class="">
+    {{ content_for_layout }}
+    {% include 'theme/simple/layout/scripts' %}
+  </div>
+
+{% else %}
+
+<div class="flex flex-col min-h-screen">
+  {% liquid
+    include 'theme/simple/layout/header', profile: current_profile
+  %}
+
+  {% if context.location.pathname == '/' %}
+    {% liquid
+      include 'theme/simple/home/content_upper', profile: current_profile
+    %}    
+  {% endif %}
+
+
+  <main class="flex-1">
+
+    {% if context.location.pathname contains '/dashboard' %}
+      <div class="container flex flex-col md:flex-row">
+        {% include 'theme/simple/dashboard/sidebar', profile: current_profile %}
+        <div class="flex-1 md:ms-10">
+          {{ content_for_layout }}
+        </div>
+      </div>
+    {% else %}
+      {{ content_for_layout }}
+    {% endif %}
+
+    {% include 'lib/flash/display' %}
+    {% render 'theme/simple/layout/flash' %}
+  </main>
+  
+
+  {% include 'theme/simple/layout/footer' %}
+  {% include 'theme/simple/layout/scripts' %}
+</div>
+
+{% endif %}

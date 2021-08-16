@@ -1,0 +1,34 @@
+{% parse_json item_data %}
+  {
+    "details": {
+      "en": {
+        "name":        "item-name",
+        "description": "item-description",
+        "lang":        "en"
+      }
+    },
+
+    "price":       121,
+    "tax_rate":    23.0,
+    "currency":    "usd",
+    "category":    "jewellery",
+
+    "quantity":    2,
+    "max_in_one_order":    2,
+    "sku":         "SKU-001",
+    "uuid":        "item.uuid"
+  }
+{% endparse_json %}
+{% liquid
+  function seller = 'test/fixtures/profile', user_id: "6999"
+  function object = 'lib/commands/items/create_complex', object: item_data, owner: seller.id
+
+  include 'test/assertions/valid_object', contract: contract, object: object, field_name: 'object'
+
+  function item = 'lib/queries/items/find', id: object.item.id
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_detail, field_name: 'name'
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_detail, field_name: 'description'
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_detail, field_name: 'lang'
+  function contract = 'test/assertions/presence', contract: contract, object: item.item_inventory, field_name: 'sku'
+  function contract = 'test/assertions/presence', contract: contract, object: item, field_name: 'currency'
+%}

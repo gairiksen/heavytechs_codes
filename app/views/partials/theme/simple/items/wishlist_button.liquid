@@ -1,0 +1,20 @@
+{% if profile_id %}
+<form action="#" class="absolute top-2 right-2 z-10"
+  x-data="{}"
+  x-on:submit.prevent
+  data-id="{{ item_id }}"
+>
+  <input type="hidden" name="l_id" value="{{ profile_id }}">
+  <input type="hidden" name="r_id" value="{{ item_id }}">
+  <input type="hidden" name="name" value="wishlist">
+
+  <button class="cursor-pointer"
+    data-tc="wishlist"
+    x-on:wishlist-ready.window="init()"
+    :class="exists ? 'text-red-600 opacity-75' : 'text-gray-500 opacity-50'"
+    x-on:click="toggle()"
+  >
+    {% render 'theme/simple/ui/icon', icon: 'heart', class: 'w-8 h-8' %}
+  </button>
+</form>
+{% endif %}

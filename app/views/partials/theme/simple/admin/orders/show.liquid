@@ -1,0 +1,47 @@
+{% liquid
+  assign transaction = transactions.first
+  for t in transactions
+    if t.status.name == 'app.statuses.transactions.success'
+      assign transaction = t
+      break
+    endif
+  endfor
+
+  assign back_url = '/admin/orders'
+  assign name = 'Buyer: ' | append: order.buyer.first_name | append: ' ' | append: order.buyer.last_name | append: ' , Seller: ' | append: order.seller.name
+
+  assign cancelled = false
+  if order.status.name == 'app.statuses.orders.cancelled_seller' or order.status.name == 'app.statuses.orders.cancelled_buyer'
+    assign cancelled = true
+    assign cancel_date = order.status.created_at | l: 'compact'
+  endif
+
+  assign payment_type_label = order.payment_type | t: scope: 'app.orders.payment_types'
+%}
+
+<div>
+  <a class="flex items-center underline gap-1" href="{{ back_url }}">
+    {% render 'theme/simple/ui/icon', icon: 'dashLeft' %}
+    {{'app.orders.order_history' | t }}
+  </a>
+
+  <h2 class="bigtitle">
+    {{ 'app.orders.show.order' | t }} {{ order.id }}
+  </h2>
+
+  <div class="flex items-center"> {{ name }} </div>
+
+  <hr class="border-t-2 mt-4 mb-4">
+
+  {% if cancelled %}
+    {% render 'theme/simple/dashboard/orders/show/cancelled_info', order: order, role: role, cancel_date: cancel_date %}
+  {% endif %}
+
+  <div class="{% if cancelled %}bg-gray-200{% endif %}">
+    {% render 'theme/simple/dashboard/orders/show/contact_details', order: order %}
+    {% render 'theme/simple/dashboard/orders/show/payment', order: order, payment_type_label: payment_type_label, transaction: transaction, role: role, cancelled: cancelled, context: context %}
+    {% render 'theme/simple/dashboard/orders/show/items', order: order, role: role, current_profile: current_profile %}
+    {% render 'theme/simple/dashboard/orders/show/delivery_info', order: order, transaction: transaction, role: role, cancelled: cancelled, context: context %}
+    {% render 'theme/simple/dashboard/orders/show/delivery_details', order: order %}
+  </div>
+</div>

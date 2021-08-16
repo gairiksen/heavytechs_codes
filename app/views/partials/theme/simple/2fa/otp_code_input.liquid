@@ -1,0 +1,12 @@
+<div class="mt-4 flex justify-center gap-4" x-data="otpForm()">
+  <input name="2fa[otp_code]" type="hidden" value="{{ object.otp_code | raw_escape_string }}" x-model="value">
+  {% for i in (0..5) %}
+    <input type="tel" maxlength="1" class="w-10 appearance-reset text-center subtitle"
+      x-ref="{{i}}"
+      x-on:input="handleInput($event)"
+      x-on:paste="handlePaste($event)"
+      x-on:keydown.backspace="$event.target.value || handleBackspace($event.target.getAttribute('x-ref'))"
+      {% if i == 0 %} autofocus{% endif %}
+      required>
+  {% endfor %}
+</div>

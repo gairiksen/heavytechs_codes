@@ -1,0 +1,78 @@
+<div class="workers-dashboard">
+    <% if(workers.length) { %>
+    <table>
+        <thead>
+        <tr>
+            <td class="name-sort" onselectstart="return false">Name&nbsp;<span class="name-nav"></span></td>
+            <td class="type-sort" onselectstart="return false">Type&nbsp;<span class="type-nav"></span></td>
+            <td>Current task</td>
+            <td>Current test</td>
+        </tr>
+        </thead>
+        <tbody>
+        <% for(var i = 0; i < workers.length; i++) {
+            var name = workers[i].workerName,
+                type = workers[i].workerType,
+                userAgent = workers[i].userAgent,
+                browserVersion = workers[i].browserVersion,
+                taskReport = workers[i].taskReport,
+                currentTest = workers[i].currentTest;
+        %>
+        <tr data-workername="<%= name %>">
+            <td>
+                <p class="worker-name"><%= name %> (version <%=browserVersion%>)</p>
+                <p class="user-agent"><%= userAgent %></p>
+            </td>
+            <td class="worker-type">
+                <p class="<%= (type === 'Connected') ? 'connected' : 'auto-created' %>"><span></span><%= type %></p>
+            </td>
+            <%if(taskReport) {%>
+                <td class="task-info" data-taskID="<%= taskReport.uid %>">
+                    <div class="task-results">
+                        <a href="/results/<%= taskReport.uid %>">
+                            <div class="stats <%= taskReport.status %>">
+                                <span class="task-name" href="/results/<%= taskReport.uid %>"><%= taskReport.name %></span>
+                                <ul>
+                                    <li>
+                                        <p><%= taskReport.passed %></p>
+                                        <p>Passed</p>
+                                    </li>
+                                    <li <%= (taskReport.failed) ? 'class=red' : '' %> >
+                                        <p><%= taskReport.failed %></p>
+                                        <p>Failed</p>
+                                    </li>
+                                    <li>
+                                        <p><%= taskReport.testCount %></p>
+                                        <p>Total</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </a>
+                    </div>
+                </td>
+                <td class="current-test">
+                    <% if(currentTest) {%>
+                        <a href="/project/<%= currentTest.path.join('/') %>?expand=<%= currentTest.filename%>">
+                            <%= currentTest.path.length ? currentTest.path.join(' / ') + ' - ' + currentTest.name : currentTest.name%>
+                        </a>
+                    <%}%>
+                </td>
+            <%} else {%>
+                <td class="task-info">
+                    <div class="worker-stopped">
+                        <p>Idle worker</p>
+                    </div>
+                </td>
+                <td class="current-test">
+                </td>
+            <%}%>
+        </tr>
+        <%}%>
+        </tbody>
+    </table>
+    <%} else {%>
+    <p class="no_workers">No tasks are running and no workers are connected. <br /><span>
+        <a target="_blank" href="http://testcafe.devexpress.com/Documentation/HelpTopics/Control_Panel#Workers_Tab">Learn more about how to operate workers</a></span>
+    </p>
+    <%}%>
+</div>

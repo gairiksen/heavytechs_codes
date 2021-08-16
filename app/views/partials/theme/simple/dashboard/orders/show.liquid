@@ -1,0 +1,385 @@
+{% liquid
+  assign transaction = transactions.first
+  for t in transactions
+    if t.status.name == 'app.statuses.transactions.success'
+      assign transaction = t
+      break
+    endif
+  endfor
+
+  if role == 'seller'
+    assign back_url = '/dashboard/sell/orders/'
+    assign user = order.buyer
+    assign name = user.first_name | append: ' ' | append: user.last_name
+  elsif role == 'buyer'
+    assign back_url = '/dashboard/buy/orders/'
+    assign user = order.seller
+    assign name = user.name
+  elsif role == 'admin'
+    assign back_url = '/admin/sales'
+    assign name = 'Buyer: ' | append: order.buyer.first_name | append: ' ' | append: order.buyer.last_name | append: ' , Seller:' | append: order.seller.name
+  endif
+  assign cancelled = false
+  if order.status.name == 'app.statuses.orders.cancelled_seller' or order.status.name == 'app.statuses.orders.cancelled_buyer'
+    assign cancelled = true
+    assign cancel_date = order.status.created_at | l: 'compact'
+  endif
+  assign payment_type_label = order.payment_type | t: scope: 'app.orders.payment_types'
+%}
+
+<div>
+  <a class="flex items-center underline gap-1" href="{{ back_url }}">
+    {% render 'theme/simple/ui/icon', icon: 'dashLeft' %}
+    {{'app.orders.order_history' | t }}
+  </a>
+
+  <h2 class="bigtitle">
+    {{ 'app.orders.show.order' | t }} {{ order.id }}
+  </h2>
+
+  <div class="flex items-center">
+    {{ name }}
+
+    {% liquid
+      if role != 'admin' and current_profile.id != user.id and chat_enabled
+        render "modules/chat/theme/simple/message_button", to_id: user.id, label: '', button: true, class: 'button-small button-compact ml-2'
+      endif
+    %}
+  </div>
+
+  <hr class="border-t-2 mt-4 mb-4">
+
+  {% if cancelled %}
+    <section class="card bg-warning-disabled border border-warning !shadow-none">
+      <h3 class="subtitle mt-0 font-bold">{{ 'app.orders.checkout.cancel.info.card_title' | t }}</h3>
+      <div class="flex">
+        <p class="w-full">
+          {% if order.status.name == 'app.statuses.orders.cancelled_seller' %}
+            {% assign sts = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_seller' | t %}
+            {{ sts | capitalize }}
+          {% else %}
+            {% assign sts = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_buyer' | t %}
+            {{ sts | capitalize }}
+          {% endif %}
+        </p>
+        <p class="w-full mt-0 text-right">{{ 'app.orders.checkout.cancel.info.date' | t: cancel_date: cancel_date }}</p>
+      </div>
+    </section>
+  {% endif %}
+
+  {% if role == 'buyer' and order.status.name == 'app.statuses.orders.confirmed' %}
+    {% liquid
+      assign minutes_from_confirmation = order.status.created_at | to_time | time_diff: 'now' , 'm'
+    %}
+    {% if transaction.status.name == 'app.statuses.transactions.failed' or minutes_from_confirmation > 5 %}
+      <section class="card bg-warning-disabled border border-warning !shadow-none">
+        <h3 class="subtitle mt-0 font-bold">{{ 'app.orders.checkout.not_finished.card_title' | t }}</h3>
+        <p>{{ 'app.orders.checkout.not_finished.card_info' | t: payment_type: payment_type_label }}</p>
+        <p>
+          {{ 'app.orders.show.auto_cancellation' | t }}
+          {{ 'app.orders.show.auto_cancellation_hours' | t: count: order_cancel_hours }}
+          {{ order.status.created_at | add_to_time: order_cancel_hours, 'h' | l  }}
+        </p>
+        <div class="mt-2 flex">
+          <div>
+            <form action="/dashboard/orders/cancel" method="post" onSubmit="if(!confirm('{{ 'app.orders.checkout.not_finished.confirm' | t }}')){ return false; }">
+              {% include 'authenticity_token' %}
+              <input type="hidden" name="orders_cancel[order_id]" value="{{ order.id }}" />
+              <input type="hidden" name="orders_cancel[role]" value="buyer" />
+              <button type="submit" class="button button-secondary">
+                {{ 'app.orders.checkout.not_finished.cancel' | t }}
+              </button>
+            </form>
+          </div>
+          <div class="ps-3">
+            <form action="/dashboard/transactions" method="post">
+              {% include 'authenticity_token' %}
+              <input type="hidden" name="order_ids[]" value="{{ order.id }}">
+              <button type="submit" class="button">
+                {{ 'app.orders.checkout.not_finished.pay' | t }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    {% else %}
+      <section class="card bg-warning-disabled border border-warning !shadow-none">
+        <h3 class="subtitle mt-0 font-bold">{{ 'app.orders.checkout.not_finished.card_title' | t }}</h3>
+        <p>{{ 'app.orders.checkout.not_finished.waiting_for_payment_confirmation' | t }}</p>
+      </section>
+    {% endif %}
+  {% endif %}
+
+  <div class="{% if cancelled %}bg-gray-200{% endif %}">
+    {% if false and role == 'buyer' and order.order_delivery.status.name == 'app.statuses.order_deliveries.delivered' %}
+      <h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.review_title' | t }}</h3>
+      <section class="card md:flex justify-between items-center">
+        <div>
+          <p class="font-bold">{{ 'app.orders.checkout.review_info.share_feedback' | t }}</p>
+          <p class="mb-4">{{ 'app.orders.checkout.review_info.review_feedback' | t }}</p>
+          <a href="#" class="button">{{ 'app.orders.checkout.review_info.add_review' | t }}</a>
+        </div>
+        <div class="hidden md:block border-l">
+          <svg class="mx-8" data-icon="review" width="82" height="82" class="flex justify-center items-center" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path clip-rule="evenodd" d="M42.77 4.587l4.16 8.19h7.09a1.943 1.943 0 011.397 3.333l-6.507 6.397 3.604 8.283a1.963 1.963 0 01-2.797 2.454L41 28.334l-8.716 4.91a1.963 1.963 0 01-2.797-2.454l3.607-8.283-6.51-6.407a1.944 1.944 0 011.396-3.333h7.09l4.164-8.18a1.98 1.98 0 013.536 0z" stroke-width="5"/><path d="M18.5 8.5a1.96 1.96 0 00-1.766 1.087l-4.164 8.19H5.48a1.943 1.943 0 00-1.396 3.333l6.51 6.397L7 35.79a1.963 1.963 0 002.797 2.453l8.703-4.91 2.307 1.297M63.5 8.5a1.967 1.967 0 011.77 1.087l4.16 8.19h7.09a1.943 1.943 0 011.397 3.333l-6.51 6.397L75 35.79a1.963 1.963 0 01-2.797 2.453l-8.703-4.91-2.307 1.297M26 61.784V73.51a5 5 0 005 5h20a5 5 0 005-5V61.784m10-2.5l-21.667-19.49a5 5 0 00-6.686 0L16 59.283" stroke-width="5"/></svg>
+        </div>
+      </section>
+    {% endif %}
+
+    <h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.contact_title' | t }}</h3>
+    <ul class="card md:flex md:gap-4 md:justify-between">
+      <li class="flex items-center">
+        {% render 'theme/simple/ui/icon', icon: 'userCircle', class: 'w-6 me-2' %}
+        {{ order.shipping_first_name }} {{ order.shipping_last_name }}
+      </li>
+      <li class="py-4 md:py-0 flex items-center">
+        {% render 'theme/simple/ui/icon', icon: 'mail', class: 'w-6 me-2' %}
+        {{ order.shipping_email }}
+      </li>
+      <li class="flex items-center">
+        {% render 'theme/simple/ui/icon', icon: 'phone', class: 'w-6 me-2' %}
+        {{ order.shipping_phone }}
+      </li>
+    </ul>
+
+    <h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.payment_title' | t }}</h3>
+    <section class="card md:flex md:gap-4 md:justify-between md:items-center">
+      <div>
+        <p>{{ 'app.orders.checkout.payment_confirmation.payment_confirmed' | t: payment_type: payment_type_label }}</p>
+        <p class="sidenote">{{'app.orders.checkout.payment_confirmation.card_info' | t }}</p>
+      </div>
+      <div>
+        {% liquid
+          assign status = transaction.status.name | default: order.status.name
+          case status
+          when 'app.statuses.transactions.success'
+            assign status_class = 'bg-confirmation-disabled border-confirmation'
+          when 'app.statuses.transactions.failed', 'app.statuses.transactions.expired'
+            assign status_class = 'bg-danger-disabled border-danger'
+          when 'app.statuses.orders.confirmed'
+            assign status_class = 'bg-warning-disabled border-warning'
+            assign status = 'app.statuses.orders_for_role.' | append: role | append: '.confirmed'
+          when 'app.statuses.orders.cancelled_buyer'
+            assign status_class = 'bg-warning-disabled border-warning'
+            assign status = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_buyer'
+          when 'app.statuses.orders.cancelled_seller'
+            assign status_class = 'bg-warning-disabled border-warning'
+            assign status = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_seller'
+          endcase
+        %}
+        {% if transaction.status and transaction.status.name == 'app.statuses.transaction.success' %}
+          {{'app.orders.checkout.payment_confirmation.order_date' | t }}: {{ transaction.status.created_at | l: 'compact' }}
+        {% endif %}
+        <span data-tc="order-status" class="ms-4 px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status | t }}</span>
+        {% unless cancelled %}
+          {% if role == 'buyer' and transaction.status.name != 'app.statuses.transactions.success' %}
+            <div class="mt-6 gap-5 flex flex-wrap justify-end items-center">
+              <div>
+                <form action="/dashboard/transactions" method="post">
+                  {% include 'authenticity_token' %}
+                  <input type="hidden" name="order_ids[]" value="{{ order.id }}">
+                  <button type="submit" class="button button-icon-right">
+                    {{ 'app.orders.show.pay' | t }}
+                  </button>
+                </form>
+              </div>
+            </div>
+          {% endif %}
+        {% endunless %}
+      </div>
+    </section>
+
+    <h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.delivery_title' | t }}</h3>
+    <section class="card md:flex gap-4">
+      <ul class="md:w-1/2 leading-11">
+        <li class="flex justify-between">
+          <span>{{ order.shipping_type | t: scope: 'app.orders.checkout.delivery_type' }}</span>
+          <span class="font-semibold">
+            {% render 'theme/simple/price', amount_cents: order.total_shipping_cost_cents, currency: order.currency %}
+          </span>
+        </li>
+        {% if transaction.status.name == 'app.statuses.transactions.success' %}
+          <li class="flex justify-between items-center">
+            {% liquid
+              assign status = order.order_delivery.status.name
+              case status
+              when blank
+                assign status_class = 'bg-warning-disabled border-warning'
+                if role == "buyer"
+                  assign status_label = 'app.orders.checkout.status_type.progress' | t
+                else
+                  assign status_label = 'app.orders.checkout.status_type.new' | t
+                endif
+              when 'app.statuses.order_deliveries.delivered'
+                assign status_class = 'bg-confirmation-disabled border-confirmation'
+                assign status_label = 'app.statuses.order_deliveries.shipping_types.' | append: order.shipping_type | t
+              endcase
+            %}
+            <span>{{ 'app.status' | t }}</span>
+            <span class="ms-4 px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status_label }}</span>
+          </li>
+        {% endif %}
+      </ul>
+      <div class="md:w-1/2 mt-4 md:mt-0 md:ps-4 md:border-l">
+        {{ 'app.orders.checkout.delivery_info' | t }}
+        {% if role == 'seller' %}
+          {% if order.status.name == 'app.statuses.orders.paid' %}
+            {% include 'theme/simple/dashboard/orders/show/delivery_form', order: order, object: order.order_delivery, cancelled: cancelled %}
+          {% else %}
+            <input type="text" class="w-full mb-2" value="{{order.order_delivery.delivery_information}}" disabled />
+            <span class="sidenote">{{ 'app.orders.checkout.already_delivered' | t }}</span>
+          {% endif %}
+        {% else %}
+          <div>
+            <input type="text" class="w-full mb-2" value="{{order.order_delivery.delivery_information}}" disabled />
+            <span class="sidenote">{{ 'app.orders.checkout.delivery_link' | t }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <h3 class="subtitle mt-8 font-bold">{{'app.orders.checkout.delivery_details' | t }}</h3>
+    <div class="card">
+      {% render 'theme/simple/dashboard/orders/address', pickup_title: 'app.models.orders.form.shipping_type_personal_pickup',
+                                                        delivery_title: 'app.orders.checkout.shipping_type_delivery'
+                                                        delivery_subtitle: 'app.models.orders.form.shipping_type_delivery_hours'
+                                                        object: order %}
+    </div>
+
+    <section class="w-full mt-16 lg:table leading-loose lg:leading-normal">
+
+      <header class="hidden uppercase lg:table-row sidenote">
+        <div class="lg:pb-2 lg:table-cell">{{ 'app.orders.show.item' | t }}</div>
+        <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.unit_price' | t }}</div>
+        <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.quantity' | t }}</div>
+        <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.total_price' | t }}</div>
+        <div class="lg:ps-3 lg:pb-2 lg:table-cell lg:text-end">{{ 'app.orders.show.return_info' | t }}</div>
+      </header>
+
+      {% for line_item in order.line_items %}
+        <ul class="{% if forloop.first == false %} mt-4 lg:mt-0 pt-4 lg:pt-0 border-t {% endif %} lg:table-row">
+
+          <li class="lg:py-4 align-middle lg:table-cell lg:border-t">
+            {% function item_url = 'link_to', item: line_item.item %}
+            <a href="{{ item_url }}" class="flex items-center">
+              {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+              {% if cover_url %}
+                <img src="{{ cover_url }}" class="w-20 rounded me-5">
+              {% else %}
+                {% render 'theme/simple/ui/picture-placeholder', class:"w-20 rounded me-5" %}
+              {% endif %}
+              {{ line_item.item.item_detail.name }}
+            </a>
+          </li>
+
+          <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+            <span class="lg:hidden">{{ 'app.orders.show.unit_price' | t }}: </span>
+            {% render 'theme/simple/price', amount_cents: line_item.price_cents, currency: line_item.currency %}
+          </li>
+
+          <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+            <span class="lg:hidden">{{ 'app.orders.show.quantity' | t }}: </span>
+            {{ line_item.quantity }}
+          </li>
+
+          <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+            <span class="lg:hidden">{{ 'app.orders.show.total_price' | t }}: </span>
+            {% render 'theme/simple/price', amount_cents: line_item.total_price_cents, currency: line_item.currency %}
+          </li>
+
+          <li class="align-middle lg:ps-4 lg:py-4 lg:table-cell lg:border-t lg:text-end">
+            {% liquid
+              assign return_status = line_item.line_item_return.status.name
+
+              case return_status
+                when 'app.statuses.line_item_returns.requested'
+                  assign return_status_class = ''
+                  assign return_status_icon = 'questionCircle'
+                when 'app.statuses.line_item_returns.accepted'
+                  assign return_status_class = 'text-confirmation'
+                  assign return_status_icon = 'check'
+                when 'app.statuses.line_item_returns.rejected'
+                  assign return_status_class = 'text-danger'
+                  assign return_status_icon = 'x'
+                when 'app.statuses.line_item_returns.returned'
+                  assign return_status_class = 'text-confirmation'
+                  assign return_status_icon = 'arrowReturnCircle'
+              endcase
+            %}
+
+            {% if role == 'buyer' %}
+              {% function can_return_line_items = 'lib/can/orders', actor: current_profile, order: order, do: 'return_line_items' %}
+
+              {% if line_item.line_item_return %}
+                <div class="mb-1 flex items-center justify-end gap-1 {{ return_status_class }}">
+                  {% render 'theme/simple/ui/icon', icon: return_status_icon %}
+                  {{ return_status | t }}
+                </div>
+              {% endif %}
+              {% if can_return_line_items %}
+                {% liquid
+                  assign item_return_days = line_item.item.return_days | default: 30
+                  assign days_from_buy = line_item.created_at | time_diff: 'now', 'd'
+                %}
+                {% if line_item.line_item_return %}
+                {% elsif line_item.line_item_return == null and days_from_buy <= item_return_days %}
+                  <a href="/dashboard/buy/line_item_returns/new?line_item_id={{ line_item.id }}" class="button button-small">{{ 'app.orders.show.return' | t }}</a>
+                  <div class="sidenote mt-2">
+                    {% render 'theme/simple/ui/icon', icon: 'timeHand', class: 'w-4 me-1 inline-block text-confirmation' %}
+                    {% assign days_remaining = item_return_days | minus: days_from_buy | round %}
+                    {{ 'app.orders.show.return_days_remaining' | t: count: days_remaining }}
+                  </div>
+                {% else %}
+                  <div class="sidenote">
+                    {% render 'theme/simple/ui/icon', icon: 'warning',  class: 'w-4 me-1 inline-block text-warning' %}
+                    {{ 'app.orders.show.expired_return_period' | t }}
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% elsif role == 'seller' %}
+              {% if line_item.line_item_return %}
+                <div class="mb-1 flex items-center justify-end gap-1 {{ return_status_class }}">
+                  {% render 'theme/simple/ui/icon', icon: return_status_icon %}
+                  {{ return_status | t }}
+                </div>
+                <a href="{% render 'link_to', line_item_return: line_item.line_item_return, current_profile: current_profile %}" class="button button-small button-secondary">
+                  {{ 'app.models.line_item_returns.return_details' | t }}
+                </a>
+              {% endif %}
+            {% elsif role == 'admin' %}
+                <div class="mb-1 flex items-center justify-end gap-1 {{ return_status_class }}">
+                  {% render 'theme/simple/ui/icon', icon: return_status_icon %}
+                  {{ return_status | t }}
+                </div>
+            {% endif %}
+          </li>
+        </ul>
+      {% endfor %}
+    </section>
+    {% if role == 'seller' and order.status.name == 'app.statuses.orders.paid' and order.order_delivery.status.name != 'app.statuses.order_deliveries.delivered' %}
+      <hr class="border-t-2 mt-4 mb-4">
+      <h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.cancel.form.card_title' | t }}</h3>
+      <section class="card bg-danger-disabled border border-danger !shadow-none">
+        <p>{{ 'app.orders.checkout.cancel.form.card_info' | t }}</p>
+        <p>{{ 'app.orders.checkout.cancel.form.select_title' | t }}</p>
+        <div>
+          <form action="/dashboard/orders/cancel" method="post"  onSubmit="if(!confirm('{{ 'app.orders.checkout.cancel.form.confirm' | t }}')){ return false; }">
+            {% include 'authenticity_token' %}
+            <ul>
+              {% for line_item in order.line_items %}
+                <li>
+                  <input data-tc="sold-order-cancel-checkbox" type="checkbox" id="orders_cancel_restock_{{ line_item.id}}" name="orders_cancel[restock][{{ line_item.id}}]" />
+                  <label for="orders_cancel_restock_{{ line_item.id}}">{{ line_item.item.item_detail.name }}</label>
+                </li>
+              {% endfor %}
+            </ul>
+            <input type="hidden" name="orders_cancel[order_id]" value="{{ order.id }}" />
+            <input type="hidden" name="orders_cancel[role]" value="seller" />
+            <button type="submit" class="button mt-2">
+              {{ 'app.orders.checkout.cancel.form.cancel_button' | t }}
+            </button>
+          </form>
+        </div>
+      </section>
+    {% endif %}
+  </div>
+</div>

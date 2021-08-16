@@ -1,0 +1,15 @@
+{% if records.results.size > 0 %}
+  <div class='flex justify-between'>
+    <h2 class="title"> {{ type | t: scope: 'app.quick_search.type' }} </h2>
+    {% if records.total_entries > limit %}
+      <a href="{{ see_more_url }}" class="subtitle">
+        {{ 'app.quick_search.see_more' | t }}
+      </a>
+    {% endif %}
+  </div>
+  <div class="grid grid-cols-3 gap-x-8 gap-y-6 cards mb-10">
+    {% for model in records.results %}
+      {% render 'theme/simple/quick_search/card', model: model, current_profile: current_profile %}
+    {% endfor %}
+  </div>
+{% endif %}

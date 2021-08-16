@@ -1,0 +1,20 @@
+---
+slug: dashboard/transactions
+method: post
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_uncompleted: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true, return_to: '/dashboard/buy/review'
+
+  function orders = 'lib/queries/orders/search_by_buyer', buyer: current_profile.id, ids: context.params.order_ids, limit: 200, status: 'app.statuses.orders.confirmed'
+  function transaction = 'lib/commands/transactions/create', order_results: orders, profile: current_profile
+  if transaction.valid
+    include 'lib/commands/events/create', type: 'transaction_created', actor_id: current_profile.id, object_id: transaction.id
+
+    function url = 'lib/commands/orders/pay_url', transaction: transaction
+    redirect_to url
+  else
+    log transaction, 'transaction#create error'
+    include 'redirect_to', url: '/dashboard/buy/orders', error: 'app.models.transactions.errors.failed_to_create_payment'
+  endif
+%}

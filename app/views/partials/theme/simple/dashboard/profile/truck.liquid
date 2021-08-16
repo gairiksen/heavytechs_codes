@@ -1,0 +1,442 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+<div class="w-full mb-6 md:mb-0 md:w-60">
+
+    
+{% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+{% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object, search_mechanic_deatils: search_mechanic_deatils %}
+
+
+
+    <div class="pt-8 pb-5 md:pb-0">
+        <ul class="customRadio flex md:block">
+            <li class="mr-4 md:mr-0 md:mb-3">
+            <input {%if profile_availability.availability == '1'%}checked{%endif%} id="available" class="mechanic_availability" type="radio" name="available" value="1">
+            <label for="available" class="text-base font-medium text-gray-800"><span><span></span></span>Available</label>
+        </li>
+        <li>
+            <input {%if profile_availability.availability == '0'%}checked{%endif%} id="unavailable" class="mechanic_availability" type="radio" name="available" value="0">
+            <label for="unavailable" class="text-base font-medium text-gray-800"><span><span></span></span>Unavailable</label>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+<div class="profileEdit_right w-full">
+  <div class="mb-8 bg-white">
+      <ul class="flex items-center flex-col md:flex-row">
+          <li class="w-full md:w-auto">
+              <a href="/dashboard/profile/bio?edit=1" 
+              class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Bio</a>
+          </li>
+          <li class="w-full md:w-auto">
+              <a href="/dashboard/profile/skills"
+              class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Skills/Services</a>
+          </li>
+          <li class="w-full md:w-auto">
+              <a href="/dashboard/profile/education"
+              class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3">Education/Certs</a>
+          </li>
+          <li class="w-full md:w-auto">
+              <a href="/dashboard/profile/truck"
+              class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center px-3  heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Truck</a>
+          </li>
+      </ul>
+  </div>
+
+    
+  <div class="rounded-md">
+
+  <div class="pb-10 pt-7">
+  <script type="text/javascript">
+    function showTruck(key){
+        document.getElementById('truck_details_div').style.display = key;
+    }
+  </script>
+
+  <div>
+    <form action="/dashboard/profile" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="_method" value="put" />
+
+    <input type="hidden" name="profile_type" value="truck" />
+
+    <input type="hidden" name="truck[id]" value="{{profile_truck.id}}" id="id" />  
+    <input type="hidden" name="truck[user_id]" value="{{profile_truck.user_id}}" id="user_id" />
+
+    
+    <div class="bg-white rounded-md px-6 mb-3 pt-7">
+        <div x-show="show_service" class="bg-white-50 pt-5 pb-14 px-7 -mx-6">
+            <div class="mb-7">
+            <h4 class="text-base font-normal text-gray-800 mb-3.5">Is Truck?</h4>
+            <ul class="customRadio flex items-center gap-4 md:gap-10">
+                <li>
+                    <input onclick="showTruck('block')" {%if profile_truck.is_truck == 'Yes'%}checked{%endif%} id="is_truck_yes" type="radio" name="truck[is_truck]" value="Yes">
+                    <label for="is_truck_yes" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>Yes</label>
+                </li>
+                <li>
+                    <input onclick="showTruck('none')" {%if profile_truck.is_truck == 'No'%}checked{%endif%} id="is_truck_no" type="radio" name="truck[is_truck]" value="No">
+                    <label for="is_truck_no" class="text-base font-medium text-gray-800">
+                    <span><span></span></span>No</label>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="bg-white rounded-md px-6 mb-3 pt-7">
+        {%if profile_truck.is_truck == 'Yes'%}
+        <div id="truck_details_div" style="display:block;">
+        {%else%}
+        <div id="truck_details_div" style="display:none;">
+        {%endif%}        
+            <div class="mb-5">
+            <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.short_description_service_skills' | t }}</h4>
+            <textarea name="truck[short_description_service_skills]" class="bg-gray-100 border border-gray-200 h-24 rounded-lg resize-none p-2 outline-none text-base text-gray-700 w-full md:w-2/4" placeholder="Type">{{profile_truck.short_description_service_skills}}</textarea>
+            <div class="flex items-center justify-end text-right text-xs text-gray-400 w-full md:w-2/4 pt-4">
+                <img src="{{ 'images/warning.svg' | asset_url }}" alt="" class="mr-2"> {{ 'app.profiles.max_150_characters' | t }}
+            </div>
+            </div>
+
+            <div>
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.upload_photos_truck' | t }}</h4>
+                <div id="truck-images" class="px-0 mt-50 mechanic_logo"></div>
+                <ul class="flex flex-wrap gap-4 mb-6 md:mb-14">
+                    
+                    {% for tImg in truck_photos %}
+                    <li>
+                        <div class="custom-file">
+                            <label class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                                <span>
+                                    <img style="width: 300px; height: 95px;" src="{{tImg.photo_path}}" alt="">                            
+                                </span>
+                            </label>
+                            <a onclick="return delConfirm()" title="Click here to remove this photo" href="/dashboard/profile/delete_truck_photo?id={{tImg.id}}">Remove</a>
+                        </div>
+                    </li>
+                    {%endfor%}
+                    
+                </ul>
+            </div>
+
+            {%liquid
+            if profile_truck.truck_type == 'Service Truck (with crane)'
+                assign service_div = true
+            else
+                assign service_div = false
+            endif
+
+            if profile_truck.truck_type == 'Lube Truck'
+                assign lube_div = true
+            else
+                assign lube_div = false
+            endif
+
+            %}
+
+            <div x-data="{show_lube: {{lube_div}}, show_service:{{service_div}}}">
+            <div class="pb-5">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.truck_type' | t }}</h4>
+                <ul class="customRadio flex flex-col flex-wrap gap-4 w-full md:w-2/4 md:flex-row md:gap-y-2 md:gap-x-0">
+                    <li class="w-full lg:w-2/4">
+                        <input {%if profile_truck.truck_type == 'Welder truck'%}checked{%endif%} @click="show_lube=false, show_service=false" id="welder_truck" type="radio" name="truck[truck_type]" value="Welder truck">
+                        <label for="welder_truck" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Welder truck</label>
+                    </li>
+                    <li class="w-full lg:w-2/4">
+                        <input {%if profile_truck.truck_type == 'Service Truck (with crane)'%}checked{%endif%} @click="show_lube=false, show_service=true" id="service_truck_with_crane" type="radio" name="truck[truck_type]" value="Service Truck (with crane)">
+                        <label for="service_truck_with_crane" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Service Truck (with crane)</label>
+                    </li>
+                    <li class="w-full lg:w-2/4">
+                        <input {%if profile_truck.truck_type == 'Small Service (no crane)'%}checked{%endif%} @click="show_lube=false, show_service=false" id="small_service_no_crane" type="radio" name="truck[truck_type]" value="Small Service (no crane)">
+                        <label for="small_service_no_crane" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Small Service (no crane)</label>
+                    </li>
+                    <li class="w-full lg:w-2/4">
+                        <input {%if profile_truck.truck_type == 'Lube Truck'%}checked{%endif%} @click="show_lube=true, show_service=false" id="lube_truck" type="radio" name="truck[truck_type]" value="Lube Truck">
+                        <label for="lube_truck" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Lube Truck</label>
+                    </li>
+                </ul>
+            </div>
+
+            <div x-show="show_lube" class="bg-gray-50 pt-5 pb-14 px-7 -mx-6">
+                <div class="mb-11">
+                    <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.no_of_products_tank' | t }}</h4>
+                    <input type="text" name="truck[no_of_products_tank]" value="{{profile_truck.no_of_products_tank}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div class="mb-11">
+                    <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.fuel_tank_size' | t }}</h4>
+                    <input type="text" name="truck[fuel_tank_size]" value="{{profile_truck.fuel_tank_size}}" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+            </div>
+
+            <div x-show="show_service" class="bg-gray-50 pt-5 pb-14 px-7 -mx-6">
+                <div class="mb-7">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.crane_certification' | t }}</h4>
+                <ul class="customRadio flex items-center gap-4 md:gap-10">
+                    <li>
+                        <input {%if profile_truck.crane_certification == 'Yes'%}checked{%endif%} id="crane_cert_yes" type="radio" name="truck[crane_certification]" value="Yes">
+                        <label for="crane_cert_yes" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Yes</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.crane_certification == 'No'%}checked{%endif%} id="crane_cert_no" type="radio" name="truck[crane_certification]" value="No">
+                        <label for="crane_cert_no" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>No</label>
+                    </li>
+                </ul>
+                </div>
+
+                <div class="custom-file mb-3.5">
+                <label onclick="showPdfUpload('truck','crane_certification')" class="custom-file-label w-40 h-24 flex items-center justify-center flex-col-reverse relative border-gray-300 border border-dashed text-sm text-gray-600" for="customFile">
+                    Upload
+                    <span>
+                        <img src="{{ 'images/upload-icon.svg' | asset_url }}" alt="">
+                    </span>
+                </label>
+                </div>
+
+                <div class="mb-11">
+                    <h4 class="text-base font-normal text-gray-800 mb-2.5">{{ 'app.profiles.expiration_date' | t }}</h4>
+                    <input type="date" value="{{profile_truck.crane_cert_expiry_date}}" name="truck[crane_cert_expiry_date]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div>
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.select_the_capacity' | t }}</h4>
+                <ul class="customRadio flex items-center gap-4 md:gap-10">
+                    <li>
+                        <input {%if profile_truck.capacity == 'Under 5,000#'%}checked{%endif%} id="capacity1" type="radio" name="truck[capacity]" value="Under 5,000#">
+                        <label for="capacity1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Under 5,000#</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.capacity == '5,001-10,000#'%}checked{%endif%} id="capacity2" type="radio" name="truck[capacity]" value="5,001-10,000#">
+                        <label for="capacity2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>5,001-10,000#</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.capacity == '10,000-14,000#'%}checked{%endif%} id="capacity3" type="radio" name="truck[capacity]" value="10,000-14,000#">
+                        <label for="capacity3" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>10,000-14,000#</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.capacity == '14,000# +'%}checked{%endif%} id="capacity4" type="radio" name="truck[capacity]" value="14,000# +">
+                        <label for="capacity4" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>14,000# +</label>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </div>
+
+            <div class="py-3.5">
+            <div class="mb-10">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.truck_class' | t }}</h4>
+                <ul class="customRadio md:flex items-center gap-4 md:gap-10">
+                    <li>
+                        <input {%if profile_truck.truck_class == '6'%}checked{%endif%} id="class1" type="radio" name="truck[truck_class]" value="6" checked>
+                        <label for="class1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>6</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.truck_class == '7'%}checked{%endif%} id="class2" type="radio" name="truck[truck_class]" value="7">
+                        <label for="class2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>7</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.truck_class == '8'%}checked{%endif%} id="class3" type="radio" name="truck[truck_class]" value="8">
+                        <label for="class3" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>8</label>
+                    </li>
+                    
+                </ul>
+            </div>
+
+            <div class="mb-11">
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.air_compressor' | t }}</h4>
+                <ul class="customRadio md:flex items-center gap-4 md:gap-10">
+                    <li>
+                        <input {%if profile_truck.air_compressor == 'Yes'%}checked{%endif%} id="compressor1" type="radio" name="truck[air_compressor]" value="Yes" checked>
+                        <label for="compressor1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Yes</label>
+                    </li>
+                    <li>
+                        <input {%if profile_truck.air_compressor == 'No'%}checked{%endif%} id="compressor2" type="radio" name="truck[air_compressor]" value="No">
+                        <label for="compressor2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>No</label>
+                    </li>
+                    
+                </ul>
+            </div>
+            </div>
+
+            {%liquid
+            if profile_truck.tooling_speciality_tool == '1'
+                assign speciality_tool_show = true
+            else 
+                assign speciality_tool_show = false
+            endif
+            %}
+
+            <div x-data="{show_speciality_tools: {{speciality_tool_show}}}">
+            <div class="py-3.5">
+                <div>
+                <h4 class="text-base font-normal text-gray-800 mb-3.5">{{ 'app.profiles.tooling' | t }}</h4>
+                <ul class="customCheck flex flex-col flex-wrap gap-4 w-full md:w-2/3 md:flex-row md:gap-y-2 md:gap-x-0">
+                    <li class="lg:w-2/4">
+                        
+                        <input {%if profile_truck.tooling_basic == '1'%}checked{%endif%} id="tooling1" type="checkbox" name="truck[tooling_basic]" value="1">
+                        <label class="text-base font-medium text-gray-800" for="tooling1">
+                        <span></span>Basic (1/2 drive" w/ power tools)</label>
+                            
+                    </li>
+                    <li class="lg:w-2/4">
+                        
+                        <input {%if profile_truck.master_set == '1'%}checked{%endif%} id="tooling2" type="checkbox" name="truck[master_set]" value="1">
+                        <label class="text-base font-medium text-gray-800" for="tooling2">
+                        <span></span>Master set of tools</label>
+                            
+                    </li>
+                    <li class="lg:w-2/4">
+                        
+                        <input {%if profile_truck.tooling_basic_1_drive == '1'%}checked{%endif%} id="tooling3" type="checkbox" name="truck[tooling_basic_1_drive]" value="1">
+                        <label class="text-base font-medium text-gray-800" for="tooling3">
+                        <span></span>Basic + 1 drive"</label>
+                            
+                    </li>
+                    <li class="lg:w-2/4">
+                        
+                        <input {%if profile_truck.tooling_speciality_tool == '1'%}checked{%endif%} @click="show_speciality_tools=!show_speciality_tools" id="tooling4" type="checkbox" name="truck[tooling_speciality_tool]" value="1">
+                        <label class="text-base font-medium text-gray-800" for="tooling4">
+                        <span></span>Speciality tools</label>
+                            
+                    </li>
+                    <li class="lg:w-2/4">
+                        
+                        <input {%if profile_truck.tooling_generic_diagnostics == '1'%}checked{%endif%} id="tooling5" type="checkbox" name="truck[tooling_generic_diagnostics]" value="1">
+                        <label class="text-base font-medium text-gray-800" for="tooling5">
+                        <span></span>Generic Diagnostic PC</label>
+                            
+                    </li>
+                </ul>
+                </div>
+
+            </div>
+
+            <div class="bg-gray-50 pt-5 pb-14 px-7 -mx-6" x-show="show_speciality_tools">
+                <ul class="customCheck flex flex-col flex-wrap gap-4 w-full md:w-2/3 md:flex-row md:gap-y-2 md:gap-x-0">
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.line_boring == '1'%}checked{%endif%} id="newcheck1" type="checkbox" name="truck[line_boring]" value="1">
+                        <label for="newcheck1" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Line boring</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.nitrogen_charge_kit == '1'%}checked{%endif%} id="newcheck2" type="checkbox" name="truck[nitrogen_charge_kit]" value="1">
+                        <label for="newcheck2" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Nitrogen charge kit</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.mag_drill == '1'%}checked{%endif%} id="newcheck3" type="checkbox" name="truck[mag_drill]" value="1">
+                        <label for="newcheck3" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Mag drill</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.fifty_t_hydraulic_jacks == '1'%}checked{%endif%} id="newcheck4" type="checkbox" name="truck[fifty_t_hydraulic_jacks]" value="1">
+                        <label for="newcheck4" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>50T hydraulic jacks</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.track_pin_press == '1'%}checked{%endif%} id="newcheck5" type="checkbox" name="truck[track_pin_press]" value="1">
+                        <label for="newcheck5" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Track pin press</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.field_hose_press == '1'%}checked{%endif%} id="newcheck6" type="checkbox" name="truck[field_hose_press]" value="1" >
+                        <label for="newcheck6" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Field hose press- with fittings and hose</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.hydraulic_pulling_rams == '1'%}checked{%endif%} id="newcheck7" type="checkbox" name="truck[hydraulic_pulling_rams]" value="1">
+                        <label for="newcheck7" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Hydraulic pulling rams</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.hydraulic_torque_wrench == '1'%}checked{%endif%} id="newcheck8" type="checkbox" name="truck[hydraulic_torque_wrench]" value="1">
+                        <label for="newcheck8" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Hydraulic torque wrench</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.generic_diagnostic_pc == '1'%}checked{%endif%} id="newcheck9" type="checkbox" name="truck[generic_diagnostic_pc]" value="1">
+                        <label for="newcheck9" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Generic Diagnostic PC</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.oem_diagnostic_software == '1'%}checked{%endif%} id="newcheck10" type="checkbox" name="truck[oem_diagnostic_software]" value="1">
+                        <label for="newcheck10" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>OEM diagnostic software</label>
+                    </li>
+                    <li class="lg:w-2/4">
+                        <input {%if profile_truck.lube_skid == '1'%}checked{%endif%} id="newcheck11" type="checkbox" name="truck[lube_skid]" value="1">
+                        <label for="newcheck11" class="text-base font-medium text-gray-800">
+                        <span><span></span></span>Lube skid</label>
+                    </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <div class="py-11">
+            <button class="heavytechs-bg-dark-orange text-white mr-2 px-6 leading-10 rounded-3xl text-base inline-block">{{ 'app.profiles.save' | t }}</button>
+        </div>
+
+    </div>
+
+    </form>
+  </div>
+  
+  
+  </div>
+
+  </div>
+</div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+
+{% render 'theme/simple/photos/truck_image_form',
+  object_uuid: object.uuid,
+  presigned_url: presigned_url,
+  user_id: {{profile_truck.user_id}},
+  photo_type: 'photo',
+  note: 'Images only, up to 10 files, 2MB each',
+  max_number_of_files: 10,
+  existing_photos: null
+%}
+
+
+<script type="text/javascript">
+
+function showPdfUpload(pageCat, itemCat){
+  var pdf_upload_url = "/dashboard/profile/pdf_upload?page_cat="+pageCat+"&item_cat="+itemCat
+  window.open(pdf_upload_url, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400");
+}
+
+function delConfirm(){
+    var ans = confirm("Do you really want to remove this photo?");
+    if(!ans) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+</script>

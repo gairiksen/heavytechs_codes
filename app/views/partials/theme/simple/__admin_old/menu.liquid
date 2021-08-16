@@ -1,0 +1,51 @@
+{% assign s = section %}
+
+<div class="container">
+  <ul class="flex flex-wrap text-lg text-gray-900">
+    <li class="mb-5">
+      <a class="me-2 px-3 py-2 {% if s == 'home' %}bg-frame{% endif %}" href='/__admin_old'>
+        {{ 'admin_old.menu.home' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'users' %}bg-frame{% endif %}" href='/__admin_old/users'>
+        {{ 'admin_old.menu.users_title' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'orders' %}bg-frame{% endif %}" href='/__admin_old/orders'>
+        {{ 'admin_old.menu.orders' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'items' %}bg-frame{% endif %}" href='/__admin_old/items'>
+        {{ 'admin_old.menu.items' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'categories' %}bg-frame{% endif %}" href='/__admin_old/categories'>
+        {{ 'admin_old.menu.categories' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'activities' %}bg-frame{% endif %}" href='/__admin_old/activities'>
+        {{ 'admin_old.menu.activities.name' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'posts' %}bg-frame{% endif %}" href='/__admin_old/posts'>
+        {{ 'admin_old.menu.posts.name' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'support-tickets' %}bg-frame{% endif %}" href='/__admin_old/support-tickets'>
+        {{ 'admin_old.menu.support-tickets' | t }}
+      </a>
+    </li>
+    <li class="mb-5 me-2">
+      <a class="px-3 py-2 {% if s == 'setup' %}bg-frame{% endif %}" href='/marketplace_setup'>
+        {{ 'admin_old.menu.setup' | t }}
+      </a>
+    </li>
+  </ul>
+</div>

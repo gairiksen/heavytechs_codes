@@ -1,0 +1,8 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+
+  function group = 'lib/queries/groups/main'
+  function posts = 'lib/queries/posts/search', limit: 100, parent_id_exists: false, group_ids: group.id, tags: context.params.tag
+
+  render 'theme/simple/posts/index', posts: posts, group: group, context: context
+%}

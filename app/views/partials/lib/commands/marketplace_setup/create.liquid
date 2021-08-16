@@ -1,0 +1,9 @@
+{% liquid
+  function object = 'lib/commands/marketplace_setup/create/check', object: constants
+  if object.valid
+    include 'lib/commands/marketplace_setup/create/execute', object: object
+    function res = 'modules/stripe/lib/webhook_endpoints/create/call', stripe_event: 'account.updated', path: '/webhooks/account_updated', connect: true, host: context.location.host
+    function res = 'modules/stripe/lib/webhook_endpoints/create/call', stripe_event: 'checkout.session.completed', path: '/webhooks/checkout_session_completed', connect: false, host: context.location.host
+  endif
+  return object
+%}

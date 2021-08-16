@@ -1,0 +1,28 @@
+{% liquid
+  if state == 'completed'
+    assign colors = "bg-confirmation-disabled text-confirmation"
+  elsif state == 'active'
+    assign colors = "bg-content text-content-inverted"
+  else
+    assign colors = "bg-page text-content-inverted"
+  endif
+%}
+<div class="mb-6 flex">
+  <span class="w-12 h-12 -ms-16 relative z-20 flex items-center justify-center flex-shrink-0 rounded-full text-2xl {{colors}}">
+    <span class="-mt-1 leading-none">
+      {% if state == 'completed' %}
+        {% render 'theme/simple/ui/icon', icon: 'check' %}
+      {% else %}
+        {{ number }}
+      {% endif %}
+    </span>
+  </span>
+
+  <div class="{% if subtitle %}-{% endif %}mt-2 ms-4">
+    <h3 class="title">
+      {{ title | t }}
+    </h3>
+
+    {{ subtitle | t }}
+  </div>
+</div>

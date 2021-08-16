@@ -1,0 +1,15 @@
+<aside class="w-72 -mt-6 ms-8 ps-8 pt-8 text-content-sidenote border-s border-frame flex-shrink-0">
+
+  <section class="border rounded p-4">
+    <h4 class="-mx-4 px-4 pb-2 border-b uppercase font-bold">{{ 'admin.conversations.filter' | t }}</h4>
+    <div class="mt-2">
+      <label for="message">{{ 'admin.conversations.message' | t }}</label>
+      <input id="message" form="admin-form" type="text" name="message" value="{{ filters.message }}" class="w-full">
+    </div>
+  </section>
+
+  <div class="text-center">
+    <button type="submit" class="mt-4 button button-small" form="admin-form">Apply</button>
+  </div>
+
+</aside>

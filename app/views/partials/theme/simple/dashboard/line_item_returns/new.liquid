@@ -1,0 +1,133 @@
+<div>
+  <h2 class="bigtitle">{{ 'app.models.line_item_returns.header' | t }}</h2>
+
+  <section class="card md:p-8">
+
+    <div class="w-full border-b pb-8 mb-8">
+      {{ 'app.models.line_item_returns.form.intro' | t }}
+    </div>
+
+    <div class="w-full flex flex-col md:flex-row gap-8">
+
+      <div class="md:w-1/2 pt-7 md:pt-0 order-2 md:order-1 border-t md:border-t-0">
+        <form action="/dashboard/buy/line_item_returns" method="post">
+          {% include 'authenticity_token' %}
+          <input name="_method" type="hidden" value="post">
+          {% if object.id %}
+            <input type="hidden" name="line_item_return[id]" value="{{ object.id }}">
+          {% endif %}
+          <input type="hidden" id="line_item_id" name="line_item_return[line_item_id]" value="{{ object.line_item_id }}">
+
+          <fieldset>
+            <label class="block" for="reason">{{ 'app.models.line_item_returns.form.reason' | t }}:</label>
+            <input
+              class="w-full"
+              type="text"
+              id="reason"
+              name="line_item_return[reason]"
+              value="{{ object.reason }}"
+              required
+            >
+            {% include 'theme/simple/field_error', errors: object.errors.reason %}
+          </fieldset>
+
+          <fieldset class="mt-4">
+            <label class="block" for="reason_details">{{ 'app.models.line_item_returns.form.reason_details' | t }}:</label>
+            <textarea
+              class="w-full h-32"
+              id="reason_details"
+              name="line_item_return[reason_details]"
+              required
+            >{{ object.reason_details | strip }}</textarea>
+            {% include 'theme/simple/field_error', errors: object.errors.reason_details %}
+          </fieldset>
+
+          <fieldset class="mt-4">
+            <label for="quantity">{{ 'app.models.line_item_returns.form.quantity' | t }}:</label>
+            <input
+              type="number"
+              id="quantity"
+              name="line_item_return[quantity]"
+              value="{{ object.quantity }}"
+              min="1"
+              max="{{ line_item.quantity }}"
+              autofocus
+              required
+            >
+            {% include 'theme/simple/field_error', errors: object.errors.quantity %}
+          </fieldset>
+
+          {% assign default_address = order.shipping_address | default: profile.default_address %}
+          {% assign delivery_title = 'app.models.line_item_returns.form.shipping_type_delivery' | t %}
+          {% render 'theme/simple/shipping_methods/form', wrapper_classes: 'mt-4 pt-3 border-t',
+                                                          title: 'app.models.line_item_returns.form.select_prefered_option',
+                                                          delivery_title: delivery_title,
+                                                          delivery_subtitle: 'app.models.line_item_returns.form.shipping_type_delivery_details'
+                                                          pickup_title: 'app.models.line_item_returns.form.shipping_type_personal_pickup',
+                                                          pickup_subtitle: 'app.models.orders.form.shipping_pickup_point'
+                                                          object: object
+                                                          name: 'line_item_return'
+                                                          seller: order.seller
+                                                          default_address: default_address
+                                                          save_default_address: false
+                                                          %}
+
+          <fieldset class="mt-8 text-end">
+            <button class="button">{{ 'app.models.line_item_returns.form.accept' | t }}</button>
+          </fieldset>
+
+        </form>
+      </div>
+
+      <div class="md:w-1/2 md:ps-8 md:border-l order-1 md:order-2">
+        <div>
+          {% function item_url = 'link_to', path: '/items/', item: line_item.item %}
+
+          <a href="{{ item_url }}">
+            {% function cover_url = 'theme/simple/items/cover_url', item: line_item.item %}
+            {% if cover_url %}
+                <img src="{{ cover_url }}" class="rounded">
+            {% else %}
+              {% render 'theme/simple/ui/picture-placeholder', class: 'rounded w-full' %}
+            {% endif %}
+          </a>
+          <div class="subtitle mt-4 flex gap-4 justify-between font-bold">
+            <span>
+              <a href="{{ item_url }}">{{ line_item.item.item_detail.name }}</a>
+            </span>
+            <span>
+              {% render 'theme/simple/price', amount_cents: line_item.price_cents, currency: line_item.currency %}
+            </span>
+          </div>
+          <dl class="mt-4 flex justify-between flex-wrap">
+            <dt class="w-1/2">{{ 'app.orders.attr.seller' | t }}:</dt>
+            <dd class="w-1/2 text-end">
+              {% function seller_url = 'link_to', organization: order.seller %}
+              <a href="{{ seller_url }}">
+                {% if order.seller.first_name  %}
+                  {{ order.seller.first_name }} {{ order.seller.last_name }}
+                {% else %}
+                  {{ order.seller.name }}
+                {% endif %}
+              </a>
+            </dd>
+
+            <dt class="w-1/2">{{ 'app.models.line_item_returns.form.date' | t }}:</dt>
+            <dd class="w-1/2 text-end">{{ order.created_at | l: 'compact' }}</dd>
+
+            <dt class="w-1/2">{{ 'app.models.line_item_returns.form.delivery_date' | t }}:</dt>
+            {% for status in order.statuses %}
+                {% if status.name == 'app.statuses.orders.delivered' %}
+                  <dd class="w-1/2 text-end">{{ status.created_at | l: 'compact' }}</dd>
+                  {% break %}
+                {% endif %}
+            {% endfor %}
+          </dl>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

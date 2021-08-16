@@ -1,0 +1,21 @@
+{% content_for metatags %}
+  {% include 'theme/simple/posts/metatags', post: post %}
+{% endcontent_for %}
+
+<div class="container">
+  <h2 class="break-words bigtitle">
+    {{ root_post.title }}
+  </h2>
+
+  {% render 'theme/simple/ui/tags', tags: root_post.tags, url: '/posts?tag=' %}
+
+  {% include 'theme/simple/posts/card', post: root_post, current_profile: current_profile  %}
+
+  {% liquid
+    for child_post in root_post.posts
+      include 'theme/simple/posts/card', post: child_post, current_profile: current_profile, root_post: root_post
+    endfor
+  %}
+
+  {% include 'theme/simple/dashboard/posts/reply', post: root_post, object: object, presigned_url: presigned_url %}
+</div>

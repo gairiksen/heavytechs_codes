@@ -1,0 +1,28 @@
+mutation update_item_inventory(
+  $id: ID!
+  $quantity: Int
+  $max_in_one_order: Int
+  $c__status: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "item_inventory"
+      properties: [
+        { name: "quantity" value_int: $quantity }
+        { name: "max_in_one_order" value_int: $max_in_one_order }
+        { name: "c__status" value: $c__status }
+      ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+    item_id: property(name: "item_id")
+    owner: property(name: "owner")
+    sku: property(name: "sku")
+    quantity: property_int(name: "quantity")
+    max_in_one_order: property_int(name: "max_in_one_order")
+    c__status: property(name: "c__status")
+  }
+}

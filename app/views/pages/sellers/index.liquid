@@ -1,0 +1,4 @@
+{% liquid
+  function organizations = 'lib/queries/organizations/search', limit: 100
+  include 'theme/simple/sellers/index', organizations: organizations.results
+%}

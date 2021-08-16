@@ -1,0 +1,4 @@
+{% liquid
+  function line_item_return = 'lib/queries/line_item_returns/find', id: event.object.id
+  function object = 'lib/commands/orders/mark_returned_when_all_returned', order_id: line_item_return.order.id
+%}

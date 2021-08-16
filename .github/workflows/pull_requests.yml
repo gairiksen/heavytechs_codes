@@ -1,0 +1,59 @@
+name: Test PR
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    container: platformos/testcafe:3.0.2
+    timeout-minutes: 12
+    strategy:
+      max-parallel: 1
+    env:
+      MPKIT_EMAIL: ${{ secrets.MPKIT_EMAIL }}
+      MPKIT_TOKEN: ${{ secrets.MPKIT_TOKEN }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Get ci-instance-url
+        shell: sh
+        run: |
+          echo "MPKIT_URL=https://$(./scripts/ci/repository reserve)" >> $GITHUB_ENV
+      - name: Build
+        shell: sh
+        run: |
+          echo $MPKIT_URL
+          npm ci
+          npm run build
+          ./scripts/inject_git_version.sh
+      - name: Deploy
+        shell: sh
+        run: |
+          set -e
+          npm -g install @platformos/pos-cli
+          sh seed/seed.sh
+      - name: UnitTest
+        shell: sh
+        run: |
+          set -e
+          npm run ci:test:unit
+      - name: Testcafe test
+        shell: sh
+        run: |
+          npm run test
+      - name: Publish test reports
+        if: ${{ failure() }}
+        shell: sh
+        run: |
+          set -e
+          npm run ci:test:publish
+
+      - name: Release instance
+        if: ${{ always() }}
+        shell: sh
+        run: |
+          ./scripts/ci/repository release

@@ -1,0 +1,9 @@
+{% liquid
+  if id == blank
+    return null
+  endif
+
+  graphql r  = 'item_reviews/search', id: id, limit: 1, with_item_inventory: true
+
+  return r.item_reviews.results.first
+%}

@@ -1,0 +1,12 @@
+{% liquid
+  function query = 'lib/queries/items/search/build', query: context.params, limit: 50, lang: context.language
+  function items = 'lib/queries/items/search/execute', query: query
+
+  function filters = 'lib/queries/search/filters', query: context.params
+
+  assign response = '{}' | parse_json
+  hash_assign response['items'] = items
+  hash_assign response['filters'] = filters
+
+  include 'theme/json/items/index', response: response
+%}

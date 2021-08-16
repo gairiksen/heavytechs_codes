@@ -1,0 +1,39 @@
+<header class="mt-2.5 mb-6 -mx-8 px-8 pb-7 flex justify-between gap-8 border-b">
+  <h2 class="title flex items-center gap-4">
+    {% render 'theme/simple/ui/icon', icon: 'users', class: 'w-6 relative top-0.5 text-content-sidenote' %}
+    {{ 'app.admin.organizations.members.new.invite_member_for' | t }} - {{ organization.name }}
+  </h2>
+</header>
+
+<div class="flex flex-wrap items-center mx-auto">
+  <form action="/admin/organizations/{{organization.id}}/members" method="post">
+    {% render 'authenticity_token', context: context %}
+    <input name="_method" type="hidden" value="post">
+    <input name="member[organization_id]" type="hidden" value="{{organization.id}}">
+    <input name="member[organization_id]" type="hidden" value="{{organization.id}}">
+    <input name="member[organization_name]" type="hidden" value="{{organization.name}}">
+
+    <fieldset>
+      <label class="block" for="first_name">{{ 'app.admin.organizations.members.new.first_name' | t }}:</label>
+      <input class="w-full" type="text" id="first_name" name="member[first_name]" value="{{ object.first_name }}" required >
+      {% render 'theme/simple/field_error', errors: object.errors.first_name %}
+    </fieldset>
+
+    <fieldset>
+      <label class="block" for="last_name">{{ 'app.admin.organizations.members.new.last_name' | t }}:</label>
+      <input class="w-full" type="text" id="last_name" name="member[last_name]" value="{{ object.last_name }}" required >
+      {% render 'theme/simple/field_error', errors: object.errors.last_name %}
+    </fieldset>
+
+    <fieldset>
+      <label class="block" for="email">{{ 'app.admin.organizations.members.new.email' | t }}:</label>
+      <input class="w-full" type="email" id="email" name="member[email]" value="{{ object.email }}" required >
+      {% render 'theme/simple/field_error', errors: object.errors.email %}
+    </fieldset>
+
+    <fieldset class="mt-8 text-end">
+      <button class="button">{{ 'app.admin.organizations.members.new.save' | t }}</button>
+    </fieldset>
+
+  </form>
+</div>

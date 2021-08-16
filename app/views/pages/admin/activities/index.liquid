@@ -1,0 +1,18 @@
+---
+layout: admin
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  assign feed = context.params.feed | split: '.'
+  assign feed_name = feed[0] | default: 'system'
+  assign feed_id = feed[1] | default: '1'
+
+  function list = 'lib/queries/activities/search', feed: feed_name, feed_id: feed_id, limit: 200
+  function selected = 'lib/queries/activities/model', id: feed_id, meta: "selected"
+
+  render 'theme/simple/admin/activities/index', list: list, current_profile: current_profile, selected: selected, filters: context.params
+%}
+

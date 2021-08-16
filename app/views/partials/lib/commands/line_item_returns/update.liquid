@@ -1,0 +1,14 @@
+{%  liquid
+  function object = 'lib/commands/line_item_returns/update/build', object: object, line_item_return: line_item_return
+  function object = 'lib/commands/line_item_returns/update/check', object: object, line_item_return: line_item_return
+
+  if object.valid
+    function status = 'lib/commands/statuses/create', object_id: object.id, name: object.status, scope: 'app.statuses.line_item_returns', profile_id: current_profile.id
+    include 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: status.id, target_id: status.object_id
+    if object.status == 'app.statuses.line_item_returns.returned'
+      include 'lib/commands/events/create', type: 'line_item_return_returned', actor_id: current_profile.id, object_id: object.id, target_id: object.line_item_id
+    endif
+  endif
+
+  return object
+%}

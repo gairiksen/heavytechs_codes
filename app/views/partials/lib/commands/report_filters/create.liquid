@@ -1,0 +1,11 @@
+{% liquid
+  function object = 'lib/commands/report_filters/create/build', object: object, current_profile: current_profile
+  function object = 'lib/commands/report_filters/create/check', object: object
+
+  if object.valid
+    hash_assign object['from'] = object.from | default: '1 year ago' | to_time: 'UTC' | to_date | append: ''
+    hash_assign object['to'] = object.to | default: 'today midnight' | to_time: 'UTC' | to_date | append: ''
+  endif
+
+  return object
+%}

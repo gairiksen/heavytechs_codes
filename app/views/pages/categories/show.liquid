@@ -1,0 +1,13 @@
+---
+slug: categories/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_must_be', profile: current_profile, action: 'be_admin'
+
+  assign category_id = context.params.id | split: '-' | last
+  function category = 'lib/queries/categories/find', id: category_id
+  include 'lib/present_or_404', property: category.id
+
+  include 'theme/simple/categories/show', category: category
+%}

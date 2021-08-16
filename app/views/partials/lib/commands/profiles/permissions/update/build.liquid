@@ -1,0 +1,19 @@
+{% parse_json data %}
+  {
+    "id": {{ object.profile_id | json }},
+    "permissions": {}
+  }
+{% endparse_json %}
+
+{% liquid
+  function actions = 'lib/queries/profiles/permission_actions'
+
+  for action in actions
+    if object[action]
+      hash_assign data['permissions'][action] = true
+    endif
+  endfor
+  hash_assign data['permissions'] = data.permissions | json
+
+  return data
+%}

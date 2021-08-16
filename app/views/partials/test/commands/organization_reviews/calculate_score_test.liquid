@@ -1,0 +1,28 @@
+{% parse_json review_high %}
+{
+  "recommend": true,
+  "delivery_score": 5,
+  "description_score": 5,
+  "service_score": 5
+}
+{% endparse_json %}
+{% liquid
+  function score = 'lib/commands/organization_reviews/calculate_score', review: review_high
+
+  include 'test/assertions/equal', contract: contract, given: score, field_name: 'score', expected: 100
+%}
+
+
+{% parse_json review_low %}
+{
+  "recommend": false,
+  "delivery_score": 1,
+  "description_score": 1,
+  "service_score": 1
+}
+{% endparse_json %}
+{% liquid
+  function score = 'lib/commands/organization_reviews/calculate_score', review: review_low
+
+  include 'test/assertions/equal', contract: contract, given: score, field_name: 'score', expected: 20
+%}

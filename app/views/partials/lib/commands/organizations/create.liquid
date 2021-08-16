@@ -1,0 +1,14 @@
+{% liquid
+  function object = 'lib/commands/organizations/create/build', object: object
+  function object = 'lib/commands/organizations/create/check', object: object
+
+  if object.valid
+    function object = 'lib/commands/execute', object: object, mutation_name: 'organizations/create', selection: 'record_create'
+
+    if object.valid
+      include 'lib/commands/events/create', type: 'organization_created', actor_id: object.id, object_id: object.id
+    endif
+  endif
+
+  return object
+%}

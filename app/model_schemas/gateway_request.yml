@@ -1,0 +1,14 @@
+name: gateway_request
+properties:
+  - name: gateway
+    type: string
+  - name: external_id
+    type: string
+  - name: payload
+    type: string
+  - name: response
+    type: string
+  - name: response_status
+    type: string
+  - name: api_call_name
+    type: string

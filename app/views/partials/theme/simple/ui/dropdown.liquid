@@ -1,0 +1,67 @@
+{% comment %}
+  simple dropdown component that shows additional element hovering
+  over the trigger element
+
+  arguments:
+    class - classes for the whole container (string)
+    toggle_title - tittle attribute appearing when hovering over the toggle button (string)
+    toggle_title_key - translation key used for title attribute appearing when hovering over the toggle button (string)
+    label - content of the toggle button (string or html)
+    label_key - translation key used for the toggle button label (string)
+    content - content of the dropdown (string or html)
+    name - custom name for the popup, will be used to throw an JS event after opening (string)
+
+  usage:
+    {% capture 'example_dropdown' %}
+      <ul class="flex flex-col gap-3 whitespace-nowrap">
+        <li><a href="https://platformos.com">platformOS</a></li>
+        <li><a href="https://documentation.platformos.com/get-started">Get started</a></li>
+        <li><a href="https://documentation.platformos.com">Documentation</a></li>
+      </ul>
+    {% endcapture %}
+
+    {% render 'theme/simple/ui/dropdown', toggle_title: 'Toggle dropdown', label: 'Example dropdown', content: example_dropdown %}
+{% endcomment %}
+
+
+{% liquid
+  if toggle_title_key
+    assign toggle_title = toggle_title_key | t
+  endif
+
+  if label_key
+    assign label = label_key | t
+  endif
+%}
+
+<div x-data="{ open: false, container: $el }" class="inline-block align-middle md:relative {{ class }}">
+
+  <button
+    {% if toggle_title %} title="{{ toggle_title }}" {% endif %}
+    class="relative {% if toggle_class %} {{ toggle_class }} {% endif %}"
+    @click="open = true"
+    data-dropdown-toggle
+  >
+    {% print label %}
+  </button>
+
+  <div
+    x-cloak
+    x-show="open && positionDropdownArrow(container, open)"
+    x-transition:enter="transition ease-out origin-top duration-100"
+    x-transition:enter-start="transform opacity-0 -translate-y-3"
+    x-transition:enter-end="transform opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in origin-top duration-80"
+    x-transition:leave-start="transform opacity-100 translate-y-0"
+    x-transition:leave-end="transform opacity-0 -translate-y-2"
+    @click.away="open = false || $dispatch('dropdown-hidden')"
+    class="absolute z-20 mt-2 border-t shadow-xl md:min-w-44 md:top-full start-0 md:start-auto end-0 md:border-0 border-interaction rounded-b-md md:rounded-md bg-page md:bg-panel md:shadow-dropdown"
+    data-dropdown-content
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="absolute top-0 left-0 z-30 w-4 h-4 -mt-4 -mb-2 fill-current text-interaction" data-dropdown-arrow>
+      <polygon points="50 30, 100 100, 0 100"/>
+    </svg>
+    {% print content %}
+  </div>
+
+</div>

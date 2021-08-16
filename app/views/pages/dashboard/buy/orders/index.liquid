@@ -1,0 +1,18 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.orders.buyer
+    - label: app.orders.list
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_uncompleted: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+  assign active_statuses = 'app.statuses.orders.confirmed,app.statuses.orders.paid,app.statuses.orders.cancelled_seller,app.statuses.orders.cancelled_buyer,app.statuses.orders.delivered,app.statuses.orders.returned' | split: ','
+
+  function orders = 'lib/queries/orders/search', page: context.params.page, limit: 20, buyer: current_profile.id, withStatuses: true, lang: context.language, status: active_statuses
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs, value: orders.total_entries
+  include 'theme/simple/dashboard/orders/list_buyer', orders: orders, role: 'buyer', page: context.params.page
+%}

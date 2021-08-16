@@ -1,0 +1,40 @@
+{% liquid
+  assign minutes_from_confirmation = order.status.created_at | to_time | time_diff: 'now' , 'm'
+%}
+{% if transaction.status.name == 'app.statuses.transactions.failed' or minutes_from_confirmation > 5 %}
+  <section class="card bg-warning-disabled border border-warning !shadow-none">
+    <h3 class="subtitle mt-0 font-bold">{{ 'app.orders.checkout.not_finished.card_title' | t }}</h3>
+    <p>{{ 'app.orders.checkout.not_finished.card_info' | t: payment_type: payment_type_label }}</p>
+    <p>
+      {{ 'app.orders.show.auto_cancellation' | t }}
+      {{ 'app.orders.show.auto_cancellation_hours' | t: count: order_cancel_hours }}
+      {{ order.status.created_at | add_to_time: order_cancel_hours, 'h' | l  }}
+    </p>
+    <div class="mt-2 flex">
+      <div>
+        <form action="/dashboard/orders/cancel" method="post" onSubmit="if(!confirm('{{ 'app.orders.checkout.not_finished.confirm' | t }}')){ return false; }">
+          {% render 'authenticity_token', context: context %}
+          <input type="hidden" name="orders_cancel[order_id]" value="{{ order.id }}" />
+          <input type="hidden" name="orders_cancel[role]" value="buyer" />
+          <button type="submit" class="button button-secondary">
+            {{ 'app.orders.checkout.not_finished.cancel' | t }}
+          </button>
+        </form>
+      </div>
+      <div class="ps-3">
+        <form action="/dashboard/transactions" method="post">
+          {% render 'authenticity_token', context: context %}
+          <input type="hidden" name="order_ids[]" value="{{ order.id }}">
+          <button type="submit" class="button">
+            {{ 'app.orders.checkout.not_finished.pay' | t }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+{% else %}
+  <section class="card bg-warning-disabled border border-warning !shadow-none">
+    <h3 class="subtitle mt-0 font-bold">{{ 'app.orders.checkout.not_finished.card_title' | t }}</h3>
+    <p>{{ 'app.orders.checkout.not_finished.waiting_for_payment_confirmation' | t }}</p>
+  </section>
+{% endif %}

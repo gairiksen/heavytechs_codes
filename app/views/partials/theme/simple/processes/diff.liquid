@@ -1,0 +1,13 @@
+{% if old[name] != new[name] and old[name] != blank and new[name] != blank %}
+  <ul>
+    <li>
+      {{ key | t_escape }}
+    </li>
+    <li>
+      {{ old[name] }}
+    </li>
+    <li>
+      {{ new[name] }}
+    </li>
+  </ul>
+{% endif %}

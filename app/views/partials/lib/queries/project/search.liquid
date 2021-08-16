@@ -1,0 +1,33 @@
+{% if latitude != '' and longitude != '' %}
+{% parse_json geo_location %}
+  {
+    "type": "Point",
+    "coordinates": [
+      {{longitude}},
+      {{latitude}}                 
+    ]
+  }
+{% endparse_json %}
+{% endif %}
+
+{% liquid
+  assign lang = lang | default: context.language
+
+  if latitude != '' and longitude != ''
+
+    graphql r = 'projects/search_project_by_location', limit: 20, keyword: keyword, lang: lang, user_id: user_id, latitude: latitude, longitude: longitude, distance: distance, point: geo_location, earthworks: earthworks, fleet: fleet, paving: paving, energy_production: energy_production, pipeline: pipeline, industry_category: industry_category, mining: mining, duration_type: duration_type, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic, welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, mechanist: mechanist, keyword_search: keyword_search
+
+    include 'lib/handle_graphql_response', r: r, name: 'queries/project/search'
+
+    return r.records
+  
+  else 
+
+    graphql r = 'projects/search_project_by_data', limit: 20, keyword: keyword, lang: lang, user_id: user_id, latitude: latitude, longitude: longitude, earthworks: earthworks, fleet: fleet, paving: paving, energy_production: energy_production, pipeline: pipeline, industry_category: industry_category, mining: mining, duration_type: duration_type, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic, welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, mechanist: mechanist, keyword_search: keyword_search
+
+    include 'lib/handle_graphql_response', r: r, name: 'queries/project/search'
+
+    return r.records
+
+  endif
+%}

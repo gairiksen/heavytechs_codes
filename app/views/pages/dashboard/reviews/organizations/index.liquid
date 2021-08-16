@@ -1,0 +1,8 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  assign page = context.params.page | to_positive_integer: 1
+  function reviews = 'lib/queries/organization_reviews/search_by_profile', profile_id: current_profile.id, limit: 20, page: page with_organization: true
+  render 'theme/simple/dashboard/reviews/organizations/index', reviews: reviews, page: page
+%}

@@ -1,0 +1,56 @@
+query search_conversation_id(
+  $autor_id: String
+  $limit: Int = 20
+  $page: Int = 1
+) {
+  conversations: records(
+    per_page: $limit
+    page: $page
+    filter: {
+      table: { exact: "modules/chat/message" },
+      properties: [
+        { name: "autor_id", value: $autor_id }
+      ]
+    }
+    sort: { created_at: { order: DESC } }
+  ) {
+    total_entries
+    total_pages
+    has_previous_page
+    has_next_page
+    results {
+      id
+      created_at
+      message: property(name: "message")
+      conversation_id: property(name: "conversation_id")
+      autor_id: property(name: "autor_id")
+      participants: related_records(
+        table: ["profile", "organization"]
+        join_on_property: "autor_id"
+        foreign_property: "id"
+      ) {
+        ...profile
+      }
+      conversations: related_records(
+        table: "modules/chat/conversation"
+        join_on_property: "conversation_id"
+        foreign_property: "id"
+        sort: { created_at: { order: DESC } }
+      ) {
+        created_at
+        participant_ids: property_array(name: "participant_ids")
+        participant_read_ids: property_array(name: "participant_read_ids")
+      }
+    }
+  }
+}
+
+fragment profile on Record {
+  id
+  name: property(name: "name")
+  first_name: property(name: "first_name")
+  last_name: property(name: "last_name")
+  slug: property(name: "slug")
+  uuid: property(name: "uuid")
+  user_id: property(name: "user_id")
+}

@@ -1,0 +1,6 @@
+name: user_ase
+properties:
+  - name: uuid
+  - name: user_id
+  - name: ase_code
+  - name: ase_name

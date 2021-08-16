@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<test-results name="<%= suite.name %>" total="<%= suite.testCount %>" error="<%= suite.failed %>" failures="<%= suite.failed %>" not-run="<%= suite.testCount - suite.failed - suite.passed %>" time="<%= suite.time %>">
+    <test-suite name="<%= suite.name %>" success="<%= parseInt(suite.failed) === 0 ? 'True' : 'False' %>" executed="<%= suite.time ? 'True' : 'False'%>" time="<%= suite.time %>" >
+        <results>
+<%          if(Object.keys(suite.testErrReports).length) { -%>
+<%              for(var i in suite.testErrReports) { -%>
+<%                  if(suite.testErrReports.hasOwnProperty(i)) { -%>
+<%                      var testCase = suite.testErrReports[i]; -%>
+            <test-case name="'<%= testCase.fixturePath %>/<%= testCase.fixtureName %>' - <%= testCase.name %>" success="False" executed="<%= testCase.time ? 'True' : 'False' %>" time="<%= testCase.time %>">
+                <failure>
+                    <message>
+<%                      for(var k = 0; k < testCase.errs.length; k++) { -%>
+<%                          var err = testCase.errs[k];                 -%>
+                            Worker: <%= err.workerName %> (version <%= suite.browserVersions[err.workerName] %>)
+                            Message: <%= err.msg.replace(/\n/g, '\n\t\t\t\t\t\t\t         ') %>
+
+<%                      } -%>
+<%                          if(testCase.screenshots && testCase.screenshots.length) { -%>
+                            Screenshots:
+<%                          for(var screenIndex = 0; screenIndex < testCase.screenshots.length; screenIndex++) { -%>
+                                <%= testCase.screenshots[screenIndex].filePath %>
+<%                          } -%>
+
+<%                          } -%>
+                    </message>
+                </failure>
+            </test-case>
+<%                  } -%>
+<%              } -%>
+<%          } -%>
+<%          if(Object.keys(suite.passedTests).length) { -%>
+<%              for(var i in suite.passedTests) { -%>
+<%                  if(suite.passedTests.hasOwnProperty(i)) { -%>
+<%                      var testCase = suite.passedTests[i]; -%>
+            <test-case name="'<%= testCase.fixturePath %>/<%= testCase.fixtureName %>' - <%= testCase.name %>" success="True" executed="True" time="<%= testCase.time %>" />
+<%                  } -%>
+<%              } -%>
+<%          } -%>
+        </results>
+    </test-suite>
+</test-results>

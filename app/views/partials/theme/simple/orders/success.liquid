@@ -1,0 +1,19 @@
+<div class="container">
+
+  <h2 class="bigtitle">
+    {{ 'app.orders.checkout.success_title' | t }}
+  </h2>
+
+ <section class="card md:h-64 flex flex-col md:flex-row justify-center items-center text-center md:text-start">
+   <div class="order-2 md:order-1">
+     <p class="subtitle text-confirmation">{{ 'app.orders.checkout.success_subtitle' | t }}</p>
+     <p class="sidenote mt-0">{{ 'app.orders.checkout.transaction_number' | t }}: {{ transaction.id }}</p>
+     <p class="sidenote mt-0">{{ 'app.orders.checkout.orders_numbers' | t }}: {{ transaction.orders | map: 'id' | join: ', ' }}</p>
+     {{ 'app.orders.checkout.success_content' | t: email: user_email | markdown }}
+   </div>
+   <div class="w-16 mb-6 md:mb-0 md:w-32 md:ms-10 md:ps-10 md:mt-1 order-1 md:order-last md:border-s">
+      {% render 'theme/simple/ui/icon', icon: 'checkBadge', class: 'w-full text-confirmation' %}
+    </div>
+  </section>
+
+</div>

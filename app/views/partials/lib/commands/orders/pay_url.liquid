@@ -1,0 +1,10 @@
+{% liquid
+  case transaction.gateway
+  when 'example'
+      assign url = '/example_payment_gateway?transaction_id=' | append: transaction.id
+  when 'stripe'
+    assign url = '/dashboard/buy/pay_stripe/' | append: transaction.id
+  endcase
+
+  return url
+%}

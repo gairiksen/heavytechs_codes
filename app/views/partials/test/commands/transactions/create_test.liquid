@@ -1,0 +1,13 @@
+{% parse_json profile %}{"id": "5"}{% endparse_json %}
+{% parse_json order_results %}
+{
+  "total_price_cents": 30,
+  "results": [{"id": "5", "total_price_cents": 10, "currency": "USD", "payment_type": "example"},{"id": "6", "total_price_cents": 20, "currency": "USD", "payment_type": "example"}]
+}
+{% endparse_json %}
+{% parse_json object %}{"payment_type": "example"}{% endparse_json %}
+{% liquid
+  function transaction = 'lib/commands/transactions/create', object: object, order_results: order_results, profile: profile
+
+  function contract = 'test/assertions/valid_object', contract: contract, object: transaction, field_name: 'id'
+%}

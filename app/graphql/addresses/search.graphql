@@ -1,0 +1,49 @@
+query search(
+  $id: ID
+  $limit: Int = 20
+  $full_name: String
+  $country: String
+  $city: String
+  $state: String
+  $street: String
+  $zip: String
+  $building_number: String
+  $flat_number: String
+) {
+  addresses: records(
+    per_page: $limit
+    filter: {
+      id: { value: $id }
+      table: { value: "address" }
+      properties: [
+        { name: "full_name" value: $full_name }
+        { name: "country" value: $country }
+        { name: "city" value: $city }
+        { name: "state" value: $state }
+        { name: "street" value: $street }
+        { name: "zip" value: $zip }
+        { name: "building_number" value: $building_number }
+        { name: "flat_number" value: $flat_number }
+      ]
+    }
+    sort: [
+      { created_at: { order: DESC }}
+    ]
+  ){
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+
+      full_name: property(name: "full_name")
+      country: property(name: "country")
+      city: property(name: "city")
+      state: property(name: "state")
+      street: property(name: "street")
+      zip: property(name: "zip")
+      building_number: property(name: "building_number")
+      flat_number: property(name: "flat_number")
+    }
+  }
+}

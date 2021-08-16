@@ -1,0 +1,18 @@
+<article class="flex flex-col">
+  <div class="bg-panel rounded shadow">
+    <a class="block w-full h-64 overflow-hidden rounded-tl rounded-tr" href="{% render 'link_to', category: object.key %}">
+      <img alt="{{ object.key }}" class="block object-cover object-center w-full h-full"
+        src="https://ipsumimage.appspot.com/640x400,1e3172?f=ffffff&s=64&t=jpg&l={{ object.key | t: scope: 'categories' }}">
+    </a>
+
+    <div class="p-4">
+      <h2 class="text-lg font-medium">
+        <a href="{% render 'link_to', category: object.key %}">{{ object.key | t: scope: 'categories' }}</a>
+      </h2>
+
+      <p class="mt-2 break-all">
+        {{ object.key | capitalize }}
+      </p>
+    </div>
+  </div>
+</article>

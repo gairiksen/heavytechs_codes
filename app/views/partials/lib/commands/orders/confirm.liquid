@@ -1,0 +1,12 @@
+{% liquid
+  function object = 'lib/commands/orders/confirm/build', order: order
+  function object = 'lib/commands/orders/confirm/check', object: object, order: order
+
+  if object.valid
+    function object = 'lib/commands/execute', object: object, mutation_name: 'orders/confirm', selection: 'record_update'
+    function status = 'lib/commands/statuses/create', profile_id: order.buyer.id, object_id: order.id, name: 'app.statuses.orders.confirmed', scope: 'app.statuses.orders'
+    include 'lib/commands/events/create', type: 'status_created', actor_id: current_profile.id, object_id: status.id, target_id: status.object_id
+  endif
+
+  return object
+%}

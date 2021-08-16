@@ -1,0 +1,22 @@
+mutation create_process(
+  $payload: String!
+  $command: String!
+  $profile_id: String!
+) {
+  record_create(
+    record: {
+      table: "process"
+      properties: [
+        { name: "payload" value: $payload }
+        { name: "command" value: $command }
+        { name: "profile_id" value: $profile_id }
+      ]
+    }
+  ){
+    id
+    created_at
+    deleted_at
+    payload: property(name: "payload")
+    command: property(name: "command")
+  }
+}

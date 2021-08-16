@@ -1,0 +1,30 @@
+<div
+  id="flashes"
+  class="fixed bottom-2 left-0 z-50"
+>
+  <template id="template-flash">
+    <div class="px-4 overflow-hidden" data-flash>
+      <div class="card min-w-80 md:max-w-md mb-2 mt-2 flex transition transform">
+
+        <div class="flex items-center" data-flash-error>
+          {% render 'theme/simple/ui/icon', icon: 'warningCloud', class: 'w-6 text-danger flex-shrink-0' %}
+          <div class="mx-3 font-semibold" data-flash-content></div>
+        </div>
+
+        <div class="flex items-center" data-flash-success>
+          {% render 'theme/simple/ui/icon', icon: 'checkBadge', class: 'w-6 text-confirmation flex-shrink-0' %}
+          <div class="mx-3 font-semibold" data-flash-content></div>
+        </div>
+
+        <button
+          title="{{ 'app.close' | t }}"
+          class="ms-auto -mt-4 -me-4 p-4 self-start hover:text-interaction-hover"
+          data-flash-close
+        >
+          {% render 'theme/simple/ui/icon', icon: 'x', class: 'w-2' %}
+        </button>
+
+      </div>
+    </div>
+  </template>
+</div>

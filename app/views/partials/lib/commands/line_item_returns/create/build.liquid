@@ -1,0 +1,17 @@
+{% parse_json object %}
+  {
+    "id": {{ object.id | json }},
+    "line_item_id": {{ line_item.id | json }},
+    "order_id": {{ line_item.order_id | json }},
+    "quantity": {{ object.quantity | to_positive_integer: 0 | json }},
+    "reason": {{ object.reason | json }},
+    "reason_details": {{ object.reason_details | json }},
+    "shipping_type": {{ object.shipping_type | json }},
+    "shipping_pickup_point": {{ object.shipping_pickup_point | json }},
+    "shipping_address": {{ object.shipping_address | json }}
+  }
+{% endparse_json %}
+
+{% liquid
+  return object
+%}

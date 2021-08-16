@@ -1,0 +1,22 @@
+---
+metadata:
+  breadcrumbs:
+    - label: app.dashboard
+      url: /dashboard
+    - label: app.items.list
+---
+
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  assign allowed_statuses = 'published,unpublished,unavailable'
+  assign statuses = context.params.status | default: allowed_statuses
+
+  function item_inventories = 'lib/queries/item_inventories/search_by_owner', limit: 20, owner: current_profile.id, params: context.params, statuses: statuses
+
+  assign statuses = statuses | split: ','
+
+  render 'theme/simple/ui/breadcrumbs', breadcrumbs: context.page.metadata.breadcrumbs, value: item_inventories.total_entries
+  include 'theme/simple/dashboard/items/list', item_inventories: item_inventories, page: context.params.page, statuses: statuses
+%}

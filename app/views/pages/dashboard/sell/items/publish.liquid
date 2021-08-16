@@ -1,0 +1,24 @@
+---
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_organization_profile', user_id: context.current_user.id
+  include 'lib/profile_organization_present_or_redirect', profile: current_profile
+
+  function item_inventory = 'lib/queries/item_inventories/find', id: context.params.id, owner: current_profile.id
+  hash_assign item_inventory['name'] = item_inventory.item.item_detail.name
+  function object = 'lib/commands/processes/wrap', command: 'items/publish', object: item_inventory, current_profile: current_profile
+  if object.valid
+    if object.require_acceptance
+      include 'redirect_to', url: '/dashboard/sell/items', notice: 'app.items.need_to_be_accepted_before_publish'
+    else
+      include 'redirect_to', url: '/dashboard/sell/items', notice: 'app.items.published'
+    endif
+  else
+    assign error = 'app.items.errors.publish_failed' | t: error: object.errors.base[0]
+
+    function item_url = 'link_to', path: '/items/', item: item_inventory.item
+    include 'redirect_to', url: item_url, error: error
+  endif
+%}
+

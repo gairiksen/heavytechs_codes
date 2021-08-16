@@ -1,0 +1,22 @@
+{% liquid
+  if return_to
+    session return_to = return_to
+  endif
+
+  if allow_anonymous
+    return true
+  elsif profile.type == 'organization'
+    return true
+  elsif profile.user_id == blank
+    unless return_to
+      session return_to = context.location.href
+    endunless
+    include 'redirect_to', url: '/sessions/new', error: 'app.errors.unauthenticated'
+  endif
+
+  if allow_uncompleted
+    return true
+  elsif profile.slug == blank
+    include 'redirect_to', url: "/dashboard/profile/edit", notice: 'app.profiles.incomplete'
+  endif
+%}

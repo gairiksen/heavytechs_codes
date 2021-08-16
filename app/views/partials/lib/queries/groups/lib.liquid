@@ -1,0 +1,15 @@
+{% liquid
+  assign lib = '{}' | parse_json
+
+  function tags = 'lib/queries/tags/search', limit: 100
+  hash_assign lib['tags'] = tags.results | map: 'name'
+
+  function post_templates = 'lib/queries/posts/post_templates'
+  hash_assign lib['post_templates'] = post_templates
+
+  function group_templates = 'lib/queries/groups/group_templates', group: group
+  assign removed = group_templates | remove_hash_key: 'profile_group'
+  hash_assign lib['group_templates'] = group_templates
+
+  return lib
+%}

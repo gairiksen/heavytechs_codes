@@ -1,0 +1,19 @@
+mutation update_item(
+  $id: ID!
+  $c__status: String
+) {
+  record_update(
+    id: $id
+    record: {
+      table: "item"
+      properties: [
+        { name: "c__status" value: $c__status }
+      ]
+    }
+  ){
+    id
+    created_at
+    updated_at
+    c__status: property(name: "c__status")
+  }
+}

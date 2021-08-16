@@ -1,0 +1,26 @@
+{% liquid
+  assign load_organizations = load_organizations | default: true
+
+  if user_id == blank
+    assign anonymous_session_id = context.session.anonymous_session_id
+  endif
+
+  if user_id == blank and allow_anonymous
+    if anonymous_session_id != blank
+      function current_profile = 'lib/queries/profiles/find', anonymous_session_id: anonymous_session_id, followships: followships, membership: membership
+      assign anonymous_session_id = null
+    endif
+
+    if current_profile == blank
+      function profile_anonymous = 'lib/commands/profiles_anonymous/create', object: context.session
+      assign id = profile_anonymous.id
+    endif
+  endif
+
+  if current_profile == blank
+    function current_profile = 'lib/queries/profiles/find', user_id: user_id, id: id, anonymous_session_id: anonymous_session_id, followships: followships, membership: membership, load_organizations: load_organizations, load_default_address: load_default_address
+  endif
+
+  export current_profile
+  return current_profile
+%}

@@ -1,0 +1,15 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_uncompleted: true, load_default_address: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_uncompleted: true
+
+  function line_item = 'lib/queries/line_items/find_by_buyer', id: context.params.line_item_id, buyer_id: current_profile.id , lang: context.language
+  include 'lib/present_or_404', property: line_item.id
+
+  function order = 'lib/queries/orders/search_by_buyer', buyer: current_profile.id, id: line_item.order.id, lang: context.language, limit: 1, load_status_history: true
+
+  assign object = '{}' | parse_json
+  hash_assign object['line_item_id'] = line_item.id
+  hash_assign object['quantity'] = line_item.quantity
+
+  include 'theme/simple/dashboard/line_item_returns/new', object: object, line_item: line_item, order: order.results.first, profile: current_profile
+%}

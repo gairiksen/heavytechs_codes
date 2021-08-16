@@ -1,0 +1,35 @@
+<div class="max-w-lg m-auto">
+    <div class="bg-gray-900 py-5 text-center rounded-t-lg">
+        <img src="{{ 'images/Logo.svg' | asset_url }}" alt="" class="m-auto">
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6">
+        <h2 class="text-gray-700 text-2xl font-extrabold mb-3">Heavy Techs {{data.profile_for}} registration</h2>
+        <span class="block text-base font-normal text-red-500">Hi, {{data.first_name}} {{data.last_name}}!</span>
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6">
+        <h2 class="text-gray-700 text-2xl font-extrabold mb-3">Welcome to Heavy Techs as {{data.profile_for}}!</h2>
+        <span class="block text-base font-normal text-red-500">Thank you for joining our {{data.profile_for}} community.</span>
+    </div>
+
+    <div class="bg-gray-100 p-8">
+        <h4 class="text-sm text-gray-800 font-bold mb-2 flex flex-wrap whitespace-nowrap">
+            You can check our {{data.profile_for}} related topics and FAQ <a href="{{data.host}}/faq" class="flex items-center text-indigo-400 px-2 hover:underline">{{data.host}}/faq</a> for further information.
+        </h4>
+        
+    </div>
+
+    <div class="bg-gray-50 px-8 py-6 rounded-b-lg">
+        <strong class="text-sm font-bold text-gray-700">Heavy Techs <span class="font-normal">Team</span></strong>
+    </div>
+
+</div>
+{%comment%}
+<h2 class="subtitle">{{ 'app.emails.passwords.reset.title' | t }}</h2>
+
+<p>{{ 'app.emails.passwords.reset.content' | t }}</p>
+<p class="sidenote">{{ 'app.emails.passwords.reset.ignore' | t }}</p>
+
+<p class="mt text-center"><a href="{{ data.url }}" class="button">{{ 'app.emails.passwords.reset.subject' | t }}</a></p>
+{%endcomment%}

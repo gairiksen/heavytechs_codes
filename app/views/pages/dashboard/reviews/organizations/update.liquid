@@ -1,0 +1,21 @@
+---
+slug: dashboard/reviews/organizations/:id
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_redirect', profile: current_profile, allow_anonymous: true
+
+  function review = 'lib/queries/organization_reviews/find_by_profile', id: context.params.organization_review.id, profile_id: current_profile.id
+  include 'lib/can_do_or_unauthorized', object: review, do: "fill", actor: current_profile
+
+  function object = 'lib/commands/organization_reviews/update', object: context.params.organization_review, profile: current_profile
+  if object.valid
+    function status = 'lib/commands/statuses/create', profile_id: current_profile.id, object_id: object.id, name: 'app.statuses.reviews.filled', scope: 'app.statuses.reviews'
+    function evt = 'lib/commands/events/create', type: 'organization_review_filled', actor_id: current_profile.id, object_id: object.id, target_id: object.organization_id
+
+    include 'redirect_to', url: '/dashboard/reviews/organizations'
+  else
+    render 'theme/simple/dashboard/reviews/organizations/form', organization: review.organization, object: object, context: context
+  endif
+%}

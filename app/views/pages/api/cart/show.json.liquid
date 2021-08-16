@@ -1,0 +1,21 @@
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile, allow_anonymous: true
+
+  function orders = 'lib/queries/orders/search', limit: 100, buyer: current_profile.id, withStatuses: true, status: 'app.statuses.orders.placed'
+
+  assign total = 0
+
+  for order in orders.results
+    assign currency = order.currency
+
+    assign total = total | plus: order.total_price_cents
+  endfor
+
+  function total_price = 'theme/simple/get_price', amount_cents: total, currency: currency
+
+  assign result = '{ "valid": true }' | parse_json
+  hash_assign result['total'] = total_price
+  hash_assign result['total_quantity'] = orders['total_quantity']
+  render 'theme/json/shared/show', object: result
+%}

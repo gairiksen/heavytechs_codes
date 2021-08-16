@@ -1,0 +1,33 @@
+{% liquid
+  function buyer = 'lib/queries/profiles/find', id: actor_id
+  assign orders = '[]' | parse_json
+  assign transaction = object.object.transaction
+
+  assign products_price_cents = 0
+  assign total_shipping_cost_cents = 0
+  assign site_name = 'app.title' | t
+
+  for order in object.object.orders
+    assign products_price_cents = products_price_cents | plus: order.products_price_cents
+    assign total_shipping_cost_cents = total_shipping_cost_cents | plus: order.total_shipping_cost_cents
+
+    assign order_to_modify = order
+
+    function order_url = 'link_to_url', object: order, type: 'buyer_order'
+    function seller_url = 'link_to_url', object: order.seller, type: 'organization'
+
+    hash_assign order_to_modify['order_url'] = order_url
+    hash_assign order_to_modify['seller']['seller_url'] = seller_url
+    assign orders = orders | add_to_array: order_to_modify
+  endfor
+
+  assign object = '{}' | parse_json
+  hash_assign object['buyer'] = buyer
+  hash_assign object['orders'] = orders
+  hash_assign object['transaction'] = transaction
+  hash_assign object['products_price_cents'] = products_price_cents
+  hash_assign object['total_shipping_cost_cents'] = total_shipping_cost_cents
+  hash_assign object['site_name'] = site_name
+
+  function email_buyer = 'lib/commands/emails/orders_confirmed_buyer', object: object
+%}

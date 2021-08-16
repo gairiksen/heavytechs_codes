@@ -1,0 +1,35 @@
+<div class="bg-gray-900 w-full p-10 md:w-1/5">
+    <ul>
+        <li class="mb-12">
+            <a href="/admin/mechanic" class="{% if this_page == 'admin_mechanic' or this_page == 'unavailable_mechanic' or this_page == 'mechanic_details'%}text-blue-600{%else%}text-white{%endif%} text-base font-normal flex items-center justify-between">
+                Mechanics
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </a>
+            <ul class="pt-4 pl-3">
+                <li>
+                    <a href="/admin/mechanic/blocked_mechanic" class="{% if this_page == 'blocked_mechanic' %}text-blue-600{%else%}text-white{%endif%} text-base font-normal">
+                        Blocked users                            
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="/admin/admin_dashboard" class="{% if this_page == 'admin_contractor' or this_page == 'contractor_details'%}text-blue-600{%else%}text-white{%endif%} text-base font-normal flex items-center justify-between">
+                Contractors
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </a>
+            <ul class="pt-4 pl-3">
+                <li>
+                    <a href="/admin/contractor/blocked_contractor" class="{% if this_page == 'blocked_contractor'%}text-blue-600{%else%}text-white{%endif%} text-base font-normal">
+                        Blocked users                            
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,7 @@
+{% liquid
+  function object = 'lib/commands/profiles/contractor/create_project/build', object: object, user_id: user_id, object_uuid: object_uuid, geo_location: geo_location, latitude: latitude, longitude: longitude
+
+  graphql r = 'profiles/create_project', args: object 
+
+  return object
+%}

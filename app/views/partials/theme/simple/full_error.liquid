@@ -1,0 +1,11 @@
+{% liquid
+  assign message = ''
+  for item in errors
+    assign error_key = 'app.models.' | append: model | append: '.form.' | append: item[0]
+    assign field_message = item[1] | join: ', '
+    assign error_message = error_key | t | append: ' ' | append: field_message
+    assign message = message | append: error_message
+  endfor
+
+  return message
+%}

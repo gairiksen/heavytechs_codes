@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <title>TestCafé: Web Testing Framework | DevExpress</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/assets/control_panel.js"></script>
+
+    <script src="/ace/ace.js"></script>
+    <script src="/dx/globalize.min.js"></script>
+    <script src="/dx/dx.webappjs.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/dx/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="/dx/dx.light.css" />
+</head>
+<body>
+<script>
+    ControlPanel.get('ResultsView').init();
+</script>
+<div class="wrapper">
+    <% var selected = 'RESULTS'; %>
+    <% include partial/header.ejs %>
+    <div class="top-buttons-push <%= (detail || !taskResults.length) ? 'hidden' : ''%>"></div>
+    <div class="results-top-buttons <%= (detail || !taskResults.length) ? 'hidden' : ''%>">
+        <div class="results-top-buttons-cont">
+            <a id="clear-reports" class="button"><span></span>Clear reports</a>
+        </div>
+
+        <div id="clear-reports-dialog" data-title="Clear reports" class="dir-operations-dialog">
+            <div class="dialog-text">
+                <h2>Are you sure that you wish to delete reports for all completed tasks?</h2>
+            </div>
+
+            <button id="clear-reports-no-btn" class="button">No</button>
+            <button id="clear-reports-yes-btn" class="button">Yes</button>
+        </div>
+
+        <div id="remove-report-dialog" data-title="Remove report" class="dir-operations-dialog">
+            <div class="dialog-text">
+                <h2></h2>
+            </div>
+
+            <button id="remove-report-no-btn" class="button">No</button>
+            <button id="remove-report-yes-btn" class="button">Yes</button>
+        </div>
+        <div class="header-line"></div>
+    </div>
+    <div id="alert-dialog" data-title="" class="dir-operations-dialog">
+        <div class="dialog-text"></div>
+        <button id="alert-dialog-ok-btn" class="button">OK</button>
+    </div>
+    <div id="screenshots-gallery" data-title="Test" class="dir-operations-dialog">
+        <div class="dialog-text">
+            <h2></h2>
+        </div>
+        <div class="screenshots-list-wrap">
+            <div class="screenshots-list"></div>
+        </div>
+    </div>
+    <div id="code-editor-dialog" data-title="Edit Fixture Code"  class="dir-operations-dialog">
+        <div id="code-editor-cont"></div>
+
+        <button id="cancel-fixture-code-btn" class="button">Cancel</button>
+        <button id="save-fixture-code-btn" class="button">OK</button>
+    </div>
+    <div class="content">
+        <div id="tasks-results-container">
+            <%if(detail) {%>
+                <% include partial/task_results_grid %>
+            <%} else {%>
+                <% include partial/task_results_container.ejs %>
+            <%}%>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="footer-push"></div>
+</div>
+
+<% include partial/footer.ejs %>
+
+</body>
+</html>

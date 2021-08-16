@@ -1,0 +1,13 @@
+{% comment %} Set the site's default max_cart_value to 15k {% endcomment %}
+
+{% assign currency = context.constants.CURRENCY | default: 'USD' %}
+{% assign max_value = 15000 | amount_to_fractional: currency | append: '' %}
+{% graphql r max_value: max_value %}
+mutation set_max_cart_value($max_value: String! ) {
+  max_cart_value: constant_set(name: "MAX_ORDER_VALUE", value: $max_value){
+    name
+    value
+  }
+}
+{% endgraphql %}
+{% log r, type: 'migrations/set_default_max_cart_value' %}

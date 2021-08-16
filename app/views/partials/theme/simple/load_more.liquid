@@ -1,0 +1,21 @@
+<div
+  x-data="loadMore()"
+  x-ref="main" x-html="render($refs.main)"
+>
+  <div class="flex items-center justify-center"
+    x-show="spinner"
+    x-cloak
+  >
+    {% render 'theme/simple/ui/spinner', size: 8 %}
+  </div>
+
+  <div class="w-full text-center"
+    x-show="!spinner">
+    <a href="{{url}}?page={{page | plus: 1}}" class="button button-small button-secondary button-icon-right"
+      x-on:click.prevent="submitSearch"
+    >
+      {{ 'app.feed.see_more' | t }}
+      {% render 'theme/simple/ui/icon', icon: 'dashDown' %}
+    </a>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<section class="flex items-center justify-between gap-10">
+  <header>
+    <h2 class="bigtitle">{{ 'app.models.posts.empty_state.title' | t }}</h2>
+    <h3 class="title">{{ 'app.models.posts.empty_state.subtitle' | t }}</h3>
+
+    <a href="/dashboard/posts/new" class="mt-5 button button-icon-right">
+      {{ 'app.models.posts.add' | t }}
+      {% render 'theme/simple/ui/icon', icon: 'plus' %}
+    </a>
+  </header>
+
+  <img src="{{ 'images/empty_questions.svg' | asset_url }}" alt="" class="w-1/3">
+</section>

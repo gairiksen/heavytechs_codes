@@ -1,0 +1,13 @@
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  assign date_format = '[12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])'
+
+  function c = 'lib/validations/matches', c: c, object: object, field_name: 'from', regexp: date_format, allow_blank: true
+  function c = 'lib/validations/matches', c: c, object: object, field_name: 'to', regexp: date_format, allow_blank: true
+
+  hash_assign object['valid'] = c.valid
+  hash_assign object['errors'] = c.errors
+
+  return object
+%}

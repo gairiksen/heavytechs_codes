@@ -1,0 +1,26 @@
+en:
+  app:
+    emails:
+      orders:
+        return:
+          seller:
+            subject: 'Neue Rückgabeanforderung von %{buyer_name}'
+        confirmed:
+          buyer:
+            subject: '[%{site_name}] Bestellbestätigung %{transaction_id}'
+            greeting: '%{first_name}, Vielen Dank für Ihre Bestellung!'
+          seller:
+            subject: 'Neue Bestellung für %{site_name} von %{buyer_name}'
+        delivered:
+          buyer:
+            subject:
+              personal_pickup: '%{site_name} Bestellen Sie %{order_id} im Geschäft'
+              delivery: '%{site_name} Bestellung %{order_id} wird versendet'
+        cancelled_buyer:
+          buyer:
+            subject: '%{site_name} Sie haben Ihre Bestellung storniert %{order_id}'
+        cancelled_seller:
+          buyer:
+            subject: '%{site_name} Ihre Bestellung %{order_id} wurde von storniert %{name}'
+          seller:
+            subject: '%{site_name} Sie haben die Bestellung storniert %{order_id}'

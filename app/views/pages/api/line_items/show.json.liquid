@@ -1,0 +1,13 @@
+---
+slug: line_items/:id
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id, allow_anonymous: true
+  include 'lib/profile_present_or_not_authenticated', profile: current_profile, allow_anonymous: true
+
+  assign line_item_id = context.params.id | split: '-' | last
+  function line_item = 'lib/queries/line_items/find', id: line_item_id, buyer: current_profile
+  include 'lib/present_or_404', property: line_item.id
+
+  include 'theme/simple/line_items/show', line_item: line_item
+%}

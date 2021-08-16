@@ -1,0 +1,7 @@
+{% liquid
+  assign page = page | to_positive_integer: 1
+  graphql r = 'organization_reviews/search', limit: limit, page: page, profile_id: profile_id, with_organization: with_organization
+  include 'lib/handle_graphql_response', r: r, name: 'queries/organization_reviews/search'
+
+  return r.organization_reviews
+%}

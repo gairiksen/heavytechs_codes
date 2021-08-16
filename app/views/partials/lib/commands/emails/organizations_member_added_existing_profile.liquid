@@ -1,0 +1,16 @@
+{% assign site_name = 'app.title' | t %}
+{% parse_json object %}
+  {
+    "to":      {{ object.profile.user.email | json }},
+    "from":    {% print 'app.support_email' | t | json %},
+    "subject": {% print 'app.emails.organizations.member_added_existing_profile.subject' | t: site_name: site_name, name: object.organization.name | json %},
+    "url":     {% print 'https://' | append: context.location.host | append: '/dashboard/sell/orders' | json %},
+    "organization_name": {{ object.organization.name | json }},
+    "partial": "theme/simple/emails/organizations/member_added_existing_profile"
+  }
+{% endparse_json %}
+
+{% liquid
+  function object = 'lib/commands/emails/send', object: object
+  return object
+%}

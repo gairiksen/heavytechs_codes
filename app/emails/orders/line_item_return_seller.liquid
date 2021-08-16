@@ -1,0 +1,8 @@
+---
+to: "{{ data.to }}"
+from: '{{ data.from }}'
+subject: "{{ data.subject }}"
+layout: mailer
+---
+
+{% include 'theme/simple/emails/orders/line_item_return_seller', data: data %}

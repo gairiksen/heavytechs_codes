@@ -1,0 +1,5 @@
+{% liquid
+  assign organization_id = event.target.id
+  function reviews = 'lib/queries/organization_reviews/search_by_organization', organization_id: organization_id, score_gte: 1, limit: 100, with_organization: false
+  function organization = 'lib/commands/reviews/calculate_rating', record_id: organization_id, reviews: reviews
+%}

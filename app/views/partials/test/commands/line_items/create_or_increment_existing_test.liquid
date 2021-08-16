@@ -1,0 +1,24 @@
+{% parse_json buyer %} {"id": "5777", "first_name": "John", "last_name": "Doe"} {% endparse_json %}
+{% liquid
+  function item = 'test/fixtures/item'
+  assign params = '{"quantity": "1"}' | parse_json
+  function order = 'lib/commands/line_items/find_or_create_order', item: item, current_profile: buyer
+%}
+
+{% comment %} test creating {% endcomment %}
+{% liquid
+  function line_item = 'lib/commands/line_items/create_or_increment_existing', item: item, params: params, current_profile: buyer, order: order
+
+  include 'test/assertions/valid_object', contract: contract, object: line_item, field_name: 'line_item'
+  include 'test/assertions/equal', contract: contract, given: line_item.total_price_cents, field_name: 'total_price_cents', expected: 1000
+%}
+
+{% comment %} increment existing {% endcomment %}
+{% liquid
+  function order = 'lib/queries/orders/find', id: order.id
+  function line_item = 'lib/commands/line_items/create_or_increment_existing', item: item, params: params, current_profile: buyer, order: order
+
+  include 'test/assertions/valid_object', contract: contract, object: line_item, field_name: 'line_item'
+  include 'test/assertions/equal', contract: contract, given: line_item.quantity, field_name: 'quantity', expected: 2
+  include 'test/assertions/equal', contract: contract, given: line_item.total_price_cents, field_name: 'total_price_cents', expected: 2000
+%}

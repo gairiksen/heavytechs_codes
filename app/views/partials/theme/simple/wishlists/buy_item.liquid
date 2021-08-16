@@ -1,0 +1,16 @@
+<form action="/orders/line_items" method="post">
+  {% render 'authenticity_token', authenticity_token: authenticity_token %}
+  <input type="hidden" name="line_item[item_id]" value="{{ item.id }}">
+  <input type="hidden" name="line_item[quantity]" value="1">
+  <button
+    class="button"
+    {% if item.item_inventory.status.name == 'app.statuses.items.unavailable' %} disabled {% endif %}
+  >
+    {% if item.item_inventory.status.name == 'app.statuses.items.unavailable' %}
+      {{ 'app.items.sold-out' | t }}
+    {% else %}
+      {{ 'app.items.add_to_cart' | t }}
+      {% render 'theme/simple/ui/icon', icon: 'cartPlus', class: 'w-4 h-4' %}
+    {% endif %}
+  </button>
+</form>

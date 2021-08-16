@@ -1,0 +1,39 @@
+<div class="mt-5">
+  {{ 'app.organizations.attr.shipping_types' | t }}:
+  {% assign shipping_types = 'app.orders.shipping_types' | t %}
+  <div x-data="{ checked: {% if object.shipping_types contains 'delivery' %}true{% else %}false{% endif %} }">
+    <fieldset>
+      <input type="checkbox" id="shipping_type_delivery" name="organization[shipping_types][]" value="delivery" {% if object.shipping_types contains 'delivery' %}checked{% endif %}
+        x-on:change="checked=!checked">
+      <label for="shipping_type_delivery">{{'app.orders.shipping_types.delivery' | t}}</label>
+    </fieldset>
+
+    <fieldset class="mt-3 mb-5"
+      x-show="checked">
+      <label class="block" for="delivery_fee">{{ 'app.organizations.attr.delivery_fee' | t }}:</label>
+      <!-- TODO: Add currency prefix $[input]  -->
+      <div class="flex items-center gap-3">
+        <input class="w-full" type="number" step="any" id="delivery_fee" name="organization[delivery_fee]" value="{{ object.delivery_fee | plus: 0 | default: 0 | fractional_to_amount: currency }}" required
+          x-bind:disabled="!checked">
+        {{ currency }}
+      </div>
+      {% render 'theme/simple/field_error', errors: object.errors.delivery_fee %}
+    </fieldset>
+  </div>
+
+  <div x-data="{ checked: {% if object.shipping_types contains 'personal_pickup' %}true{% else %}false{% endif %} }">
+    <fieldset>
+      <input type="checkbox" id="shipping_type_personal_pickup" name="organization[shipping_types][]" value="personal_pickup" {% if object.shipping_types contains 'personal_pickup' %}checked{% endif %}
+        x-on:change="checked=!checked">
+      <label for="shipping_type_personal_pickup">{{'app.orders.shipping_types.personal_pickup' | t}}</label>
+    </fieldset>
+
+    <fieldset class="mt-3 mb-5"
+      x-show="checked">
+      <label class="block" for="offline_stores">{{ 'app.admin.organizations.new.offline_stores' | t }}:</label>
+      <input class="w-full" type="text" id="offline_stores" name="organization[offline_stores]" value="{{ object.offline_stores | join: ';' }}" required
+        x-bind:disabled="!checked">
+      {% render 'theme/simple/field_error', errors: object.errors.offline_stores %}
+    </fieldset>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+{% liquid
+  function transaction = 'lib/queries/transactions/find', id: event.target.id
+
+  function orders = 'lib/queries/orders/search', ids: transaction.order_ids, limit: 100
+  for order in orders.results
+    include 'lib/commands/events/create', type: 'order_confirmed', actor_id: order.buyer.id, object_id: order.id, target_id: order.seller_id, attributed_to_id: event.target.id
+  endfor
+%}

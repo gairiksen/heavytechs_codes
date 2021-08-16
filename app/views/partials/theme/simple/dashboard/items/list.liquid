@@ -1,0 +1,67 @@
+<div
+  x-data="listFiltered"
+  x-init="status = {{ statuses | replace: "'", '"' }}; url='/dashboard/sell/items/list.frame'"
+  x-on:list-filters-changed="filter()"
+>
+
+    <div class="flex items-center justify-between">
+      <h2 class="bigtitle">{{ 'app.items.list' | t }}</h2>
+      <a href="/dashboard/items/new" class="button button-icon-right button-small">
+        {{ 'app.items.add' | t }}
+        {% render 'theme/simple/ui/icon', icon: 'plus' %}
+      </a>
+
+      {% capture 'filters' %}
+        <div class="py-4 px-7">
+          <ul class="flex flex-col gap-3 whitespace-nowrap">
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="published"
+                class="me-1"
+                id="list-filter-status-published"
+              >
+              <label for="list-filter-status-published">{{ 'app.statuses.items.published' | t }}</label>
+            </li>
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="unpublished"
+                class="me-1"
+                id="list-filter-status-unpublished"
+              >
+              <label for="list-filter-status-unpublished">{{ 'app.statuses.items.unpublished' | t }}</label>
+            </li>
+            <li class="flex items-center capitalize">
+              <input
+                x-model="listFiltered.status"
+                type="checkbox"
+                value="unavailable"
+                class="me-1"
+                id="list-filter-status-unvailable"
+              >
+              <label for="list-filter-status-unvailable">{{ 'app.statuses.items.unavailable' | t }}</label>
+            </li>
+          <button x-on:click="$dispatch('list-filters-changed'); open = false;" class="mt-4 button">
+            {{ 'app.apply' | t }}
+          </button>
+        </div>
+      {% endcapture %}
+
+      {% capture 'filters_label' %}
+        {{ 'app.filters' | t }}
+        {% render 'theme/simple/ui/icon', icon: 'settings' %}
+      {% endcapture %}
+
+      {% render 'theme/simple/ui/dropdown', toggle_class: 'button button-secondary button-small button-icon-right' label: filters_label, content: filters %}
+    </div>
+
+    <div data-list-filtered-frame>
+      {% liquid
+        include 'theme/simple/dashboard/items/list/table', item_inventories: item_inventories, statuses: statuses
+      %}
+    </div>
+
+</div>

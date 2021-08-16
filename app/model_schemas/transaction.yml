@@ -1,0 +1,10 @@
+name: transaction
+properties:
+  - name: profile_id
+  - name: order_ids
+    type: array
+  - name: amount
+    type: integer
+  - name: currency
+  - name: gateway
+  - name: c__status

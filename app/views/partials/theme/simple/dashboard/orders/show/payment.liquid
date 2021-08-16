@@ -1,0 +1,46 @@
+<h3 class="subtitle mt-8 font-bold">{{ 'app.orders.checkout.payment_title' | t }}</h3>
+<section class="card md:flex md:gap-4 md:justify-between md:items-center">
+  <div>
+    <p>{{ 'app.orders.checkout.payment_confirmation.payment_confirmed' | t: payment_type: payment_type_label }}</p>
+    <p class="sidenote">{{'app.orders.checkout.payment_confirmation.card_info' | t }}</p>
+  </div>
+  <div>
+    {% liquid
+      assign status = transaction.status.name | default: order.status.name
+      case status
+      when 'app.statuses.transactions.success'
+        assign status_class = 'bg-confirmation-disabled border-confirmation'
+      when 'app.statuses.transactions.failed', 'app.statuses.transactions.expired'
+        assign status_class = 'bg-danger-disabled border-danger'
+      when 'app.statuses.orders.confirmed'
+        assign status_class = 'bg-warning-disabled border-warning'
+        assign status = 'app.statuses.orders_for_role.' | append: role | append: '.confirmed'
+      when 'app.statuses.orders.cancelled_buyer'
+        assign status_class = 'bg-warning-disabled border-warning'
+        assign status = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_buyer'
+      when 'app.statuses.orders.cancelled_seller'
+        assign status_class = 'bg-warning-disabled border-warning'
+        assign status = 'app.statuses.orders_for_role.' | append: role | append: '.cancelled_seller'
+      endcase
+    %}
+    {% if transaction.status and transaction.status.name == 'app.statuses.transaction.success' %}
+      {{'app.orders.checkout.payment_confirmation.order_date' | t }}: {{ transaction.status.created_at | l: 'compact' }}
+    {% endif %}
+    <span data-tc="order-status" class="ms-4 px-2 py-1 inline-block rounded border {{ status_class }} leading-normal uppercase">{{ status | t }}</span>
+    {% unless cancelled %}
+      {% if role == 'buyer' and transaction.status.name != 'app.statuses.transactions.success' %}
+        <div class="mt-6 gap-5 flex flex-wrap justify-end items-center">
+          <div>
+            <form action="/dashboard/transactions" method="post">
+              {% render 'authenticity_token', context: context %}
+              <input type="hidden" name="order_ids[]" value="{{ order.id }}">
+              <button type="submit" class="button button-icon-right">
+                {{ 'app.orders.show.pay' | t }}
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endif %}
+    {% endunless %}
+  </div>
+</section>

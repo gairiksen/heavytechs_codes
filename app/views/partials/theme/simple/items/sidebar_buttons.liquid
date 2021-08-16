@@ -1,0 +1,15 @@
+<div class="sticky top-0 z-10 w-full pt-5 -mt-5 lg:bg-transparent lg:hidden">
+  <button
+    class="w-full mb-5 text-white shadow-md button button-primary"
+    @click="isSidebarOpen = true; $nextTick(() => { $refs.sidebar.focus() })"
+  >
+    <span class="sr-only">Show/hide filters</span>
+    <span aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" class="w-6 h-6">
+        <defs><style>.a{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;}</style></defs><circle class="a" cx="2" cy="2" r="1.5"/><line class="a" x1="3.5" y1="2" x2="13.5" y2="2"/><circle class="a" cx="7" cy="7" r="1.5"/><line class="a" x1="0.5" y1="7" x2="5.5" y2="7"/><line class="a" x1="8.5" y1="7" x2="13.5" y2="7"/><circle class="a" cx="12" cy="12" r="1.5"/><line class="a" x1="10.5" y1="12" x2="0.5" y2="12"/>
+      </svg>
+
+      {{ 'app.search.all_filters' | t  }}
+    </span>
+  </button>
+</div>

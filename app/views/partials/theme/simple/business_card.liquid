@@ -1,0 +1,8 @@
+{% assign name = user.name | default: 'Unknown' %}
+
+<div class="flex items-center mt-auto">
+  <span class="me-2">By <a href="{% render 'link_to', object: user %}">{{ name }}</a></span>
+  {% if current_profile and current_profile.id != user.id %}
+    {% render 'theme/simple/follow_button', current_profile: current_profile, user: user %}
+  {% endif %}
+</div>

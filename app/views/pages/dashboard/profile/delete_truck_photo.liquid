@@ -1,0 +1,7 @@
+{% liquid
+  assign truck_photo_id = context.params.id
+
+  graphql r = 'profiles/delete_truck_photo', id: truck_photo_id 
+
+  include 'redirect_to', url: '/dashboard/profile/truck'
+%}

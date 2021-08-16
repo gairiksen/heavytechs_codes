@@ -1,0 +1,10 @@
+name: profile_oem
+properties:
+  - name: uuid
+  - name: uuid
+  - name: user_id
+  - name: oem_name
+  - name: expert_familiar
+  - name: cert_name
+  - name: is_custom
+

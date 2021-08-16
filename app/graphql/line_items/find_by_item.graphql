@@ -1,0 +1,50 @@
+query find(
+  $item_id: String!
+  $buyer: String!
+  $order_id: String!
+) {
+  line_items: records(
+    per_page: 1
+    filter: {
+      table: {
+        value: "line_item"
+      }
+      properties: [
+        { name: "item_id", value: $item_id }
+        { name: "order_id", value: $order_id }
+      ]
+      related_records: {
+        join: { join_on_property: "order_id", foreign_property: "id"}
+        filter: {
+          table: { value: "order" },
+          properties: [
+            { name: "buyer", value: $buyer }
+          ]
+        }
+      }
+    }
+    sort: [{ created_at: { order: DESC } }]
+  ) {
+    total_entries
+    results {
+      id
+      created_at
+      type: table
+      item_id: property(name: "item_id")
+      order_id: property(name: "order_id")
+      name: property(name: "name")
+      description: property(name: "description")
+      price_cents: property(name: "price_cents")
+      currency: property(name: "currency")
+      quantity: property_int(name: "quantity")
+      total_price_cents: property(name: "total_price_cents")
+      order: related_record(
+        join_on_property: "order_id"
+        foreign_property: "id"
+        table: "order"
+      ) {
+        id
+      }
+    }
+  }
+}

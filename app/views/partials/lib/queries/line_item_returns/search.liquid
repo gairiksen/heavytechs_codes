@@ -1,0 +1,8 @@
+{% liquid
+  assign page = page | to_positive_integer: 1
+
+  graphql r = 'line_item_returns/search', limit: limit, page: page, status: status, order_id: order_id
+  include 'lib/handle_graphql_response', r: r, name: 'queries/line_item_returns/search'
+
+  return r.line_item_returns
+%}

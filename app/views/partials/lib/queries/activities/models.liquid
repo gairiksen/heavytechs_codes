@@ -1,0 +1,22 @@
+{% liquid
+  if ids == blank
+    log '(model) ID cannot be blank when searching for audience'
+    return null
+  endif
+
+  graphql r = 'activities/model', ids: ids, limit: 20
+
+  assign models = r.records.results
+
+  for m in models
+    assign index = forloop.index | minus: 1
+    assign model = models[index]
+
+    assign uuid = model.uuid | default: 'no-uuid-this-is-fake-report-and-add'
+    graphql ri = 'activities/photo', uuid: uuid
+    hash_assign model['photos'] = ri.records.results
+    hash_assign model['name'] = model['name'] | default: model['title'] | default: model['first_name']
+  endfor
+
+  return models
+%}

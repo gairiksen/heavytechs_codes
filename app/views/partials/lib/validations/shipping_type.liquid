@@ -1,0 +1,29 @@
+{% liquid
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'shipping_type'
+
+  if shipping_types
+    function c = 'lib/validations/included', c: c, object: object, field_name: 'shipping_type', array: shipping_types
+  endif
+
+
+  if object.shipping_type == 'delivery'
+    function address_object = 'lib/commands/addresses/create/check', object: object.shipping_address
+    hash_assign object['shipping_address'] = address_object
+    if address_object.valid == false
+      hash_assign c['valid'] = false
+      hash_assign object['errors'] = object['errors'] | hash_merge: address_object['errors']
+    endif
+  endif
+
+  if object.shipping_type == 'personal_pickup'
+    function c = 'lib/validations/presence', c: c, object: object, field_name: 'shipping_pickup_point'
+  endif
+
+
+  if c.valid == false
+    hash_assign c['valid'] = false
+  endif
+
+  return c
+%}
+

@@ -1,0 +1,22 @@
+{% liquid
+  assign can = false
+
+  case do
+  when 'edit':
+    return false
+  when 'follow':
+    return true
+  when 'display'
+    assign status = item.item_inventory.status.name
+    if status == 'app.statuses.items.published' or status == 'app.statuses.items.unavailable'
+      return true
+    else
+     assign orgs = actor.organizations | map: 'r_id'
+     if orgs contains item.item_inventory.owner.id
+       return true
+      endif
+    endif
+  endcase
+
+  return can
+%}

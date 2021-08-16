@@ -1,0 +1,493 @@
+<div class="profileEdit bg-gray-100 pt-9 pb-28"><!--profileEdit-->
+<div class="container m-auto px-3.5">
+
+<div class="flex justify-between flex-col md:flex-row">
+    <div class="w-full mb-6 md:mb-0 md:w-60">
+
+        {% render 'theme/simple/dashboard/profile/contractor/photo_upload_area', object: object, presigned_url: presigned_url %}
+        {% render 'theme/simple/dashboard/profile/contractor/profile_completion_bar', object: object %}
+
+        <div class="text-center mt-3">
+            <a href="/dashboard/profile/contractor/post_project" class="hover:text-white heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block w-11/12 m-auto">Post a project</a>
+        </div>
+
+    </div>
+
+    <div class="profileEdit_right w-full">
+        <div class="mb-8 bg-white">
+            <ul class="flex items-center flex-col md:flex-row">
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/bio" 
+                    class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36"">Company Bio</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/projects" class="text-base font-normal text-gray-800 w-full text-center h-12 flex items-center justify-center md:w-36">Projects</a>
+                </li>
+                <li class="w-full md:w-auto">
+                    <a href="/dashboard/profile/contractor/post_project" class="text-base w-full text-center h-12 flex items-center justify-center md:w-36 heavytechs-border-color-orange heavytechs-text-dark-orange font-medium border-b-2">Post a project</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div>
+        <div class="bg-white rounded-md shadow-sm px-6 pt-8">
+            
+            <script type="text/javascript">
+                function initialize() {
+                    var input = document.getElementById('location_of_project');
+                    const options = {
+                        componentRestrictions: { country: "us" },
+                        fields: ["address_components", "geometry", "icon", "name"],
+                        strictBounds: false,
+                        types: ["establishment"],
+                    };
+                    new google.maps.places.Autocomplete(input, options);
+                }
+
+                google.maps.event.addDomListener(window, 'load', initialize);
+            </script>
+
+            <form action="/dashboard/profile/contractor" method="post" id="project_frm" enctype='multipart/form-data'>
+                {% render 'authenticity_token', context: context %}
+                <input type="hidden" name="_method" value="put" />
+
+                <input type="hidden" name="profile_type" value="edit_project" />
+                <input type="hidden" name="project[id]" value="{{project_details.id}}" id="id" />
+                <input type="hidden" name="project[user_id]" value="{{project_details.user_id}}" id="user_id" />
+
+                <div class="mb-8">
+                    <label class="block mb-0.5 pl-4 text-base text-gray-800">Project name</label>
+                    <input value="{{project_details.project_name}}" type="text" name="project[project_name]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div class="mb-8">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Longer Description</h4>
+                    <textarea name="project[longer_description]" class="bg-gray-100 border border-gray-200 h-24 rounded-lg resize-none p-2 outline-none text-base text-gray-700 w-full md:w-2/4" placeholder="Type">{{project_details.longer_description}}</textarea>
+                </div>
+
+                <div class="mb-10">
+                    <label class="block mb-0.5 pl-4 text-base text-gray-800">Location of project*</label>
+                    <input value="{{project_details.location_of_project}}" type="text" name="project[location_of_project]" placeholder="Enter project location" id="location_of_project" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div class="mb-10">
+                    <!--<label class="block mb-0.5 pl-4 text-base text-gray-800">Latitude</label>-->
+                    <input type="hidden" name="project[latitude]" id="latitude" value="{{project_details.latitude}}" placeholder="Enter latitude" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div class="mb-10">
+                    <!--<label class="block mb-0.5 pl-4 text-base text-gray-800">Longitude</label>-->
+                    <input type="hidden" name="project[longitude]" id="longitude" value="{{project_details.longitude}}" placeholder="Enter longitude" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                </div>
+
+                <div>
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Schedule</h4>
+                    <ul class="flex items-center pb-6 md:pb-14 gap-4 flex-wrap">
+                        <li class="relative mr-0 md:mr-16">
+                            <label class="block mb-0.5 pl-4 text-base text-gray-800">Expected start date</label>
+                            <input value="{{project_details.expected_start_date}}" id="expected_start_date" type="date" name="project[expected_start_date]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-56">
+                            <img src="{{ 'images/calendar-icon.svg' | asset_url }}" alt="" class="absolute bottom-3 left-48">
+                        </li>
+                        <li class="relative">
+                            <label class="block mb-0.5 pl-4 text-base text-gray-800">Expected end date</label>
+                            <input value="{{project_details.expected_end_date}}" id="expected_end_date" type="date" name="project[expected_end_date]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-56">
+                            <img src="{{ 'images/calendar-icon.svg' | asset_url }}" alt="" class="absolute bottom-3 left-48">
+                        </li>
+                    </ul>
+
+                    <input type="hidden" name="project[start_time_stamp]" id="start_time_stamp" value="{{project_details.start_time_stamp}}">
+                    <input type="hidden" name="project[end_time_stamp]" id="end_time_stamp" value="{{project_details.end_time_stamp}}">
+                </div>
+
+                <div>
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Duration Type</h4>
+                    <ul class="customRadio pb-14">
+                        <li class="mb-4">
+                            <input {%if project_details.duration_type == 'Short term - less than a week (specific repair)' %}checked{%endif%} id="duration1" type="radio" name="project[duration_type]" value="Short term - less than a week (specific repair)">
+                            <label for="duration1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Short term - less than a week (specific repair)</label>
+                        </li>
+                        <li class="mb-4">
+                            <input {%if project_details.duration_type == 'Short term - less than a week (fill in for employee)' %}checked{%endif%} id="duration2" type="radio" name="project[duration_type]" value="Short term - less than a week (fill in for employee)">
+                            <label for="duration2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Short term - less than a week (fill in for employee)</label>
+                        </li>
+                        <li class="mb-4">
+                            <input {%if project_details.duration_type == 'Recurring Project' %}checked{%endif%} id="duration3" type="radio" name="project[duration_type]" value="Recurring Project">
+                            <label for="duration3" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Recurring Project</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.duration_type == 'Long term - longer than one month' %}checked{%endif%} id="duration4" type="radio" name="project[duration_type]" value="Long term - longer than one month">
+                            <label for="duration4" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Long term - longer than one month</label>
+                        </li>
+                    </ul>
+                </div>
+
+                {%liquid 
+                    if project_details.special_pay == 'Yes' 
+                        assign show_short_desc = true | default: false
+                    else
+                        assign show_short_desc = false | default: false
+                    endif
+                %}
+                <div x-data='{show_short_desc: {{show_short_desc}}}'>
+                    <div>
+                        <h4 class="text-base font-normal text-gray-800 mb-3.5">Special Pay (Davis Bacon)</h4>
+                        <ul class="customRadio flex items-center gap-10 pb-7">
+                            <li>
+                                <input {%if project_details.special_pay == 'Yes' %}checked{%endif%} @click="show_short_desc = true" id="Pay1" type="radio" name="project[special_pay]" value="Yes">
+                                <label for="Pay1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Yes</label>
+                            </li>
+                            <li>
+                                <input {%if project_details.special_pay == 'No' %}checked{%endif%} @click="show_short_desc = false" id="Pay2" type="radio" name="project[special_pay]" value="No">
+                                <label for="Pay2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>No</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div x-show="show_short_desc" class="bg-gray-50 p-7 -mx-6">
+                        <h4 class="text-base font-normal text-gray-800 mb-2.5">Short description</h4>
+                        <input value="{{project_details.short_description}}" type="text" name="project[short_description]" placeholder="Type" class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                    </div>
+                </div>
+
+                <div class="py-5">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Specialized Training</h4>
+                    <ul class="customCheck md:flex items-center gap-4 flex-wrap">
+                        <li>
+                            <input {%if project_details.osha == '1' %}checked{%endif%} id="training1" type="checkbox" name="project[osha]" value="1">
+                            <label for="training1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>OSHA</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.msha == '1' %}checked{%endif%} id="training2" type="checkbox" name="project[msha]" value="1">
+                            <label for="training2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>MSHA</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-14">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Insurance</h4>
+                    <ul class="customCheck gap-4 flex flex-col">
+                        <li>
+                            <input {%if project_details.additionally_insured == '1' %}checked{%endif%} id="insurance1" type="checkbox" name="project[additionally_insured]" value="1">
+                            <label for="insurance1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Additionally Insured</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.insurance_cert_holder == '1' %}checked{%endif%} id="insurance2" type="checkbox" name="project[insurance_cert_holder]" value="1">
+                            <label for="insurance2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Insurance cert holder</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.liability_limits == '1' %}checked{%endif%} id="insurance3" type="checkbox" name="project[liability_limits]" value="1">
+                            <label for="insurance3" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Liability Limits</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-14">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Crane Required</h4>
+                    <ul class="customRadio flex items-center gap-10">
+                        <li>
+                            <input {%if project_details.crane_required == 'Yes' %}checked{%endif%} id="Crane1" type="radio" name="project[crane_required]" value="Yes">
+                            <label for="Crane1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Yes</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.crane_required == 'No' %}checked{%endif%} id="Crane2" type="radio" name="project[crane_required]" value="No">
+                            <label for="Crane2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>No</label>
+                        </li>
+                    </ul>
+                </div>
+
+                {%liquid 
+                    if project_details.driver_license_required == 'Yes' 
+                        assign show_license = true | default: false
+                    else
+                        assign show_license = false | default: false
+                    endif
+                %}
+
+                <div x-data='{show_license: {{show_license}}}'>
+                    <div class="mb-14">
+                        <h4 class="text-base font-normal text-gray-800 mb-3.5">Drivers Licence required</h4>
+                        <ul class="customRadio flex items-center gap-10">
+                            <li>
+                                <input {%if project_details.driver_license_required == 'Yes' %}checked{%endif%} @click="show_license = true" id="licence1" type="radio" name="project[driver_license_required]" value="Yes">
+                                <label for="licence1" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Yes</label>
+                            </li>
+                            <li>
+                                <input {%if project_details.driver_license_required == 'No' %}checked{%endif%} @click="show_license = false" id="licence2" type="radio" name="project[driver_license_required]" value="No">
+                                <label for="licence2" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>No</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div x-show="show_license" class="bg-gray-50 p-7 -mx-6">
+                        <ul class="customRadio flex flex-col gap-4 mb-7 md:flex-row md:gap-x-11 flex-wrap">
+                            <li>
+                                <input {%if project_details.driver_license_class == 'Class A' %}checked{%endif%} id="classa" type="radio" name="project[driver_license_class]" value="Class A">
+                                <label for="classa" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Class A</label>
+                            </li>
+                            <li>
+                                <input {%if project_details.driver_license_class == 'Class B' %}checked{%endif%} id="classb" type="radio" name="project[driver_license_class]" value="Class B">
+                                <label for="classb" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Class B</label>
+                            </li>
+                            <li>
+                                <input {%if project_details.driver_license_class == 'Class C' %}checked{%endif%} id="classc" type="radio" name="project[driver_license_class]" value="Class C">
+                                <label for="classc" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Class C</label>
+                            </li>
+                            <li>
+                                <input {%if project_details.driver_license_class == 'Class D' %}checked{%endif%} id="classd" type="radio" name="project[driver_license_class]" value="Class D">
+                                <label for="classd" class="text-base font-medium text-gray-800">
+                                <span><span></span></span>Class D</label>
+                            </li>
+                        </ul>
+
+                        <div>
+                            <h4 class="text-base font-normal text-gray-800 mb-7">Endorsement Type</h4>
+                            <ul class="customCheck gap-4 flex flex-col flex-wrap w-full md:w-2/4 md:flex-row md:gap-y-2 md:gap-x-10">
+                                <li>
+                                    <input {%if project_details.tanker == '1' %}checked{%endif%} id="industries1" type="checkbox" name="project[tanker]" value="1">
+                                    <label class="text-base font-medium text-gray-800" for="industries1">
+                                    <span></span>Tanker</label>
+                                </li>
+                                <li>
+                                    <input {%if project_details.air_brakes == '1' %}checked{%endif%} id="industries2" type="checkbox" name="project[air_brakes]" value="1">
+                                    <label class="text-base font-medium text-gray-800" for="industries2">
+                                    <span></span>Air Brakes</label>
+                                </li>
+                                <li>
+                                    <input {%if project_details.passenger == '1' %}checked{%endif%} id="industries3" type="checkbox" name="project[passenger]" value="1">
+                                    <label class="text-base font-medium text-gray-800" for="industries3">
+                                    <span></span>Passenger</label>
+                                </li>
+                                <li>
+                                    <input {%if project_details.doubles_triples == '1' %}checked{%endif%} id="industries4" type="checkbox" name="project[doubles_triples]" value="1">
+                                    <label class="text-base font-medium text-gray-800" for="industries4">
+                                    <span></span>Doubles/Triples</label>
+                                </li>
+                                <li>
+                                    <input {%if project_details.hazmat == '1' %}checked{%endif%} id="industries5" type="checkbox" name="project[hazmat]" value="1">
+                                    <label class="text-base font-medium text-gray-800" for="industries5">
+                                    <span></span>Hazmat</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="py-12">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Union</h4>
+                    <ul class="customRadio flex items-center gap-10">
+                        <li>
+                            <input id="union1" type="radio" name="union">
+                            <label for="union1" class="text-base font-medium text-gray-800"><span><span></span></span>Yes</label>
+                        </li>
+                        <li>
+                            <input id="union2" type="radio" name="union">
+                            <label for="union2" class="text-base font-medium text-gray-800"><span><span></span></span>No</label>
+                        </li>
+                    </ul>
+                </div>-->
+
+                <div class="mb-7">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Industries Serviced (project type)</h4>
+
+                    <ul class="customCheck gap-4 flex flex-col flex-wrap w-full lg:w-3/4 md:flex-row md:gap-y-2">
+                        <li class="lg:w-3/12">
+                            <input {%if project_details.earthworks == '1' %}checked{%endif%} id="projecttype1" type="checkbox" name="project[earthworks]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="projecttype1">
+                            <span></span>Earthworks</label>
+                        </li>
+                        <li class="lg:w-3/12">
+                            <input {%if project_details.mining == '1' %}checked{%endif%} id="projecttype2" type="checkbox" name="project[mining]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="projecttype2">
+                            <span></span>Mining</label>
+                        </li>
+                        <li class="lg:w-3/12">
+                            <input {%if project_details.fleet == '1' %}checked{%endif%} id="projecttype3" type="checkbox" name="project[fleet]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="projecttype3">
+                            <span></span>Fleet</label>
+                        </li>
+                        <li class="lg:w-3/12">
+                            <input {%if project_details.pipeline == '1' %}checked{%endif%} id="projecttype4" type="checkbox" name="project[pipeline]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="projecttype4">
+                            <span></span>Pipeline</label>
+                        </li>
+                        <li class="lg:w-3/12">
+                            <input {%if project_details.paving == '1' %}checked{%endif%} id="projecttype5" type="checkbox" name="project[paving]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="projecttype5">
+                            <span></span>Paving</label>
+                        </li>
+                        <li class="w-auto">
+                            <input {%if project_details.energy_production == '1' %}checked{%endif%} id="projecttype6" type="checkbox" name="project[energy_production]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="projecttype6">
+                            <span></span>Energy Production</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="w-full mb-5 md:w-4/6 md:mb-12">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Service Skills and Specialize Training</h4>
+                    <ul class="customCheck flex flex-col flex-wrap gap-4 md:flex-row md:gap-y-2">
+                    <li class="lg:w-2/4">
+                            <input {%if project_details.heavy_equipment_mechanic == '1' %}checked{%endif%} id="specialize1" type="checkbox" name="project[heavy_equipment_training]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="specialize1">
+                            <span></span>Heavy Equipment Mechanic</label>
+                        
+                        </li>
+                    <li class="lg:w-2/4">
+                            <input {%if project_details.welder_fabricator == '1' %}checked{%endif%} id="specialize2" type="checkbox" name="project[welder_fabricator]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="specialize2">
+                            <span></span>Welder/Fabricator</label>
+                        </li>
+                    <li class="lg:w-2/4">
+                            <input {%if project_details.truck_mechanic == '1' %}checked{%endif%} id="specialize3" type="checkbox" name="project[truck_mechanic]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="specialize3">
+                            <span></span>Truck Mechanic</label>
+                        </li>
+                    <li class="lg:w-2/4">
+                            <input {%if project_details.oiler_pm_tech == '1' %}checked{%endif%} id="specialize4" type="checkbox" name="project[oiler_pm_tech]" value="1">
+                            <label class="text-base font-medium text-gray-800" for="specialize4">
+                            <span></span>Oilers/PM Tech</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-16">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Qualification/Area of Expertise</h4>
+                    <ul class="customCheck md:flex items-center gap-4 flex-wrap">
+                        <li>
+                            <input {%if project_details.welding == '1' %}checked{%endif%} id="expertise1" type="checkbox" name="project[welding]" value="1">
+                            <label for="expertise1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Welding</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.electrical_troubleshooting == '1' %}checked{%endif%} id="expertise2" type="checkbox" name="project[electrical_troubleshooting]" value="1">
+                            <label for="expertise2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Electrical Troubleshooting</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.computer_diagnostics == '1' %}checked{%endif%} id="expertise3" type="checkbox" name="project[computer_diagnostics]" value="1">
+                            <label for="expertise3" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Computer Diagnostics</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-7">
+                    <h4 class="text-base font-normal text-gray-800 mb-3.5">Travel/Living Expenses</h4>
+                    <ul class="customCheck md:flex items-center gap-4 flex-wrap">
+                        <li>
+                            <input {%if project_details.company_supplied == '1' %}checked{%endif%} id="travel1" type="checkbox" name="project[company_supplied]" value="1">
+                            <label for="travel1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Company Supplied</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.not_offered == '1' %}checked{%endif%} id="travel2" type="checkbox" name="project[not_offered]" value="1">
+                            <label for="travel2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Not offered</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.per_diem == '1' %}checked{%endif%} id="travel3" type="checkbox" name="project[per_diem]" value="1">
+                            <label for="travel3" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Per diem</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-50 p-5 -mx-6">
+                    <ul class="customRadio flex items-center gap-10">
+                        <li>
+                            <input {%if project_details.paid_not_paid == 'Paid' %}checked{%endif%} id="paid1" type="radio" name="project[paid_not_paid]" value="Paid">
+                            <label for="paid1" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Paid</label>
+                        </li>
+                        <li>
+                            <input {%if project_details.paid_not_paid == 'Not Paid' %}checked{%endif%} id="paid2" type="radio" name="project[paid_not_paid]" value="Not Paid">
+                            <label for="paid2" class="text-base font-medium text-gray-800">
+                            <span><span></span></span>Not paid</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mb-8 p-5 -mx-6">
+                    <label class="block mb-0.5 pl-4 text-base text-gray-800">Status</label>
+                    <select name="project[status]" id="status"  class="bg-gray-100 border border-gray-200 h-11 rounded-3xl px-5 outline-none text-base text-gray-700 w-full md:w-96">
+                        <option {%if project_details.status == 'Publish' %}selected{%endif%} value="Publish">Publish</option>
+                        <option {%if project_details.status == 'Unpublish' %}selected{%endif%} value="Unpublish">Unpublish</option>
+                    </select>
+                </div>
+
+                <div class="py-12">
+                    <!--<button class="heavytechs-bg-dark-orange text-white mr-2 px-6 leading-10 rounded-3xl text-base inline-block">Save</button>-->
+                    <!--<button class="heavytechs-border-color-orange heavytechs-text-dark-orange text-white heavytechs-border-color-orange border-2 mr-2 px-6 leading-10 rounded-3xl text-base inline-block">Cancel</button>-->
+                    <input onclick="saveProject()" class="heavytechs-bg-dark-orange text-white px-6 leading-10 rounded-3xl text-base inline-block cursor-pointer" type="button" name="save_bio" id="save_bio" value="Save">
+                </div>
+
+            </form>
+
+            <script type="text/javascript">
+            function saveProject(){            
+                var geocoder = new google.maps.Geocoder();
+
+                var start_date = document.getElementById('expected_start_date').value;
+                var end_date = document.getElementById('expected_end_date').value;
+
+                var start_time_stamp = toTimestamp(start_date);
+                var end_time_stamp = toTimestamp(end_date);
+
+                document.getElementById('start_time_stamp').value = start_time_stamp;
+                document.getElementById('end_time_stamp').value = end_time_stamp;
+
+                var location = document.getElementById('location_of_project').value;
+                if(location.includes("USA") == false){
+                    location = location + ", USA";
+                }
+
+                geocoder.geocode( { 'address': location}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var latitude = results[0].geometry.location.lat();
+                        var longitude = results[0].geometry.location.lng();
+                        
+                        document.getElementById('latitude').value = latitude;
+                        document.getElementById('longitude').value = longitude;
+
+                        document.getElementById('project_frm').submit();
+                    } 
+                });           
+                        
+            }
+
+            function toTimestamp(strDate){
+                var datum = Date.parse(strDate);
+                return datum/1000;
+            }
+            </script>
+        </div>
+        </div>
+
+    </div>
+
+    </div>
+    </div>
+</div>
+</div>
+</div><!--profileEdit-->
+
+
+

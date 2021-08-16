@@ -1,0 +1,14 @@
+{% liquid
+  graphql r = 'events/create', payload: object
+
+  if r.errors
+    log r.errors, type: 'errors.graphql.invalid'
+    hash_assign object['errors'] = r.errors
+    hash_assign object['valid'] = false
+  else
+    assign object = r.activity_create.payload
+    hash_assign object['valid'] = true
+  endif
+
+  return object
+%}

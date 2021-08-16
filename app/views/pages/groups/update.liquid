@@ -1,0 +1,28 @@
+---
+slug: groups/:id
+method: put
+---
+{% liquid
+  function current_profile = 'lib/current_profile', user_id: context.current_user.id
+  include 'lib/profile_present_or_redirect', profile: current_profile
+%}
+
+{% liquid
+  assign group_id = context.params.id | split: '-' | last
+  function group = 'lib/queries/groups/find', id: group_id, owner_id: current_profile.id, relation_name: 'owner'
+
+  function can = "lib/can", actor: current_profile, do: "see_meta", object: group
+  unless can.valid
+    include 'lib/present_or_404', property: null
+  endunless
+%}
+
+{% liquid
+  function object = 'lib/commands/groups/update', object: context.params.group
+  if object.valid
+    include 'redirect_to', url: '/dashboard/groups', notice: 'app.models.shared.updated'
+  else
+    function presigned_url = 'lib/queries/presigned_url'
+    render 'theme/simple/groups/edit', object: object, presigned_url: presigned_url, context: context, current_profile: current_profile
+  endif
+%}

@@ -1,0 +1,35 @@
+{% if latitude != '' and longitude != '' %}
+{% parse_json geo_location %}
+  {
+    "type": "Point",
+    "coordinates": [
+      {{longitude}},
+      {{latitude}}                
+    ]
+  }
+{% endparse_json %}
+{% endif %}
+
+{% liquid
+  assign lang = lang | default: context.language
+
+  if availability == '1'
+
+      if latitude == '' or longitude == ''
+        graphql r = 'mechanic/search_mechanic_filter_available_basic', limit: 20, keyword: keyword, lang: lang, user_id: user_id, total_experience: total_experience, earthworks: earthworks, mining: mining, fleet: fleet, pipeline: pipeline, paving: paving, energy_production: energy_production, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic,welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, caterpillar: caterpillar, john_deere: john_deere, hitachi: hitachi, volvo: volvo, komatsu: komatsu, other: other, insurance_coverage: insurance_coverage, ase: ase, osha: osha, msha: msha, oem: oem, truck_type: truck_type, availability: availability, keyword_search: keyword_search
+      else
+        graphql r = 'mechanic/search_mechanic_filter_available', limit: 20, keyword: keyword, lang: lang, user_id: user_id, total_experience: total_experience, earthworks: earthworks, mining: mining, fleet: fleet, pipeline: pipeline, paving: paving, energy_production: energy_production, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic,welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, caterpillar: caterpillar, john_deere: john_deere, hitachi: hitachi, volvo: volvo, komatsu: komatsu, other: other, insurance_coverage: insurance_coverage, ase: ase, osha: osha, msha: msha, oem: oem, truck_type: truck_type, availability: availability, latitude: latitude, longitude: longitude, distance: distance, point: geo_location, keyword_search: keyword_search
+      endif 
+  else
+
+      if latitude == '' or longitude == ''
+        graphql r = 'mechanic/search_mechanic_filter_basic', limit: 20, keyword: keyword, lang: lang, user_id: user_id, total_experience: total_experience, earthworks: earthworks, mining: mining, fleet: fleet, pipeline: pipeline, paving: paving, energy_production: energy_production, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic,welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, caterpillar: caterpillar, john_deere: john_deere, hitachi: hitachi, volvo: volvo, komatsu: komatsu, other: other, insurance_coverage: insurance_coverage, ase: ase, osha: osha, msha: msha, oem: oem, truck_type: truck_type, availability: availability, keyword_search: keyword_search
+      else
+        graphql r = 'mechanic/search_mechanic_filter', limit: 20, keyword: keyword, lang: lang, user_id: user_id, total_experience: total_experience, earthworks: earthworks, mining: mining, fleet: fleet, pipeline: pipeline, paving: paving, energy_production: energy_production, heavy_equipment_mechanic: heavy_equipment_mechanic, truck_mechanic: truck_mechanic,welder_fabricator: welder_fabricator, oilers_pm_tech: oilers_pm_tech, caterpillar: caterpillar, john_deere: john_deere, hitachi: hitachi, volvo: volvo, komatsu: komatsu, other: other, insurance_coverage: insurance_coverage, ase: ase, osha: osha, msha: msha, oem: oem, truck_type: truck_type, availability: availability, latitude: latitude, longitude: longitude, distance: distance, point: geo_location, keyword_search: keyword_search
+      endif
+  endif 
+
+  include 'lib/handle_graphql_response', r: r, name: 'queries/mechanic/search'
+
+  return r.records
+%}

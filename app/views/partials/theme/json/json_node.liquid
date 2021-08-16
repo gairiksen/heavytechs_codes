@@ -1,0 +1,31 @@
+{% assign id = 10 | random_string %}
+<style>
+  .debug {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 400px;
+    font-size: 10px;
+    z-index: 30;
+    background-color: white;
+    opacity: 98%;
+    overflow: auto;
+    height: 100%;
+  }
+</style>
+<script>
+  var json = {{ node | json | html_safe }}
+  console.log(json)
+  debug = document.getElementById("debug")
+
+  if (!debug) {
+    var debug = document.createElement("div");
+    debug.setAttribute("id", "debug");
+    debug.classList.add("debug");
+    document.body.prepend(debug);
+  }
+
+  var log = document.createElement("pre");
+  log.appendChild(document.createTextNode(JSON.stringify(json, null, 2)));
+  debug.appendChild(log)
+</script>
